@@ -1,32 +1,30 @@
-import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
 import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres";
-import { neon } from "@neondatabase/serverless";
+import { Pool } from "pg";
 
 import * as schema from "./schema";
 
-// Initialize a Drizzle DB instance depending on environment.
-// We prefer `NEON_DATABASE_URL` but fall back to `DATABASE_URL` for compatibility.
-const connectionString =
-    process.env.NEON_DATABASE_URL || process.env.DATABASE_URL;
+// Initialize a Drizzle DB instance using Supabase connection.
+const connectionString = process.env.SUPABASE_DATABASE_URL;
 
 let _db: any = null;
 
 if (connectionString) {
     try {
-        // Vercel or serverless environment -> use neon serverless client
-        if (process.env.VERCEL || process.env.NEXT_RUNTIME === "edge") {
-            _db = drizzleNeon({
-                client: neon(connectionString),
-                schema,
-                casing: "snake_case",
-            });
-        } else {
-            // Local or node environment -> use node-postgres adapter
-            _db = drizzlePostgres(connectionString, {
-                schema,
-                casing: "snake_case",
-            });
-        }
+        // Use node-postgres Pool for Supabase (better for server environments)
+        const pool = new Pool({
+            connectionString,
+            ssl: { rejectUnauthorized: false },
+            max: 5, // Reduce max connections for pooler
+            min: 0, // No minimum connections
+            idleTimeoutMillis: 10000, // Shorter idle timeout
+            connectionTimeoutMillis: 5000, // Longer connection timeout
+            allowExitOnIdle: true, // Allow pool to exit when idle
+        });
+
+        _db = drizzlePostgres(pool, {
+            schema,
+            casing: "snake_case",
+        });
     } catch (e) {
         // Do not throw during module evaluation; export null so callers can handle missing DB.
         // eslint-disable-next-line no-console
@@ -35,9 +33,7 @@ if (connectionString) {
     }
 } else {
     // eslint-disable-next-line no-console
-    console.warn(
-        "No NEON_DATABASE_URL or DATABASE_URL found — DB client not initialized."
-    );
+    console.warn("No SUPABASE_DATABASE_URL found — DB client not initialized.");
 }
 
 export const db = _db;

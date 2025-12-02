@@ -6,6 +6,7 @@ export default {
     schema: "./db/schema.ts",
     out: "./drizzle",
     dbCredentials: {
-        url: process.env.NEON_DATABASE_URL || "",
+        url: process.env.SUPABASE_DATABASE_URL || "",
+        ssl: { rejectUnauthorized: false },
     },
 } satisfies Config;

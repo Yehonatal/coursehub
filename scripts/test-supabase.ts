@@ -84,7 +84,7 @@ async function main() {
                 ssl: { rejectUnauthorized: false },
             });
             await sql`
-        CREATE TABLE IF NOT EXISTS test_supabase (
+        CREATE TABLE IF NOT EXISTS test (
           id serial PRIMARY KEY,
           name text NOT NULL,
           created_at timestamptz NOT NULL DEFAULT now()
@@ -92,9 +92,9 @@ async function main() {
       `;
 
             const inserted = await sql`
-        INSERT INTO test_supabase (name) VALUES ('supabase-connect-test') RETURNING *
+        INSERT INTO test (name) VALUES ('drizzle-connect-test') RETURNING *
       `;
-            console.log("Inserted row into test_supabase:", inserted);
+            console.log("Inserted row into test:", inserted);
             await sql.end({ timeout: 5 });
         } catch (e) {
             console.warn(
