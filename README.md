@@ -149,7 +149,13 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
    pnpm dlx drizzle-kit migrate
    ```
 
-3. **Seed databases with initial data**:
+3. **Enable Row Level Security (RLS) policies** (critical for security):
+   ```bash
+   # Copy and run the SQL from scripts/enable-rls.sql in Supabase SQL Editor
+   # This enables RLS on all tables with optimized performance policies
+   ```
+
+4. **Seed databases with initial data**:
    ```bash
    # Seed both databases
    pnpm run db:seed

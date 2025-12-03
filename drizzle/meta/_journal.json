@@ -29,6 +29,20 @@
       "when": 1764769890144,
       "tag": "0003_great_firebrand",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1764781627618,
+      "tag": "0004_puzzling_sharon_ventura",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1764783323706,
+      "tag": "0005_wide_otto_octavius",
+      "breakpoints": true
     }
   ]
 }
