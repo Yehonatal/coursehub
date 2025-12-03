@@ -7,7 +7,11 @@
         "build": "next build",
         "start": "next start",
         "lint": "eslint",
-        "test": "vitest"
+        "test": "vitest",
+        "db:setup": "tsx scripts/mongo.setup.ts",
+        "db:seed:pg": "tsx scripts/seed.pg.ts",
+        "db:seed:mongo": "tsx scripts/seed.mongo.ts",
+        "db:seed": "pnpm run db:seed:pg && pnpm run db:seed:mongo"
     },
     "dependencies": {
         "@supabase/auth-helpers-nextjs": "^0.15.0",

@@ -22,6 +22,13 @@
       "when": 1764768037562,
       "tag": "0002_broken_jean_grey",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1764769890144,
+      "tag": "0003_great_firebrand",
+      "breakpoints": true
     }
   ]
 }

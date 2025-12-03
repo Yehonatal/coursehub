@@ -23,6 +23,11 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
+            - name: Setup MongoDB Collections & Indexes
+              run: pnpm dlx tsx scripts/mongo.setup.ts
+              env:
+                  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
             - name: Seed PostgreSQL (Supabase)
               run: pnpm dlx tsx scripts/seed.pg.ts
               env:

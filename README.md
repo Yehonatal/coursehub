@@ -82,3 +82,107 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - D4: Vercel + GitHub Actions for deployment and CI/CD
 
 ---
+
+
+### Technical Stack
+
+#### Frontend
+- **Framework**: Next.js 16 (App Router)
+- **Styling**: Tailwind CSS
+- **UI Components**: Custom component library with shadcn/ui
+- **State Management**: React Server Components + Client Components
+
+#### Backend
+- **Database**: PostgreSQL (Supabase) + MongoDB (Analytics)
+- **ORM**: Drizzle ORM for type-safe queries
+- **Authentication**: Supabase Auth
+- **Storage**: Supabase Storage
+- **AI**: Google Gemini Studio API
+
+#### Infrastructure
+- **Deployment**: Vercel
+- **CI/CD**: GitHub Actions
+- **Package Manager**: pnpm
+- **Runtime**: Node.js 22.20.0
+- **TypeScript**: Strict mode configuration
+
+### Getting Started
+
+#### Prerequisites
+- Node.js 22.20.0 or later
+- pnpm package manager
+- Supabase account and project
+- MongoDB Atlas account
+- Google Gemini API key
+- SendGrid account (for notifications)
+
+#### Environment Setup
+1. Copy `env.example` to `.env.local`
+2. Configure the following variables:
+   ```bash
+   # Supabase
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   SUPABASE_DATABASE_URL=your_database_url
+   SUPABASE_DB_POOL_URL=your_pooler_url
+
+   # MongoDB
+   MONGODB_URI=your_mongodb_connection_string
+
+   # AI
+   GEMINI_API_KEY=your_gemini_api_key
+
+   # Notifications
+   SENDGRID_API_KEY=your_sendgrid_api_key
+   ```
+
+#### Database Setup
+1. **Initialize MongoDB collections and indexes** (run once):
+   ```bash
+   pnpm run db:setup
+   ```
+
+2. **Run database migrations**:
+   ```bash
+   pnpm dlx drizzle-kit generate
+   pnpm dlx drizzle-kit migrate
+   ```
+
+3. **Seed databases with initial data**:
+   ```bash
+   # Seed both databases
+   pnpm run db:seed
+
+   # Or seed individually
+   pnpm run db:seed:pg      # PostgreSQL only
+   pnpm run db:seed:mongo   # MongoDB only
+   ```
+
+   **Available Database Scripts:**
+   - `pnpm run db:setup` - Initialize MongoDB collections and indexes
+   - `pnpm run db:seed:pg` - Seed PostgreSQL with initial user data
+   - `pnpm run db:seed:mongo` - Seed MongoDB with sample analytics data
+   - `pnpm run db:seed` - Run both PostgreSQL and MongoDB seeding
+
+#### Development
+1. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+2. Start development server:
+   ```bash
+   pnpm dev
+   ```
+
+3. Run tests:
+   ```bash
+   pnpm test
+   ```
+
+#### Production Deployment
+- Automated CI/CD via GitHub Actions
+- Deployed on Vercel with environment variables configured
+- Database seeding runs automatically on deployment
+
