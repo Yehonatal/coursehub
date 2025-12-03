@@ -110,3 +110,74 @@ export const outbox = pgTable("outbox", {
     processed: boolean("processed").default(false).notNull(),
     processed_at: timestamp("processed_at"),
 });
+
+// ================= RESOURCE TAGS =================
+export const resource_tags = pgTable("resource_tags", {
+    id: serial("id").primaryKey(),
+    resource_id: uuid("resource_id")
+        .notNull()
+        .references(() => resources.resource_id),
+    tag: varchar("tag", { length: 50 }).notNull(),
+});
+
+// ================= SAVED RESOURCES =================
+export const saved_resources = pgTable("saved_resources", {
+    saved_id: serial("saved_id").primaryKey(),
+    user_id: uuid("user_id")
+        .notNull()
+        .references(() => users.user_id),
+    resource_id: uuid("resource_id")
+        .notNull()
+        .references(() => resources.resource_id),
+    saved_at: timestamp("saved_at").defaultNow().notNull(),
+});
+
+// ================= REPORT FLAGS =================
+export const report_flags = pgTable("report_flags", {
+    report_id: serial("report_id").primaryKey(),
+    resource_id: uuid("resource_id")
+        .notNull()
+        .references(() => resources.resource_id),
+    reporter_id: uuid("reporter_id")
+        .notNull()
+        .references(() => users.user_id),
+    reason: varchar("reason", { length: 255 }).notNull(),
+    status: varchar("status", { length: 20 }).default("Pending").notNull(), // Pending | Resolved
+    reported_at: timestamp("reported_at").defaultNow().notNull(),
+});
+
+// ================= RESOURCE VIEWS =================
+export const resource_views = pgTable("resource_views", {
+    id: serial("id").primaryKey(),
+    resource_id: uuid("resource_id")
+        .notNull()
+        .references(() => resources.resource_id),
+    user_id: uuid("user_id"),
+    viewed_at: timestamp("viewed_at").defaultNow().notNull(),
+});
+
+// ================= UNIVERSITIES =================
+export const universities = pgTable("universities", {
+    university_id: serial("university_id").primaryKey(),
+    name: varchar("name", { length: 120 }).unique().notNull(),
+});
+
+// ================= PROGRAMS =================
+export const programs = pgTable("programs", {
+    program_id: serial("program_id").primaryKey(),
+    university_id: integer("university_id")
+        .notNull()
+        .references(() => universities.university_id),
+    program_name: varchar("program_name", { length: 120 }).notNull(),
+});
+
+// ================= COURSES =================
+export const courses = pgTable("courses", {
+    course_id: serial("course_id").primaryKey(),
+    program_id: integer("program_id")
+        .notNull()
+        .references(() => programs.program_id),
+    course_code: varchar("course_code", { length: 10 }).notNull(),
+    course_name: varchar("course_name", { length: 255 }).notNull(),
+    semester: varchar("semester", { length: 20 }).notNull(),
+});
