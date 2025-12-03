@@ -13,18 +13,18 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: "20" # Match your project's Node version
-                  cache: "pnpm"
+                  node-version: "22"
+                  cache: "npm"
 
             - name: Install dependencies
-              run: pnpm install
+              run: npm ci
 
             - name: Seed PostgreSQL (Supabase)
-              run: pnpm dlx tsx scripts/seed.pg.ts
+              run: npx tsx scripts/seed.pg.ts
               env:
                   SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
 
             - name: Seed MongoDB
-              run: pnpm dlx tsx scripts/seed.mongo.ts
+              run: npx tsx scripts/seed.mongo.ts
               env:
                   MONGODB_URI: ${{ secrets.MONGODB_URI }}
