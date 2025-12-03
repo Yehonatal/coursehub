@@ -1,0 +1,582 @@
+{
+  "id": "0d6c39c1-9918-4aab-8413-b8af50f4a108",
+  "prevId": "c0bfdfd3-f230-4117-8c06-735cb1b2a2d7",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.ai_requests": {
+      "name": "ai_requests",
+      "schema": "",
+      "columns": {
+        "request_id": {
+          "name": "request_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "resource_id": {
+          "name": "resource_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "request_date": {
+          "name": "request_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "response_url": {
+          "name": "response_url",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ai_requests_resource_id_resources_resource_id_fk": {
+          "name": "ai_requests_resource_id_resources_resource_id_fk",
+          "tableFrom": "ai_requests",
+          "tableTo": "resources",
+          "columnsFrom": [
+            "resource_id"
+          ],
+          "columnsTo": [
+            "resource_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ai_requests_user_id_users_user_id_fk": {
+          "name": "ai_requests_user_id_users_user_id_fk",
+          "tableFrom": "ai_requests",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.comments": {
+      "name": "comments",
+      "schema": "",
+      "columns": {
+        "comment_id": {
+          "name": "comment_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "resource_id": {
+          "name": "resource_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "text": {
+          "name": "text",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comment_date": {
+          "name": "comment_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "comments_resource_id_resources_resource_id_fk": {
+          "name": "comments_resource_id_resources_resource_id_fk",
+          "tableFrom": "comments",
+          "tableTo": "resources",
+          "columnsFrom": [
+            "resource_id"
+          ],
+          "columnsTo": [
+            "resource_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "comments_user_id_users_user_id_fk": {
+          "name": "comments_user_id_users_user_id_fk",
+          "tableFrom": "comments",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.notifications": {
+      "name": "notifications",
+      "schema": "",
+      "columns": {
+        "notification_id": {
+          "name": "notification_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event_type": {
+          "name": "event_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sent_date": {
+          "name": "sent_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notifications_user_id_users_user_id_fk": {
+          "name": "notifications_user_id_users_user_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.outbox": {
+      "name": "outbox",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "event_type": {
+          "name": "event_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "processed": {
+          "name": "processed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "processed_at": {
+          "name": "processed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ratings": {
+      "name": "ratings",
+      "schema": "",
+      "columns": {
+        "rating_id": {
+          "name": "rating_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "resource_id": {
+          "name": "resource_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rating_date": {
+          "name": "rating_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ratings_resource_id_resources_resource_id_fk": {
+          "name": "ratings_resource_id_resources_resource_id_fk",
+          "tableFrom": "ratings",
+          "tableTo": "resources",
+          "columnsFrom": [
+            "resource_id"
+          ],
+          "columnsTo": [
+            "resource_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ratings_user_id_users_user_id_fk": {
+          "name": "ratings_user_id_users_user_id_fk",
+          "tableFrom": "ratings",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.resources": {
+      "name": "resources",
+      "schema": "",
+      "columns": {
+        "resource_id": {
+          "name": "resource_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "uploader_id": {
+          "name": "uploader_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "course_code": {
+          "name": "course_code",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "semester": {
+          "name": "semester",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "university": {
+          "name": "university",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "file_url": {
+          "name": "file_url",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "upload_date": {
+          "name": "upload_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "resources_uploader_id_users_user_id_fk": {
+          "name": "resources_uploader_id_users_user_id_fk",
+          "tableFrom": "resources",
+          "tableTo": "users",
+          "columnsFrom": [
+            "uploader_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "full_name": {
+          "name": "full_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_verified": {
+          "name": "is_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "subscription_status": {
+          "name": "subscription_status",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.verification": {
+      "name": "verification",
+      "schema": "",
+      "columns": {
+        "verification_id": {
+          "name": "verification_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "resource_id": {
+          "name": "resource_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "educator_id": {
+          "name": "educator_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verified_date": {
+          "name": "verified_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "verification_resource_id_resources_resource_id_fk": {
+          "name": "verification_resource_id_resources_resource_id_fk",
+          "tableFrom": "verification",
+          "tableTo": "resources",
+          "columnsFrom": [
+            "resource_id"
+          ],
+          "columnsTo": [
+            "resource_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "verification_educator_id_users_user_id_fk": {
+          "name": "verification_educator_id_users_user_id_fk",
+          "tableFrom": "verification",
+          "tableTo": "users",
+          "columnsFrom": [
+            "educator_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "verification_resource_id_unique": {
+          "name": "verification_resource_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "resource_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

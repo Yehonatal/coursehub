@@ -1,0 +1,30 @@
+name: database-setup
+
+on:
+    workflow_dispatch: # Manual trigger instead of every push
+    # Or use: on: [release] for production seeds
+
+jobs:
+    seed-db:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20" # Match your project's Node version
+                  cache: "pnpm"
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Seed PostgreSQL (Supabase)
+              run: pnpm dlx tsx scripts/seed.pg.ts
+              env:
+                  SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+
+            - name: Seed MongoDB
+              run: pnpm dlx tsx scripts/seed.mongo.ts
+              env:
+                  MONGODB_URI: ${{ secrets.MONGODB_URI }}

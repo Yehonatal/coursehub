@@ -8,6 +8,20 @@
       "when": 1764689574818,
       "tag": "0000_busy_wendigo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1764766286888,
+      "tag": "0001_numerous_marvex",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1764768037562,
+      "tag": "0002_broken_jean_grey",
+      "breakpoints": true
     }
   ]
 }
