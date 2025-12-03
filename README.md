@@ -106,6 +106,21 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - **Runtime**: Node.js 22.20.0
 - **TypeScript**: Strict mode configuration
 
+
+#### Security Features:
+- Data Isolation: Users can only see/modify their own private data
+- Public Education: Core content remains accessible to all
+- Fraud Prevention: No self-rating, unique constraints
+- Moderation: Reporting system with educator oversight
+- Subscription Control: AI features can be gated by subscription
+- Admin Controls: University structure management
+  
+#### Performance Optimizations:
+- Indexes: All foreign keys have covering indexes
+- Composite Uniques: Prevent duplicate ratings/saves
+- Optimized RLS: Uses (SELECT auth.uid()) for performance
+- Constraint Checks: Efficient foreign key validation
+
 ### Getting Started
 
 #### Prerequisites
