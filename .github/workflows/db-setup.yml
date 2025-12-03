@@ -14,17 +14,21 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: "22"
-                  cache: "npm"
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
 
             - name: Install dependencies
-              run: npm ci
+              run: pnpm install --frozen-lockfile
 
             - name: Seed PostgreSQL (Supabase)
-              run: npx tsx scripts/seed.pg.ts
+              run: pnpm dlx tsx scripts/seed.pg.ts
               env:
                   SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
 
             - name: Seed MongoDB
-              run: npx tsx scripts/seed.mongo.ts
+              run: pnpm dlx tsx scripts/seed.mongo.ts
               env:
                   MONGODB_URI: ${{ secrets.MONGODB_URI }}
