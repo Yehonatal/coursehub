@@ -17,20 +17,23 @@ async function main() {
     await client.connect();
     const db = drizzle(client);
 
-    await db.insert(users).values([
-        {
-            full_name: "Admin Educator",
-            email: "admin@coursehub.edu",
-            password_hash: "hashed",
-            role: "educator",
-        },
-        {
-            full_name: "Student User",
-            email: "student@coursehub.edu",
-            password_hash: "hashed",
-            role: "student",
-        },
-    ]);
+    await db
+        .insert(users)
+        .values([
+            {
+                full_name: "Admin Educator",
+                email: "admin@coursehub.edu",
+                password_hash: "hashed",
+                role: "educator",
+            },
+            {
+                full_name: "Student User",
+                email: "student@coursehub.edu",
+                password_hash: "hashed",
+                role: "student",
+            },
+        ])
+        .onConflictDoNothing(); // Skip if already exists
 
     console.log("PG seed complete");
     await client.end();
