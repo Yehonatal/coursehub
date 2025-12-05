@@ -5,16 +5,8 @@ import { signUp, type ActionResponse } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
-import { FileUpload } from "@/components/ui/file-upload";
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 
 const initialState: ActionResponse = {
     success: false,
@@ -25,164 +17,211 @@ export function RegisterForm() {
     const [state, action, isPending] = useActionState(signUp, initialState);
 
     return (
-        <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl font-bold text-center">
-                    Register to Course Hub
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-                <form action={action} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="firstName">First name</Label>
-                            <Input
-                                id="firstName"
-                                name="firstName"
-                                placeholder="Enter your first name"
-                                required
-                            />
-                            {state?.errors?.firstName && (
-                                <p className="text-sm text-red-500">
-                                    {state.errors.firstName[0]}
-                                </p>
-                            )}
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="lastName">Last name</Label>
-                            <Input
-                                id="lastName"
-                                name="lastName"
-                                placeholder="Enter your last name"
-                                required
-                            />
-                            {state?.errors?.lastName && (
-                                <p className="text-sm text-red-500">
-                                    {state.errors.lastName[0]}
-                                </p>
-                            )}
-                        </div>
-                    </div>
+        <div className="w-full space-y-8">
+            <div className="flex flex-col space-y-2 text-center">
+                <h1 className="text-3xl font-serif font-medium tracking-tight text-[#0A251D]">
+                    Create an account
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                    Join CourseHub to start your learning journey
+                </p>
+            </div>
 
+            <form action={action} className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="firstName" className="text-[#0A251D]">
+                            First name
+                        </Label>
                         <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            placeholder="example@gmail.com"
+                            id="firstName"
+                            name="firstName"
+                            placeholder="John"
                             required
+                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
                         />
-                        {state?.errors?.email && (
+                        {state?.errors?.firstName && (
                             <p className="text-sm text-red-500">
-                                {state.errors.email[0]}
+                                {state.errors.firstName[0]}
                             </p>
                         )}
                     </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="lastName" className="text-[#0A251D]">
+                            Last name
+                        </Label>
+                        <Input
+                            id="lastName"
+                            name="lastName"
+                            placeholder="Doe"
+                            required
+                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                        />
+                        {state?.errors?.lastName && (
+                            <p className="text-sm text-red-500">
+                                {state.errors.lastName[0]}
+                            </p>
+                        )}
+                    </div>
+                </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="accountType">
-                                Select Account Type
-                            </Label>
-                            <Select
+                <div className="space-y-2">
+                    <Label htmlFor="email" className="text-[#0A251D]">
+                        Email
+                    </Label>
+                    <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="name@example.com"
+                        required
+                        className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                    />
+                    {state?.errors?.email && (
+                        <p className="text-sm text-red-500">
+                            {state.errors.email[0]}
+                        </p>
+                    )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="accountType" className="text-[#0A251D]">
+                            Account Type
+                        </Label>
+                        <div className="relative">
+                            <select
                                 id="accountType"
                                 name="accountType"
                                 required
+                                className="flex h-11 w-full items-center justify-between rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#0A251D] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 <option value="student">Student</option>
                                 <option value="educator">Educator</option>
-                            </Select>
+                            </select>
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="university">University</Label>
-                            <Select
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="university" className="text-[#0A251D]">
+                            University
+                        </Label>
+                        <div className="relative">
+                            <select
                                 id="university"
                                 name="university"
                                 required
                                 defaultValue=""
+                                className="flex h-11 w-full items-center justify-between rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#0A251D] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 <option value="" disabled>
-                                    Select your University
+                                    Select University
                                 </option>
-                                <option value="aau">Haramaya University</option>
                                 <option value="aau">
                                     Addis Ababa University
                                 </option>
                                 <option value="aastu">AASTU</option>
                                 <option value="astu">ASTU</option>
+                                <option value="jimma">Jimma University</option>
+                                <option value="haramaya">
+                                    Haramaya University
+                                </option>
                                 <option value="other">Other</option>
-                            </Select>
+                            </select>
                         </div>
+                        {state?.errors?.university && (
+                            <p className="text-sm text-red-500">
+                                {state.errors.university[0]}
+                            </p>
+                        )}
                     </div>
+                </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="password">Password</Label>
-                                <Input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    required
-                                />
-                                {state?.errors?.password && (
-                                    <p className="text-sm text-red-500">
-                                        {state.errors.password[0]}
-                                    </p>
-                                )}
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="confirmPassword">
-                                    Confirm password
-                                </Label>
-                                <Input
-                                    id="confirmPassword"
-                                    name="confirmPassword"
-                                    type="password"
-                                    placeholder="Confirm password"
-                                    required
-                                />
-                                {state?.errors?.confirmPassword && (
-                                    <p className="text-sm text-red-500">
-                                        {state.errors.confirmPassword[0]}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="schoolId">School ID</Label>
-                            <FileUpload id="schoolId" name="schoolId" />
-                        </div>
+                <div className="space-y-2">
+                    <Label htmlFor="schoolId" className="text-[#0A251D]">
+                        School ID / Proof of Enrollment
+                    </Label>
+                    <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                        <Input
+                            id="schoolId"
+                            name="schoolId"
+                            type="file"
+                            accept="image/*,.pdf"
+                            className="cursor-pointer border-0 bg-transparent p-0 h-auto file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#0A251D]/10 file:text-[#0A251D] hover:file:bg-[#0A251D]/20"
+                        />
                     </div>
+                </div>
 
-                    {state?.message && !state.success && (
-                        <p className="text-sm text-red-500 text-center">
-                            {state.message}
-                        </p>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="password" className="text-[#0A251D]">
+                            Password
+                        </Label>
+                        <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="••••••••"
+                            required
+                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                        />
+                        {state?.errors?.password && (
+                            <p className="text-sm text-red-500">
+                                {state.errors.password[0]}
+                            </p>
+                        )}
+                    </div>
+                    <div className="space-y-2">
+                        <Label
+                            htmlFor="confirmPassword"
+                            className="text-[#0A251D]"
+                        >
+                            Confirm Password
+                        </Label>
+                        <Input
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            placeholder="••••••••"
+                            required
+                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                        />
+                        {state?.errors?.confirmPassword && (
+                            <p className="text-sm text-red-500">
+                                {state.errors.confirmPassword[0]}
+                            </p>
+                        )}
+                    </div>
+                </div>
+
+                {state?.message && !state.success && (
+                    <p className="text-sm text-red-500 text-center">
+                        {state.message}
+                    </p>
+                )}
+
+                <Button
+                    type="submit"
+                    className="w-full h-11 bg-[#0A251D] hover:bg-[#0A251D]/90 text-white font-medium"
+                    disabled={isPending}
+                >
+                    {isPending && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
+                    Create Account
+                </Button>
+            </form>
 
-                    <Button
-                        type="submit"
-                        className="w-full"
-                        disabled={isPending}
-                    >
-                        {isPending ? "Registering..." : "Register"}
-                    </Button>
-                </form>
-            </CardContent>
-            <CardFooter className="justify-center">
-                <p className="text-sm text-muted-foreground">
-                    Got an account?{" "}
-                    <Link
-                        href="/login"
-                        className="text-primary hover:underline"
-                    >
-                        Login here!
-                    </Link>
-                </p>
-            </CardFooter>
-        </Card>
+            <div className="text-center text-sm">
+                <span className="text-muted-foreground">
+                    Already have an account?{" "}
+                </span>
+                <Link
+                    href="/login"
+                    className="font-medium text-[#0A251D] hover:underline underline-offset-4"
+                >
+                    Sign in
+                </Link>
+            </div>
+        </div>
     );
 }
