@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+    HandDrawnCircle,
+    HandDrawnUnderline,
+} from "@/components/ui/decorations";
 import {
     ArrowRight,
     BookOpen,
@@ -20,8 +23,14 @@ export default function LandingPage() {
                     <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
                         <div className="space-y-8" data-aos="fade-right">
                             <h1 className="text-5xl font-serif font-medium tracking-tight sm:text-6xl md:text-7xl text-foreground leading-[1.1]">
-                                A centralized, adaptive learning ecosystem for
-                                everyone.
+                                A centralized, adaptive
+                                <HandDrawnUnderline className="text-[#F5A623]">
+                                    adaptive
+                                </HandDrawnUnderline>{" "}
+                                learning ecosystem for{" "}
+                                <HandDrawnCircle className="text-[#F5A623] -rotate-2">
+                                    everyone.
+                                </HandDrawnCircle>
                             </h1>
                             <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
                                 Access a vast library of resources tagged by
@@ -56,7 +65,6 @@ export default function LandingPage() {
                             className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-muted"
                             data-aos="fade-left"
                         >
-                            {/* Placeholder Image */}
                             <div className="absolute inset-0 bg-neutral-200 flex items-center justify-center text-neutral-400">
                                 <span className="text-lg">
                                     Platform Dashboard Preview
@@ -109,7 +117,11 @@ export default function LandingPage() {
                 <div className="container px-4 md:px-6 mx-auto">
                     <div className="text-center mb-16">
                         <h3 className="text-xs font-bold tracking-widest text-muted-foreground uppercase mb-8">
-                            Trusted By Leading Ethiopian Universities
+                            Trusted By{" "}
+                            <HandDrawnUnderline className="text-[#F5A623]">
+                                Leading
+                            </HandDrawnUnderline>{" "}
+                            Ethiopian Universities
                         </h3>
                         <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-70 grayscale">
                             <div className="h-12 w-48 bg-neutral-800/10 rounded flex items-center justify-center font-serif font-bold text-neutral-800/40">
@@ -179,7 +191,11 @@ export default function LandingPage() {
                 <div className="container px-4 md:px-6 mx-auto">
                     <div className="text-center mb-16" data-aos="fade-up">
                         <h2 className="text-3xl font-serif font-medium tracking-tight sm:text-4xl md:text-5xl mb-4">
-                            How CourseHub works with your studies
+                            How CourseHub{" "}
+                            <HandDrawnUnderline className="text-[#F5A623]">
+                                works
+                            </HandDrawnUnderline>{" "}
+                            with your studies
                         </h2>
                     </div>
 

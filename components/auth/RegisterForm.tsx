@@ -5,6 +5,7 @@ import { signUp, type ActionResponse } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { HandDrawnBox } from "@/components/ui/decorations";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 
@@ -20,7 +21,10 @@ export function RegisterForm() {
         <div className="w-full space-y-8">
             <div className="flex flex-col space-y-2 text-center">
                 <h1 className="text-3xl font-serif font-medium tracking-tight text-[#0A251D]">
-                    Create an account
+                    Create an{" "}
+                    <HandDrawnBox className="text-[#F5A623] -rotate-2">
+                        account
+                    </HandDrawnBox>
                 </h1>
                 <p className="text-sm text-muted-foreground">
                     Join CourseHub to start your learning journey

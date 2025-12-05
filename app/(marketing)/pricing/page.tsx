@@ -9,6 +9,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import {
+    HandDrawnCircle,
+    HandDrawnUnderline,
+} from "@/components/ui/decorations";
 
 export default function PricingPage() {
     return (
@@ -22,7 +26,10 @@ export default function PricingPage() {
                         Membership Plans
                     </div>
                     <h1 className="text-4xl font-serif font-medium tracking-tight sm:text-5xl md:text-6xl">
-                        Invest in your future
+                        Invest in your{" "}
+                        <HandDrawnUnderline className="text-[#F5A623]">
+                            future
+                        </HandDrawnUnderline>
                     </h1>
                     <p className="max-w-[800px] text-muted-foreground md:text-xl/relaxed lg:text-lg/relaxed xl:text-xl/relaxed">
                         Choose the plan that fits your learning needs. Upgrade
@@ -44,7 +51,9 @@ export default function PricingPage() {
                             </p>
                         </div>
                         <div className="flex items-baseline text-4xl font-serif font-bold mb-8">
-                            Free
+                            <HandDrawnCircle className="text-[#F5A623] -rotate-2">
+                                Free
+                            </HandDrawnCircle>
                             <span className="ml-2 text-lg font-sans font-normal text-muted-foreground">
                                 / forever
                             </span>

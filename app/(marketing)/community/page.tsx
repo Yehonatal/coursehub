@@ -7,6 +7,10 @@ import {
     Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+    HandDrawnCircle,
+    HandDrawnUnderline,
+} from "@/components/ui/decorations";
 
 export default function CommunityPage() {
     return (
@@ -20,7 +24,10 @@ export default function CommunityPage() {
                         Our Network
                     </div>
                     <h1 className="text-4xl font-serif font-medium tracking-tight sm:text-5xl md:text-6xl">
-                        A Thriving Academic Community
+                        A Thriving Academic{" "}
+                        <HandDrawnUnderline className="text-[#F5A623]">
+                            Community
+                        </HandDrawnUnderline>
                     </h1>
                     <p className="max-w-[800px] text-muted-foreground md:text-xl/relaxed lg:text-lg/relaxed xl:text-xl/relaxed">
                         Join a network of students and educators dedicated to
@@ -35,7 +42,10 @@ export default function CommunityPage() {
                             Collaboration
                         </div>
                         <h2 className="text-3xl font-serif font-medium tracking-tight">
-                            Connect and Collaborate
+                            Connect and{" "}
+                            <HandDrawnCircle className="text-[#F5A623] -rotate-1">
+                                Collaborate
+                            </HandDrawnCircle>
                         </h2>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             CourseHub isn't just a repository; it's a living
@@ -72,7 +82,10 @@ export default function CommunityPage() {
                             Quality Control
                         </div>
                         <h2 className="text-3xl font-serif font-medium tracking-tight">
-                            Community Moderation
+                            Community{" "}
+                            <HandDrawnUnderline className="text-[#F5A623]">
+                                Moderation
+                            </HandDrawnUnderline>
                         </h2>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             We rely on our community to maintain high standards.
@@ -90,7 +103,10 @@ export default function CommunityPage() {
                             Verification
                         </div>
                         <h2 className="text-3xl font-serif font-medium tracking-tight">
-                            Educator Verification
+                            Educator{" "}
+                            <HandDrawnCircle className="text-[#F5A623] -rotate-2">
+                                Verification
+                            </HandDrawnCircle>
                         </h2>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             Educators play a special role on CourseHub. Verified

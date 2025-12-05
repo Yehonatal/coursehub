@@ -5,6 +5,7 @@ import { signIn, type ActionResponse } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { HandDrawnUnderline } from "@/components/ui/decorations";
 import Link from "next/link";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 
@@ -21,7 +22,10 @@ export function LoginForm() {
         <div className="w-full space-y-8">
             <div className="flex flex-col space-y-2 text-center">
                 <h1 className="text-3xl font-serif font-medium tracking-tight text-[#0A251D]">
-                    Welcome back
+                    Welcome{" "}
+                    <HandDrawnUnderline className="text-[#F5A623]">
+                        back
+                    </HandDrawnUnderline>
                 </h1>
                 <p className="text-sm text-muted-foreground">
                     Enter your credentials to access your account
