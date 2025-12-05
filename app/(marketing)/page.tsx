@@ -23,7 +23,7 @@ export default function LandingPage() {
                     <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
                         <div className="space-y-8" data-aos="fade-right">
                             <h1 className="text-5xl font-serif font-medium tracking-tight sm:text-6xl md:text-7xl text-foreground leading-[1.1]">
-                                A centralized, adaptive
+                                A centralized,
                                 <HandDrawnUnderline className="text-[#F5A623]">
                                     adaptive
                                 </HandDrawnUnderline>{" "}
