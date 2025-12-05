@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Timestamp } from "@/components/ui/Timestamp";
 
@@ -9,45 +8,58 @@ export default function AuthLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="flex min-h-screen w-full font-sans">
-            <div className="flex flex-1 flex-col px-4 py-12 sm:px-6 lg:px-20 xl:px-24 bg-[#F9F9F9]">
-                <div className="mb-10">
-                    <Link href="/" className="flex items-center gap-2 w-fit">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#0A251D] text-white">
-                            <span className="text-2xl font-serif font-bold">
-                                H
-                            </span>
+        <div className="flex min-h-screen w-full font-sans bg-[#0A251D] lg:bg-white lg:flex-row">
+            <div className="absolute inset-0 z-0 lg:hidden overflow-hidden pointer-events-none">
+                <div className="absolute inset-0 opacity-10 bg-[url('/auth-pattern.png')] bg-cover bg-center mix-blend-overlay"></div>
+                <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] rounded-full bg-white/5 blur-3xl" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[200px] h-[200px] rounded-full bg-white/5 blur-3xl" />
+            </div>
+
+            <div className="relative z-10 flex flex-1 flex-col justify-center px-4 py-8 sm:px-6 lg:px-20 xl:px-24 lg:w-1/2 lg:bg-white">
+                <div className="bg-[#F9F9F9] rounded-3xl shadow-2xl p-6 sm:p-8 lg:shadow-none lg:p-0 lg:bg-transparent lg:rounded-none w-full max-w-md mx-auto lg:max-w-full">
+                    <div className="mb-8 lg:mb-10">
+                        <Link
+                            href="/"
+                            className="flex items-center gap-2 w-fit"
+                        >
+                            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#0A251D] text-white">
+                                <span className="text-2xl font-serif font-bold">
+                                    H
+                                </span>
+                            </div>
+                            <span className="sr-only">CourseHub</span>
+                        </Link>
+                    </div>
+
+                    <div className="flex-1 flex flex-col justify-center w-full max-w-md mx-auto lg:max-w-xl lg:mx-0">
+                        {children}
+                    </div>
+
+                    <div className="mt-8 lg:mt-12 flex flex-col sm:flex-row items-center justify-between text-xs sm:text-sm text-muted-foreground gap-4 sm:gap-0 border-t border-border/10 pt-6 lg:border-none lg:pt-0">
+                        <p className="text-center sm:text-left">
+                            <Timestamp /> CourseHub. All rights reserved.
+                        </p>
+                        <div className="flex gap-4">
+                            <Link
+                                href="/privacy"
+                                className="hover:underline hover:text-[#0A251D] transition-colors"
+                            >
+                                Privacy Policy
+                            </Link>
+                            <Link
+                                href="/terms"
+                                className="hover:underline hover:text-[#0A251D] transition-colors"
+                            >
+                                Terms & Conditions
+                            </Link>
                         </div>
-                        <span className="sr-only">CourseHub</span>
-                    </Link>
-                </div>
-                <div className="flex-1 flex flex-col justify-center">
-                    <div className="mx-auto w-full max-w-md">{children}</div>
-                </div>
-                <div className="mt-8 flex items-center justify-between text-sm text-muted-foreground">
-                    <p>
-                        <Timestamp /> CourseHub. All rights reserved.
-                    </p>
-                    <div className="flex gap-2">
-                        <Link
-                            href="/privacy"
-                            className="hover:underline hover:text-[#0A251D]"
-                        >
-                            Privacy Policy
-                        </Link>
-                        <span>•</span>
-                        <Link
-                            href="/terms"
-                            className="hover:underline hover:text-[#0A251D]"
-                        >
-                            Term & Condition
-                        </Link>
                     </div>
                 </div>
             </div>
-            <div className="hidden lg:block lg:w-1/2 relative bg-[#0A251D]">
+
+            <div className="hidden lg:block lg:w-1/2 relative bg-[#0A251D] overflow-hidden">
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-12 text-center z-10">
-                    <h1 className="text-5xl font-serif font-medium mb-6">
+                    <h1 className="text-4xl xl:text-5xl font-serif font-medium mb-6 tracking-tight">
                         Elevate your academic journey.
                     </h1>
                     <p className="text-lg text-white/80 max-w-lg leading-relaxed">
@@ -55,8 +67,10 @@ export default function AuthLayout({
                         advanced adaptive learning platform in Ethiopia.
                     </p>
                 </div>
-                {/* Abstract Pattern Overlay */}
                 <div className="absolute inset-0 opacity-10 bg-[url('/auth-pattern.png')] bg-cover bg-center mix-blend-overlay"></div>
+
+                <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-white/5 blur-3xl" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] rounded-full bg-white/5 blur-3xl" />
             </div>
         </div>
     );
