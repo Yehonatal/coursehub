@@ -18,14 +18,12 @@
                 "name": "next"
             }
         ],
-        "ignoreDeprecations": "6.0",
-        "baseUrl": ".",
         "paths": {
             "@/*": ["./*"],
-            "@lib/*": ["lib/*"],
-            "@components/*": ["components/*"],
-            "@types/*": ["types/*"],
-            "@services/*": ["services/*"]
+            "@lib/*": ["./lib/*"],
+            "@components/*": ["./components/*"],
+            "@types/*": ["./types/*"],
+            "@services/*": ["./services/*"]
         }
     },
     "include": [
