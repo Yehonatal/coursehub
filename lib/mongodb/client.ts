@@ -1,4 +1,4 @@
-import mongoose, { Connection, Model, Document, Schema } from "mongoose";
+import mongoose, { Model, Document, Schema } from "mongoose";
 
 // Use a global cache to avoid creating multiple connections in development
 declare global {
@@ -23,12 +23,15 @@ export async function connectMongo(): Promise<typeof mongoose> {
     if (mongoose.connection && mongoose.connection.readyState === 1)
         return mongoose;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cached = (global as any).mongoose;
+
     if (
-        global.mongoose &&
-        (global.mongoose.connection.readyState === 1 ||
-            global.mongoose.connection.readyState === 2)
+        cached &&
+        (cached.connection.readyState === 1 ||
+            cached.connection.readyState === 2)
     ) {
-        return global.mongoose;
+        return cached;
     }
 
     if (!uri) throw new Error("MONGODB_URI is not set in environment");
@@ -39,7 +42,8 @@ export async function connectMongo(): Promise<typeof mongoose> {
         serverSelectionTimeoutMS: 5000,
     });
 
-    global.mongoose = mongoose;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).mongoose = mongoose;
     return mongoose;
 }
 
