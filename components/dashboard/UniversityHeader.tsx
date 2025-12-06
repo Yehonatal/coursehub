@@ -31,8 +31,8 @@ export function UniversityHeader({
                     />
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-green-50 to-emerald-50">
-                        <div className="flex items-center gap-4 opacity-80">
-                            <div className="relative rounded-full h-16 w-16">
+                        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 opacity-80 text-center md:text-left p-4">
+                            <div className="relative rounded-full h-12 w-12 md:h-16 md:w-16 shrink-0">
                                 <Image
                                     src={logoUrl}
                                     alt={name}
@@ -41,10 +41,10 @@ export function UniversityHeader({
                                 />
                             </div>
                             <div className="space-y-1">
-                                <h1 className="text-3xl font-serif font-bold text-green-700">
+                                <h1 className="text-xl md:text-3xl font-serif font-bold text-green-700 line-clamp-1">
                                     {name}
                                 </h1>
-                                <p className="text-sm text-orange-400 font-medium italic">
+                                <p className="text-xs md:text-sm text-orange-400 font-medium italic line-clamp-1">
                                     — Building the Basis for Development —
                                 </p>
                             </div>
@@ -53,33 +53,34 @@ export function UniversityHeader({
                 )}
             </div>
 
-            <div className="relative">
-                <div className="flex flex-col md:flex-row items-start justify-between gap-4">
-                    <div className="flex items-start gap-6">
-                        <div className="h-24 w-24  rounded-full border-4 border-white bg-white shadow-sm relative ml-4 -mt-12 overflow-hidden shrink-0">
+            <div className="relative px-4 md:px-0">
+                <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-4">
+                    <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 w-full">
+                        <div className="h-16 w-16 md:h-24 md:w-24 rounded-full border-4 border-white bg-white shadow-sm relative md:ml-4 -mt-12 md:-mt-10 overflow-hidden shrink-0">
                             <Image
                                 src={logoUrl}
                                 alt={name}
                                 fill
+                                sizes="96"
                                 className="object-contain p-1"
                             />
                         </div>
-                        <div className="space-y-1 pt-2">
+                        <div className="space-y-2 pt-0 md:pt-2 text-center md:text-left w-full">
                             <div>
-                                <h1 className="text-2xl font-bold text-[#0A251D]">
+                                <h1 className="text-2xl md:text-3xl font-bold text-[#0A251D]">
                                     {name}
                                 </h1>
                                 <a
                                     href={website}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-xs text-blue-500 hover:underline flex items-center gap-1 md:hidden"
+                                    className="text-xs text-blue-500 hover:underline flex items-center justify-center md:justify-start gap-1 md:hidden"
                                 >
                                     {website}
                                     <ExternalLink className="h-3 w-3" />
                                 </a>
                             </div>
-                            <p className="text-base text-muted-foreground max-w-2xl leading-relaxed">
+                            <p className="text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed mx-auto md:mx-0">
                                 {description}
                             </p>
                             <p className="text-sm text-muted-foreground">
@@ -88,15 +89,17 @@ export function UniversityHeader({
                         </div>
                     </div>
 
-                    <a
-                        href={website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hidden md:flex text-sm text-blue-500 hover:underline items-center gap-1 pt-2"
-                    >
-                        {website}
-                        <ExternalLink className="h-3 w-3" />
-                    </a>
+                    <div>
+                        <a
+                            href={website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hidden md:flex text-sm text-blue-500 hover:underline items-center gap-1 pt-4"
+                        >
+                            {website}
+                            <ExternalLink className="h-3 w-3" />
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

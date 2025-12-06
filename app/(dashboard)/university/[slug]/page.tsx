@@ -67,7 +67,7 @@ export default async function UniversityPage({
     ];
 
     return (
-        <div className="max-w-7xl mx-auto px-16 sm:px-6 lg:px-8 pb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
             <div className="space-y-8">
                 <UniversityHeader
                     name="Haramaya University"

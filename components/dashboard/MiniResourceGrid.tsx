@@ -22,7 +22,7 @@ interface ResourceGridProps {
 export function MiniResourceGrid({ resources }: ResourceGridProps) {
     return (
         <div
-            className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-4 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
             data-aos="fade-up"
             data-aos-delay="300"
             suppressHydrationWarning

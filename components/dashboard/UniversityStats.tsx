@@ -11,7 +11,7 @@ interface StatCardProps {
 function StatCard({ label, value, icon, highlight }: StatCardProps) {
     return (
         <div
-            className={`rounded-xl p-6 flex flex-col items-center justify-center text-center gap-2 ${
+            className={`rounded-xl flex-1 p-6 flex flex-col items-center justify-center text-center gap-2 ${
                 highlight ? "bg-[#FDF6B2]" : "bg-blue-50/50"
             }`}
         >
@@ -26,8 +26,8 @@ function StatCard({ label, value, icon, highlight }: StatCardProps) {
 
 export function UniversityStats() {
     return (
-        <div className="grid grid-cols-2 md:grid-cols-[1fr_1.5fr] gap-4">
-            <div className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1fr_1.5fr] gap-4">
+            <div className="space-y-4 flex flex-wrap gap-4">
                 <StatCard label="Students" value="250" />
                 <StatCard label="Staff" value="8" />
             </div>
