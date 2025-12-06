@@ -46,13 +46,13 @@ export function Header() {
                                 H
                             </span>
                         </div>
-                        <span className="text-lg font-serif font-bold text-[#0A251D]">
+                        <span className="hidden md:block text-lg font-serif font-bold text-[#0A251D]">
                             Course Hub
                         </span>
                     </Link>
                 </div>
 
-                <div className="flex-1 max-w-xl mx-4 hidden md:block">
+                <div className="flex-1 max-w-xl mx-4">
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -64,14 +64,6 @@ export function Header() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-muted-foreground"
-                    >
-                        <Grid className="h-5 w-5" />
-                    </Button>
-
                     <div className="relative" ref={menuRef}>
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}

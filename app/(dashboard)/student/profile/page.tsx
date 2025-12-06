@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 export default function StudentProfilePage() {
     return (
-        <div className="max-w-7xl mx-auto pb-12 space-y-8">
+        <div className="max-w-7xl mx-auto pb-12 space-y-8 px-4 md:px-0">
             <ProfileHeader />
             <ProfileStats />
             <ProfileRecents />

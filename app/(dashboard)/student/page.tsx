@@ -6,6 +6,7 @@ import { QuickUploadCard } from "@/components/dashboard/QuickUploadCard";
 import { RecentsList } from "@/components/dashboard/RecentsList";
 import { ResourceGrid } from "@/components/dashboard/ResourceGrid";
 import { AIUploadCard } from "@/components/dashboard/AIUploadCard";
+import { MobileQuickActions } from "@/components/dashboard/MobileQuickActions";
 import { DashboardSkeleton } from "@/components/skeleton/DashboardSkeleton";
 
 export default function StudentDashboard() {
@@ -25,7 +26,7 @@ export default function StudentDashboard() {
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[2.5fr_7fr_2.5fr] gap-8">
-            <div className="space-y-8">
+            <div className="hidden lg:block space-y-8">
                 <ProfileCard
                     name="Yonatan Afewerk"
                     role="SWE | @HRU | Full-Stack Developer"
@@ -38,6 +39,7 @@ export default function StudentDashboard() {
             </div>
 
             <div className="space-y-10">
+                <MobileQuickActions />
                 <RecentsList
                     items={[
                         {
@@ -141,7 +143,7 @@ export default function StudentDashboard() {
                 />
             </div>
 
-            <div className="space-y-6">
+            <div className="hidden lg:block space-y-6">
                 <AIUploadCard />
             </div>
         </div>
