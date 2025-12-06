@@ -38,7 +38,7 @@ export function Badge({
 
     return (
         <div
-            className={`px-2 py-0.5 bg-gray-100 rounded text-[10px] font-medium text-gray-700 ${className}`}
+            className={`px-2 py-0.5 w-fit bg-gray-100 rounded text-[10px] font-medium text-gray-700 ${className}`}
         >
             {label ?? "Badge"}
         </div>

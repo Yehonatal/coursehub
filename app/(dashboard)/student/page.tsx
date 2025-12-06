@@ -8,16 +8,17 @@ import { ResourceGrid } from "@/components/dashboard/ResourceGrid";
 import { AIUploadCard } from "@/components/dashboard/AIUploadCard";
 import { MobileQuickActions } from "@/components/dashboard/MobileQuickActions";
 import { DashboardSkeleton } from "@/components/skeleton/DashboardSkeleton";
+import { mockDelay } from "@/utils/helpers";
 
 export default function StudentDashboard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Simulate loading
-        const timer = setTimeout(() => {
+        const loadData = async () => {
+            await mockDelay();
             setLoading(false);
-        }, 1000);
-        return () => clearTimeout(timer);
+        };
+        loadData();
     }, []);
 
     if (loading) {
@@ -65,9 +66,7 @@ export default function StudentDashboard() {
                         },
                     ]}
                 />
-                <h3 className="text-lg font-serif font-bold text-[#0A251D]">
-                    Most Popular Resources
-                </h3>
+
                 <ResourceGrid
                     resources={[
                         {

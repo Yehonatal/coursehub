@@ -1,6 +1,6 @@
 import React from "react";
-import { Header } from "@/components/dashboard/Header";
-import { BottomNav } from "@/components/dashboard/BottomNav";
+import { Header } from "@/components/layout/Header";
+import { BottomNav } from "@/components/layout/BottomNav";
 import { AOSInit } from "@/utils/AOSInit";
 
 export default function DashboardLayout({
