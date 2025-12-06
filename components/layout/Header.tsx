@@ -79,7 +79,7 @@ export function Header() {
                         </button>
 
                         {isMenuOpen && (
-                            <Card className="absolute right-0 top-full mt-2 w-72 p-2 z-50 shadow-lg border-border/60 animate-in fade-in zoom-in-95 duration-200 bg-white">
+                            <Card className="absolute right-0 rounded-xl top-full mt-2 w-72 p-2 z-50 shadow-sm border-border/60 animate-in fade-in zoom-in-95 duration-200 bg-white">
                                 <div className="p-2 flex items-start gap-3 mb-2">
                                     <div className="h-12 w-12 rounded-full bg-gray-200 overflow-hidden shrink-0 relative">
                                         <Image

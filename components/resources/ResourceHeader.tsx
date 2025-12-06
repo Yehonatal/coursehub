@@ -1,20 +1,18 @@
+"use client";
+
 import React, { useState } from "react";
-import {
-    Star,
-    Flag,
-    Sparkles,
-    Download,
-    Share2,
-    MoreHorizontal,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Image from "next/image";
+import { Star, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { AIChatModal } from "@/components/ai/AIChatModal";
+import { ResourceHeaderActions } from "./ResourceHeaderActions";
 
 interface ResourceHeaderProps {
     title: string;
     rating: number;
     reviews: number;
+    downloads: number;
     courseCode: string;
     type: string;
     date: string;
@@ -27,6 +25,7 @@ export function ResourceHeader({
     title,
     rating,
     reviews,
+    downloads,
     courseCode,
     type,
     date,
@@ -44,18 +43,15 @@ export function ResourceHeader({
                 resourceTitle={title}
                 resourceType={type}
             />
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="space-y-1">
-                    <div className="flex items-center gap-3">
-                        <h1 className="text-3xl font-bold text-[#0A251D]">
+                    <div className="flex items-center">
+                        <h1 className="text-2xl md:text-3xl font-bold text-[#0A251D] leading-tight">
                             {title}
                         </h1>
-                        <span className="text-gray-500 text-lg">
-                            ({reviews})
-                        </span>
                     </div>
 
-                    <div className="flex items-center gap-2 text-sm">
+                    <div className="flex flex-wrap items-center gap-2 text-sm mt-1">
                         <div className="flex text-yellow-400">
                             {[1, 2, 3, 4].map((i) => (
                                 <Star
@@ -69,12 +65,17 @@ export function ResourceHeader({
                             {rating} / 5
                         </span>
                         <span className="text-gray-400">
-                            based on {reviews} reviews
+                            ({reviews} reviews)
                         </span>
+                        <span className="text-gray-300">•</span>
+                        <div className="flex items-center gap-1 text-gray-600">
+                            <Download className="w-4 h-4" />
+                            <span>{downloads} downloads</span>
+                        </div>
                     </div>
 
-                    <div className="flex items-center gap-3 text-sm text-gray-500 mt-2">
-                        <span className="font-medium text-gray-900">
+                    <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mt-2">
+                        <span className="font-medium text-[#0A251D]">
                             {courseCode}
                         </span>
                         <span>•</span>
@@ -89,55 +90,38 @@ export function ResourceHeader({
                         <Badge variant="verified" label="Verified" />
                     </div>
                 </div>
-
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                            <div className="w-full h-full bg-linear-to-br from-blue-500 to-purple-600"></div>
+                <div className="hidden md:flex items-center gap-3">
+                    <Link
+                        href="/university/haramaya-university"
+                        className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                    >
+                        <div className="w-12 h-12 rounded-full border border-gray-200 overflow-hidden relative bg-white">
+                            <Image
+                                src="/hu-logo.jpg"
+                                alt={university}
+                                fill
+                                className="object-contain p-1"
+                            />
                         </div>
                         <div className="text-sm">
-                            <p className="font-medium text-gray-900">
+                            <p className="font-medium text-[#0A251D]">
                                 {university}
                             </p>
                             <p className="text-gray-500">{department}</p>
                         </div>
-                    </div>
+                    </Link>
                 </div>
             </div>
 
-            <div className="flex items-center gap-3 border-t border-b border-gray-100 py-4">
-                <Button
-                    variant="outline"
-                    className="gap-2 text-orange-600 border-orange-200 hover:bg-orange-50 hover:text-orange-700"
-                >
-                    <Flag className="w-4 h-4" />
-                </Button>
-                <Button
-                    className="gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
-                    onClick={() => setIsAIModalOpen(true)}
-                >
-                    <Sparkles className="w-4 h-4" />
-                    Generate Content
-                </Button>
-                <Button className="gap-2 bg-green-600 hover:bg-green-700 text-white shadow-sm">
-                    <Download className="w-4 h-4" />
-                </Button>
-                <div className="flex-1"></div>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-gray-400 hover:text-gray-600"
-                >
-                    <Share2 className="w-5 h-5" />
-                </Button>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-gray-400 hover:text-gray-600"
-                >
-                    <MoreHorizontal className="w-5 h-5" />
-                </Button>
-            </div>
+            <ResourceHeaderActions
+                onGenerateContent={() => setIsAIModalOpen(true)}
+                onDownload={() => {
+                    /* TODO: download handler */
+                }}
+                onReport={() => {
+                    /* TODO: report handler */
+                }}
+            />
         </div>
     );
 }

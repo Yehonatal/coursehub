@@ -1,0 +1,38 @@
+"use client";
+
+import React from "react";
+import { usePathname } from "next/navigation";
+import { ProfileCard } from "@/components/dashboard/ProfileCard";
+import { QuickUploadCard } from "@/components/dashboard/QuickUploadCard";
+
+export function SidebarWrapper({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+
+    const hideSidebarPaths = ["/student/profile", "/instructor/profile"];
+    const shouldHideSidebar = hideSidebarPaths.some((path) =>
+        pathname.startsWith(path)
+    );
+
+    if (shouldHideSidebar) {
+        return <>{children}</>;
+    }
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-[2.5fr_9.5fr] gap-8">
+            <div className="hidden lg:block space-y-8">
+                <ProfileCard
+                    name="Yonatan Afewerk"
+                    role="SWE | @HRU | Full-Stack Developer"
+                    university="Haramaya University"
+                    department="Software Engineering"
+                    location="Harar"
+                    avatarUrl="https://github.com/shadcn.png"
+                    type="student"
+                    badge="Student"
+                />
+                <QuickUploadCard />
+            </div>
+            <div className="w-full min-w-0">{children}</div>
+        </div>
+    );
+}

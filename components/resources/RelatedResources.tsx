@@ -33,7 +33,7 @@ export function RelatedResources() {
                 {[1, 2, 3].map((i) => (
                     <Card
                         key={i}
-                        className="p-4 hover:shadow-md transition-shadow cursor-pointer border-gray-200"
+                        className="p-4 hover:shadow-md rounded-lg transition-shadow cursor-pointer border-gray-200"
                     >
                         <div className="space-y-3">
                             <div className="flex items-start justify-between">

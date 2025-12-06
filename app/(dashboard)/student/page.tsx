@@ -1,44 +1,16 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ProfileCard } from "@/components/dashboard/ProfileCard";
-import { QuickUploadCard } from "@/components/dashboard/QuickUploadCard";
 import { RecentsList } from "@/components/dashboard/RecentsList";
 import { ResourceGrid } from "@/components/dashboard/ResourceGrid";
 import { AIUploadCard } from "@/components/dashboard/AIUploadCard";
 import { MobileQuickActions } from "@/components/dashboard/MobileQuickActions";
-import { DashboardSkeleton } from "@/components/skeleton/DashboardSkeleton";
 import { mockDelay } from "@/utils/helpers";
 
-export default function StudentDashboard() {
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const loadData = async () => {
-            await mockDelay();
-            setLoading(false);
-        };
-        loadData();
-    }, []);
-
-    if (loading) {
-        return <DashboardSkeleton />;
-    }
+export default async function StudentDashboard() {
+    await mockDelay();
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-[2.5fr_7fr_2.5fr] gap-8">
-            <div className="hidden lg:block space-y-8">
-                <ProfileCard
-                    name="Yonatan Afewerk"
-                    role="SWE | @HRU | Full-Stack Developer"
-                    university="Haramaya University"
-                    department="Software Engineering"
-                    location="Harar"
-                    avatarUrl="https://github.com/shadcn.png"
-                />
-                <QuickUploadCard />
-            </div>
-
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-8">
             <div className="space-y-10">
                 <MobileQuickActions />
                 <RecentsList

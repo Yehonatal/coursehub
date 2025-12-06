@@ -1,6 +1,16 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
 
+export function ResourceBannerSkeleton() {
+    return (
+        <div className="w-full border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+                <div className="h-32 sm:h-48 w-full rounded-t-xl bg-gray-200 animate-pulse" />
+            </div>
+        </div>
+    );
+}
+
 export function ResourceHeaderSkeleton() {
     return (
         <div className="space-y-6 animate-pulse">

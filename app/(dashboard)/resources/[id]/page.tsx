@@ -1,19 +1,11 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React from "react";
+import Image from "next/image";
 import { ResourceHeader } from "@/components/resources/ResourceHeader";
 import { ResourceContent } from "@/components/resources/ResourceContent";
 import { ResourceSidebar } from "@/components/resources/ResourceSidebar";
 import { RelatedResources } from "@/components/resources/RelatedResources";
 import { CommentsSection } from "@/components/common/CommentsSection";
 import { mockDelay } from "@/utils/helpers";
-import {
-    ResourceHeaderSkeleton,
-    ResourceContentSkeleton,
-    ResourceSidebarSkeleton,
-    RelatedResourcesSkeleton,
-    CommentsSectionSkeleton,
-} from "@/components/skeleton/ResourcePageSkeleton";
 
 const dummyComments = [
     {
@@ -62,74 +54,46 @@ const dummyComments = [
     },
 ];
 
-export default function ResourcePage() {
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const load = async () => {
-            await mockDelay();
-            setLoading(false);
-        };
-        load();
-    }, []);
-
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-gray-50/50 pb-20">
-                <div className="w-full border-b border-gray-200">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                        <div className="w-full h-48 rounded-2xl bg-gray-200 animate-pulse" />
-                    </div>
-                </div>
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                        <div className="lg:col-span-8 space-y-8">
-                            <ResourceHeaderSkeleton />
-                            <ResourceContentSkeleton />
-                            <RelatedResourcesSkeleton />
-                            <CommentsSectionSkeleton />
-                        </div>
-
-                        <div className="lg:col-span-4">
-                            <ResourceSidebarSkeleton />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+export default async function ResourcePage() {
+    await mockDelay();
 
     return (
         <div className="min-h-screen bg-gray-50/50 pb-20">
-            <div className="w-full  border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    <div className="w-full h-auto py-8 md:h-48 rounded-2xl bg-linear-to-r from-green-50 to-emerald-50 border border-green-100 flex items-center justify-center relative overflow-hidden">
-                        <div className="text-center z-10 px-4">
-                            <div className="flex flex-col md:flex-row items-center justify-center gap-3 mb-2">
-                                <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center">
-                                    <span className="text-2xl">🎓</span>
+            <div className="w-full border-b border-gray-200">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+                    <div className="h-32 sm:h-48 w-full rounded-t-xl bg-white border border-border/60 relative overflow-hidden group">
+                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-green-50 to-emerald-50">
+                            <div className="flex items-center gap-4 opacity-80">
+                                <div className="relative h-16 w-16">
+                                    <Image
+                                        src="/hu-logo.jpg"
+                                        alt="Haramaya University"
+                                        fill
+                                        className="object-contain"
+                                    />
                                 </div>
-                                <h1 className="text-2xl md:text-3xl font-bold text-[#0A251D]">
-                                    Haramaya University
-                                </h1>
+                                <div className="space-y-1">
+                                    <h1 className="text-3xl font-serif font-bold text-green-700">
+                                        Haramaya University
+                                    </h1>
+                                    <p className="text-sm text-orange-400 font-medium italic">
+                                        — Building the Basis for Development —
+                                    </p>
+                                </div>
                             </div>
-                            <p className="text-[#0A251D]/80 font-medium italic">
-                                Building the Basis for Development
-                            </p>
                         </div>
-                        <div className="absolute top-0 left-0 w-full h-full opacity-30 bg-[radial-gradient(#22c55e_1px,transparent_1px)] bg-size-[16px_16px]"></div>
                     </div>
                 </div>
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div className="lg:col-span-8 space-y-8">
+                    <div className="lg:col-span-8 space-y-8 order-1 lg:order-1">
                         <ResourceHeader
                             title="Data Structures and Algorithms"
                             rating={4.5}
                             reviews={120}
+                            downloads={1050}
                             courseCode="CS201"
                             type="Lecture Slides"
                             date="March 10, 2025"
@@ -151,15 +115,17 @@ export default function ResourcePage() {
                         />
 
                         <RelatedResources />
+                    </div>
+                    <div className="lg:col-span-4 order-2 lg:order-2">
+                        <ResourceSidebar />
+                    </div>
 
+                    {/* Ensure comments are always last on small screens and below main content on large screens */}
+                    <div className="lg:col-span-8 order-3 lg:order-3">
                         <CommentsSection
                             comments={dummyComments}
                             totalCount={dummyComments.length}
                         />
-                    </div>
-
-                    <div className="lg:col-span-4">
-                        <ResourceSidebar />
                     </div>
                 </div>
             </div>

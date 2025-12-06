@@ -94,8 +94,7 @@ export function CommentsSection({
 }: CommentsSectionProps) {
     return (
         <div className={cn("space-y-8", className)}>
-            {/* Input Area */}
-            <div className="bg-gray-100/50 p-6 rounded-2xl space-y-4">
+            <div className="bg-gray-200/50 p-6 rounded-2xl space-y-4">
                 <textarea
                     placeholder="Add comment..."
                     className="w-full bg-transparent border-none resize-none focus:ring-0 p-0 text-gray-700 placeholder:text-gray-500 min-h-[40px]"
@@ -108,7 +107,6 @@ export function CommentsSection({
                 </div>
             </div>
 
-            {/* Header & Sort */}
             <div className="flex items-center justify-between">
                 <h2 className="text-lg font-medium text-[#0A251D]">
                     Comments{" "}
@@ -123,7 +121,6 @@ export function CommentsSection({
                 </button>
             </div>
 
-            {/* Comments List */}
             <div className="space-y-8">
                 {comments.map((comment) => (
                     <div key={comment.id}>
@@ -139,7 +136,6 @@ export function CommentsSection({
                 ))}
             </div>
 
-            {/* Show More */}
             <div className="flex justify-center pt-4">
                 <button className="flex items-center gap-2 text-[#0E7490] font-medium hover:underline">
                     Show more

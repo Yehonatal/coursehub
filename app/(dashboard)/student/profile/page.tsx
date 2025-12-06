@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ProfileHeader } from "@/components/dashboard/ProfileHeader";
 import { ProfileStats } from "@/components/dashboard/ProfileStats";
 import { ProfileRecents } from "@/components/dashboard/ProfileRecents";
@@ -8,36 +6,9 @@ import { MiniResourceGrid } from "@/components/dashboard/MiniResourceGrid";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mockDelay } from "@/utils/helpers";
-import {
-    ProfileHeaderSkeleton,
-    ProfileStatsSkeleton,
-    ProfileRecentsSkeleton,
-} from "@/components/skeleton/ProfilePageSkeleton";
 
-export default function StudentProfilePage() {
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const load = async () => {
-            await mockDelay();
-            setLoading(false);
-        };
-        load();
-    }, []);
-
-    if (loading) {
-        return (
-            <div className="max-w-7xl mx-auto pb-12 space-y-8 px-4 sm:px-6 lg:px-8">
-                <ProfileHeaderSkeleton />
-                <ProfileStatsSkeleton />
-                <ProfileRecentsSkeleton />
-                <div className="space-y-4">
-                    <div className="h-8 w-64 bg-gray-200 rounded animate-pulse" />
-                    <ProfileRecentsSkeleton />
-                </div>
-            </div>
-        );
-    }
+export default async function StudentProfilePage() {
+    await mockDelay();
 
     return (
         <div className="max-w-7xl mx-auto pb-12 space-y-8 px-4 sm:px-6 lg:px-8">

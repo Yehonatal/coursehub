@@ -45,7 +45,7 @@ const CountUp = ({
 export function ProfileStats() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <Card className="md:col-span-2 p-5 bg-gradient-to-br from-blue-50/50 to-white border-border/60  relative overflow-hidden">
+            <Card className="md:col-span-2 sm:p-5 bg-gradient-to-br from-blue-50/50 to-white border-border/60  relative overflow-hidden">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-sm font-bold text-[#0A251D]">
                         Current Repo Status
@@ -56,8 +56,8 @@ export function ProfileStats() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4">
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-white/60 border border-blue-100/50 hover:border-blue-200 transition-colors group">
+                <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-1 items-center gap-3 p-3 sm:p-3 rounded-xl bg-white/60 border border-blue-100/50 hover:border-blue-200 transition-colors group">
                         <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                             <FileText className="h-5 w-5 text-blue-600" />
                         </div>
@@ -71,7 +71,7 @@ export function ProfileStats() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-white/60 border border-teal-100/50 hover:border-teal-200 transition-colors group">
+                    <div className="flex flex-1 items-center gap-3 p-3 rounded-xl bg-white/60 border border-teal-100/50 hover:border-teal-200 transition-colors group">
                         <div className="h-10 w-10 rounded-lg bg-teal-100 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                             <Network className="h-5 w-5 text-teal-600" />
                         </div>
@@ -85,7 +85,7 @@ export function ProfileStats() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-white/60 border border-indigo-100/50 hover:border-indigo-200 transition-colors group">
+                    <div className="flex flex-1 items-center gap-3 p-3 rounded-xl bg-white/60 border border-indigo-100/50 hover:border-indigo-200 transition-colors group">
                         <div className="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                             <HelpCircle className="h-5 w-5 text-indigo-600" />
                         </div>

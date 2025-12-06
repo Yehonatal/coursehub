@@ -10,8 +10,8 @@ export function AIUploadCard() {
             data-aos="fade-left"
             data-aos-delay="400"
         >
-            <div className="flex items-center gap-2 text-[#0A251D] font-medium">
-                <Folder className="h-5 w-5 fill-blue-400 text-blue-400" />
+            <div className="flex items-start gap-2 text-[#0A251D] font-medium">
+                <Folder className="h-5 w-5 fill-blue-400 text-blue-400 " />
                 <h3 className="font-serif font-bold">
                     Upload AI Generated Content
                 </h3>
