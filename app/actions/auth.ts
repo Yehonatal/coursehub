@@ -1,6 +1,9 @@
 "use server";
 
 import { z } from "zod";
+import bcrypt from "bcrypt";
+import { Client } from "pg";
+import { redirect } from "next/navigation";
 
 const SignInSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email format"),
@@ -31,11 +34,24 @@ export type ActionResponse = {
     errors?: Record<string, string[]>;
 };
 
+async function getDbClient() {
+    const connectionString = process.env.SUPABASE_DATABASE_URL;
+    if (!connectionString) {
+        throw new Error("SUPABASE_DATABASE_URL not configured");
+    }
+    const client = new Client({
+        connectionString,
+        ssl: { rejectUnauthorized: false },
+    });
+    await client.connect();
+    return client;
+}
+
 export async function signIn(
     prevState: ActionResponse,
     formData: FormData
 ): Promise<ActionResponse> {
-    const data = Object.fromEntries(formData);
+    const data = Object.fromEntries(formData) as Record<string, string>;
     const parsed = SignInSchema.safeParse(data);
 
     if (!parsed.success) {
@@ -46,22 +62,38 @@ export async function signIn(
         };
     }
 
-    // TODO: Implement actual sign in logic
-    console.log("Sign in data:", parsed.data);
+    const { email, password } = parsed.data;
 
-    return {
-        success: true,
-        message: "Signed in successfully",
-    };
+    try {
+        const client = await getDbClient();
+        const res = await client.query(
+            "SELECT user_id, password_hash FROM users WHERE email = $1",
+            [email]
+        );
+        await client.end();
+
+        if (res.rowCount === 0) {
+            return { success: false, message: "Invalid email or password" };
+        }
+
+        const row = res.rows[0];
+        const match = await bcrypt.compare(password, row.password_hash);
+        if (!match) {
+            return { success: false, message: "Invalid email or password" };
+        }
+    } catch (err) {
+        console.error("Sign in error:", err);
+        return { success: false, message: "Server error" };
+    }
+
+    redirect("/student");
 }
 
 export async function signUp(
     prevState: ActionResponse,
     formData: FormData
 ): Promise<ActionResponse> {
-    const data = Object.fromEntries(formData);
-    // Handle file upload separately if needed, but for validation we might need to check it
-    // For now, let's assume file is handled or optional in schema for simplicity in this step
+    const data = Object.fromEntries(formData) as Record<string, string>;
 
     const parsed = SignUpSchema.safeParse(data);
 
@@ -73,11 +105,41 @@ export async function signUp(
         };
     }
 
-    // TODO: Implement actual sign up logic
-    console.log("Sign up data:", parsed.data);
+    const { firstName, lastName, email, accountType, university, password } =
+        parsed.data;
 
-    return {
-        success: true,
-        message: "Account created successfully",
-    };
+    try {
+        const client = await getDbClient();
+
+        const existing = await client.query(
+            "SELECT user_id FROM users WHERE email = $1",
+            [email]
+        );
+        if (existing.rowCount !== null && existing.rowCount > 0) {
+            await client.end();
+            return { success: false, message: "Email already in use" };
+        }
+
+        const passwordHash = await bcrypt.hash(password, 12);
+
+        await client.query(
+            `INSERT INTO users (first_name, last_name, email, password_hash, role, university)
+             VALUES ($1, $2, $3, $4, $5, $6)`,
+            [
+                firstName,
+                lastName,
+                email,
+                passwordHash,
+                accountType,
+                university || null,
+            ]
+        );
+
+        await client.end();
+    } catch (err) {
+        console.error("Sign up error:", err);
+        return { success: false, message: "Server error" };
+    }
+
+    redirect("/student");
 }

@@ -43,6 +43,13 @@
       "when": 1764783323706,
       "tag": "0005_wide_otto_octavius",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1764998664979,
+      "tag": "0006_absurd_sue_storm",
+      "breakpoints": true
     }
   ]
 }

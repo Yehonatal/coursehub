@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
+import bcrypt from "bcrypt";
 import { users } from "../db/schema";
 
 async function main() {
@@ -17,23 +18,32 @@ async function main() {
     await client.connect();
     const db = drizzle(client);
 
+    const passwordHash = await bcrypt.hash("password123", 12);
+
     await db
         .insert(users)
         .values([
             {
-                full_name: "Admin Educator",
+                first_name: "Admin",
+                last_name: "Educator",
                 email: "admin@coursehub.edu",
-                password_hash: "hashed",
+                password_hash: passwordHash,
                 role: "educator",
+                university: "hu",
             },
             {
-                full_name: "Student User",
+                first_name: "Student",
+                last_name: "User",
                 email: "student@coursehub.edu",
-                password_hash: "hashed",
+                password_hash: passwordHash,
                 role: "student",
+                university: "hu",
             },
         ])
-        .onConflictDoNothing(); // Skip if already exists
+        .onConflictDoUpdate({
+            target: users.email,
+            set: { password_hash: passwordHash },
+        });
 
     console.log("PG seed complete");
     await client.end();

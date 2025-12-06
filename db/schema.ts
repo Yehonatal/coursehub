@@ -14,10 +14,13 @@ import {
 // ================= USERS =================
 export const users = pgTable("users", {
     user_id: uuid("user_id").defaultRandom().primaryKey(),
-    full_name: varchar("full_name", { length: 100 }).notNull(),
+    first_name: varchar("first_name", { length: 50 }).notNull(),
+    last_name: varchar("last_name", { length: 50 }).notNull(),
     email: varchar("email", { length: 255 }).notNull().unique(),
     password_hash: varchar("password_hash", { length: 255 }).notNull(),
     role: varchar("role", { length: 20 }).notNull(),
+    university: varchar("university", { length: 100 }),
+    school_id_url: varchar("school_id_url", { length: 512 }),
     is_verified: boolean("is_verified").default(false).notNull(),
     subscription_status: varchar("subscription_status", { length: 20 }),
     created_at: timestamp("created_at").defaultNow().notNull(),

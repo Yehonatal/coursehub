@@ -133,3 +133,44 @@ export function HandDrawnBox({
         </span>
     );
 }
+
+export function HandDrawnShape({
+    className,
+    strokeWidth = 4,
+}: {
+    className?: string;
+    strokeWidth?: number;
+}) {
+    return (
+        <svg
+            className={cn("pointer-events-none select-none", className)}
+            viewBox="0 0 200 100"
+            preserveAspectRatio="none"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M185.5 45.5C185.5 75.5 145.5 92.5 95.5 92.5C45.5 92.5 10.5 75.5 10.5 45.5C10.5 15.5 45.5 5.5 95.5 5.5C145.5 5.5 185.5 15.5 185.5 45.5Z"
+                stroke="currentColor"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+                className="opacity-80"
+            />
+            <path
+                d="M190 48C190 76 148 95 98 95C48 95 5 76 5 48C5 20 48 3 98 3C148 3 190 20 190 48Z"
+                stroke="currentColor"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+                className="opacity-60"
+                style={{
+                    transform: "rotate(-1deg)",
+                    transformOrigin: "center",
+                }}
+            />
+        </svg>
+    );
+}
