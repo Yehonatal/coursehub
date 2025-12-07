@@ -40,14 +40,14 @@ export function Header() {
         <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-white/80 backdrop-blur-md">
             <div className="container flex h-16 items-center justify-between px-4 md:px-6 mx-auto">
                 <div className="flex items-center gap-4">
-                    <Link href="/student" className="flex items-center gap-2">
+                    <Link href="/user" className="flex items-center gap-2">
                         <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#0A251D] text-white">
                             <span className="text-lg font-serif font-bold">
                                 H
                             </span>
                         </div>
-                        <span className="hidden md:block text-lg font-serif font-bold text-[#0A251D]">
-                            Course Hub
+                        <span className="hidden md:block text-lg font-serif font-extralight text-[#0A251D]">
+                            COURSE HUB
                         </span>
                     </Link>
                 </div>
@@ -100,7 +100,7 @@ export function Header() {
                                 </div>
                                 <div className="px-2 mb-2">
                                     <Link
-                                        href="/student/profile"
+                                        href="/user/profile"
                                         className="block"
                                     >
                                         <Button

@@ -86,7 +86,7 @@ export async function signIn(
         return { success: false, message: "Server error" };
     }
 
-    redirect("/student");
+    redirect("/user");
 }
 
 export async function signUp(
@@ -141,5 +141,5 @@ export async function signUp(
         return { success: false, message: "Server error" };
     }
 
-    redirect("/student");
+    redirect("/user");
 }

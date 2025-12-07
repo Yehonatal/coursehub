@@ -15,17 +15,17 @@ export function BottomNav() {
         {
             label: "Home",
             icon: Home,
-            href: "/student",
+            href: "/user",
         },
         {
             label: "Resources",
             icon: BookOpen,
-            href: "/student/resources",
+            href: "/resources",
         },
         {
             label: "AI",
             icon: Sparkles,
-            href: "/student/ai",
+            href: "/user/ai",
         },
         {
             label: "Post",
@@ -39,7 +39,7 @@ export function BottomNav() {
         {
             label: "Notifications",
             icon: Bell,
-            href: "/student/notifications",
+            href: "/user/notifications",
         },
     ];
 

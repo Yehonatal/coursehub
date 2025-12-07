@@ -8,7 +8,7 @@ import { QuickUploadCard } from "@/components/dashboard/QuickUploadCard";
 export function SidebarWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
-    const hideSidebarPaths = ["/student/profile", "/instructor/profile"];
+    const hideSidebarPaths = ["/user/profile", "/resources"];
     const shouldHideSidebar = hideSidebarPaths.some((path) =>
         pathname.startsWith(path)
     );

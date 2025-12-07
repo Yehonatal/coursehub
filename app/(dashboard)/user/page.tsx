@@ -40,6 +40,8 @@ export default async function StudentDashboard() {
                 />
 
                 <ResourceGrid
+                    title="Recommended for You"
+                    viewAllLink="/resources"
                     resources={[
                         {
                             id: 1,

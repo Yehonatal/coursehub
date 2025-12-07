@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ResourceHeader } from "@/components/resources/ResourceHeader";
 import { ResourceContent } from "@/components/resources/ResourceContent";
 import { ResourceSidebar } from "@/components/resources/ResourceSidebar";
-import { RelatedResources } from "@/components/resources/RelatedResources";
+import { RelatedResources } from "@/components/common/RelatedResources";
 import { CommentsSection } from "@/components/common/CommentsSection";
 import { mockDelay } from "@/utils/helpers";
 

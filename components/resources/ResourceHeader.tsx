@@ -46,7 +46,7 @@ export function ResourceHeader({
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="space-y-1">
                     <div className="flex items-center">
-                        <h1 className="text-2xl md:text-3xl font-bold text-[#0A251D] leading-tight">
+                        <h1 className="text-lg md:text-2xl font-bold text-[#0A251D] leading-tight">
                             {title}
                         </h1>
                     </div>
