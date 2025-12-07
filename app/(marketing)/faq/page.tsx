@@ -1,12 +1,7 @@
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Mail } from "lucide-react";
+import { PageHeader } from "@/components/marketing/PageHeader";
+import { FAQList } from "@/components/marketing/FAQList";
+import { SupportCTA } from "@/components/marketing/SupportCTA";
+import { HandDrawnUnderline } from "@/components/ui/decorations";
 
 export default function FAQPage() {
     const faqCategories = [
@@ -69,74 +64,20 @@ export default function FAQPage() {
 
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">
-            <div className="container py-20 md:py-32 mx-auto px-4 md:px-6">
-                <div
-                    className="flex flex-col items-center justify-center space-y-4 text-center mb-20"
-                    data-aos="fade-up"
-                >
-                    <div className="inline-block rounded-md bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground uppercase tracking-wider mb-2">
-                        Support
-                    </div>
-                    <h1 className="text-4xl font-serif font-medium tracking-tight sm:text-5xl md:text-6xl">
-                        Frequently Asked Questions
-                    </h1>
-                    <p className="max-w-[800px] text-muted-foreground md:text-xl/relaxed lg:text-lg/relaxed xl:text-xl/relaxed">
-                        Everything you need to know about the platform.
-                    </p>
-                </div>
-
-                <div className="max-w-4xl mx-auto space-y-16">
-                    {faqCategories.map((category, catIndex) => (
-                        <div
-                            key={catIndex}
-                            data-aos="fade-up"
-                            data-aos-delay={catIndex * 100}
-                        >
-                            <h2 className="text-2xl font-serif font-bold mb-8 text-[#0A251D] border-b border-border/60 pb-2">
-                                {category.category}
-                            </h2>
-                            <Accordion
-                                type="single"
-                                collapsible
-                                className="w-full"
-                            >
-                                {category.items.map((faq, index) => (
-                                    <AccordionItem
-                                        key={index}
-                                        value={`item-${catIndex}-${index}`}
-                                    >
-                                        <AccordionTrigger className="text-left text-lg font-bold text-primary hover:no-underline">
-                                            {faq.question}
-                                        </AccordionTrigger>
-                                        <AccordionContent className="text-muted-foreground leading-relaxed text-base">
-                                            {faq.answer}
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                ))}
-                            </Accordion>
-                        </div>
-                    ))}
-                </div>
-
-                <div
-                    className="mt-32 bg-[#F5F2EB] rounded-3xl p-12 text-center max-w-4xl mx-auto"
-                    data-aos="fade-up"
-                >
-                    <h2 className="text-3xl font-serif font-medium mb-4 text-[#0A251D]">
-                        Still have questions?
-                    </h2>
-                    <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-                        Can't find the answer you're looking for? Please chat to
-                        our friendly team.
-                    </p>
-                    <Link href="mailto:support@coursehub.et">
-                        <Button className="rounded-full px-8 h-12 text-base">
-                            <Mail className="mr-2 h-4 w-4" />
-                            Contact Support
-                        </Button>
-                    </Link>
-                </div>
-            </div>
+            <PageHeader
+                tag="Support"
+                title={
+                    <>
+                        Frequently Asked{" "}
+                        <HandDrawnUnderline className="text-[#F5A623]">
+                            Questions
+                        </HandDrawnUnderline>
+                    </>
+                }
+                subtitle="Everything you need to know about the platform."
+            />
+            <FAQList categories={faqCategories} />
+            <SupportCTA />
         </div>
     );
 }

@@ -25,7 +25,7 @@ export function BottomNav() {
         {
             label: "AI",
             icon: Sparkles,
-            href: "/user/ai",
+            href: "/ai",
         },
         {
             label: "Post",

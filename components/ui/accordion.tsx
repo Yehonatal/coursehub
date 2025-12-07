@@ -18,22 +18,37 @@ const Accordion = React.forwardRef<
     React.HTMLAttributes<HTMLDivElement> & {
         type?: "single" | "multiple";
         collapsible?: boolean;
+        defaultValue?: string;
     }
->(({ className, children, ...props }, ref) => {
-    const [value, setValue] = React.useState<string | undefined>(undefined);
+>(
+    (
+        {
+            className,
+            children,
+            type = "single",
+            collapsible = false,
+            defaultValue,
+            ...props
+        },
+        ref
+    ) => {
+        const [value, setValue] = React.useState<string | undefined>(
+            defaultValue
+        );
 
-    const onValueChange = (newValue: string) => {
-        setValue((prev) => (prev === newValue ? undefined : newValue));
-    };
+        const onValueChange = (newValue: string) => {
+            setValue((prev) => (prev === newValue ? undefined : newValue));
+        };
 
-    return (
-        <AccordionContext.Provider value={{ value, onValueChange }}>
-            <div ref={ref} className={className} {...props}>
-                {children}
-            </div>
-        </AccordionContext.Provider>
-    );
-});
+        return (
+            <AccordionContext.Provider value={{ value, onValueChange }}>
+                <div ref={ref} className={className} {...props}>
+                    {children}
+                </div>
+            </AccordionContext.Provider>
+        );
+    }
+);
 Accordion.displayName = "Accordion";
 
 const AccordionItem = React.forwardRef<

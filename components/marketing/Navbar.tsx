@@ -48,11 +48,11 @@ export function Navbar() {
                         </div>
                         <span
                             className={cn(
-                                "font-serif font-bold transition-colors duration-300",
+                                "font-serif font-extralight transition-colors duration-300",
                                 isOpen ? "text-white" : "text-foreground"
                             )}
                         >
-                            CourseHub
+                            COURSEHUB
                         </span>
                     </Link>
                 </div>
