@@ -205,8 +205,9 @@ export function ProductShowcase() {
                             <HandDrawnCircle
                                 className="text-primary"
                                 strokeWidth={2.6}
-                            />
-                            Featured
+                            >
+                                Featured
+                            </HandDrawnCircle>
                         </div>
                         <div className="flex items-start gap-3 md:gap-4">
                             <div
@@ -290,7 +291,9 @@ export function ProductShowcase() {
                                     <HandDrawnCircle
                                         className="text-primary"
                                         strokeWidth={2.4}
-                                    />
+                                    >
+                                        <span className="block w-12 h-12" />
+                                    </HandDrawnCircle>
                                 </div>
                             </div>
                         </div>
