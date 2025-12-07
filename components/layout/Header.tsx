@@ -12,6 +12,7 @@ import {
     HelpCircle,
     Globe,
     FileText,
+    Sparkles,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -64,6 +65,13 @@ export function Header() {
                 </div>
 
                 <div className="flex items-center gap-4">
+                    <Link
+                        href="/ai"
+                        className="hidden sm:inline-flex h-8 w-8 items-center justify-center rounded-full border border-border/60 bg-white/80 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A251D] focus-visible:ring-offset-2 transition"
+                        aria-label="Open AI workspace"
+                    >
+                        <Sparkles className="h-5 w-5 text-primary" />
+                    </Link>
                     <div className="relative" ref={menuRef}>
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
