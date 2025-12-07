@@ -41,7 +41,12 @@ const getBg = (type: string) => {
 
 export function RecentsList({ items }: RecentsListProps) {
     return (
-        <section className="mb-8" data-aos="fade-up" data-aos-delay="200">
+        <section
+            className="mb-8"
+            data-aos="fade-up"
+            data-aos-delay="200"
+            suppressHydrationWarning
+        >
             <h3 className="text-lg font-serif font-bold text-[#0A251D] mb-4">
                 Recents
             </h3>

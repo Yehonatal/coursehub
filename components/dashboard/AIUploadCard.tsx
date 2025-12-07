@@ -9,6 +9,7 @@ export function AIUploadCard() {
             className="p-6 space-y-6 border-border/60"
             data-aos="fade-left"
             data-aos-delay="400"
+            suppressHydrationWarning
         >
             <div className="flex items-start gap-2 text-[#0A251D] font-medium">
                 <Folder className="h-5 w-5 fill-blue-400 text-blue-400 " />

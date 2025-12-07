@@ -5,7 +5,13 @@ import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
+import {
+    Select,
+    SelectTrigger,
+    SelectContent,
+    SelectItem,
+    SelectValue,
+} from "@/components/ui/select";
 
 interface UploadModalProps {
     isOpen: boolean;
@@ -31,7 +37,6 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
             <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-xl animate-in zoom-in-95 duration-200">
                 <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
-                    {/* Left Side - Form */}
                     <div className="p-6 lg:p-8 space-y-6">
                         <div className="space-y-4">
                             <div className="space-y-2">
@@ -95,19 +100,24 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                     <Label className="text-gray-700">
                                         Select resource material type
                                     </Label>
-                                    <Select
-                                        className="bg-white border-gray-200 focus:ring-blue-500/20"
-                                        defaultValue=""
-                                    >
-                                        <option value="" disabled>
-                                            Select type
-                                        </option>
-                                        <option value="slides">Slides</option>
-                                        <option value="notes">Notes</option>
-                                        <option value="exam">Exam</option>
-                                        <option value="assignment">
-                                            Assignment
-                                        </option>
+                                    <Select defaultValue="">
+                                        <SelectTrigger className="bg-white border-gray-200 focus:ring-blue-500/20">
+                                            <SelectValue placeholder="Select type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="slides">
+                                                Slides
+                                            </SelectItem>
+                                            <SelectItem value="notes">
+                                                Notes
+                                            </SelectItem>
+                                            <SelectItem value="exam">
+                                                Exam
+                                            </SelectItem>
+                                            <SelectItem value="assignment">
+                                                Assignment
+                                            </SelectItem>
+                                        </SelectContent>
                                     </Select>
                                 </div>
                                 <div className="space-y-2">
