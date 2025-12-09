@@ -6,8 +6,12 @@ export function Footer() {
             <div className="container flex flex-col gap-10 py-12 md:py-16 px-4 md:px-6 mx-auto">
                 <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
                     <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
-                        <h3 className="text-2xl font-serif font-bold text-primary">
-                            CourseHub
+                        <h3
+                            className={
+                                "font-serif text-2xl font-extralight transition-colors duration-300"
+                            }
+                        >
+                            COURSEHUB
                         </h3>
                         <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
                             Centralized adaptive learning platform for Ethiopian

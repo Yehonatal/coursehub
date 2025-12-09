@@ -3,7 +3,7 @@ import React from "react";
 export function PricingTestimonial() {
     return (
         <div
-            className="bg-[#0A251D] text-white rounded-3xl p-12 md:p-20 text-center max-w-5xl mx-auto"
+            className="bg-[#0A251D] text-white mb-32 md:rounded-3xl p-12 md:p-20 text-center max-w-5xl mx-auto"
             data-aos="fade-up"
         >
             <div className="flex justify-center mb-6">

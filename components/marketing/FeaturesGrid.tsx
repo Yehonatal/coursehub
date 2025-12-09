@@ -47,16 +47,16 @@ export function FeaturesGrid() {
     ];
 
     return (
-        <section className="w-full py-20 md:py-32 bg-background">
-            <div className="container px-4 md:px-6 mx-auto">
-                <div className="text-center mb-16">
-                    <div className="inline-block rounded-md bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground uppercase tracking-wider mb-4">
+        <section className="w-full py-12 sm:py-16 md:py-20 lg:py-32 bg-background">
+            <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
+                <div className="text-center mb-12 sm:mb-16">
+                    <div className="inline-block rounded-md bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground uppercase tracking-wider mb-3 sm:mb-4">
                         Student Value
                     </div>
-                    <h2 className="text-3xl font-serif font-medium tracking-tight sm:text-4xl md:text-5xl mb-4">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-medium tracking-tight mb-3 sm:mb-4">
                         Key benefits for your academic journey
                     </h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+                    <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
                         Built for the specific rigors of higher education in
                         <HandDrawnUnderline className="text-[#F5A623]">
                             Ethiopia.
@@ -64,21 +64,21 @@ export function FeaturesGrid() {
                     </p>
                 </div>
 
-                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-4 sm:gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                     {features.map((item, i) => (
                         <div
                             key={i}
-                            className="group p-6 border border-border/50 hover:border-primary/30 bg-card hover:bg-secondary/20 transition-colors rounded-xl"
+                            className="group p-4 sm:p-6 border border-border/50 hover:border-primary/30 bg-card hover:bg-secondary/20 transition-colors rounded-lg sm:rounded-xl"
                             data-aos="fade-up"
                             data-aos-delay={i * 50}
                         >
-                            <div className="mb-4 text-primary opacity-80 group-hover:opacity-100 transition-opacity">
+                            <div className="mb-3 sm:mb-4 text-primary opacity-80 group-hover:opacity-100 transition-opacity">
                                 {item.icon}
                             </div>
-                            <h3 className="text-lg font-serif font-bold mb-2">
+                            <h3 className="text-base sm:text-lg font-serif font-bold mb-1 sm:mb-2">
                                 {item.title}
                             </h3>
-                            <p className="text-sm text-muted-foreground leading-relaxed">
+                            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                                 {item.desc}
                             </p>
                         </div>

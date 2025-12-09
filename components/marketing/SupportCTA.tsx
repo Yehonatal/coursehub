@@ -6,7 +6,7 @@ import { Mail } from "lucide-react";
 export function SupportCTA() {
     return (
         <div
-            className="my-32 bg-[#F5F2EB] rounded-3xl p-12 text-center max-w-4xl mx-auto"
+            className="my-32 bg-[#F5F2EB]  md:rounded-3xl p-12 text-center max-w-4xl mx-auto"
             data-aos="fade-up"
         >
             <h2 className="text-3xl font-serif font-medium mb-4 text-[#0A251D]">

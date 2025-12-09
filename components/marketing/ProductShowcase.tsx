@@ -13,7 +13,6 @@ import {
     Library,
     Users,
     CheckCircle2,
-    Sparkles,
 } from "lucide-react";
 
 const products = [
@@ -97,31 +96,30 @@ export function ProductShowcase() {
         products.find((p) => p.id === activeTab) || products[0];
 
     return (
-        <section className="relative w-full py-14 md:py-28 overflow-hidden bg-background">
+        <section className="relative w-full py-8 sm:py-12 md:py-16 lg:py-20 xl:py-28 overflow-hidden bg-background">
             <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-0 left-1/4 w-[280px] h-[280px] md:w-[420px] md:h-[420px] bg-primary/10 rounded-full blur-[120px] mix-blend-multiply animate-blob" />
-                <div className="absolute bottom-0 right-1/4 w-[280px] h-[280px] md:w-[420px] md:h-[420px] bg-secondary/15 rounded-full blur-[120px] mix-blend-multiply animate-blob animation-delay-2000" />
+                <div className="absolute top-0 left-1/4 w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] md:w-[420px] md:h-[420px] bg-primary/10 rounded-full blur-[80px] sm:blur-[100px] md:blur-[120px] mix-blend-multiply animate-blob" />
+                <div className="absolute bottom-0 right-1/4 w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] md:w-[420px] md:h-[420px] bg-secondary/15 rounded-full blur-[80px] sm:blur-[100px] md:blur-[120px] mix-blend-multiply animate-blob animation-delay-2000" />
             </div>
 
-            <div className="container px-4 md:px-6 mx-auto relative z-10">
+            <div className="container px-4 sm:px-6 lg:px-8 mx-auto relative z-10">
                 <div
-                    className="text-center max-w-3xl mx-auto mb-10 md:mb-14 px-2"
+                    className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 md:mb-12 lg:mb-14 px-2"
                     data-aos="fade-up"
                 >
-                    <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs md:text-sm font-medium text-primary mb-4">
-                        <Sparkles className="h-4 w-4" />
+                    <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs sm:text-sm font-medium text-primary mb-3 sm:mb-4">
                         <span className="uppercase tracking-wide">
                             Product Tour
                         </span>
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-serif font-medium tracking-tight mb-3 md:mb-4 text-foreground">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-medium tracking-tight mb-2 sm:mb-3 md:mb-4 text-foreground">
                         Explore the{" "}
                         <HandDrawnUnderline className="text-[#F5A623]">
                             CourseHub
                         </HandDrawnUnderline>{" "}
                         Ecosystem
                     </h2>
-                    <p className="text-base md:text-xl text-muted-foreground leading-relaxed px-2">
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed px-2">
                         A calm, focused walkthrough of what matters most for
                         students and educators.
                     </p>
@@ -132,7 +130,6 @@ export function ProductShowcase() {
                     data-aos="fade-up"
                     data-aos-delay="100"
                 >
-                    {/* Mobile: grid pills with text visible, no sideways scroll */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 px-1 md:hidden">
                         {products.map((product) => (
                             <button
@@ -163,7 +160,6 @@ export function ProductShowcase() {
                         ))}
                     </div>
 
-                    {/* Desktop: horizontal pills with icon + label */}
                     <div className="hidden md:block overflow-x-auto hide-scrollbar">
                         <div className="flex flex-nowrap justify-center gap-2 md:gap-3 px-1 min-w-full snap-x snap-mandatory">
                             {products.map((product) => (
@@ -254,45 +250,45 @@ export function ProductShowcase() {
                     </div>
 
                     <div
-                        className="order-1 lg:order-2 lg:col-span-7 w-full"
+                        className="order-1 lg:order-2 lg:col-span-7 w-full flex justify-center"
                         data-aos="fade-left"
                         data-aos-delay="180"
                     >
-                        <div className="relative group">
+                        <div className="relative group w-full max-w-md sm:max-w-lg md:max-w-2xl">
                             <div
                                 className={cn(
-                                    "absolute -inset-4 md:-inset-6 rounded-[24px] md:rounded-[28px] bg-gradient-to-tr blur-3xl opacity-40 transition-opacity duration-700",
+                                    "absolute -inset-4 sm:-inset-6 rounded-[20px] sm:rounded-[24px] md:rounded-[28px] bg-gradient-to-tr blur-2xl sm:blur-3xl opacity-40 transition-opacity duration-700",
                                     activeProduct.gradient
                                 )}
                             />
-                            <div className="relative bg-background rounded-[20px] md:rounded-[24px] border border-border shadow-xl md:shadow-2xl overflow-hidden backdrop-blur">
-                                <div className="flex items-center gap-2 h-10 px-4 bg-muted/70 border-b border-border/70">
-                                    <span className="w-2.5 h-2.5 rounded-full bg-[#ff6b6b]" />
-                                    <span className="w-2.5 h-2.5 rounded-full bg-[#ffd166]" />
-                                    <span className="w-2.5 h-2.5 rounded-full bg-[#4ecdc4]" />
-                                    <div className="ml-4 h-3 w-20 md:w-24 rounded-full bg-muted" />
+                            <div className="relative bg-background rounded-[16px] sm:rounded-[20px] md:rounded-[24px] border border-border shadow-lg sm:shadow-xl md:shadow-2xl overflow-hidden backdrop-blur">
+                                <div className="flex items-center gap-1.5 sm:gap-2 h-8 sm:h-9 md:h-10 px-3 sm:px-4 bg-muted/70 border-b border-border/70">
+                                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ff6b6b]" />
+                                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ffd166]" />
+                                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#4ecdc4]" />
+                                    <div className="ml-2 sm:ml-4 h-2 sm:h-3 w-16 sm:w-20 md:w-24 rounded-full bg-muted" />
                                 </div>
-                                <div className="relative aspect-[4/3] md:aspect-[16/9] bg-muted/20 overflow-hidden">
+                                <div className="relative aspect-video bg-muted/20 overflow-hidden">
                                     <Image
                                         key={activeProduct.image}
                                         src={activeProduct.image}
                                         alt={activeProduct.title}
                                         fill
-                                        sizes="(max-width: 768px) 100vw, 60vw"
+                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 95vw, (max-width: 1280px) 60vw, 50vw"
                                         className="object-cover object-top transition duration-700 ease-out"
                                         priority
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-background/35 to-transparent" />
                                 </div>
                                 <div
-                                    className="absolute -top-5 -right-3 hidden md:block"
+                                    className="absolute -top-4 sm:-top-5 -right-2 sm:-right-3 hidden sm:block"
                                     aria-hidden
                                 >
                                     <HandDrawnCircle
                                         className="text-primary"
                                         strokeWidth={2.4}
                                     >
-                                        <span className="block w-12 h-12" />
+                                        <span className="block w-10 sm:w-12 h-10 sm:h-12" />
                                     </HandDrawnCircle>
                                 </div>
                             </div>

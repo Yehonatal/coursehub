@@ -15,7 +15,7 @@ export function PricingTable() {
             <h2 className="text-3xl font-serif font-medium text-center mb-12">
                 Compare Plans
             </h2>
-            <div className="border rounded-xl overflow-hidden">
+            <div className="border md:rounded-xl overflow-hidden">
                 <Table>
                     <TableHeader className="bg-muted/30">
                         <TableRow>
