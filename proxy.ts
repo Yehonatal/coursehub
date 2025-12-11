@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const sessionId = request.cookies.get("session_id")?.value;
     const isAuthPage =
         request.nextUrl.pathname.startsWith("/login") ||
@@ -12,6 +12,9 @@ export function middleware(request: NextRequest) {
         request.nextUrl.pathname.startsWith(route)
     );
 
+    // Note: We only check for session existence here. Full validation (DB check)
+    // happens in the Layout/Page via validateRequest(). This avoids Edge Runtime
+    // limitations with non-HTTP DB drivers.
     if (isProtected && !sessionId) {
         return NextResponse.redirect(new URL("/login", request.url));
     }

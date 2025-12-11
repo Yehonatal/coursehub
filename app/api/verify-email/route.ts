@@ -11,6 +11,9 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Missing token" }, { status: 400 });
     }
 
+    // Basic rate limiting could be implemented here using a store (Redis/KV)
+    // For now, we rely on the token being a UUID which is hard to guess.
+
     const tokens = await db
         .select()
         .from(verificationTokens)

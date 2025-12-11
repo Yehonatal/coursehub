@@ -1,2 +1,2 @@
-export const mockDelay = (ms = 2000) =>
+export const mockDelay = (ms = 10) =>
     new Promise((resolve) => setTimeout(resolve, ms));

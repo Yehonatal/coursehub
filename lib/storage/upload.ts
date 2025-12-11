@@ -14,7 +14,8 @@ export async function uploadFile(file: File, path: string) {
         });
 
     if (error) {
-        throw new Error(`Upload failed: ${error.message}`);
+        console.error("Upload failed:", error);
+        throw new Error("Upload failed. Please try again later.");
     }
 
     const { data: publicUrlData } = supabaseAdmin.storage
