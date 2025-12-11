@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useUser } from "@/components/providers/UserProvider";
-import { signOut } from "@/app/actions/auth";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,9 +40,18 @@ export function Header() {
     }, []);
 
     const handleSignOut = async () => {
-        await signOut();
-        router.push("/login");
-        router.refresh();
+        try {
+            const res = await fetch("/api/auth/signout", { method: "POST" });
+            if (!res.ok) {
+                console.error("Sign out API responded with non-ok status");
+            }
+        } catch (err) {
+            console.error("Sign out failed:", err);
+        } finally {
+            // Ensure local navigation happens regardless
+            router.push("/login");
+            router.refresh();
+        }
     };
 
     return (
