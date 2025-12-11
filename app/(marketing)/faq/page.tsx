@@ -3,6 +3,8 @@ import { FAQList } from "@/components/marketing/FAQList";
 import { SupportCTA } from "@/components/marketing/SupportCTA";
 import { HandDrawnUnderline } from "@/components/ui/decorations";
 
+export const dynamic = "force-static";
+
 export default function FAQPage() {
     const faqCategories = [
         {

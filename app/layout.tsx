@@ -6,6 +6,11 @@ import { validateRequest } from "@/lib/auth/session";
 import { UserProvider } from "@/components/providers/UserProvider";
 import { User } from "@/app/types/user";
 
+// Force dynamic rendering for the entire app since we rely on session cookies
+// in the root layout. This prevents build errors with static generation.
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 const geistSans = Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"],
@@ -32,7 +37,16 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const { user } = await validateRequest();
+    // Wrap session validation in a try-catch block to handle potential errors gracefully
+    // and prevent build failures during static generation.
+    let user = null;
+    try {
+        const result = await validateRequest();
+        user = result.user;
+    } catch (error) {
+        console.error("Failed to validate session in RootLayout:", error);
+        // Continue rendering with null user
+    }
 
     return (
         <html lang="en">

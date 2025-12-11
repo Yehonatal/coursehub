@@ -4,10 +4,6 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { SidebarWrapper } from "@/components/layout/SidebarWrapper";
 import { AOSInit } from "@/utils/AOSInit";
 
-// Force dynamic rendering for the entire app since we rely on session cookies
-// in the root layout. This prevents build errors with static generation.
-export const dynamic = "force-dynamic";
-
 export default async function DashboardLayout({
     children,
 }: {

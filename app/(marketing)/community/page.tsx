@@ -2,6 +2,8 @@ import { PageHeader } from "@/components/marketing/PageHeader";
 import { CommunityHighlights } from "@/components/marketing/CommunityHighlights";
 import { HandDrawnCircle } from "@/components/ui/decorations";
 
+export const dynamic = "force-static";
+
 export default function CommunityPage() {
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">

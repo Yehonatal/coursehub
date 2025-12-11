@@ -8,7 +8,13 @@ import { validateRequest } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 
 export default async function LandingPage() {
-    const { user } = await validateRequest();
+    let user = null;
+    try {
+        const result = await validateRequest();
+        user = result.user;
+    } catch (error) {
+        // Ignore session validation errors on landing page
+    }
 
     if (user) {
         redirect("/dashboard");

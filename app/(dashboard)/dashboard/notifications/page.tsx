@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
 import { Bell, MessageSquare, Star, UserPlus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+
+export const dynamic = "force-dynamic";
 
 export default function NotificationsPage() {
     const notifications = [

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
+export const dynamic = "force-static";
+
 export default function VerifyEmailPage() {
     return (
         <div className="flex flex-col items-center justify-center space-y-4 text-center">

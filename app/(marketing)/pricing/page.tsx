@@ -4,6 +4,8 @@ import { PricingTable } from "@/components/marketing/PricingTable";
 import { PricingTestimonial } from "@/components/marketing/PricingTestimonial";
 import { HandDrawnUnderline } from "@/components/ui/decorations";
 
+export const dynamic = "force-static";
+
 export default function PricingPage() {
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">
