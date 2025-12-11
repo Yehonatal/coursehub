@@ -2,8 +2,15 @@
 
 import { z } from "zod";
 import bcrypt from "bcrypt";
-import { Client } from "pg";
 import { redirect } from "next/navigation";
+import { db } from "@/db";
+import { users, verificationTokens } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { createSession, invalidateSession } from "@/lib/auth/session";
+import { uploadFile } from "@/lib/storage/upload";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const SignInSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email format"),
@@ -34,19 +41,6 @@ export type ActionResponse = {
     errors?: Record<string, string[]>;
 };
 
-async function getDbClient() {
-    const connectionString = process.env.SUPABASE_DATABASE_URL;
-    if (!connectionString) {
-        throw new Error("SUPABASE_DATABASE_URL not configured");
-    }
-    const client = new Client({
-        connectionString,
-        ssl: { rejectUnauthorized: false },
-    });
-    await client.connect();
-    return client;
-}
-
 export async function signIn(
     prevState: ActionResponse,
     formData: FormData
@@ -65,28 +59,35 @@ export async function signIn(
     const { email, password } = parsed.data;
 
     try {
-        const client = await getDbClient();
-        const res = await client.query(
-            "SELECT user_id, password_hash FROM users WHERE email = $1",
-            [email]
-        );
-        await client.end();
+        const existingUsers = await db
+            .select()
+            .from(users)
+            .where(eq(users.email, email));
 
-        if (res.rowCount === 0) {
+        if (existingUsers.length === 0) {
             return { success: false, message: "Invalid email or password" };
         }
 
-        const row = res.rows[0];
-        const match = await bcrypt.compare(password, row.password_hash);
+        const user = existingUsers[0];
+        const match = await bcrypt.compare(password, user.password_hash);
         if (!match) {
             return { success: false, message: "Invalid email or password" };
         }
+
+        if (!user.is_verified) {
+            return {
+                success: false,
+                message: "Please verify your email before logging in.",
+            };
+        }
+
+        await createSession(user.user_id);
     } catch (err) {
         console.error("Sign in error:", err);
         return { success: false, message: "Server error" };
     }
 
-    redirect("/user");
+    redirect("/dashboard");
 }
 
 export async function signUp(
@@ -94,7 +95,6 @@ export async function signUp(
     formData: FormData
 ): Promise<ActionResponse> {
     const data = Object.fromEntries(formData) as Record<string, string>;
-
     const parsed = SignUpSchema.safeParse(data);
 
     if (!parsed.success) {
@@ -105,41 +105,88 @@ export async function signUp(
         };
     }
 
-    const { firstName, lastName, email, accountType, university, password } =
+    const { firstName, lastName, email, password, accountType, university } =
         parsed.data;
+    const schoolIdFile = formData.get("schoolId") as File | null;
 
     try {
-        const client = await getDbClient();
+        const existingUsers = await db
+            .select()
+            .from(users)
+            .where(eq(users.email, email));
 
-        const existing = await client.query(
-            "SELECT user_id FROM users WHERE email = $1",
-            [email]
-        );
-        if (existing.rowCount !== null && existing.rowCount > 0) {
-            await client.end();
-            return { success: false, message: "Email already in use" };
+        if (existingUsers.length > 0) {
+            return {
+                success: false,
+                message: "Email already registered",
+                errors: { email: ["Email already registered"] },
+            };
+        }
+
+        let schoolIdUrl = "";
+        if (schoolIdFile && schoolIdFile.size > 0) {
+            try {
+                const path = `school-ids/${Date.now()}-${schoolIdFile.name}`;
+                schoolIdUrl = await uploadFile(schoolIdFile, path);
+            } catch (error) {
+                console.error("File upload error:", error);
+                return {
+                    success: false,
+                    message: "Failed to upload school ID. Please try again.",
+                };
+            }
         }
 
         const passwordHash = await bcrypt.hash(password, 12);
 
-        await client.query(
-            `INSERT INTO users (first_name, last_name, email, password_hash, role, university)
-             VALUES ($1, $2, $3, $4, $5, $6)`,
-            [
-                firstName,
-                lastName,
+        const [newUser] = await db
+            .insert(users)
+            .values({
+                first_name: firstName,
+                last_name: lastName,
                 email,
-                passwordHash,
-                accountType,
-                university || null,
-            ]
-        );
+                password_hash: passwordHash,
+                role: accountType,
+                university: university || null,
+                school_id_url: schoolIdUrl || null,
+                is_verified: false,
+            })
+            .returning();
 
-        await client.end();
+        // Create verification token
+        const token = crypto.randomUUID();
+        const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24 hours
+
+        await db.insert(verificationTokens).values({
+            token,
+            user_id: newUser.user_id,
+            expires_at: expiresAt,
+        });
+
+        const baseUrl =
+            process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        const verificationUrl = `${baseUrl}/api/verify-email?token=${token}`;
+
+        await resend.emails.send({
+            from: "CourseHub <onboarding@resend.dev>",
+            to: email,
+            subject: "Verify your CourseHub account",
+            html: `
+                <h1>Welcome to CourseHub!</h1>
+                <p>Please verify your email address by clicking the link below:</p>
+                <a href="${verificationUrl}">Verify Email</a>
+                <p>Or copy and paste this link: ${verificationUrl}</p>
+            `,
+        });
     } catch (err) {
         console.error("Sign up error:", err);
         return { success: false, message: "Server error" };
     }
 
-    redirect("/user");
+    redirect("/verify-email");
+}
+
+export async function signOut() {
+    await invalidateSession();
+    redirect("/login");
 }

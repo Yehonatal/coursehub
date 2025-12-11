@@ -8,7 +8,7 @@ import { QuickUploadCard } from "@/components/dashboard/QuickUploadCard";
 export function SidebarWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
-    const hideSidebarPaths = ["/user/profile", "/resources"];
+    const hideSidebarPaths = ["/dashboard/profile", "/resources"];
     const shouldHideSidebar = hideSidebarPaths.some((path) =>
         pathname.startsWith(path)
     );
@@ -20,16 +20,7 @@ export function SidebarWrapper({ children }: { children: React.ReactNode }) {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[2.5fr_9.5fr] gap-8">
             <div className="hidden lg:block space-y-8">
-                <ProfileCard
-                    name="Yonatan Afewerk"
-                    role="SWE | @HRU | Full-Stack Developer"
-                    university="Haramaya University"
-                    department="Software Engineering"
-                    location="Harar"
-                    avatarUrl="https://github.com/shadcn.png"
-                    type="student"
-                    badge="Student"
-                />
+                <ProfileCard />
                 <QuickUploadCard />
             </div>
             <div className="w-full min-w-0">{children}</div>

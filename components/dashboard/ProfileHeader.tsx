@@ -1,9 +1,22 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { HandDrawnShape } from "@/components/ui/decorations";
+import { useUser } from "@/components/providers/UserProvider";
 
 export function ProfileHeader() {
+    const { user } = useUser();
+
+    const displayName = user
+        ? `${user.first_name} ${user.last_name}`
+        : "Guest User";
+    const displayRole = user?.role === "educator" ? "Educator" : "Student";
+    const displayUniversity = user?.university || "No University";
+    const displayLocation = "Addis Ababa, Ethiopia"; // Placeholder
+    const displayAvatar = "https://github.com/shadcn.png"; // Placeholder
+
     return (
         <div className="relative mb-8">
             <div className="h-28 sm:h-40 w-full rounded-t-xl bg-[#4F46E5]/10 relative overflow-hidden border-x border-t border-border/60">
@@ -23,7 +36,7 @@ export function ProfileHeader() {
                     <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 -mt-10 md:-mt-12 relative z-10">
                         <div className="h-20 w-20 md:h-32 md:w-32 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-md relative">
                             <Image
-                                src="https://github.com/shadcn.png"
+                                src={displayAvatar}
                                 alt="Profile"
                                 fill
                                 className="object-cover"
@@ -32,35 +45,39 @@ export function ProfileHeader() {
 
                         <div className="-mt-2 md:mt-16 space-y-1">
                             <h1 className="text-2xl font-serif font-bold text-[#0A251D]">
-                                Yonatan Afewerk
+                                {displayName}
                             </h1>
                             <p className="text-sm md:text-sm font-medium text-[#0A251D]">
-                                SWE | @HRU | Full-Stack Developer
+                                {displayRole} | @{displayUniversity}
                             </p>
                             <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground">
-                                <span>Student</span>
+                                <span>{displayRole}</span>
                                 <span>•</span>
-                                <span>Harar</span>
+                                <span>{displayLocation}</span>
                             </div>
                         </div>
                     </div>
 
-                    <Link
-                        href="/university/haramaya-university"
-                        className="flex items-center gap-3 mt-4 md:mt-0 hover:opacity-80 transition-opacity"
-                    >
-                        <div className="h-10 w-10 rounded-full bg-white border border-border flex items-center justify-center overflow-hidden relative">
-                            <div className="absolute inset-0 bg-green-600/20 flex items-center justify-center text-[10px] font-bold text-green-800">
-                                HU
+                    {displayUniversity && (
+                        <Link
+                            href={`/university/${displayUniversity
+                                .toLowerCase()
+                                .replace(/\s+/g, "-")}`}
+                            className="flex items-center gap-3 mt-4 md:mt-0 hover:opacity-80 transition-opacity"
+                        >
+                            <div className="h-10 w-10 rounded-full bg-white border border-border flex items-center justify-center overflow-hidden relative">
+                                <div className="absolute inset-0 bg-green-600/20 flex items-center justify-center text-[10px] font-bold text-green-800">
+                                    {displayUniversity
+                                        .substring(0, 2)
+                                        .toUpperCase()}
+                                </div>
                             </div>
-                        </div>
-                        <div className="text-xs text-[#0A251D]">
-                            <p className="font-bold">
-                                Haramaya University, Software
-                            </p>
-                            <p>engineering</p>
-                        </div>
-                    </Link>
+                            <div className="text-xs text-[#0A251D]">
+                                <p className="font-bold">{displayUniversity}</p>
+                                <p>Department</p>
+                            </div>
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>

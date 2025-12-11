@@ -4,8 +4,16 @@ import { TrustedBy } from "@/components/marketing/TrustedBy";
 import { HowItWorks } from "@/components/marketing/HowItWorks";
 import { FeaturesGrid } from "@/components/marketing/FeaturesGrid";
 import { CTA } from "@/components/marketing/CTA";
+import { validateRequest } from "@/lib/auth/session";
+import { redirect } from "next/navigation";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+    const { user } = await validateRequest();
+
+    if (user) {
+        redirect("/dashboard");
+    }
+
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">
             <Hero />

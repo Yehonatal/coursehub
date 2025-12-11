@@ -70,19 +70,19 @@ export function Navbar() {
                 </nav>
 
                 <div className="hidden md:flex items-center gap-4">
-                    <Link href="/login">
-                        <Button
-                            variant="ghost"
-                            className="text-base font-medium hover:bg-transparent hover:text-primary"
-                        >
-                            Log in
-                        </Button>
-                    </Link>
-                    <Link href="/register">
-                        <Button className="rounded-md px-6 bg-[#0A251D] text-white hover:bg-[#0A251D]/90">
-                            Get Started
-                        </Button>
-                    </Link>
+                    <Button
+                        variant="ghost"
+                        className="text-base font-medium hover:bg-transparent hover:text-primary"
+                        asChild
+                    >
+                        <Link href="/login">Log in</Link>
+                    </Button>
+                    <Button
+                        className="rounded-md px-6 bg-[#0A251D] text-white hover:bg-[#0A251D]/90"
+                        asChild
+                    >
+                        <Link href="/register">Get Started</Link>
+                    </Button>
                 </div>
 
                 <button
