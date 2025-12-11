@@ -12,6 +12,9 @@ export function proxy(request: NextRequest) {
         request.nextUrl.pathname.startsWith(route)
     );
 
+    // Note: We only check for session existence here. Full validation (DB check)
+    // happens in the Layout/Page via validateRequest(). This avoids Edge Runtime
+    // limitations with non-HTTP DB drivers.
     if (isProtected && !sessionId) {
         return NextResponse.redirect(new URL("/login", request.url));
     }

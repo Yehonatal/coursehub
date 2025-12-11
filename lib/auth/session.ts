@@ -4,55 +4,122 @@ import { sessions, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 const SESSION_COOKIE_NAME = "session_id";
-const SESSION_DURATION_MS = 1000 * 60 * 60 * 24 * 7; // 7 days
+// Session duration in milliseconds. Configurable via SESSION_DURATION_MS env var. Defaults to 7 days.
+const SESSION_DURATION_MS =
+    process.env.SESSION_DURATION_MS &&
+    !isNaN(Number(process.env.SESSION_DURATION_MS))
+        ? Number(process.env.SESSION_DURATION_MS)
+        : 1000 * 60 * 60 * 24 * 7;
 
 export async function createSession(userId: string) {
+    if (!db) {
+        console.error(
+            "createSession: DB client not initialized (SUPABASE_DATABASE_URL?)"
+        );
+        throw new Error("Database not initialized");
+    }
+
     const sessionId = crypto.randomUUID();
     const expiresAt = new Date(Date.now() + SESSION_DURATION_MS);
 
-    await db.insert(sessions).values({
-        session_id: sessionId,
-        user_id: userId,
-        expires_at: expiresAt,
-    });
+    try {
+        await db.insert(sessions).values({
+            session_id: sessionId,
+            user_id: userId,
+            expires_at: expiresAt,
+        });
+    } catch (err) {
+        console.error("createSession: DB insert failed:", err);
+        throw err;
+    }
 
     (await cookies()).set(SESSION_COOKIE_NAME, sessionId, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
         expires: expiresAt,
         path: "/",
     });
 }
 
 export async function validateRequest() {
-    const sessionId = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
-    if (!sessionId) return { user: null, session: null };
+    try {
+        if (!db) {
+            // DB not ready — log and return unauthenticated (don't throw).
+            console.warn(
+                "validateRequest: DB client not initialized; returning unauthenticated"
+            );
+            return { user: null, session: null };
+        }
 
-    const result = await db
-        .select({ user: users, session: sessions })
-        .from(sessions)
-        .innerJoin(users, eq(sessions.user_id, users.user_id))
-        .where(eq(sessions.session_id, sessionId));
+        const sessionId = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
+        if (!sessionId) return { user: null, session: null };
 
-    if (result.length < 1) {
+        const result = await db
+            .select({ user: users, session: sessions })
+            .from(sessions)
+            .innerJoin(users, eq(sessions.user_id, users.user_id))
+            .where(eq(sessions.session_id, sessionId));
+
+        if (!result || result.length < 1) {
+            return { user: null, session: null };
+        }
+
+        const { user, session } = result[0];
+        const expiresAt =
+            session.expires_at instanceof Date
+                ? session.expires_at
+                : new Date(session.expires_at);
+
+        if (Date.now() >= expiresAt.getTime()) {
+            try {
+                await db
+                    .delete(sessions)
+                    .where(eq(sessions.session_id, sessionId));
+            } catch (err) {
+                console.warn(
+                    "validateRequest: failed to delete expired session:",
+                    err
+                );
+            }
+            return { user: null, session: null };
+        }
+
+        // Success
+        return { user, session };
+    } catch (err) {
+        // Catch all DB or cookie errors so SSR doesn't crash
+        console.error(
+            "validateRequest: unexpected error while validating session:",
+            err
+        );
         return { user: null, session: null };
     }
-
-    const { user, session } = result[0];
-
-    if (Date.now() >= session.expires_at.getTime()) {
-        await db.delete(sessions).where(eq(sessions.session_id, sessionId));
-        return { user: null, session: null };
-    }
-
-    return { user, session };
 }
 
 export async function invalidateSession() {
-    const sessionId = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
-    if (sessionId) {
-        await db.delete(sessions).where(eq(sessions.session_id, sessionId));
+    try {
+        const sessionId = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
+        if (sessionId && db) {
+            try {
+                await db
+                    .delete(sessions)
+                    .where(eq(sessions.session_id, sessionId));
+            } catch (err) {
+                console.error(
+                    "invalidateSession: failed to delete session from DB:",
+                    err
+                );
+            }
+        }
+    } catch (err) {
+        console.warn("invalidateSession: error reading cookies:", err);
+    } finally {
+        // Always attempt to clear cookie locally
+        try {
+            (await cookies()).delete(SESSION_COOKIE_NAME);
+        } catch (err) {
+            console.warn("invalidateSession: error deleting cookie:", err);
+        }
     }
-    (await cookies()).delete(SESSION_COOKIE_NAME);
 }

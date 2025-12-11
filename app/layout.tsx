@@ -37,6 +37,8 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body
+                // Suppress hydration warnings caused by browser extensions or theme providers
+                // that modify the DOM before React hydrates.
                 suppressHydrationWarning
                 className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
             >

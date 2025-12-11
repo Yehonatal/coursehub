@@ -16,7 +16,7 @@ This document maps the SRS/SDD Functional Requirements (FR), Non-Functional Requ
 
 - FR-01 (Register using email/password): `app/(auth)/register/`, `lib/supabase/auth.ts`, `lib/supabase/client.ts`, `components/forms/*`
 - FR-02 (Email verification): `lib/supabase/auth.ts`, `services/notifications/*`, `app/(auth)/verify/`
-- FR-03 (Login & session): `app/(auth)/login/`, `lib/supabase/auth.ts`, `middleware.ts` (session protection)
+- FR-03 (Login & session): `app/(auth)/login/`, `lib/supabase/auth.ts`, `proxy.ts` (session protection)
 - FR-04 (Profile updates): `app/(dashboard)/dashboard/profile`, `lib/supabase/queries.ts`
 - FR-05 (Student / educator verification): `app/(dashboard)/instructor/`, `services/verification/*`, `lib/supabase/queries.ts`
 - FR-06 (Upload resources): `app/resources/upload/`, `lib/supabase/client.ts`, `lib/supabase/queries.ts`, `lib/supabase/storage` (if added)
@@ -38,13 +38,13 @@ This document maps the SRS/SDD Functional Requirements (FR), Non-Functional Requ
 - FR-22 (User contribution stats): `app/dashboard/student/`, `services/analytics/*`
 - FR-23 (Payment module): `services/payments/*`, `app/dashboard/subscription/`
 - FR-24 (Validate subscription): `services/payments/*`, `lib/supabase/queries.ts`
-- FR-25 (Restrict premium features): `middleware.ts`, `services/subscriptions/*`, `lib/ai/gemini.ts`
+- FR-25 (Restrict premium features): `proxy.ts`, `services/subscriptions/*`, `lib/ai/gemini.ts`
 
 ---
 
 ## Business Rules (BR)
 
-- BR-01 (Auth required for upload/download): `middleware.ts`, `app/resources/*`, `lib/supabase/auth.ts`
+- BR-01 (Auth required for upload/download): `proxy.ts`, `app/resources/*`, `lib/supabase/auth.ts`
 - BR-02 (Tagging metadata required): `app/resources/upload/`, `components/forms/*`, `lib/validators.ts`
 - BR-03 (Visibility uses min 3 ratings): `lib/supabase/queries.ts`, `app/resources/listing`
 - BR-04 (Premium AI requires subscription): `services/subscriptions/*`, `lib/ai/*`
@@ -58,7 +58,7 @@ This document maps the SRS/SDD Functional Requirements (FR), Non-Functional Requ
 - NFR-02 (Upload performance): `app/resources/upload/`, use resumable uploads where possible and show progress
 - NFR-03 (AI response time): `lib/ai/gemini.ts`, ensure async handling and UI timeouts
 - NFR-04..NFR-06 (usability/accessibility): `app/` UI components and `components/*`
-- NFR-07..NFR-10 (security): `middleware.ts`, `lib/validators.ts`, secrets in env, password hashing and session config in `lib/supabase/auth.ts`
+- NFR-07..NFR-10 (security): `proxy.ts`, `lib/validators.ts`, secrets in env, password hashing and session config in `lib/supabase/auth.ts`
 
 ---
 
