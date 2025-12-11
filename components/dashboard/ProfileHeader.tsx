@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { HandDrawnShape } from "@/components/ui/decorations";
 import { useUser } from "@/components/providers/UserProvider";
+import { BadgeCheck } from "lucide-react";
 
 export function ProfileHeader() {
     const { user } = useUser();
@@ -44,8 +45,11 @@ export function ProfileHeader() {
                         </div>
 
                         <div className="-mt-2 md:mt-16 space-y-1">
-                            <h1 className="text-2xl font-serif font-bold text-[#0A251D]">
+                            <h1 className="text-2xl font-serif font-bold text-[#0A251D] flex items-center gap-2">
                                 {displayName}
+                                {user?.is_verified && (
+                                    <BadgeCheck className="h-6 w-6 text-blue-500" />
+                                )}
                             </h1>
                             <p className="text-sm md:text-sm font-medium text-[#0A251D]">
                                 {displayRole} | @{displayUniversity}

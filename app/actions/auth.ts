@@ -4,13 +4,10 @@ import { z } from "zod";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
-import { users, verificationTokens } from "@/db/schema";
+import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { createSession, invalidateSession } from "@/lib/auth/session";
 import { uploadFile } from "@/lib/storage/upload";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const SignInSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email format"),
@@ -72,13 +69,6 @@ export async function signIn(
         const match = await bcrypt.compare(password, user.password_hash);
         if (!match) {
             return { success: false, message: "Invalid email or password" };
-        }
-
-        if (!user.is_verified) {
-            return {
-                success: false,
-                message: "Please verify your email before logging in.",
-            };
         }
 
         await createSession(user.user_id);
@@ -158,54 +148,13 @@ export async function signUp(
             })
             .returning();
 
-        // Create verification token
-        const token = crypto.randomUUID();
-        const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24 hours
-
-        // Check for existing valid tokens to prevent spam (basic rate limiting)
-        const existingTokens = await db
-            .select()
-            .from(verificationTokens)
-            .where(eq(verificationTokens.user_id, newUser.user_id));
-
-        if (existingTokens.length > 3) {
-            // If user has too many tokens, delete old ones or just fail silently/log
-            // For now, we'll just proceed but ideally we should limit this.
-            // Cleaning up old tokens:
-            await db
-                .delete(verificationTokens)
-                .where(eq(verificationTokens.user_id, newUser.user_id));
-        }
-
-        await db.insert(verificationTokens).values({
-            token,
-            user_id: newUser.user_id,
-            expires_at: expiresAt,
-        });
-
-        const baseUrl =
-            process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-        // Ensure baseUrl doesn't have trailing slash
-        const cleanBaseUrl = baseUrl.replace(/\/$/, "");
-        const verificationUrl = `${cleanBaseUrl}/api/verify-email?token=${token}`;
-
-        await resend.emails.send({
-            from: "CourseHub <onboarding@resend.dev>",
-            to: email,
-            subject: "Verify your CourseHub account",
-            html: `
-                <h1>Welcome to CourseHub!</h1>
-                <p>Please verify your email address by clicking the link below:</p>
-                <a href="${verificationUrl}">Verify Email</a>
-                <p>Or copy and paste this link: ${verificationUrl}</p>
-            `,
-        });
+        await createSession(newUser.user_id);
     } catch (err) {
         console.error("Sign up error:", err);
         return { success: false, message: "Server error" };
     }
 
-    redirect("/verify-email");
+    redirect("/dashboard");
 }
 
 export async function signOut() {

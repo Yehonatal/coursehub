@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { HandDrawnShape } from "@/components/ui/decorations";
-import { FolderOpen } from "lucide-react";
+import { FolderOpen, BadgeCheck } from "lucide-react";
 import { useUser } from "@/components/providers/UserProvider";
 
 interface ProfileCardProps {
@@ -70,8 +70,11 @@ export function ProfileCard({
                     />
                 </div>
                 <div className="mt-10 space-y-1 sm:mt-12">
-                    <h2 className="text-xl font-serif font-bold text-[#0A251D]">
+                    <h2 className="text-xl font-serif font-bold text-[#0A251D] flex items-center gap-2">
                         {displayName}
+                        {user?.is_verified && (
+                            <BadgeCheck className="h-5 w-5 text-blue-500" />
+                        )}
                     </h2>
                     <p className="text-sm text-muted-foreground">
                         {displayRole}
