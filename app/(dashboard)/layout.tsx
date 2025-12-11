@@ -4,13 +4,15 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { SidebarWrapper } from "@/components/layout/SidebarWrapper";
 import { AOSInit } from "@/utils/AOSInit";
 
+// Force dynamic rendering for the entire app since we rely on session cookies
+// in the root layout. This prevents build errors with static generation.
+export const dynamic = "force-dynamic";
+
 export default async function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
     return (
         <div className="min-h-screen bg-[#F9F9F9] font-sans text-foreground pb-16 md:pb-0">
             <AOSInit />
