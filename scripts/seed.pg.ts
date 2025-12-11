@@ -26,7 +26,7 @@ async function main() {
             {
                 first_name: "Admin",
                 last_name: "Educator",
-                email: "admin1@coursehub.edu",
+                email: "admin@coursehub.edu",
                 password_hash: passwordHash,
                 role: "educator",
                 university: "hu",
@@ -34,7 +34,7 @@ async function main() {
             {
                 first_name: "Student",
                 last_name: "User",
-                email: "student1@coursehub.edu",
+                email: "student@coursehub.edu",
                 password_hash: passwordHash,
                 role: "student",
                 university: "hu",
