@@ -15,7 +15,7 @@ export function BottomNav() {
         {
             label: "Home",
             icon: Home,
-            href: "/user",
+            href: "/dashboard",
         },
         {
             label: "Resources",
@@ -39,7 +39,7 @@ export function BottomNav() {
         {
             label: "Notifications",
             icon: Bell,
-            href: "/user/notifications",
+            href: "/dashboard/notifications",
         },
     ];
 

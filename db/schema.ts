@@ -259,3 +259,21 @@ export const courses = pgTable(
         idx_program: index("idx_courses_program").on(table.program_id),
     })
 );
+
+// ================= SESSIONS =================
+export const sessions = pgTable("sessions", {
+    session_id: varchar("session_id", { length: 255 }).primaryKey(),
+    user_id: uuid("user_id")
+        .notNull()
+        .references(() => users.user_id, { onDelete: "cascade" }),
+    expires_at: timestamp("expires_at", { withTimezone: true }).notNull(),
+});
+
+// ================= VERIFICATION TOKENS =================
+export const verificationTokens = pgTable("verification_tokens", {
+    token: varchar("token", { length: 255 }).primaryKey(),
+    user_id: uuid("user_id")
+        .notNull()
+        .references(() => users.user_id, { onDelete: "cascade" }),
+    expires_at: timestamp("expires_at", { withTimezone: true }).notNull(),
+});

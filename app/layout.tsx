@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { validateRequest } from "@/lib/auth/session";
+import { UserProvider } from "@/components/providers/UserProvider";
+import { User } from "@/app/types/user";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -24,18 +27,23 @@ export const metadata: Metadata = {
         "The centralized adaptive learning platform for Ethiopian university students and educators.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const { user } = await validateRequest();
+
     return (
         <html lang="en">
             <body
+                suppressHydrationWarning
                 className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
             >
-                <Toaster />
-                {children}
+                <UserProvider user={user as User | null}>
+                    <Toaster />
+                    {children}
+                </UserProvider>
             </body>
         </html>
     );

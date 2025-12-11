@@ -17,7 +17,7 @@ This document maps the SRS/SDD Functional Requirements (FR), Non-Functional Requ
 - FR-01 (Register using email/password): `app/(auth)/register/`, `lib/supabase/auth.ts`, `lib/supabase/client.ts`, `components/forms/*`
 - FR-02 (Email verification): `lib/supabase/auth.ts`, `services/notifications/*`, `app/(auth)/verify/`
 - FR-03 (Login & session): `app/(auth)/login/`, `lib/supabase/auth.ts`, `middleware.ts` (session protection)
-- FR-04 (Profile updates): `app/(dashboard)/user/`, `lib/supabase/queries.ts`
+- FR-04 (Profile updates): `app/(dashboard)/dashboard/profile`, `lib/supabase/queries.ts`
 - FR-05 (Student / educator verification): `app/(dashboard)/instructor/`, `services/verification/*`, `lib/supabase/queries.ts`
 - FR-06 (Upload resources): `app/resources/upload/`, `lib/supabase/client.ts`, `lib/supabase/queries.ts`, `lib/supabase/storage` (if added)
 - FR-07 (Require metadata tags): `app/resources/upload/`, `components/forms/*`, `lib/validators.ts`, `lib/supabase/queries.ts`

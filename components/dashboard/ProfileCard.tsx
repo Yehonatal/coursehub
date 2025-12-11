@@ -1,17 +1,21 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { HandDrawnShape } from "@/components/ui/decorations";
 import { FolderOpen } from "lucide-react";
+import { useUser } from "@/components/providers/UserProvider";
 
 interface ProfileCardProps {
-    name: string;
-    role: string;
+    // Optional props to override user data if needed
+    name?: string;
+    role?: string;
     university?: string;
     department?: string;
-    location: string;
-    avatarUrl: string;
+    location?: string;
+    avatarUrl?: string;
     type?: "student" | "university";
     badge?: string;
 }
@@ -26,6 +30,18 @@ export function ProfileCard({
     type = "student",
     badge = "Student",
 }: ProfileCardProps) {
+    const { user } = useUser();
+
+    const displayName =
+        name || (user ? `${user.first_name} ${user.last_name}` : "Guest User");
+    const displayRole =
+        role || (user?.role === "educator" ? "Educator" : "Student");
+    const displayUniversity = university || user?.university || "No University";
+    const displayLocation = location || "Addis Ababa, Ethiopia"; // Could be dynamic if we had location in user
+    const displayAvatar = avatarUrl || "https://github.com/shadcn.png"; // Placeholder
+    const displayType =
+        type || (user?.role === "educator" ? "university" : "student"); // Mapping educator to university type for now, adjust as needed
+
     return (
         <Card
             className="overflow-hidden border-border/60 bg-white group transition-all duration-300"
@@ -47,7 +63,7 @@ export function ProfileCard({
             <div className="px-4 pb-6 sm:px-6 relative">
                 <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full border-4 border-white bg-gray-200 absolute -top-20 sm:-top-24 overflow-hidden shadow-sm z-20">
                     <Image
-                        src={avatarUrl}
+                        src={displayAvatar}
                         alt="Profile"
                         fill
                         className="object-cover"
@@ -55,9 +71,11 @@ export function ProfileCard({
                 </div>
                 <div className="mt-10 space-y-1 sm:mt-12">
                     <h2 className="text-xl font-serif font-bold text-[#0A251D]">
-                        {name}
+                        {displayName}
                     </h2>
-                    <p className="text-sm text-muted-foreground">{role}</p>
+                    <p className="text-sm text-muted-foreground">
+                        {displayRole}
+                    </p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
                         {badge && (
                             <span className="px-2 py-0.5 rounded-full bg-gray-100 text-xs font-medium">
@@ -65,28 +83,30 @@ export function ProfileCard({
                             </span>
                         )}
                         <span>•</span>
-                        <span>{location}</span>
+                        <span>{displayLocation}</span>
                     </div>
                 </div>
 
-                {type === "student" && university && (
+                {displayType === "student" && displayUniversity && (
                     <Link
-                        href="/university/haramaya-university"
+                        href={`/university/${displayUniversity
+                            .toLowerCase()
+                            .replace(/\s+/g, "-")}`}
                         className="mt-6 pt-6 border-t border-border/40 flex items-center gap-3 hover:bg-gray-50 transition-colors rounded-md p-2 -mx-2"
                     >
                         <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-xs">
-                            {university.substring(0, 2).toUpperCase()}
+                            {displayUniversity.substring(0, 2).toUpperCase()}
                         </div>
                         <div className="text-xs text-muted-foreground">
                             <p className="font-medium text-foreground">
-                                {university}
+                                {displayUniversity}
                             </p>
-                            <p>{department}</p>
+                            <p>{department || "Department"}</p>
                         </div>
                     </Link>
                 )}
 
-                {type === "university" && (
+                {displayType === "university" && (
                     <div className="mt-6 pt-6 border-t border-border/40">
                         <div className="flex items-center gap-2 text-[#0A251D] font-medium mb-3">
                             <FolderOpen className="h-4 w-4" />

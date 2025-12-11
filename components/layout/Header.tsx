@@ -17,11 +17,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useUser } from "@/components/providers/UserProvider";
+import { signOut } from "@/app/actions/auth";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+    const { user } = useUser();
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -37,11 +40,15 @@ export function Header() {
             document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const handleSignOut = async () => {
+        await signOut();
+    };
+
     return (
         <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-white/80 backdrop-blur-md">
             <div className="container flex h-16 items-center justify-between px-4 md:px-6 mx-auto">
                 <div className="flex items-center gap-4">
-                    <Link href="/user" className="flex items-center gap-2">
+                    <Link href="/dashboard" className="flex items-center gap-2">
                         <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#0A251D] text-white">
                             <span className="text-lg font-serif font-bold">
                                 H
@@ -99,16 +106,20 @@ export function Header() {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <h4 className="font-bold text-[#0A251D] truncate">
-                                            Yonatan Afewerk
+                                            {user
+                                                ? `${user.first_name} ${user.last_name}`
+                                                : "Guest"}
                                         </h4>
                                         <p className="text-xs text-muted-foreground line-clamp-2">
-                                            SWE | @HRU | Full-Stack Developer
+                                            {user?.role || "Visitor"} |{" "}
+                                            {user?.university ||
+                                                "No University"}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="px-2 mb-2">
                                     <Link
-                                        href="/user/profile"
+                                        href="/dashboard/profile"
                                         className="block"
                                     >
                                         <Button
@@ -160,7 +171,7 @@ export function Header() {
 
                                 <div className="py-1">
                                     <button
-                                        onClick={() => router.push("/login")}
+                                        onClick={handleSignOut}
                                         className="w-full text-left px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/50 rounded-md flex items-center gap-2 transition-colors"
                                     >
                                         <LogOut className="h-4 w-4" /> Sign Out
