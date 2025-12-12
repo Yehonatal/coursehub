@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useEffect } from "react";
 import { signIn, type ActionResponse } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { HandDrawnUnderline } from "@/components/ui/decorations";
 import Link from "next/link";
 import { Loader2, Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 
 const initialState: ActionResponse = {
     success: false,
@@ -17,6 +19,31 @@ const initialState: ActionResponse = {
 export function LoginForm() {
     const [state, action, isPending] = useActionState(signIn, initialState);
     const [showPassword, setShowPassword] = useState(false);
+    const searchParams = useSearchParams();
+    const verified = searchParams.get("verified");
+
+    useEffect(() => {
+        if (verified) {
+            toast.success("Email verified successfully", {
+                description: "You can now log in to your account.",
+            });
+        }
+    }, [verified]);
+
+    useEffect(() => {
+        if (state?.message === "Email not verified") {
+            toast.error("Account not verified", {
+                description:
+                    "Please check your email and verify your account before logging in.",
+            });
+        } else if (
+            state?.message &&
+            !state.success &&
+            state.message !== "Validation failed"
+        ) {
+            toast.error(state.message);
+        }
+    }, [state]);
 
     return (
         <div className="w-full space-y-8">
@@ -52,9 +79,17 @@ export function LoginForm() {
                     )}
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="password" className="text-[#0A251D]">
-                        Password
-                    </Label>
+                    <div className="flex items-center justify-between">
+                        <Label htmlFor="password" className="text-[#0A251D]">
+                            Password
+                        </Label>
+                        <Link
+                            href="/forgot-password"
+                            className="text-sm font-medium text-[#0A251D] hover:underline"
+                        >
+                            Forgot password?
+                        </Link>
+                    </div>
                     <div className="relative">
                         <Input
                             id="password"

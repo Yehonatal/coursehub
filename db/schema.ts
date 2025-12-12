@@ -277,3 +277,12 @@ export const verificationTokens = pgTable("verification_tokens", {
         .references(() => users.user_id, { onDelete: "cascade" }),
     expires_at: timestamp("expires_at", { withTimezone: true }).notNull(),
 });
+
+// ================= PASSWORD RESET TOKENS =================
+export const passwordResetTokens = pgTable("password_reset_tokens", {
+    token: varchar("token", { length: 255 }).primaryKey(),
+    user_id: uuid("user_id")
+        .notNull()
+        .references(() => users.user_id, { onDelete: "cascade" }),
+    expires_at: timestamp("expires_at", { withTimezone: true }).notNull(),
+});
