@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState, useActionState } from "react";
+import { useEffect, useState, useActionState, useRef } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -29,7 +28,6 @@ export function EditProfileModal({
     onClose,
     user,
 }: EditProfileModalProps) {
-    const router = useRouter();
     const [state, action, isPending] = useActionState(
         updateProfile,
         initialActionState
@@ -43,30 +41,62 @@ export function EditProfileModal({
     const [headline, setHeadline] = useState(user?.headline ?? "");
 
     useEffect(() => {
-        setMounted(true);
+        // Schedule the state update to the next tick to avoid synchronous
+        // setState during the effect which can trigger cascading renders.
+        const id = setTimeout(() => setMounted(true), 0);
+        return () => clearTimeout(id);
     }, []);
 
     useEffect(() => {
-        if (open) {
-            setFirstName(user?.first_name ?? "");
-            setLastName(user?.last_name ?? "");
-            setUniversity(user?.university ?? "");
-            setHeadline(user?.headline ?? "");
+        if (open && user) {
+            setFirstName((prev) =>
+                prev !== (user.first_name ?? "") ? user.first_name ?? "" : prev
+            );
+            setLastName((prev) =>
+                prev !== (user.last_name ?? "") ? user.last_name ?? "" : prev
+            );
+            setUniversity((prev) =>
+                prev !== (user.university ?? "") ? user.university ?? "" : prev
+            );
+            setHeadline((prev) =>
+                prev !== (user.headline ?? "") ? user.headline ?? "" : prev
+            );
         }
     }, [open, user]);
 
+    // Prevent repeated toasts by tracking whether we've already notified for the
+    // currently-handled action state. useActionState exposes `state` which may be
+    // updated on subsequent renders; guard to avoid duplicate notifications.
+    const hasNotifiedRef = useRef(false);
     useEffect(() => {
-        if (state.success) {
+        if (!open) {
+            // Reset the notification guard when modal closes or re-opens.
+            hasNotifiedRef.current = false;
+        }
+    }, [open]);
+
+    useEffect(() => {
+        if (state.success && !hasNotifiedRef.current) {
+            hasNotifiedRef.current = true;
             toast.success(state.message || "Profile updated", {
                 description: "Your dashboard now reflects the latest info.",
             });
-            router.refresh();
+            // rely on server-side revalidation instead of a client refresh to
+            // avoid double refresh events which could trigger duplicate
+            // effects/notifications.
             onClose();
-        } else if (state.message && !state.success && state.message !== "") {
+        } else if (
+            state.message &&
+            !state.success &&
+            state.message !== "" &&
+            !hasNotifiedRef.current
+        ) {
+            hasNotifiedRef.current = true;
             toast.error(state.message);
         }
-    }, [state, onClose, router]);
+    }, [state, onClose]);
 
+    const firstInputRef = useRef<HTMLInputElement | null>(null);
     useEffect(() => {
         if (!open) return;
         const handler = (event: KeyboardEvent) => {
@@ -77,6 +107,19 @@ export function EditProfileModal({
         document.addEventListener("keydown", handler);
         return () => document.removeEventListener("keydown", handler);
     }, [onClose, open]);
+
+    // Focus the first input when the modal opens and lock background scroll.
+    useEffect(() => {
+        if (open) {
+            firstInputRef.current?.focus();
+            // lock background scroll
+            const prev = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+            return () => {
+                document.body.style.overflow = prev || "";
+            };
+        }
+    }, [open]);
 
     if (!mounted || !open || !user) {
         return null;
@@ -92,7 +135,7 @@ export function EditProfileModal({
             <Card
                 role="dialog"
                 aria-modal="true"
-                className="relative z-10 w-full max-w-2xl space-y-6 px-6 py-8 dark:bg-slate-900"
+                className="relative z-10 w-full max-w-2xl space-y-6 px-6 py-8 dark:bg-slate-900 rounded-2xl"
             >
                 <div className="flex items-center justify-between">
                     <div>
@@ -113,17 +156,29 @@ export function EditProfileModal({
                         <X className="h-4 w-4" />
                     </Button>
                 </div>
-
-                <form action={action} className="space-y-6">
+                {state.message && (
+                    <p
+                        className={`text-sm ${
+                            state.errors && Object.keys(state.errors).length
+                                ? "text-destructive"
+                                : "text-emerald-600"
+                        }`}
+                    >
+                        {state.message}
+                    </p>
+                )}
+                <form className="space-y-6" action={action}>
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="space-y-2">
                             <Label htmlFor="firstName">First name</Label>
                             <Input
                                 id="firstName"
+                                ref={firstInputRef}
                                 name="firstName"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                                 placeholder="Addis"
+                                aria-label="First name"
                             />
                             {state.errors?.firstName && (
                                 <p className="text-xs text-destructive">
@@ -158,6 +213,12 @@ export function EditProfileModal({
                             onChange={(e) => setHeadline(e.target.value)}
                             placeholder="Software Engineering Student | AI Enthusiast"
                         />
+                        <div
+                            className="text-xs text-muted-foreground text-right"
+                            aria-live="polite"
+                        >
+                            {headline.length}/150
+                        </div>
                         {state.errors?.headline && (
                             <p className="text-xs text-destructive">
                                 {state.errors.headline[0]}
@@ -185,7 +246,14 @@ export function EditProfileModal({
                         <Button
                             variant="outline"
                             type="button"
-                            onClick={onClose}
+                            onClick={() => {
+                                if (isPending) return;
+                                setFirstName(user?.first_name ?? "");
+                                setLastName(user?.last_name ?? "");
+                                setUniversity(user?.university ?? "");
+                                setHeadline(user?.headline ?? "");
+                                onClose();
+                            }}
                             disabled={isPending}
                         >
                             Cancel
