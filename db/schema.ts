@@ -41,6 +41,9 @@ export const resources = pgTable(
         title: varchar("title", { length: 255 }).notNull(),
         description: text("description"),
         file_url: varchar("file_url", { length: 512 }).notNull(),
+        mime_type: varchar("mime_type", { length: 100 }),
+        file_size: integer("file_size"),
+        resource_type: varchar("resource_type", { length: 20 }),
         upload_date: timestamp("upload_date").defaultNow().notNull(),
     },
     (table) => ({

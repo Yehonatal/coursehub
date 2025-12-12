@@ -71,6 +71,13 @@
       "when": 1765537170479,
       "tag": "0009_unknown_sunfire",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1765548441632,
+      "tag": "0010_young_luckman",
+      "breakpoints": true
     }
   ]
 }
