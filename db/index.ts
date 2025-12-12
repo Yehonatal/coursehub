@@ -25,6 +25,10 @@ if (connectionString) {
                 connectionTimeoutMillis: 5000,
                 allowExitOnIdle: true,
             });
+            // Add error handler to prevent uncaught exceptions
+            pool.on("error", (err) => {
+                console.error("Unexpected error on idle client", err);
+            });
         } else {
             if (!globalForDb.conn) {
                 globalForDb.conn = new Pool({
@@ -35,6 +39,10 @@ if (connectionString) {
                     idleTimeoutMillis: 10000,
                     connectionTimeoutMillis: 5000,
                     allowExitOnIdle: true,
+                });
+                // Add error handler to prevent uncaught exceptions
+                globalForDb.conn.on("error", (err) => {
+                    console.error("Unexpected error on idle client", err);
                 });
             }
             pool = globalForDb.conn;

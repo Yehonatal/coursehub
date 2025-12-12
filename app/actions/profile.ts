@@ -58,6 +58,9 @@ export async function updateProfile(
     }
 
     try {
+        if (!db) {
+            throw new Error("Database connection not available");
+        }
         await db
             .update(users)
             .set({
@@ -68,7 +71,14 @@ export async function updateProfile(
             })
             .where(eq(users.user_id, user.user_id));
 
-        revalidatePath("/", "layout");
+        // revalidatePath("/", "layout");
+        // Revalidate the root and dashboard sections so client UI updates reflect
+        // the newly-saved profile fields (e.g., `ProfileHeader`, `ProfileCard`).
+        // Do not pass extra args to revalidatePath; call it for every path we want
+        // revalidated.
+        revalidatePath("/");
+        revalidatePath("/dashboard");
+        revalidatePath("/dashboard/profile");
 
         return {
             ...initialActionState,
