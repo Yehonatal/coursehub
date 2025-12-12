@@ -6,7 +6,7 @@ import { Folder, Upload } from "lucide-react";
 export function AIUploadCard() {
     return (
         <Card
-            className="p-6 space-y-6 border-border/60"
+            className="p-6 space-y-6 border-border/60 rounded-2xl"
             data-aos="fade-left"
             data-aos-delay="400"
             suppressHydrationWarning

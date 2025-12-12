@@ -5,12 +5,14 @@ import { ResourceGrid } from "@/components/dashboard/ResourceGrid";
 import { AIUploadCard } from "@/components/dashboard/AIUploadCard";
 import { MobileQuickActions } from "@/components/dashboard/MobileQuickActions";
 import { mockDelay } from "@/utils/helpers";
+import { DashboardToast } from "@/components/dashboard/DashboardToast";
 
 export default async function StudentDashboard() {
     await mockDelay();
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-8">
+            <DashboardToast />
             <div className="space-y-10">
                 <MobileQuickActions />
                 <RecentsList

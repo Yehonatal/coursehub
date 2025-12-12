@@ -14,7 +14,7 @@ export function QuickUploadCard() {
                     <span>Upload File</span>
                 </div>
                 <Card
-                    className="p-8 border-dashed border-2 border-border/60 bg-muted/30 flex flex-col items-center justify-center text-center gap-4 hover:bg-muted/50 transition-colors cursor-pointer group"
+                    className="p-8 border-dashed border-2 rounded-2xl border-border/60 bg-muted/30 flex flex-col items-center justify-center text-center gap-4 hover:bg-muted/50 transition-colors cursor-pointer group"
                     onClick={() => setIsModalOpen(true)}
                 >
                     <div className="h-10 w-10 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-300">

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
@@ -42,9 +42,17 @@ export function ProfileCard({
     const displayType =
         type || (user?.role === "educator" ? "university" : "student"); // Mapping educator to university type for now, adjust as needed
 
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        // Use setTimeout to avoid "synchronous setState" warnings in some environments
+        const timer = setTimeout(() => setIsMounted(true), 0);
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
         <Card
-            className="overflow-hidden border-border/60 bg-white group transition-all duration-300"
+            className="overflow-hidden border-border/60 bg-white group transition-all duration-300 rounded-2xl"
             data-aos="fade-up"
         >
             <div className="h-24 bg-[#0A251D]/5 relative overflow-hidden">
@@ -72,9 +80,13 @@ export function ProfileCard({
                 <div className="mt-10 space-y-1 sm:mt-12">
                     <h2 className="text-xl font-serif font-bold text-[#0A251D] flex items-center gap-2">
                         {displayName}
-                        {user?.is_verified && (
+                        {isMounted && user?.is_verified ? (
                             <BadgeCheck className="h-5 w-5 text-blue-500" />
-                        )}
+                        ) : isMounted && user ? (
+                            <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-medium border border-amber-200 whitespace-nowrap">
+                                Not Verified
+                            </span>
+                        ) : null}
                     </h2>
                     <p className="text-sm text-muted-foreground">
                         {displayRole}

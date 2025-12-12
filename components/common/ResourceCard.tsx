@@ -45,12 +45,12 @@ export function ResourceCard({
             <Card className="h-full flex flex-col overflow-hidden hover:shadow-md transition-all duration-300 border-border/60 rounded-xl hover:-translate-y-1 bg-white">
                 <div
                     className={cn(
-                        "bg-gray-100 relative overflow-hidden",
+                        "bg-gray-100 relative overflow-hidden border-2 border-dashed border-border/60",
                         isMini ? "h-28" : "h-32"
                     )}
                 >
                     {/* Placeholder for resource preview */}
-                    <div className="absolute inset-0 bg-linear-to-br from-gray-50 to-gray-100 group-hover:scale-105 transition-transform duration-500" />
+                    <div className="absolute inset-0  bg-linear-to-br from-gray-50 to-gray-100 group-hover:scale-105 transition-transform duration-500" />
 
                     {isAI && (
                         <div className="absolute top-2 left-2 z-10">

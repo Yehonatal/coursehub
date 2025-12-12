@@ -38,9 +38,9 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 
 **Functional Requirements (traceable FR-XX)**
 
-- [ ] FR-01: Allow users to register using email and password.
-- [ ] FR-02: Verify user accounts via email using the Notification Service.
-- [ ] FR-03: Allow users to log in and maintain session state.
+- [x] FR-01: Allow users to register using email and password.
+- [x] FR-02: Verify user accounts via email using the Notification Service.
+- [x] FR-03: Allow users to log in and maintain session state.
 - [ ] FR-04: Allow users to update their profile information.
 - [ ] FR-05: Differentiate students and educators via a verification process.
 - [ ] FR-06: Allow authenticated users to upload educational resources (PDFs, docs).
@@ -55,7 +55,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [ ] FR-15: Allow users to generate AI-based study notes from uploaded content.
 - [ ] FR-16: Allow users to generate flashcards and knowledge trees via the Gemini Studio API.
 - [ ] FR-17: Restrict AI-powered features to free-tier quotas or require subscription for extended use.
-- [ ] FR-18: Send email or SMS notifications for account verification, password resets, and content interaction events.
+- [x] FR-18: Send email or SMS notifications for account verification, password resets, and content interaction events.
 - [ ] FR-19: Notify users when their content receives a comment, rating, or verification tag.
 - [ ] FR-20: Send regular updates or reminders regarding saved content and trending materials.
 - [ ] FR-21: Generate university-specific dashboards summarizing uploaded content and engagement metrics.
@@ -63,6 +63,14 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [ ] FR-23: Support a payment module for subscription to premium AI services.
 - [ ] FR-24: Validate subscription status via an external payment gateway.
 - [ ] FR-25: Restrict access to premium features when subscription inactive/expired.
+
+### Implemented (summary)
+
+- Authentication: registration, sign-in, session creation, sign-out. See `app/actions/auth.ts`, `components/auth/RegisterForm.tsx`, `components/auth/LoginForm.tsx`.
+- Email: verification & password reset flows (tokens, templates, Gmail/Nodemailer transport). See `lib/email/client.ts`, `lib/email/templates.ts`, and `app/api/verify-email/route.ts`.
+- UI feedback: Sonner toasts for verification success and unverified account warning (login flow). See `components/auth/LoginForm.tsx`.
+- Forgot / Reset password UI and logic: `app/(auth)/forgot-password/page.tsx` and `app/(auth)/reset-password/page.tsx`.
+- Removed temporary email test endpoint (`app/api/email/test`) and rely on real delivery or development logs.
 
 ---
 
@@ -143,6 +151,12 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - Google Gemini API key
 - SendGrid account (for notifications)
 
+**Email / Notifications (Gmail via Nodemailer)**
+- You can use Gmail SMTP with an App Password (recommended) for sending verification and password reset emails via Nodemailer.
+- Environment variables: `GMAIL_USER` and `GMAIL_PASS` (App Password). Optionally set `NEXT_PUBLIC_APP_URL` if you want to force links to a specific origin.
+- If you use 2FA on your Google account you must generate an App Password for the app. Learn more: https://support.google.com/accounts/answer/185833
+
+
 #### Environment Setup
 1. Copy `env.example` to `.env.local`
 2. Configure the following variables:
@@ -160,8 +174,12 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
    # AI
    GEMINI_API_KEY=your_gemini_api_key
 
-   # Notifications
-   SENDGRID_API_KEY=your_sendgrid_api_key
+
+   # Gmail (Nodemailer)
+   GMAIL_USER=your_gmail_address
+   GMAIL_PASS=your_gmail_app_password
+   # Optional: Force app URL used in emailed links
+   # NEXT_PUBLIC_APP_URL=https://coursehub.example.com
    ```
 
 #### Database Setup
@@ -212,7 +230,14 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 3. Run tests:
    ```bash
    pnpm test
-   ```
+
+### Testing Auth Flows (Email Verification & Password Reset)
+
+- Sign up locally (register) and check your inbox for a verification email. If Gmail is configured with an App Password, the verification email will contain a link like `https://<your-host>/api/verify-email?token=<token>`.
+- For quick development checks when email delivery is blocked or slow, the verification and reset links are also logged to the server console in development mode (NODE_ENV !== "production").
+- Forgot Password: Go to the Login page, click "Forgot password?" and enter your email. That will generate a reset token and email a link to `https://<your-host>/reset-password?token=<token>`.
+- The app detects the request's host dynamically so tokens and links will target the origin of the request (local host on dev or your production domain).
+- If you see a Gmail auth error (534 or similar), generate an App Password and set `GMAIL_PASS`.
 
 #### Production Deployment
 - Automated CI/CD via GitHub Actions

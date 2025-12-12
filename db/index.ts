@@ -6,34 +6,53 @@ import * as schema from "./schema";
 // Initialize a Drizzle DB instance using Supabase connection.
 const connectionString = process.env.SUPABASE_DATABASE_URL;
 
-let _db: any = null;
+// Singleton pattern for DB connection to prevent exhaustion in dev
+const globalForDb = globalThis as unknown as {
+    conn: Pool | undefined;
+};
+
+let pool: Pool | undefined;
 
 if (connectionString) {
     try {
-        // Use node-postgres Pool for Supabase (better for server environments)
-        const pool = new Pool({
-            connectionString,
-            ssl: { rejectUnauthorized: false },
-            max: 5, // Reduce max connections for pooler
-            min: 0, // No minimum connections
-            idleTimeoutMillis: 10000, // Shorter idle timeout
-            connectionTimeoutMillis: 5000, // Longer connection timeout
-            allowExitOnIdle: true, // Allow pool to exit when idle
-        });
-
-        _db = drizzlePostgres(pool, {
-            schema,
-            casing: "snake_case",
-        });
+        if (process.env.NODE_ENV === "production") {
+            pool = new Pool({
+                connectionString,
+                ssl: { rejectUnauthorized: false },
+                max: 10, // Higher limit for production
+                min: 0,
+                idleTimeoutMillis: 10000,
+                connectionTimeoutMillis: 5000,
+                allowExitOnIdle: true,
+            });
+        } else {
+            if (!globalForDb.conn) {
+                globalForDb.conn = new Pool({
+                    connectionString,
+                    ssl: { rejectUnauthorized: false },
+                    max: 5, // Low limit for dev
+                    min: 0,
+                    idleTimeoutMillis: 10000,
+                    connectionTimeoutMillis: 5000,
+                    allowExitOnIdle: true,
+                });
+            }
+            pool = globalForDb.conn;
+        }
     } catch (e) {
-        // Do not throw during module evaluation; export null so callers can handle missing DB.
-        // eslint-disable-next-line no-console
-        console.error("Failed to initialize DB client:", e);
-        _db = null;
+        console.error("Failed to initialize DB pool:", e);
     }
 } else {
     // eslint-disable-next-line no-console
     console.warn("No SUPABASE_DATABASE_URL found — DB client not initialized.");
+}
+
+let _db: any = null;
+if (pool) {
+    _db = drizzlePostgres(pool, {
+        schema,
+        casing: "snake_case",
+    });
 }
 
 export const db = _db;

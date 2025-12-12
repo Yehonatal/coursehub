@@ -202,7 +202,7 @@ export async function signUp(
         return { success: false, message: "Server error" };
     }
 
-    redirect("/dashboard");
+    redirect("/dashboard?registered=true");
 }
 
 export async function signOut() {
