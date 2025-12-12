@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 interface ResourceItem {
-    id: number;
+    id: string | number;
     title: string;
     rating: number;
     reviews: number;
@@ -14,6 +14,8 @@ interface ResourceItem {
     comments: number;
     isAI?: boolean;
     isVerified?: boolean;
+    fileUrl?: string;
+    mimeType?: string;
 }
 
 interface ResourceGridProps {

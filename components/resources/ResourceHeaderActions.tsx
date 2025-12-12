@@ -1,19 +1,28 @@
 "use client";
 
 import React from "react";
-import { Flag, Sparkles, Download, Share2, MoreHorizontal } from "lucide-react";
+import {
+    Flag,
+    Sparkles,
+    Download,
+    Share2,
+    MoreHorizontal,
+    Eye,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ResourceHeaderActionsProps {
     onGenerateContent: () => void;
     onDownload?: () => void;
     onReport?: () => void;
+    onView?: () => void;
 }
 
 export function ResourceHeaderActions({
     onGenerateContent,
     onDownload,
     onReport,
+    onView,
 }: ResourceHeaderActionsProps) {
     return (
         <div className="flex items-center gap-3 border-t border-b border-gray-100 py-4 overflow-x-auto md:overflow-visible">
@@ -24,6 +33,15 @@ export function ResourceHeaderActions({
             >
                 <Flag className="w-4 h-4" />
                 <span className="hidden sm:inline">Report</span>
+            </Button>
+
+            <Button
+                className="inline-flex cursor-pointer items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-sm border-0 px-3 py-2 text-sm whitespace-nowrap"
+                onClick={() => onView && onView()}
+            >
+                <Eye className="w-4 h-4" />
+                <span className="hidden sm:inline">View Content</span>
+                <span className="sm:hidden">View</span>
             </Button>
 
             <Button

@@ -6,9 +6,44 @@ import { MiniResourceGrid } from "@/components/dashboard/MiniResourceGrid";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mockDelay } from "@/utils/helpers";
+import { validateRequest } from "@/lib/auth/session";
+import { getUserResources } from "@/lib/resources";
+
+type MiniResourceItem = {
+    id: string;
+    title: string;
+    rating: number;
+    reviews: number;
+    description: string;
+    tags: string[];
+    downloads: number;
+    comments: number;
+    isAI?: boolean;
+    isVerified?: boolean;
+    fileUrl?: string;
+    mimeType?: string;
+};
 
 export default async function StudentProfilePage() {
     await mockDelay();
+    const { user } = await validateRequest();
+
+    let userResources: MiniResourceItem[] = [];
+    if (user) {
+        const resources = await getUserResources(user.user_id);
+        userResources = resources.map((r) => ({
+            id: r.resource_id,
+            title: r.title,
+            rating: r.rating || 0,
+            reviews: r.reviews || 0,
+            description: r.description || "",
+            tags: r.tags,
+            downloads: r.downloads || 0,
+            comments: r.comments || 0,
+            fileUrl: r.file_url,
+            mimeType: r.mime_type || undefined,
+        }));
+    }
 
     return (
         <div className="max-w-7xl mx-auto pb-12 space-y-8 px-4 sm:px-6 lg:px-8">
@@ -43,67 +78,15 @@ export default async function StudentProfilePage() {
                         </Button>
                     </div>
                 </div>
-                <MiniResourceGrid
-                    resources={[
-                        {
-                            id: 1,
-                            title: "Introduction to Software Engineering",
-                            rating: 4.7,
-                            reviews: 210,
-                            description:
-                                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-                            tags: ["CS101", "HRU", "Slides"],
-                            downloads: 148,
-                            comments: 25,
-                            isAI: true,
-                        },
-                        {
-                            id: 2,
-                            title: "Advanced Database Systems",
-                            rating: 4.9,
-                            reviews: 180,
-                            description:
-                                "Deep dive into query optimization, indexing strategies, and distributed databases.",
-                            tags: ["CS302", "DB", "Notes"],
-                            downloads: 230,
-                            comments: 42,
-                        },
-                        {
-                            id: 3,
-                            title: "Data Structures & Algorithms",
-                            rating: 4.8,
-                            reviews: 315,
-                            description:
-                                "Complete guide to trees, graphs, and dynamic programming with Python examples.",
-                            tags: ["CS201", "DSA", "Code"],
-                            downloads: 512,
-                            comments: 89,
-                            isAI: true,
-                        },
-                        {
-                            id: 4,
-                            title: "Web Development Fundamentals",
-                            rating: 4.6,
-                            reviews: 150,
-                            description:
-                                "Modern web development concepts including React, Next.js, and Tailwind CSS.",
-                            tags: ["Web", "React", "Frontend"],
-                            downloads: 190,
-                            comments: 30,
-                        },
-                        {
-                            id: 5,
-                            title: "Operating Systems Concepts",
-                            rating: 4.5,
-                            reviews: 120,
-                            description:
-                                "Understanding processes, threads, scheduling, and memory management.",
-                            tags: ["CS303", "OS", "Theory"],
-                            downloads: 165,
-                            comments: 22,
-                        },
-                    ]}
-                />
+                {userResources.length ? (
+                    <MiniResourceGrid resources={userResources} />
+                ) : (
+                    <div className="rounded-xl border border-dashed border-[#0A251D]/30 bg-white/60 p-6 text-sm text-[#0A251D]">
+                        You haven’t uploaded any resources yet. Uploading a
+                        resource will populate this list so you can easily
+                        highlight it as one of your most popular contributions.
+                    </div>
+                )}
             </div>
         </div>
     );

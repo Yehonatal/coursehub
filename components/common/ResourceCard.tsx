@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Star, Download, MessageSquare, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/utils/cn";
+import { ResourcePreview } from "./ResourcePreview";
 
 interface ResourceCardProps {
-    id: number;
+    id: string | number;
     title: string;
     rating: number;
     reviews: number;
@@ -15,6 +16,8 @@ interface ResourceCardProps {
     tags: string[];
     downloads: number;
     comments: number;
+    fileUrl?: string;
+    mimeType?: string;
     isAI?: boolean;
     isVerified?: boolean;
     variant?: "default" | "mini";
@@ -30,6 +33,8 @@ export function ResourceCard({
     tags,
     downloads,
     comments,
+    fileUrl,
+    mimeType,
     isAI,
     isVerified,
     variant = "default",
@@ -49,8 +54,16 @@ export function ResourceCard({
                         isMini ? "h-28" : "h-32"
                     )}
                 >
-                    {/* Placeholder for resource preview */}
-                    <div className="absolute inset-0  bg-linear-to-br from-gray-50 to-gray-100 group-hover:scale-105 transition-transform duration-500" />
+                    {/* Resource Preview */}
+                    {fileUrl ? (
+                        <ResourcePreview
+                            fileUrl={fileUrl}
+                            mimeType={mimeType}
+                            className="absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+                        />
+                    ) : (
+                        <div className="absolute inset-0  bg-linear-to-br from-gray-50 to-gray-100 group-hover:scale-105 transition-transform duration-500" />
+                    )}
 
                     {isAI && (
                         <div className="absolute top-2 left-2 z-10">
@@ -79,7 +92,7 @@ export function ResourceCard({
                             {title}
                         </h3>
                         <div className="flex items-center gap-1 text-xs">
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                            <Star className="h-3 w-3 fill-current text-yellow-400" />
                             <span className="font-bold text-[#0A251D]">
                                 {rating}
                             </span>

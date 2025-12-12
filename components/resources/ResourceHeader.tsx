@@ -2,11 +2,14 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Star, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { AIChatModal } from "@/components/ai/AIChatModal";
 import { ResourceHeaderActions } from "./ResourceHeaderActions";
+import { ResourceViewerModal } from "./ResourceViewerModal";
+import { trackResourceDownload } from "@/app/actions/resource-tracking";
+import UniversityBadge from "@/components/common/UniversityBadge";
+import { useResourceStats } from "@/components/resources/useResourceStats";
 
 interface ResourceHeaderProps {
     title: string;
@@ -19,6 +22,8 @@ interface ResourceHeaderProps {
     author: string;
     university: string;
     department: string;
+    fileUrl?: string;
+    resourceId?: string;
 }
 
 export function ResourceHeader({
@@ -32,8 +37,26 @@ export function ResourceHeader({
     author,
     university,
     department,
+    fileUrl,
+    resourceId,
 }: ResourceHeaderProps) {
     const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+    const [isViewerOpen, setIsViewerOpen] = useState(false);
+    const { stats } = useResourceStats(resourceId);
+
+    const handleDownload = async () => {
+        if (!fileUrl) return;
+        try {
+            // Track download server-side
+            if (resourceId) {
+                await trackResourceDownload(resourceId);
+            }
+        } catch (err) {
+            console.error("Failed tracking download", err);
+        }
+        // Open the file after tracking
+        window.open(fileUrl, "_blank");
+    };
 
     return (
         <div className="space-y-6">
@@ -43,6 +66,14 @@ export function ResourceHeader({
                 resourceTitle={title}
                 resourceType={type}
             />
+            {fileUrl && (
+                <ResourceViewerModal
+                    isOpen={isViewerOpen}
+                    onClose={() => setIsViewerOpen(false)}
+                    fileUrl={fileUrl}
+                    title={title}
+                />
+            )}
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="space-y-1">
                     <div className="flex items-center">
@@ -52,25 +83,37 @@ export function ResourceHeader({
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2 text-sm mt-1">
-                        <div className="flex text-yellow-400">
-                            {[1, 2, 3, 4].map((i) => (
+                        <div
+                            className="flex"
+                            // star markup can be updated client-side after hydration (live stats);
+                            // suppressHydrationWarning prevents dev-mode hydration error while keeping markup accessible
+                            suppressHydrationWarning
+                        >
+                            {[1, 2, 3, 4, 5].map((star) => (
                                 <Star
-                                    key={i}
-                                    className="w-4 h-4 fill-current"
+                                    key={star}
+                                    className={`w-4 h-4 fill-current ${
+                                        star <=
+                                        Math.round(stats?.rating ?? rating)
+                                            ? "text-yellow-400"
+                                            : "text-gray-200"
+                                    }`}
+                                    aria-hidden
                                 />
                             ))}
-                            <Star className="w-4 h-4 fill-current text-gray-300" />
                         </div>
                         <span className="text-gray-600 font-medium">
-                            {rating} / 5
+                            {(stats?.rating ?? rating).toFixed(1)} / 5
                         </span>
                         <span className="text-gray-400">
-                            ({reviews} reviews)
+                            ({stats?.reviews ?? reviews} reviews)
                         </span>
                         <span className="text-gray-300">•</span>
                         <div className="flex items-center gap-1 text-gray-600">
                             <Download className="w-4 h-4" />
-                            <span>{downloads} downloads</span>
+                            <span>
+                                {stats?.downloads ?? downloads} downloads
+                            </span>
                         </div>
                     </div>
 
@@ -91,36 +134,33 @@ export function ResourceHeader({
                     </div>
                 </div>
                 <div className="hidden md:flex items-center gap-3">
-                    <Link
-                        href="/university/haramaya-university"
-                        className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                    >
-                        <div className="w-12 h-12 rounded-full border border-gray-200 overflow-hidden relative bg-white">
-                            <Image
-                                src="/hu-logo.jpg"
-                                alt={university}
-                                fill
-                                className="object-contain p-1"
+                    {university && (
+                        <Link
+                            href={`/university/${university
+                                .toLowerCase()
+                                .replace(/[^a-z0-9]+/g, "-")
+                                .replace(/(^-|-$)/g, "")}`}
+                            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                        >
+                            <UniversityBadge
+                                university={university}
+                                size={48}
                             />
-                        </div>
-                        <div className="text-sm">
-                            <p className="font-medium text-[#0A251D]">
-                                {university}
-                            </p>
-                            <p className="text-gray-500">{department}</p>
-                        </div>
-                    </Link>
+                            <div className="text-sm">
+                                <p className="font-medium text-[#0A251D]">
+                                    {university}
+                                </p>
+                                <p className="text-gray-500">{department}</p>
+                            </div>
+                        </Link>
+                    )}
                 </div>
             </div>
 
             <ResourceHeaderActions
                 onGenerateContent={() => setIsAIModalOpen(true)}
-                onDownload={() => {
-                    /* TODO: download handler */
-                }}
-                onReport={() => {
-                    /* TODO: report handler */
-                }}
+                onView={fileUrl ? () => setIsViewerOpen(true) : undefined}
+                onDownload={fileUrl ? handleDownload : undefined}
             />
         </div>
     );

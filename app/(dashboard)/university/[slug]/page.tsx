@@ -15,6 +15,7 @@ export default async function UniversityPage({
     const { slug } = await params;
     await mockDelay();
 
+    // Hardcoded resources for university page
     const resources = [
         {
             id: 1,

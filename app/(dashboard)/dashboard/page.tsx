@@ -6,9 +6,25 @@ import { AIUploadCard } from "@/components/dashboard/AIUploadCard";
 import { MobileQuickActions } from "@/components/dashboard/MobileQuickActions";
 import { mockDelay } from "@/utils/helpers";
 import { DashboardToast } from "@/components/dashboard/DashboardToast";
+import { getRecommendedResources } from "@/lib/resources";
 
 export default async function StudentDashboard() {
     await mockDelay();
+    const recommendedResources = await getRecommendedResources(6);
+
+    const resourcesForGrid = recommendedResources.map((r) => ({
+        id: r.resource_id,
+        title: r.title,
+        rating: r.rating || 0,
+        reviews: r.reviews || 0,
+        description: r.description || "",
+        tags: r.tags,
+        downloads: r.downloads || 0,
+        comments: r.comments || 0,
+        isAI: r.resource_type === "AI",
+        fileUrl: r.file_url,
+        mimeType: r.mime_type || undefined,
+    }));
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-8">
@@ -44,77 +60,7 @@ export default async function StudentDashboard() {
                 <ResourceGrid
                     title="Recommended for You"
                     viewAllLink="/resources"
-                    resources={[
-                        {
-                            id: 1,
-                            title: "Introduction to Software Engineering",
-                            rating: 4.7,
-                            reviews: 210,
-                            description:
-                                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-                            tags: ["CS101", "HRU", "Slides"],
-                            downloads: 148,
-                            comments: 25,
-                            isAI: true,
-                        },
-                        {
-                            id: 2,
-                            title: "Data Structures and Algorithms",
-                            rating: 4.9,
-                            reviews: 342,
-                            description:
-                                "In-depth guide to common data structures and algorithms with examples in C++.",
-                            tags: ["CS201", "HRU", "Notes"],
-                            downloads: 256,
-                            comments: 42,
-                        },
-                        {
-                            id: 3,
-                            title: "Database Management Systems",
-                            rating: 4.5,
-                            reviews: 156,
-                            description:
-                                "Complete course material for DBMS including SQL queries and normalization.",
-                            tags: ["CS301", "HRU", "Exam"],
-                            downloads: 189,
-                            comments: 18,
-                            isAI: true,
-                        },
-                        {
-                            id: 4,
-                            title: "Web Programming",
-                            rating: 4.8,
-                            reviews: 275,
-                            description:
-                                "Modern web development techniques using React, Node.js, and Tailwind CSS.",
-                            tags: ["CS401", "HRU", "Project"],
-                            downloads: 312,
-                            comments: 56,
-                        },
-                        {
-                            id: 5,
-                            title: "Artificial Intelligence Fundamentals",
-                            rating: 4.9,
-                            reviews: 420,
-                            description:
-                                "Comprehensive introduction to AI concepts, machine learning, and neural networks.",
-                            tags: ["CS501", "AI", "ML"],
-                            downloads: 567,
-                            comments: 89,
-                            isAI: true,
-                        },
-                        {
-                            id: 6,
-                            title: "Computer Networks",
-                            rating: 4.6,
-                            reviews: 180,
-                            description:
-                                "Understanding the OSI model, TCP/IP protocols, and network security basics.",
-                            tags: ["CS305", "Networking", "Cisco"],
-                            downloads: 234,
-                            comments: 34,
-                        },
-                    ]}
+                    resources={resourcesForGrid}
                 />
             </div>
 

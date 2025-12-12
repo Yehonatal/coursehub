@@ -2,45 +2,14 @@ import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ResourceCard } from "@/components/common/ResourceCard";
+import { ResourceWithTags } from "@/lib/resources";
 
-export function RelatedResources() {
-    const relatedResources = [
-        {
-            id: 101,
-            title: "Advanced Algorithms",
-            rating: 4.8,
-            reviews: 120,
-            description:
-                "Deep dive into graph algorithms, dynamic programming, and complexity analysis.",
-            tags: ["CS301", "Algorithms"],
-            downloads: 89,
-            comments: 12,
-            isVerified: true,
-        },
-        {
-            id: 102,
-            title: "System Design Patterns",
-            rating: 4.9,
-            reviews: 85,
-            description:
-                "Learn how to design scalable and maintainable software systems using common patterns.",
-            tags: ["CS402", "Architecture"],
-            downloads: 150,
-            comments: 24,
-            isAI: true,
-        },
-        {
-            id: 103,
-            title: "Cloud Computing Basics",
-            rating: 4.6,
-            reviews: 95,
-            description:
-                "Introduction to cloud services, deployment models, and virtualization technologies.",
-            tags: ["CS405", "Cloud"],
-            downloads: 210,
-            comments: 18,
-        },
-    ];
+interface RelatedResourcesProps {
+    resources: ResourceWithTags[];
+}
+
+export function RelatedResources({ resources }: RelatedResourcesProps) {
+    if (!resources || resources.length === 0) return null;
 
     return (
         <div className="space-y-6 pt-8 border-t border-gray-100">
@@ -66,12 +35,21 @@ export function RelatedResources() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {relatedResources.map((resource) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {resources.map((resource) => (
                     <ResourceCard
-                        key={resource.id}
-                        {...resource}
-                        variant="mini"
+                        key={resource.resource_id}
+                        id={resource.resource_id}
+                        title={resource.title}
+                        rating={resource.rating || 0}
+                        reviews={resource.reviews || 0}
+                        description={resource.description || ""}
+                        tags={resource.tags}
+                        downloads={resource.downloads || 0}
+                        comments={resource.comments || 0}
+                        isVerified={false}
+                        fileUrl={resource.file_url}
+                        mimeType={resource.mime_type || undefined}
                     />
                 ))}
             </div>

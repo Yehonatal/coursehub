@@ -43,9 +43,12 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-03: Allow users to log in and maintain session state.
 - [x] FR-04: Allow users to update their profile information.
 - [x] FR-05: Differentiate students and educators via a verification process.
-- [ ] FR-06: Allow authenticated users to upload educational resources (PDFs, docs).
-- [ ] FR-07: Require users to tag uploaded content with course code, semester, and university.
-- [ ] FR-08: Allow users to download and view publicly available content.
+- [x] FR-06: Allow authenticated users to upload educational resources (PDFs, docs).
+- [x] FR-06-01: View material on platform, Download material to device.
+- [x] FR-06-02: Status names are dynamic (view, download, rating, comments)
+- [x] FR-07: Require users to tag uploaded content with course code, semester, and university.
+- [x] FR-08: Allow users to download and view publicly available content.
+- [x] FR-09-01: Track and store download counts for each resource. 
 - [ ] FR-09: Provide advanced search filtering using course codes, university, tags, and semester.
 - [ ] FR-10: Allow users to rate content on a 5-star scale.
 - [ ] FR-11: Allow users to comment on content.

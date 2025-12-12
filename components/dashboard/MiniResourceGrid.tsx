@@ -2,7 +2,7 @@ import React from "react";
 import { ResourceCard } from "@/components/common/ResourceCard";
 
 interface ResourceItem {
-    id: number;
+    id: string | number;
     title: string;
     rating: number;
     reviews: number;
@@ -12,6 +12,8 @@ interface ResourceItem {
     comments: number;
     isAI?: boolean;
     isVerified?: boolean;
+    fileUrl?: string;
+    mimeType?: string;
 }
 
 interface ResourceGridProps {
@@ -26,8 +28,8 @@ export function MiniResourceGrid({ resources }: ResourceGridProps) {
             data-aos-delay="300"
             suppressHydrationWarning
         >
-            {resources.map((item, i) => (
-                <ResourceCard key={i} {...item} variant="mini" />
+            {resources.map((item) => (
+                <ResourceCard key={item.id} {...item} variant="mini" />
             ))}
         </div>
     );

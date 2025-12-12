@@ -226,6 +226,24 @@ export const resource_views = pgTable(
     })
 );
 
+// ================= DOWNLOADS =================
+export const resource_downloads = pgTable(
+    "resource_downloads",
+    {
+        id: serial("id").primaryKey(),
+        resource_id: uuid("resource_id")
+            .notNull()
+            .references(() => resources.resource_id, { onDelete: "cascade" }),
+        user_id: uuid("user_id"),
+        downloaded_at: timestamp("downloaded_at").defaultNow().notNull(),
+    },
+    (table) => ({
+        idx_resource: index("idx_resource_downloads_resource").on(
+            table.resource_id
+        ),
+    })
+);
+
 // ================= UNIVERSITY STRUCTURE =================
 export const universities = pgTable("universities", {
     university_id: serial("university_id").primaryKey(),
