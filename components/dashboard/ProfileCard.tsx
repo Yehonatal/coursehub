@@ -18,6 +18,7 @@ interface ProfileCardProps {
     avatarUrl?: string;
     type?: "student" | "university";
     badge?: string;
+    headline?: string;
 }
 
 export function ProfileCard({
@@ -29,6 +30,7 @@ export function ProfileCard({
     avatarUrl,
     type = "student",
     badge = "Student",
+    headline,
 }: ProfileCardProps) {
     const { user } = useUser();
 
@@ -41,6 +43,7 @@ export function ProfileCard({
     const displayAvatar = avatarUrl || "https://github.com/shadcn.png"; // Placeholder
     const displayType =
         type || (user?.role === "educator" ? "university" : "student"); // Mapping educator to university type for now, adjust as needed
+    const displayHeadline = headline || user?.headline;
 
     const [isMounted, setIsMounted] = useState(false);
 
@@ -89,7 +92,7 @@ export function ProfileCard({
                         ) : null}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                        {displayRole}
+                        {displayHeadline || displayRole}
                     </p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
                         {badge && (

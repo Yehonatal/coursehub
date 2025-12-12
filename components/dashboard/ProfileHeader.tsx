@@ -1,14 +1,16 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { HandDrawnShape } from "@/components/ui/decorations";
+import { Button } from "@/components/ui/button";
 import { useUser } from "@/components/providers/UserProvider";
-import { BadgeCheck } from "lucide-react";
+import { BadgeCheck, Pencil } from "lucide-react";
+import { EditProfileModal } from "@/components/dashboard/EditProfileModal";
 
 export function ProfileHeader() {
     const { user } = useUser();
+    const [isEditOpen, setIsEditOpen] = useState(false);
 
     const displayName = user
         ? `${user.first_name} ${user.last_name}`
@@ -52,7 +54,8 @@ export function ProfileHeader() {
                                 )}
                             </h1>
                             <p className="text-sm md:text-sm font-medium text-[#0A251D]">
-                                {displayRole} | @{displayUniversity}
+                                {user?.headline ||
+                                    `${displayRole} | @${displayUniversity}`}
                             </p>
                             <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground">
                                 <span>{displayRole}</span>
@@ -62,28 +65,50 @@ export function ProfileHeader() {
                         </div>
                     </div>
 
-                    {displayUniversity && (
-                        <Link
-                            href={`/university/${displayUniversity
-                                .toLowerCase()
-                                .replace(/\s+/g, "-")}`}
-                            className="flex items-center gap-3 mt-4 md:mt-0 hover:opacity-80 transition-opacity"
-                        >
-                            <div className="h-10 w-10 rounded-full bg-white border border-border flex items-center justify-center overflow-hidden relative">
-                                <div className="absolute inset-0 bg-green-600/20 flex items-center justify-center text-[10px] font-bold text-green-800">
-                                    {displayUniversity
-                                        .substring(0, 2)
-                                        .toUpperCase()}
+                    <div className="flex items-center gap-3 mt-4 md:mt-0">
+                        {user && (
+                            <Button
+                                size="icon"
+                                variant="ghost"
+                                type="button"
+                                onClick={() => setIsEditOpen(true)}
+                                className="h-8 w-8"
+                            >
+                                <Pencil className="h-4 w-4" />
+                            </Button>
+                        )}
+                        {displayUniversity && (
+                            <Link
+                                href={`/university/${displayUniversity
+                                    .toLowerCase()
+                                    .replace(/\s+/g, "-")}`}
+                                className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                            >
+                                <div className="h-10 w-10 rounded-full bg-white border border-border flex items-center justify-center overflow-hidden relative">
+                                    <div className="absolute inset-0 bg-green-600/20 flex items-center justify-center text-[10px] font-bold text-green-800">
+                                        {displayUniversity
+                                            .substring(0, 2)
+                                            .toUpperCase()}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="text-xs text-[#0A251D]">
-                                <p className="font-bold">{displayUniversity}</p>
-                                <p>Department</p>
-                            </div>
-                        </Link>
-                    )}
+                                <div className="text-xs text-[#0A251D]">
+                                    <p className="font-bold">
+                                        {displayUniversity}
+                                    </p>
+                                    <p>Department</p>
+                                </div>
+                            </Link>
+                        )}
+                    </div>
                 </div>
             </div>
+            {isEditOpen && user && (
+                <EditProfileModal
+                    open={isEditOpen}
+                    onClose={() => setIsEditOpen(false)}
+                    user={user}
+                />
+            )}
         </div>
     );
 }

@@ -20,6 +20,7 @@ export const users = pgTable("users", {
     password_hash: varchar("password_hash", { length: 255 }).notNull(),
     role: varchar("role", { length: 20 }).notNull(),
     university: varchar("university", { length: 100 }),
+    headline: varchar("headline", { length: 150 }),
     school_id_url: varchar("school_id_url", { length: 512 }),
     is_verified: boolean("is_verified").default(false).notNull(),
     subscription_status: varchar("subscription_status", { length: 20 }),
