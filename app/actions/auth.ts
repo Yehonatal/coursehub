@@ -61,6 +61,10 @@ export async function signIn(
 
     const { email, password } = parsed.data;
 
+    if (!db) {
+        return { success: false, message: "Database connection error" };
+    }
+
     try {
         const existingUsers = await db
             .select()
@@ -108,6 +112,10 @@ export async function signUp(
     const { firstName, lastName, email, password, accountType, university } =
         parsed.data;
     const schoolIdFile = formData.get("schoolId") as File | null;
+
+    if (!db) {
+        return { success: false, message: "Database connection error" };
+    }
 
     try {
         const existingUsers = await db

@@ -1,31 +1,41 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { validateRequest } from "@/lib/auth/session";
 
-export function proxy(request: NextRequest) {
-    const sessionId = request.cookies.get("session_id")?.value;
-    const isAuthPage =
-        request.nextUrl.pathname.startsWith("/login") ||
-        request.nextUrl.pathname.startsWith("/register");
+export async function proxy(request: NextRequest) {
+    const { pathname } = request.nextUrl;
 
+    // Protected routes
     const protectedRoutes = ["/dashboard", "/ai", "/resources", "/university"];
+
     const isProtected = protectedRoutes.some((route) =>
-        request.nextUrl.pathname.startsWith(route)
+        pathname.startsWith(route)
     );
 
-    // Note: We only check for session existence here. Full validation (DB check)
-    // happens in the Layout/Page via validateRequest(). This avoids Edge Runtime
-    // limitations with non-HTTP DB drivers.
-    if (isProtected && !sessionId) {
-        return NextResponse.redirect(new URL("/login", request.url));
-    }
-
-    if (isAuthPage && sessionId) {
-        return NextResponse.redirect(new URL("/dashboard", request.url));
+    if (isProtected) {
+        try {
+            const { user } = await validateRequest();
+            if (!user) {
+                return NextResponse.redirect(new URL("/", request.url));
+            }
+        } catch (error) {
+            console.error("Middleware auth error:", error);
+            return NextResponse.redirect(new URL("/", request.url));
+        }
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         * - public folder
+         */
+        "/((?!api|_next/static|_next/image|favicon.ico|public).*)",
+    ],
 };
