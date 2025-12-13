@@ -17,7 +17,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 
 
 ### Key Features
-- **Authentication**: User registration, email verification, and session management via Supabase Auth.
+- **Authentication**: User registration, email verification, and session management via Supabase Auth (currently have custom auth).
 - **Content Submission**: Upload educational resources (e.g., PDFs, docs) with mandatory tagging by course code, semester, and university.
 - **Community Moderation**: Ratings (5-star scale), comments, reporting of inappropriate content, and educator-verified tagging for prioritized visibility.
 - **AI-Powered Study Aids**: Generate study notes, flashcards, and knowledge trees using the Gemini Studio API, with quota restrictions or subscription-based access.
@@ -48,7 +48,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-06-02: Status names are dynamic (view, download, rating, comments)
 - [x] FR-07: Require users to tag uploaded content with course code, semester, and university.
 - [x] FR-08: Allow users to download and view publicly available content.
-- [x] FR-09-01: Track and store download counts for each resource. 
+- [x] FR-08-01: Track and store download counts for each resource. 
 - [ ] FR-09: Provide advanced search filtering using course codes, university, tags, and semester.
 - [ ] FR-10: Allow users to rate content on a 5-star scale.
 - [ ] FR-11: Allow users to comment on content.

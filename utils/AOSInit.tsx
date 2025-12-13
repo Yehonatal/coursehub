@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import "aos/dist/aos.css";
 
 const AOSInit = () => {
     useEffect(() => {

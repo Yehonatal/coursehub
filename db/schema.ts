@@ -45,6 +45,9 @@ export const resources = pgTable(
         file_size: integer("file_size"),
         resource_type: varchar("resource_type", { length: 20 }),
         upload_date: timestamp("upload_date").defaultNow().notNull(),
+        views_count: integer("views_count").default(0).notNull(),
+        downloads_count: integer("downloads_count").default(0).notNull(),
+        tags: text("tags"), // Comma-separated tags
     },
     (table) => ({
         idx_uploader: index("idx_resources_uploader").on(table.uploader_id),
@@ -172,21 +175,6 @@ export const saved_resources = pgTable(
     })
 );
 
-// ================= TAGS =================
-export const resource_tags = pgTable(
-    "resource_tags",
-    {
-        id: serial("id").primaryKey(),
-        resource_id: uuid("resource_id")
-            .notNull()
-            .references(() => resources.resource_id, { onDelete: "cascade" }),
-        tag: varchar("tag", { length: 50 }).notNull(),
-    },
-    (table) => ({
-        idx_resource: index("idx_resource_tags_resource").on(table.resource_id),
-    })
-);
-
 // ================= REPORT FLAGS =================
 export const report_flags = pgTable(
     "report_flags",
@@ -205,42 +193,6 @@ export const report_flags = pgTable(
     (table) => ({
         idx_resource: index("idx_report_flags_resource").on(table.resource_id),
         idx_reporter: index("idx_report_flags_reporter").on(table.reporter_id),
-    })
-);
-
-// Optional view logs
-export const resource_views = pgTable(
-    "resource_views",
-    {
-        id: serial("id").primaryKey(),
-        resource_id: uuid("resource_id")
-            .notNull()
-            .references(() => resources.resource_id, { onDelete: "cascade" }),
-        user_id: uuid("user_id"),
-        viewed_at: timestamp("viewed_at").defaultNow().notNull(),
-    },
-    (table) => ({
-        idx_resource: index("idx_resource_views_resource").on(
-            table.resource_id
-        ),
-    })
-);
-
-// ================= DOWNLOADS =================
-export const resource_downloads = pgTable(
-    "resource_downloads",
-    {
-        id: serial("id").primaryKey(),
-        resource_id: uuid("resource_id")
-            .notNull()
-            .references(() => resources.resource_id, { onDelete: "cascade" }),
-        user_id: uuid("user_id"),
-        downloaded_at: timestamp("downloaded_at").defaultNow().notNull(),
-    },
-    (table) => ({
-        idx_resource: index("idx_resource_downloads_resource").on(
-            table.resource_id
-        ),
     })
 );
 

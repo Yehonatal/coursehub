@@ -1,16 +1,19 @@
 "use server";
 
 import { db } from "@/db";
-import { resource_views, resource_downloads } from "@/db/schema";
+import { resources } from "@/db/schema";
 import { revalidatePath } from "next/cache";
+import { eq, sql } from "drizzle-orm";
 
-export async function trackResourceView(resourceId: string, userId?: string) {
-    // Track view in database
+export async function trackResourceView(resourceId: string, _userId?: string) {
+    // Track view in database (only counter now)
     try {
-        await db.insert(resource_views).values({
-            resource_id: resourceId,
-            user_id: userId, // Can be null/undefined
-        });
+        await db
+            .update(resources)
+            .set({
+                views_count: sql`${resources.views_count} + 1`,
+            })
+            .where(eq(resources.resource_id, resourceId));
         revalidatePath(`/resources/${resourceId}`);
     } catch (error) {
         console.error("Failed to track view:", error);
@@ -19,13 +22,15 @@ export async function trackResourceView(resourceId: string, userId?: string) {
 
 export async function trackResourceDownload(
     resourceId: string,
-    userId?: string
+    _userId?: string
 ) {
     try {
-        await db.insert(resource_downloads).values({
-            resource_id: resourceId,
-            user_id: userId,
-        });
+        await db
+            .update(resources)
+            .set({
+                downloads_count: sql`${resources.downloads_count} + 1`,
+            })
+            .where(eq(resources.resource_id, resourceId));
         revalidatePath(`/resources/${resourceId}`);
     } catch (error) {
         console.error("Failed to track download:", error);

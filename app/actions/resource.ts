@@ -2,9 +2,9 @@
 
 import { z } from "zod";
 import { db } from "@/db";
-import { resources, resource_tags } from "@/db/schema";
 import { uploadFile } from "@/lib/storage/upload";
 import { validateRequest } from "@/lib/auth/session";
+import { createResource } from "@/lib/dal/resource-helpers";
 import type { ActionResponse } from "@/app/actions/auth";
 
 const UploadResourceSchema = z.object({
@@ -100,37 +100,32 @@ export async function uploadResource(
 
         const publicUrl = await uploadFile(file, path);
 
-        const [inserted] = await db
-            .insert(resources)
-            .values({
+        const tagList = tags
+            ? tags
+                  .split(",")
+                  .map((t) => t.trim())
+                  .filter(Boolean)
+            : [];
+
+        if (!uploaderUniversity) {
+            return { success: false, message: "University is required" };
+        }
+
+        await createResource(
+            {
                 uploader_id: user.user_id,
                 course_code: courseCode,
                 semester,
                 university: uploaderUniversity,
                 title,
-                description: description || null,
+                description: description || undefined,
                 file_url: publicUrl,
                 mime_type: file.type,
                 file_size: file.size,
-                resource_type: resourceType || null,
-            })
-            .returning();
-
-        // Insert tags if any
-        if (tags && tags.trim().length > 0) {
-            const tagList = tags
-                .split(",")
-                .map((t) => t.trim())
-                .filter(Boolean);
-            for (const tag of tagList) {
-                // Use the standard insert API to ensure compatibility with installed
-                // Drizzle version; `.run()` may not be available in all adapters.
-                await db.insert(resource_tags).values({
-                    resource_id: inserted.resource_id,
-                    tag,
-                });
-            }
-        }
+                resource_type: resourceType || undefined,
+            },
+            tagList
+        );
 
         return {
             ...initialActionState,
