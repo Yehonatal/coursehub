@@ -40,33 +40,37 @@ export async function fetchResourceRows(
     limit?: number,
     orderBy?: SQL
 ) {
-    return db
-        .select({
-            resource_id: resourcesTable.resource_id,
-            title: resourcesTable.title,
-            description: resourcesTable.description,
-            upload_date: resourcesTable.upload_date,
-            uploader_id: resourcesTable.uploader_id,
-            course_code: resourcesTable.course_code,
-            semester: resourcesTable.semester,
-            university: resourcesTable.university,
-            file_url: resourcesTable.file_url,
-            resource_type: resourcesTable.resource_type,
-            mime_type: resourcesTable.mime_type,
-            file_size: resourcesTable.file_size,
-            views_count: resourcesTable.views_count,
-            downloads_count: resourcesTable.downloads_count,
-            tags: resourcesTable.tags,
-            // Author info join
-            author_first: users.first_name,
-            author_last: users.last_name,
-            author_uni: users.university,
-        })
-        .from(resourcesTable)
-        .leftJoin(users, eq(resourcesTable.uploader_id, users.user_id))
-        .where(whereClause)
-        .limit(limit || 100)
-        .orderBy(orderBy || desc(resourcesTable.upload_date));
+    try {
+        return await db
+            .select({
+                resource_id: resourcesTable.resource_id,
+                title: resourcesTable.title,
+                description: resourcesTable.description,
+                upload_date: resourcesTable.upload_date,
+                uploader_id: resourcesTable.uploader_id,
+                course_code: resourcesTable.course_code,
+                semester: resourcesTable.semester,
+                university: resourcesTable.university,
+                file_url: resourcesTable.file_url,
+                resource_type: resourcesTable.resource_type,
+                mime_type: resourcesTable.mime_type,
+                file_size: resourcesTable.file_size,
+                views_count: resourcesTable.views_count,
+                downloads_count: resourcesTable.downloads_count,
+                tags: resourcesTable.tags,
+                // Author info join
+                author_first: users.first_name,
+                author_last: users.last_name,
+                author_uni: users.university,
+            })
+            .from(resourcesTable)
+            .leftJoin(users, eq(resourcesTable.uploader_id, users.user_id))
+            .where(whereClause)
+            .limit(limit || 100)
+            .orderBy(orderBy || desc(resourcesTable.upload_date));
+    } catch (err) {
+        return [];
+    }
 }
 
 export async function fetchTagsByIds(ids: string[]) {
