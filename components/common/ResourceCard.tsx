@@ -47,10 +47,10 @@ export function ResourceCard({
             href={`/resources/${id}`}
             className={cn("block group h-full", className)}
         >
-            <Card className="h-full flex flex-col overflow-hidden hover:shadow-md transition-all duration-300 border-border/60 rounded-xl hover:-translate-y-1 bg-white">
+            <Card className="h-full flex flex-col overflow-hidden hover:shadow-md transition-all duration-300 border border-amber-100 rounded-xl hover:-translate-y-1 bg-white">
                 <div
                     className={cn(
-                        "bg-gray-100 relative overflow-hidden border-2 border-dashed border-border/60",
+                        "bg-gray-100 relative overflow-hidden border border-dashed border-amber-100",
                         isMini ? "h-28" : "h-32"
                     )}
                 >
@@ -62,7 +62,7 @@ export function ResourceCard({
                             className="absolute inset-0 group-hover:scale-105 transition-transform duration-500"
                         />
                     ) : (
-                        <div className="absolute inset-0  bg-linear-to-br from-gray-50 to-gray-100 group-hover:scale-105 transition-transform duration-500" />
+                        <div className="absolute inset-0 bg-linear-to-br from-gray-50 to-gray-100 group-hover:scale-105 transition-transform duration-500" />
                     )}
 
                     {isAI && (

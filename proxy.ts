@@ -16,11 +16,11 @@ export async function proxy(request: NextRequest) {
         try {
             const { user } = await validateRequest();
             if (!user) {
-                return NextResponse.redirect(new URL("/", request.url));
+                return NextResponse.redirect(new URL("/login", request.url));
             }
         } catch (err) {
             error("Middleware auth error:", err);
-            return NextResponse.redirect(new URL("/", request.url));
+            return NextResponse.redirect(new URL("/login", request.url));
         }
     }
 
