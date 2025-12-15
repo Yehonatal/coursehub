@@ -129,17 +129,15 @@ export function Header() {
                                     </div>
                                 </div>
                                 <div className="px-2 mb-2">
-                                    <Link
-                                        href="/dashboard/profile"
-                                        className="block"
+                                    <Button
+                                        variant="outline"
+                                        asChild
+                                        className="w-full rounded-full text-[#0A251D] border-[#0A251D] hover:bg-[#0A251D]/5 h-8 text-xs font-medium"
                                     >
-                                        <Button
-                                            variant="outline"
-                                            className="w-full rounded-full text-[#0A251D] border-[#0A251D] hover:bg-[#0A251D]/5 h-8 text-xs font-medium"
-                                        >
+                                        <Link href="/dashboard/profile">
                                             View Profile
-                                        </Button>
-                                    </Link>
+                                        </Link>
+                                    </Button>
                                 </div>
 
                                 <div className="h-px bg-border/40 my-1" />
@@ -157,12 +155,6 @@ export function Header() {
                                     <button className="w-full text-left px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/50 rounded-md flex items-center gap-2 transition-colors">
                                         <Settings className="h-4 w-4" />{" "}
                                         Settings & Privacy
-                                    </button>
-                                    <button className="w-full text-left px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/50 rounded-md flex items-center gap-2 transition-colors">
-                                        <HelpCircle className="h-4 w-4" /> Help
-                                    </button>
-                                    <button className="w-full text-left px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/50 rounded-md flex items-center gap-2 transition-colors">
-                                        <Globe className="h-4 w-4" /> Language
                                     </button>
                                 </div>
 

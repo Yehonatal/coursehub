@@ -164,14 +164,17 @@ export function Navbar() {
                         style={{ transitionDelay: "300ms" }}
                     >
                         {user ? (
-                            <Link
-                                href="/dashboard"
-                                onClick={() => setIsOpen(false)}
+                            <Button
+                                asChild
+                                className="w-full h-12 text-lg bg-[#F5F2EB] text-[#0A251D] hover:bg-[#F5F2EB]/90 rounded-full"
                             >
-                                <Button className="w-full h-12 text-lg bg-[#F5F2EB] text-[#0A251D] hover:bg-[#F5F2EB]/90 rounded-full">
+                                <Link
+                                    href="/dashboard"
+                                    onClick={() => setIsOpen(false)}
+                                >
                                     Go to Dashboard
-                                </Button>
-                            </Link>
+                                </Link>
+                            </Button>
                         ) : (
                             <>
                                 <Link
