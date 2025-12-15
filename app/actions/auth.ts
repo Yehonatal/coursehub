@@ -67,7 +67,11 @@ export async function signIn(
 
     try {
         const existingUsers = await db
-            .select()
+            .select({
+                user_id: users.user_id,
+                password_hash: users.password_hash,
+                is_verified: users.is_verified,
+            })
             .from(users)
             .where(eq(users.email, email));
 
@@ -119,7 +123,7 @@ export async function signUp(
 
     try {
         const existingUsers = await db
-            .select()
+            .select({ user_id: users.user_id })
             .from(users)
             .where(eq(users.email, email));
 
@@ -241,7 +245,7 @@ export async function forgotPassword(
 
     try {
         const existingUsers = await db
-            .select()
+            .select({ user_id: users.user_id })
             .from(users)
             .where(eq(users.email, email));
 
@@ -323,7 +327,10 @@ export async function resetPassword(
 
     try {
         const validTokens = await db
-            .select()
+            .select({
+                user_id: passwordResetTokens.user_id,
+                expires_at: passwordResetTokens.expires_at,
+            })
             .from(passwordResetTokens)
             .where(
                 and(

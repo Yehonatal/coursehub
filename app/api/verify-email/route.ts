@@ -15,7 +15,10 @@ export async function GET(req: Request) {
         }
 
         const tokens = await db
-            .select()
+            .select({
+                user_id: verificationTokens.user_id,
+                expires_at: verificationTokens.expires_at,
+            })
             .from(verificationTokens)
             .where(eq(verificationTokens.token, token))
             .limit(1);

@@ -167,7 +167,7 @@ export async function deleteResource(
 
     try {
         const [resource] = await db
-            .select()
+            .select({ file_url: resources.file_url })
             .from(resources)
             .where(
                 and(
@@ -248,7 +248,7 @@ export async function updateResource(
         } = parsed.data;
 
         const [existing] = await db
-            .select()
+            .select({ resource_id: resources.resource_id })
             .from(resources)
             .where(
                 and(

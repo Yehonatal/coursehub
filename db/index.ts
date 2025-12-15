@@ -1,67 +1,40 @@
-import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
-
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import * as schema from "./schema";
 
-// Initialize a Drizzle DB instance using Supabase connection.
 const connectionString = process.env.SUPABASE_DATABASE_URL;
 
-// Singleton pattern for DB connection to prevent exhaustion in dev
 const globalForDb = globalThis as unknown as {
-    conn: Pool | undefined;
+    conn: postgres.Sql | undefined;
 };
 
-let pool: Pool | undefined;
+let client: postgres.Sql | undefined;
 
 if (connectionString) {
-    try {
-        if (process.env.NODE_ENV === "production") {
-            pool = new Pool({
-                connectionString,
-                ssl: { rejectUnauthorized: false },
-                max: 10, // Moderate limit for production
-                min: 0,
-                idleTimeoutMillis: 10000,
-                connectionTimeoutMillis: 10000,
-                allowExitOnIdle: true,
-            });
-            // Add error handler to prevent uncaught exceptions
-            pool.on("error", (err) => {
-                console.error("Unexpected error on idle client", err);
-            });
-        } else {
-            if (!globalForDb.conn) {
-                globalForDb.conn = new Pool({
-                    connectionString,
-                    ssl: { rejectUnauthorized: false },
-                    max: 6, // Balanced limit for dev
-                    min: 0,
-                    idleTimeoutMillis: 1000, // Release connections quickly
-                    connectionTimeoutMillis: 30000, // Wait longer for a connection
-                    allowExitOnIdle: true,
-                    keepAlive: true,
-                });
-                // Add error handler to prevent uncaught exceptions
-                globalForDb.conn.on("error", (err) => {
-                    console.error("Unexpected error on idle client", err);
-                });
-            }
-            pool = globalForDb.conn;
-        }
-    } catch (e) {
-        console.error("Failed to initialize DB pool:", e);
+    // Fix for Supabase Transaction Pooler: Ensure port 6543 is used
+    // This is necessary because port 5432 (Session Pooler) often times out in serverless environments
+    // or is blocked in some networks, while port 6543 (Transaction Pooler) is designed for this.
+    let url = connectionString;
+    if (url.includes("supabase.com") && url.includes(":5432")) {
+        // console.log("🔧 Auto-switching to Supabase Transaction Pooler (port 6543)");
+        url = url.replace(":5432", ":6543");
     }
+
+    if (!globalForDb.conn) {
+        // console.log("🔌 Initializing new DB connection pool...");
+        globalForDb.conn = postgres(url, {
+            prepare: false, // Crucial for Supabase Transaction Pooler (port 6543)
+            max: 1, // Limit to 1 connection per serverless function instance
+            ssl: { rejectUnauthorized: false }, // Required for Supabase
+            idle_timeout: 20, // Close idle connections quickly to avoid timeouts
+            connect_timeout: 30,
+        });
+    }
+    client = globalForDb.conn;
 } else {
-    // eslint-disable-next-line no-console
     console.warn("No SUPABASE_DATABASE_URL found — DB client not initialized.");
 }
 
-let _db: any = null;
-if (pool) {
-    _db = drizzlePostgres(pool, {
-        schema,
-        casing: "snake_case",
-    });
-}
-
-export const db = _db;
+export const db = client
+    ? drizzle(client, { schema, casing: "snake_case" })
+    : (null as any);

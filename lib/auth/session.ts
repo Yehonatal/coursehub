@@ -1,7 +1,9 @@
 import { cookies } from "next/headers";
+import { cache } from "react";
 import { db } from "@/db";
 import { sessions, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { withRetry } from "@/lib/db/utils";
 
 const SESSION_COOKIE_NAME = "session_id";
 // Session duration in milliseconds. Configurable via SESSION_DURATION_MS env var. Defaults to 7 days.
@@ -23,10 +25,12 @@ export async function createSession(userId: string) {
     const expiresAt = new Date(Date.now() + SESSION_DURATION_MS);
 
     try {
-        await db.insert(sessions).values({
-            session_id: sessionId,
-            user_id: userId,
-            expires_at: expiresAt,
+        await withRetry(async () => {
+            await db.insert(sessions).values({
+                session_id: sessionId,
+                user_id: userId,
+                expires_at: expiresAt,
+            });
         });
     } catch (err) {
         console.error("createSession: DB insert failed:", err);
@@ -42,7 +46,7 @@ export async function createSession(userId: string) {
     });
 }
 
-export async function validateRequest() {
+export const validateRequest = cache(async () => {
     try {
         if (!db) {
             // DB not ready — log and return unauthenticated (don't throw).
@@ -55,11 +59,13 @@ export async function validateRequest() {
         const sessionId = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
         if (!sessionId) return { user: null, session: null };
 
-        const result = await db
-            .select({ user: users, session: sessions })
-            .from(sessions)
-            .innerJoin(users, eq(sessions.user_id, users.user_id))
-            .where(eq(sessions.session_id, sessionId));
+        const result = await withRetry(async () => {
+            return await db
+                .select({ user: users, session: sessions })
+                .from(sessions)
+                .innerJoin(users, eq(sessions.user_id, users.user_id))
+                .where(eq(sessions.session_id, sessionId));
+        });
 
         if (!result || result.length < 1) {
             return { user: null, session: null };
@@ -73,9 +79,11 @@ export async function validateRequest() {
 
         if (Date.now() >= expiresAt.getTime()) {
             try {
-                await db
-                    .delete(sessions)
-                    .where(eq(sessions.session_id, sessionId));
+                await withRetry(async () => {
+                    await db
+                        .delete(sessions)
+                        .where(eq(sessions.session_id, sessionId));
+                });
             } catch (err) {
                 console.warn(
                     "validateRequest: failed to delete expired session:",
@@ -95,16 +103,18 @@ export async function validateRequest() {
         );
         return { user: null, session: null };
     }
-}
+});
 
 export async function invalidateSession() {
     try {
         const sessionId = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
         if (sessionId && db) {
             try {
-                await db
-                    .delete(sessions)
-                    .where(eq(sessions.session_id, sessionId));
+                await withRetry(async () => {
+                    await db
+                        .delete(sessions)
+                        .where(eq(sessions.session_id, sessionId));
+                });
             } catch (err) {
                 console.error(
                     "invalidateSession: failed to delete session from DB:",
