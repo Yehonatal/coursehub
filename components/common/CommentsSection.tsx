@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Image from "next/image";
 import {
     ThumbsUp,
     ThumbsDown,
@@ -49,13 +50,15 @@ function CommentItem({
         <div className={cn("flex gap-4", depth > 0 && "ml-12 mt-6")}>
             <div className="w-10 h-10 rounded-full bg-gray-200 shrink-0 overflow-hidden">
                 {comment.author.avatar ? (
-                    <img
+                    <Image
                         src={comment.author.avatar}
                         alt={comment.author.name}
+                        width={40}
+                        height={40}
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400" />
+                    <div className="w-full h-full bg-linear-to-br from-gray-300 to-gray-400" />
                 )}
             </div>
             <div className="space-y-1.5 flex-1">
@@ -180,7 +183,7 @@ export function CommentsSection({
             <div className="bg-gray-200/50 p-6 rounded-2xl space-y-4">
                 <textarea
                     placeholder="Add comment..."
-                    className="w-full bg-transparent border-none resize-none focus:ring-0 p-0 text-gray-700 placeholder:text-gray-500 min-h-[40px]"
+                    className="w-full bg-transparent border-none resize-none focus:ring-0 p-0 text-gray-700 placeholder:text-gray-500 min-h-10"
                     rows={2}
                     value={value}
                     onChange={(e) => setValue(e.target.value)}

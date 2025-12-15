@@ -120,7 +120,7 @@ const SelectContent = React.forwardRef<
         <div
             ref={ref}
             className={cn(
-                "absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-80",
+                "absolute z-50 min-w-32 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-80",
                 "top-full left-0 w-full mt-1",
                 className
             )}
@@ -144,7 +144,8 @@ const SelectItem = React.forwardRef<
     // Register label for display
     React.useEffect(() => {
         if (typeof children === "string") {
-            context.registerLabel(value, children);
+            const register = context.registerLabel;
+            register(value, children);
         }
     }, [value, children, context.registerLabel]);
 
@@ -152,7 +153,7 @@ const SelectItem = React.forwardRef<
         <div
             ref={ref}
             className={cn(
-                "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-accent hover:text-accent-foreground",
+                "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 hover:bg-accent hover:text-accent-foreground",
                 className
             )}
             onClick={(e) => {

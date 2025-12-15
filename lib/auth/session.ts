@@ -123,3 +123,12 @@ export async function invalidateSession() {
         }
     }
 }
+
+/**
+ * Convenience helper to return the current user server-side.
+ * Returns the `user` object from `validateRequest()` or `null`.
+ */
+export async function getCurrentUser() {
+    const { user } = await validateRequest();
+    return user;
+}

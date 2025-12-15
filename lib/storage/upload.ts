@@ -24,3 +24,16 @@ export async function uploadFile(file: File, path: string) {
 
     return publicUrlData.publicUrl;
 }
+
+export async function deleteFile(path: string) {
+    if (!supabaseAdmin) throw new Error("Supabase not configured");
+
+    const { error } = await supabaseAdmin.storage
+        .from("coursebucket")
+        .remove([path]);
+
+    if (error) {
+        console.error("Delete failed:", error);
+        throw new Error("Failed to delete file.");
+    }
+}

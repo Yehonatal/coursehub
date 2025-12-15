@@ -49,18 +49,15 @@ export function EditProfileModal({
 
     useEffect(() => {
         if (open && user) {
-            setFirstName((prev) =>
-                prev !== (user.first_name ?? "") ? user.first_name ?? "" : prev
-            );
-            setLastName((prev) =>
-                prev !== (user.last_name ?? "") ? user.last_name ?? "" : prev
-            );
-            setUniversity((prev) =>
-                prev !== (user.university ?? "") ? user.university ?? "" : prev
-            );
-            setHeadline((prev) =>
-                prev !== (user.headline ?? "") ? user.headline ?? "" : prev
-            );
+            // Schedule the updates so we don't call setState synchronously inside
+            // the effect body which may trigger cascading renders.
+            const id = setTimeout(() => {
+                setFirstName(user.first_name ?? "");
+                setLastName(user.last_name ?? "");
+                setUniversity(user.university ?? "");
+                setHeadline(user.headline ?? "");
+            }, 0);
+            return () => clearTimeout(id);
         }
     }, [open, user]);
 
@@ -126,7 +123,7 @@ export function EditProfileModal({
     }
 
     const modalContent = (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center px-4">
+        <div className="fixed inset-0 z-1000 flex items-center justify-center px-4">
             <div
                 className="absolute inset-0 bg-black/40 backdrop-blur"
                 onClick={onClose}

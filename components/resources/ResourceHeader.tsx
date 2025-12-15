@@ -26,6 +26,17 @@ interface ResourceHeaderProps {
     department: string;
     fileUrl?: string;
     resourceId?: string;
+    isOwner?: boolean;
+    resourceData?: {
+        courseCode: string;
+        semester: string;
+        university: string;
+        type: string;
+        description?: string;
+        tags?: string;
+        fileUrl?: string;
+        fileName?: string;
+    };
 }
 
 export function ResourceHeader({
@@ -41,6 +52,8 @@ export function ResourceHeader({
     department,
     fileUrl,
     resourceId,
+    isOwner = false,
+    resourceData,
 }: ResourceHeaderProps) {
     const [isAIModalOpen, setIsAIModalOpen] = useState(false);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -75,7 +88,8 @@ export function ResourceHeader({
             <AIChatModal
                 isOpen={isAIModalOpen}
                 onClose={() => setIsAIModalOpen(false)}
-                resourceId={resourceId}
+                resourceTitle={title}
+                resourceType={type}
             />
 
             {fileUrl && (
@@ -159,6 +173,10 @@ export function ResourceHeader({
                 onGenerateContent={() => setIsAIModalOpen(true)}
                 onView={fileUrl ? () => setIsViewerOpen(true) : undefined}
                 onDownload={fileUrl ? handleDownload : undefined}
+                resourceId={resourceId || ""}
+                title={title}
+                isOwner={isOwner}
+                resourceData={resourceData}
             />
         </div>
     );
