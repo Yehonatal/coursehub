@@ -1,6 +1,11 @@
 import { db } from "@/db";
-import { resources as resourcesTable, comments, users } from "@/db/schema";
-import { eq, desc, and, ne } from "drizzle-orm";
+import {
+    resources as resourcesTable,
+    comments,
+    users,
+    comment_reactions,
+} from "@/db/schema";
+import { eq, desc, and, ne, count, inArray } from "drizzle-orm";
 import {
     fetchResourceRows,
     fetchTagsByIds,
@@ -45,12 +50,14 @@ export async function getResourceStats(resourceId: string) {
     };
 }
 
-export async function getResourceComments(resourceId: string) {
+export async function getResourceComments(resourceId: string, userId?: string) {
+    // Fetch all comments for resource, with author and parent id
     const rows = await db
         .select({
             id: comments.comment_id,
             content: comments.text,
             timestamp: comments.comment_date,
+            parent: comments.parent_comment_id,
             author_first: users.first_name,
             author_last: users.last_name,
         })
@@ -59,17 +66,98 @@ export async function getResourceComments(resourceId: string) {
         .where(eq(comments.resource_id, resourceId))
         .orderBy(desc(comments.comment_date));
 
-    return rows.map((row: any) => ({
-        id: row.id.toString(),
-        author: {
-            name: `${row.author_first} ${row.author_last}`,
-        },
-        content: row.content,
-        timestamp: row.timestamp.toISOString(),
-        likes: 0,
-        dislikes: 0,
-        replies: [],
-    }));
+    const commentIds = rows.map((r: any) => r.id);
+
+    // Build reaction counts
+    const likesMap = new Map<string, number>();
+    const dislikesMap = new Map<string, number>();
+
+    if (commentIds.length > 0) {
+        const likeRows: any[] = await db
+            .select({
+                id: comment_reactions.comment_id,
+                cnt: count(comment_reactions.reaction_id),
+            })
+            .from(comment_reactions)
+            .where(
+                and(
+                    inArray(comment_reactions.comment_id, commentIds),
+                    eq(comment_reactions.type, "like")
+                )
+            )
+            .groupBy(comment_reactions.comment_id);
+
+        likeRows.forEach((r) =>
+            likesMap.set(r.id.toString(), Number(r.cnt || 0))
+        );
+
+        const dislikeRows: any[] = await db
+            .select({
+                id: comment_reactions.comment_id,
+                cnt: count(comment_reactions.reaction_id),
+            })
+            .from(comment_reactions)
+            .where(
+                and(
+                    inArray(comment_reactions.comment_id, commentIds),
+                    eq(comment_reactions.type, "dislike")
+                )
+            )
+            .groupBy(comment_reactions.comment_id);
+
+        dislikeRows.forEach((r) =>
+            dislikesMap.set(r.id.toString(), Number(r.cnt || 0))
+        );
+    }
+
+    // User reactions (if userId provided)
+    const userReactionMap = new Map<string, string | null>();
+    if (userId && commentIds.length > 0) {
+        const ur = await db
+            .select({
+                id: comment_reactions.comment_id,
+                type: comment_reactions.type,
+            })
+            .from(comment_reactions)
+            .where(
+                and(
+                    inArray(comment_reactions.comment_id, commentIds),
+                    eq(comment_reactions.user_id, userId)
+                )
+            );
+        ur.forEach((r: any) => userReactionMap.set(r.id.toString(), r.type));
+    }
+
+    // Build nested structure
+    const byId = new Map<string, any>();
+    rows.forEach((row: any) => {
+        const id = row.id.toString();
+        byId.set(id, {
+            id,
+            author: { name: `${row.author_first} ${row.author_last}` },
+            content: row.content,
+            timestamp: row.timestamp.toISOString(),
+            likes: likesMap.get(id) || 0,
+            dislikes: dislikesMap.get(id) || 0,
+            replies: [],
+            userReaction: userReactionMap.get(id) || null,
+            parentId: row.parent ? row.parent.toString() : null,
+        });
+    });
+
+    const topLevel: any[] = [];
+    rows.forEach((row: any) => {
+        const id = row.id.toString();
+        const parent = row.parent;
+        if (parent) {
+            const p = byId.get(parent.toString());
+            if (p) p.replies.push(byId.get(id));
+        } else {
+            topLevel.push(byId.get(id));
+        }
+    });
+
+    return topLevel;
 }
 
 export async function getUserResources(

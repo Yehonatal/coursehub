@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Star, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { AIChatModal } from "@/components/ai/AIChatModal";
 import { ResourceHeaderActions } from "./ResourceHeaderActions";
@@ -10,6 +10,8 @@ import { ResourceViewerModal } from "./ResourceViewerModal";
 import { trackResourceDownload } from "@/app/actions/resource-tracking";
 import UniversityBadge from "@/components/common/UniversityBadge";
 import { useResourceStats } from "@/components/resources/useResourceStats";
+import { useResourceRating } from "@/hooks/useResourceRating";
+import { StarRating } from "@/components/common/StarRating";
 
 interface ResourceHeaderProps {
     title: string;
@@ -28,9 +30,9 @@ interface ResourceHeaderProps {
 
 export function ResourceHeader({
     title,
-    rating,
-    reviews,
-    downloads,
+    rating: serverRating,
+    reviews: serverReviews,
+    downloads: serverDownloads,
     courseCode,
     type,
     date,
@@ -42,20 +44,30 @@ export function ResourceHeader({
 }: ResourceHeaderProps) {
     const [isAIModalOpen, setIsAIModalOpen] = useState(false);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
-    const { stats } = useResourceStats(resourceId);
+
+    // Use the hook for rating logic
+    const {
+        average,
+        count,
+        userRating,
+        submitRating,
+        loading: ratingLoading,
+    } = useResourceRating(resourceId, serverRating, serverReviews);
+
+    // Use stats hook for real-time updates if needed, or fallback to props/rating hook
+    const { stats } = useResourceStats(resourceId || "");
+
+    const displayRating = average ?? stats?.rating ?? serverRating;
+    const displayCount = count ?? stats?.reviews ?? serverReviews;
+    const displayDownloads = stats?.downloads ?? serverDownloads;
 
     const handleDownload = async () => {
-        if (!fileUrl) return;
-        try {
-            // Track download server-side
-            if (resourceId) {
-                await trackResourceDownload(resourceId);
-            }
-        } catch (err) {
-            console.error("Failed tracking download", err);
+        if (resourceId) {
+            await trackResourceDownload(resourceId);
         }
-        // Open the file after tracking
-        window.open(fileUrl, "_blank");
+        if (fileUrl) {
+            window.open(fileUrl, "_blank");
+        }
     };
 
     return (
@@ -63,9 +75,9 @@ export function ResourceHeader({
             <AIChatModal
                 isOpen={isAIModalOpen}
                 onClose={() => setIsAIModalOpen(false)}
-                resourceTitle={title}
-                resourceType={type}
+                resourceId={resourceId}
             />
+
             {fileUrl && (
                 <ResourceViewerModal
                     isOpen={isViewerOpen}
@@ -74,46 +86,32 @@ export function ResourceHeader({
                     title={title}
                 />
             )}
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                <div className="space-y-1">
-                    <div className="flex items-center">
-                        <h1 className="text-lg md:text-2xl font-bold text-[#0A251D] leading-tight">
-                            {title}
-                        </h1>
-                    </div>
 
-                    <div className="flex flex-wrap items-center gap-2 text-sm mt-1">
-                        <div
-                            className="flex"
-                            // star markup can be updated client-side after hydration (live stats);
-                            // suppressHydrationWarning prevents dev-mode hydration error while keeping markup accessible
-                            suppressHydrationWarning
-                        >
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <Star
-                                    key={star}
-                                    className={`w-4 h-4 fill-current ${
-                                        star <=
-                                        Math.round(stats?.rating ?? rating)
-                                            ? "text-yellow-400"
-                                            : "text-gray-200"
-                                    }`}
-                                    aria-hidden
-                                />
-                            ))}
+            <div className="flex flex-col md:flex-row justify-between gap-4">
+                <div className="space-y-3">
+                    <h1 className="text-2xl md:text-3xl font-bold text-[#0A251D]">
+                        {title}
+                    </h1>
+                    <div className="flex flex-wrap items-center gap-4 text-sm">
+                        <div className="flex items-center gap-2">
+                            <StarRating
+                                value={userRating ?? displayRating}
+                                onChange={submitRating}
+                                readOnly={ratingLoading}
+                            />
+                            <span className="text-gray-600 font-medium">
+                                {displayRating.toFixed(1)} / 5
+                            </span>
+                            <span className="text-gray-400">
+                                ({displayCount} reviews)
+                            </span>
                         </div>
-                        <span className="text-gray-600 font-medium">
-                            {(stats?.rating ?? rating).toFixed(1)} / 5
+                        <span className="text-gray-300 hidden sm:inline">
+                            •
                         </span>
-                        <span className="text-gray-400">
-                            ({stats?.reviews ?? reviews} reviews)
-                        </span>
-                        <span className="text-gray-300">•</span>
                         <div className="flex items-center gap-1 text-gray-600">
                             <Download className="w-4 h-4" />
-                            <span>
-                                {stats?.downloads ?? downloads} downloads
-                            </span>
+                            <span>{displayDownloads} downloads</span>
                         </div>
                     </div>
 

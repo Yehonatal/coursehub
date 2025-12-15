@@ -119,6 +119,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                         <CommentsSection
                             comments={comments}
                             totalCount={stats.comments}
+                            resourceId={id}
                         />
                     </div>
                 </div>

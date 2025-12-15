@@ -82,56 +82,72 @@ export async function fetchStatsByIds(ids: string[]) {
             downloadById: new Map(),
         };
 
-    // Ratings
-    const ratingRows: RatingRow[] = await db
-        .select({
-            id: ratings.resource_id,
-            average: avg(ratings.value),
-            count: count(ratings.rating_id),
-        })
-        .from(ratings)
-        .where(inArray(ratings.resource_id, ids))
-        .groupBy(ratings.resource_id);
+    try {
+        // Ratings
+        const ratingRows: RatingRow[] = await db
+            .select({
+                id: ratings.resource_id,
+                average: avg(ratings.value),
+                count: count(ratings.rating_id),
+            })
+            .from(ratings)
+            .where(inArray(ratings.resource_id, ids))
+            .groupBy(ratings.resource_id);
 
-    const ratingById = new Map<string, { average: number; count: number }>();
-    ratingRows.forEach((r: RatingRow) => {
-        ratingById.set(r.id, {
-            average: parseFloat(r.average?.toString() || "0"),
-            count: Number(r.count || 0),
+        const ratingById = new Map<
+            string,
+            { average: number; count: number }
+        >();
+        ratingRows.forEach((r: RatingRow) => {
+            ratingById.set(r.id, {
+                average: parseFloat(r.average?.toString() || "0"),
+                count: Number(r.count || 0),
+            });
         });
-    });
 
-    // Comments
-    const commentRows: CommentRow[] = await db
-        .select({ id: comments.resource_id, count: count(comments.comment_id) })
-        .from(comments)
-        .where(inArray(comments.resource_id, ids))
-        .groupBy(comments.resource_id);
+        // Comments
+        const commentRows: CommentRow[] = await db
+            .select({
+                id: comments.resource_id,
+                count: count(comments.comment_id),
+            })
+            .from(comments)
+            .where(inArray(comments.resource_id, ids))
+            .groupBy(comments.resource_id);
 
-    const commentById = new Map<string, number>();
-    commentRows.forEach((r: CommentRow) =>
-        commentById.set(r.id, Number(r.count || 0))
-    );
+        const commentById = new Map<string, number>();
+        commentRows.forEach((r: CommentRow) =>
+            commentById.set(r.id, Number(r.count || 0))
+        );
 
-    // Views & Downloads (from resources table directly)
-    const resourceStats: ResourceStatRow[] = await db
-        .select({
-            id: resourcesTable.resource_id,
-            views: resourcesTable.views_count,
-            downloads: resourcesTable.downloads_count,
-        })
-        .from(resourcesTable)
-        .where(inArray(resourcesTable.resource_id, ids));
+        // Views & Downloads (from resources table directly)
+        const resourceStats: ResourceStatRow[] = await db
+            .select({
+                id: resourcesTable.resource_id,
+                views: resourcesTable.views_count,
+                downloads: resourcesTable.downloads_count,
+            })
+            .from(resourcesTable)
+            .where(inArray(resourcesTable.resource_id, ids));
 
-    const viewById = new Map<string, number>();
-    const downloadById = new Map<string, number>();
+        const viewById = new Map<string, number>();
+        const downloadById = new Map<string, number>();
 
-    resourceStats.forEach((r: ResourceStatRow) => {
-        viewById.set(r.id, Number(r.views || 0));
-        downloadById.set(r.id, Number(r.downloads || 0));
-    });
+        resourceStats.forEach((r: ResourceStatRow) => {
+            viewById.set(r.id, Number(r.views || 0));
+            downloadById.set(r.id, Number(r.downloads || 0));
+        });
 
-    return { ratingById, viewById, commentById, downloadById };
+        return { ratingById, viewById, commentById, downloadById };
+    } catch (error) {
+        console.error("Error fetching stats:", error);
+        return {
+            ratingById: new Map(),
+            viewById: new Map(),
+            commentById: new Map(),
+            downloadById: new Map(),
+        };
+    }
 }
 
 export function mapResourceRows(

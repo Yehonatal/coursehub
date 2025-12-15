@@ -88,11 +88,37 @@ export const comments = pgTable(
             .notNull()
             .references(() => users.user_id, { onDelete: "cascade" }),
         text: varchar("text", { length: 2000 }).notNull(),
+        parent_comment_id: integer("parent_comment_id"),
         comment_date: timestamp("comment_date").defaultNow().notNull(),
     },
     (table) => ({
         idx_resource: index("idx_comments_resource").on(table.resource_id),
         idx_user: index("idx_comments_user").on(table.user_id),
+        idx_parent: index("idx_comments_parent").on(table.parent_comment_id),
+    })
+);
+
+export const comment_reactions = pgTable(
+    "comment_reactions",
+    {
+        reaction_id: serial("reaction_id").primaryKey(),
+        comment_id: integer("comment_id")
+            .notNull()
+            .references(() => comments.comment_id, { onDelete: "cascade" }),
+        user_id: uuid("user_id")
+            .notNull()
+            .references(() => users.user_id, { onDelete: "cascade" }),
+        type: varchar("type", { length: 10 }).notNull(), // 'like' or 'dislike'
+        reacted_at: timestamp("reacted_at").defaultNow().notNull(),
+    },
+    (table) => ({
+        unique_user_reaction: uniqueIndex("unique_comment_reaction").on(
+            table.comment_id,
+            table.user_id
+        ),
+        idx_comment: index("idx_comment_reactions_comment").on(
+            table.comment_id
+        ),
     })
 );
 
