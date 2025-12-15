@@ -58,6 +58,8 @@ export async function fetchResourceRows(
                 views_count: resourcesTable.views_count,
                 downloads_count: resourcesTable.downloads_count,
                 tags: resourcesTable.tags,
+                is_ai: resourcesTable.is_ai,
+                is_verified: resourcesTable.is_verified,
                 // Author info join
                 author_first: users.first_name,
                 author_last: users.last_name,
@@ -190,6 +192,8 @@ export function mapResourceRows(
             resource_type: r.resource_type,
             mime_type: r.mime_type,
             file_size: r.file_size,
+            is_ai: r.is_ai,
+            is_verified: r.is_verified,
             tags: tags,
             author: {
                 name: `${r.author_first} ${r.author_last}`,
@@ -217,6 +221,8 @@ export async function createResource(
         mime_type: string;
         file_size: number;
         resource_type?: string;
+        is_ai?: boolean;
+        is_verified?: boolean;
     },
     tags: string[]
 ) {
@@ -228,6 +234,8 @@ export async function createResource(
             .values({
                 ...data,
                 tags: tagsString,
+                is_ai: data.is_ai ?? false,
+                is_verified: data.is_verified ?? false,
             })
             .returning();
 

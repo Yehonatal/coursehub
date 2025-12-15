@@ -19,10 +19,10 @@ if (connectionString) {
             pool = new Pool({
                 connectionString,
                 ssl: { rejectUnauthorized: false },
-                max: 10, // Higher limit for production
+                max: 10, // Moderate limit for production
                 min: 0,
                 idleTimeoutMillis: 10000,
-                connectionTimeoutMillis: 5000,
+                connectionTimeoutMillis: 10000,
                 allowExitOnIdle: true,
             });
             // Add error handler to prevent uncaught exceptions
@@ -34,11 +34,12 @@ if (connectionString) {
                 globalForDb.conn = new Pool({
                     connectionString,
                     ssl: { rejectUnauthorized: false },
-                    max: 5, // Low limit for dev
+                    max: 6, // Balanced limit for dev
                     min: 0,
-                    idleTimeoutMillis: 10000,
-                    connectionTimeoutMillis: 5000,
+                    idleTimeoutMillis: 1000, // Release connections quickly
+                    connectionTimeoutMillis: 30000, // Wait longer for a connection
                     allowExitOnIdle: true,
+                    keepAlive: true,
                 });
                 // Add error handler to prevent uncaught exceptions
                 globalForDb.conn.on("error", (err) => {

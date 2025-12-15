@@ -35,8 +35,8 @@ export const resources = pgTable(
         uploader_id: uuid("uploader_id")
             .notNull()
             .references(() => users.user_id, { onDelete: "cascade" }),
-        course_code: varchar("course_code", { length: 10 }).notNull(),
-        semester: varchar("semester", { length: 10 }).notNull(),
+        course_code: varchar("course_code", { length: 20 }).notNull(),
+        semester: varchar("semester", { length: 20 }).notNull(),
         university: varchar("university", { length: 100 }).notNull(),
         title: varchar("title", { length: 255 }).notNull(),
         description: text("description"),
@@ -48,6 +48,8 @@ export const resources = pgTable(
         views_count: integer("views_count").default(0).notNull(),
         downloads_count: integer("downloads_count").default(0).notNull(),
         tags: text("tags"), // Comma-separated tags
+        is_ai: boolean("is_ai").default(false).notNull(),
+        is_verified: boolean("is_verified").default(false).notNull(),
     },
     (table) => ({
         idx_uploader: index("idx_resources_uploader").on(table.uploader_id),
