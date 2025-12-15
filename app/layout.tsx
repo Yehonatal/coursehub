@@ -8,8 +8,8 @@ import { User } from "@/app/types/user";
 
 // Force dynamic rendering for the entire app since we rely on session cookies
 // in the root layout. This prevents build errors with static generation.
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
+// export const dynamic = "force-dynamic";
+// export const fetchCache = "force-no-store";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
