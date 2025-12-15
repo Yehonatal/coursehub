@@ -12,8 +12,8 @@ export async function withRetry<T>(
 ): Promise<T> {
     try {
         return await fn();
-    } catch (error) {
-        if (retries <= 0) throw error;
+    } catch (err) {
+        if (retries <= 0) throw err;
 
         // Check if error is a connection error or timeout (optional refinement)
         // For now, retry on any error that might be transient

@@ -38,8 +38,8 @@ export async function POST(
             success: true,
             message: "Report submitted successfully",
         });
-    } catch (error) {
-        console.error("Failed to submit report:", error);
+    } catch (err) {
+        console.error("Failed to submit report:", err);
         return NextResponse.json(
             { success: false, message: "Failed to submit report" },
             { status: 500 }

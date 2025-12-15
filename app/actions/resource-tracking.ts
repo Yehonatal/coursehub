@@ -15,8 +15,8 @@ export async function trackResourceView(resourceId: string, _userId?: string) {
             })
             .where(eq(resources.resource_id, resourceId));
         revalidatePath(`/resources/${resourceId}`);
-    } catch (error) {
-        console.error("Failed to track view:", error);
+    } catch (err) {
+        console.error("Failed to track view:", err);
     }
 }
 
@@ -32,7 +32,7 @@ export async function trackResourceDownload(
             })
             .where(eq(resources.resource_id, resourceId));
         revalidatePath(`/resources/${resourceId}`);
-    } catch (error) {
-        console.error("Failed to track download:", error);
+    } catch (err) {
+        console.error("Failed to track download:", err);
     }
 }

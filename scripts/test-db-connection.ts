@@ -43,8 +43,8 @@ async function testConnection() {
     try {
         const result = await sql`select 1 as result`;
         console.log("✅ Connection successful:", result);
-    } catch (error) {
-        console.error("❌ Connection failed:", error);
+    } catch (err) {
+        console.error("❌ Connection failed:", err);
     } finally {
         await sql.end();
         console.log("🔌 Connection closed");

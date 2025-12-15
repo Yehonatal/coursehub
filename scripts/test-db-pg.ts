@@ -28,8 +28,8 @@ async function testConnection() {
         const result = await client.query("SELECT 1 as result");
         console.log("✅ Query successful:", result.rows[0]);
         client.release();
-    } catch (error) {
-        console.error("❌ Connection failed:", error);
+    } catch (err) {
+        console.error("❌ Connection failed:", err);
     } finally {
         await pool.end();
         console.log("🔌 Pool closed");

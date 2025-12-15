@@ -145,8 +145,8 @@ export async function fetchStatsByIds(ids: string[]) {
         });
 
         return { ratingById, viewById, commentById, downloadById };
-    } catch (error) {
-        console.error("Error fetching stats:", error);
+    } catch (err) {
+        console.error("Error fetching stats:", err);
         return {
             ratingById: new Map(),
             viewById: new Map(),

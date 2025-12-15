@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { RegisterForm } from "@/components/auth/RegisterForm";
 import { getSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";

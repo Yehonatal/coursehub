@@ -4,7 +4,7 @@ import * as jose from "jose";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { debug, info, warn, error } from "@/lib/logger";
+import { debug, warn, error } from "@/lib/logger";
 
 interface JWTPayload {
     userId: string;
@@ -29,8 +29,8 @@ export async function verifyJWT(token: string): Promise<JWTPayload | null> {
     try {
         const { payload } = await jose.jwtVerify(token, JWT_SECRET);
         return payload as JWTPayload;
-    } catch (error) {
-        // console.error("JWT verification failed:", error);
+    } catch (err) {
+        // console.error("JWT verification failed:", err);
         return null;
     }
 }
@@ -76,18 +76,25 @@ export const getSession = cache(async () => {
         }
 
         return payload ? { userId: payload.userId as string } : null;
-    } catch (error) {
-        if (
-            error instanceof Error &&
-            error.message.includes("During prerendering, `cookies()` rejects")
-        ) {
-            debug(
-                "Cookies not available during prerendering, returning null session"
-            );
-            return null;
+    } catch (err) {
+        // Handle Next.js prerendering and dynamic server usage errors gracefully
+        if (err instanceof Error) {
+            const msg = err.message || "";
+            if (
+                msg.includes("During prerendering, `cookies()` rejects") ||
+                msg.includes(
+                    "couldn't be rendered statically because it used `cookies`"
+                ) ||
+                msg.includes("Dynamic server usage")
+            ) {
+                debug(
+                    "Cookies not available during prerendering or dynamic server usage; returning null session"
+                );
+                return null;
+            }
         }
 
-        error("getSession failed:", error);
+        error("getSession failed:", err);
         return null;
     }
 });
