@@ -1,5 +1,4 @@
 import React from "react";
-import { ProfileCard } from "@/components/dashboard/ProfileCard";
 import { RecentsList } from "@/components/dashboard/RecentsList";
 import { ResourceGrid } from "@/components/dashboard/ResourceGrid";
 import { AIUploadCard } from "@/components/dashboard/AIUploadCard";
@@ -21,7 +20,8 @@ export default async function StudentDashboard() {
         tags: r.tags,
         downloads: r.downloads || 0,
         comments: r.comments || 0,
-        isAI: r.resource_type === "AI",
+        isAI: r.is_ai || false,
+        isVerified: r.is_verified || false,
         fileUrl: r.file_url,
         mimeType: r.mime_type || undefined,
     }));

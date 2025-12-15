@@ -11,4 +11,6 @@ export type Resource = {
     file_size?: number | null;
     resource_type?: string | null;
     upload_date: string;
+    is_ai?: boolean;
+    is_verified?: boolean;
 };

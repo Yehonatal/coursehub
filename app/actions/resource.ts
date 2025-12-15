@@ -12,8 +12,8 @@ import { revalidatePath } from "next/cache";
 
 const UploadResourceSchema = z.object({
     title: z.string().trim().min(1).max(255),
-    courseCode: z.string().trim().min(1).max(10),
-    semester: z.string().trim().min(1).max(10),
+    courseCode: z.string().trim().min(1).max(20),
+    semester: z.string().trim().min(1).max(30),
     university: z.string().trim().max(100).optional(),
     description: z.string().trim().max(2000).optional(),
     resourceType: z
@@ -27,6 +27,7 @@ const UploadResourceSchema = z.object({
             }
         ),
     tags: z.string().optional(), // comma-separated tags
+    isAi: z.string().optional(),
 });
 
 const initialActionState: ActionResponse = {
@@ -84,6 +85,7 @@ export async function uploadResource(
         description,
         resourceType,
         tags,
+        isAi,
     } = parsed.data;
 
     // Use uploader's university if none provided
@@ -126,6 +128,7 @@ export async function uploadResource(
                 mime_type: file.type,
                 file_size: file.size,
                 resource_type: resourceType || undefined,
+                is_ai: isAi === "true",
             },
             tagList
         );
@@ -205,40 +208,45 @@ export async function updateResource(
     _prevState: ActionResponse,
     formData: FormData
 ): Promise<ActionResponse> {
-    const { user } = await validateRequest();
-    if (!user) {
-        return { success: false, message: "Unauthorized" };
-    }
-
-    const resourceId = formData.get("resourceId") as string;
-    if (!resourceId) {
-        return { success: false, message: "Resource ID is required" };
-    }
-
-    // We reuse the schema but make some fields optional if needed,
-    // but for simplicity we'll validate the whole form again.
-    const raw = Object.fromEntries(formData) as Record<string, string>;
-    const parsed = UploadResourceSchema.safeParse(raw);
-
-    if (!parsed.success) {
-        return {
-            success: false,
-            message: "Validation failed",
-            errors: parsed.error.flatten().fieldErrors,
-        };
-    }
-
-    const {
-        title,
-        courseCode,
-        semester,
-        university,
-        description,
-        resourceType,
-        tags,
-    } = parsed.data;
-
     try {
+        const { user } = await validateRequest();
+        if (!user) {
+            return { success: false, message: "Unauthorized" };
+        }
+
+        const resourceId = formData.get("resourceId") as string;
+        if (!resourceId) {
+            return { success: false, message: "Resource ID is required" };
+        }
+
+        // Manually construct the object for validation to avoid File objects
+        const raw: Record<string, any> = {};
+        formData.forEach((value, key) => {
+            if (key !== "file" && typeof value === "string") {
+                raw[key] = value;
+            }
+        });
+
+        const parsed = UploadResourceSchema.safeParse(raw);
+
+        if (!parsed.success) {
+            return {
+                success: false,
+                message: "Validation failed",
+                errors: parsed.error.flatten().fieldErrors,
+            };
+        }
+
+        const {
+            title,
+            courseCode,
+            semester,
+            university,
+            description,
+            resourceType,
+            tags,
+        } = parsed.data;
+
         const [existing] = await db
             .select()
             .from(resources)
@@ -322,6 +330,11 @@ export async function updateResource(
         return { success: true, message: "Resource updated successfully" };
     } catch (error) {
         console.error("Update resource failed:", error);
-        return { success: false, message: "Failed to update resource" };
+        const errorMessage =
+            error instanceof Error ? error.message : "Unknown error";
+        return {
+            success: false,
+            message: `Failed to update resource: ${errorMessage}`,
+        };
     }
 }

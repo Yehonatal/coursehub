@@ -2,7 +2,14 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useActionState } from "react";
-import { Upload, X, FileText, CheckCircle2, AlertCircle } from "lucide-react";
+import {
+    Upload,
+    X,
+    FileText,
+    CheckCircle2,
+    AlertCircle,
+    Sparkles,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,12 +26,12 @@ import { uploadResourceInitialState } from "@/app/actions/resource.client";
 import { toast } from "sonner";
 import { cn } from "@/utils/cn";
 
-interface UploadModalProps {
+interface AIUploadModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-export function UploadModal({ isOpen, onClose }: UploadModalProps) {
+export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
     const [dragActive, setDragActive] = useState(false);
     const [selectedFileName, setSelectedFileName] = useState<string | null>(
         null
@@ -100,15 +107,19 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
 
             <form
                 action={action}
-                className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col"
+                className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col border-2 border-dashed border-blue-200"
             >
-                <div className="flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-white z-20">
+                <input type="hidden" name="isAi" value="true" />
+                <div className="flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-blue-50/30 z-20 backdrop-blur-sm">
                     <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                            Upload Resource
-                        </p>
-                        <h2 className="text-xl font-semibold text-[#0A251D]">
-                            Share your knowledge with the community
+                        <div className="flex items-center gap-2">
+                            <Sparkles className="h-5 w-5 text-blue-500" />
+                            <p className="text-xs uppercase tracking-[0.2em] text-blue-900 ">
+                                Upload AI Resource
+                            </p>
+                        </div>
+                        <h2 className="text-lg font-semibold text-blue-600/80">
+                            Share AI generated content with the community
                         </h2>
                     </div>
 
@@ -117,7 +128,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                         size="icon"
                         type="button"
                         onClick={onClose}
-                        className="h-8 w-8 rounded-full hover:bg-gray-100"
+                        className="h-8 w-8 rounded-full hover:bg-blue-100 text-blue-500"
                     >
                         <X className="h-4 w-4" />
                         <span className="sr-only">Close</span>
@@ -130,7 +141,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                             className={cn(
                                 "p-3 rounded-lg text-sm flex items-center gap-2",
                                 state.success
-                                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                    ? "bg-blue-50 text-blue-700 border border-blue-200"
                                     : "bg-red-50 text-red-700 border border-red-200"
                             )}
                         >
@@ -152,10 +163,10 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                             className={cn(
                                 "relative group cursor-pointer rounded-lg border-2 border-dashed transition-all duration-200 ease-in-out p-8 text-center",
                                 dragActive
-                                    ? "border-primary bg-primary/5"
-                                    : "border-gray-200 hover:border-primary/50 hover:bg-gray-50",
+                                    ? "border-blue-500 bg-blue-50/50"
+                                    : "border-blue-200 hover:border-blue-400 hover:bg-blue-50/30",
                                 selectedFileName &&
-                                    "border-emerald-500 bg-emerald-50/30"
+                                    "border-blue-500 bg-blue-50/30"
                             )}
                             onDragEnter={handleDrag}
                             onDragOver={handleDrag}
@@ -176,26 +187,26 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                             <div className="flex flex-col items-center gap-2">
                                 {selectedFileName ? (
                                     <>
-                                        <div className="h-12 w-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+                                        <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
                                             <FileText className="h-6 w-6" />
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-sm font-medium text-emerald-700 break-all max-w-[300px]">
+                                            <p className="text-sm font-medium text-blue-700 break-all max-w-[300px]">
                                                 {selectedFileName}
                                             </p>
-                                            <p className="text-xs text-emerald-600">
+                                            <p className="text-xs text-blue-600">
                                                 Click to change file
                                             </p>
                                         </div>
                                     </>
                                 ) : (
                                     <>
-                                        <div className="h-12 w-12 rounded-full bg-gray-100 group-hover:bg-primary/10 flex items-center justify-center text-gray-500 group-hover:text-primary transition-colors">
+                                        <div className="h-12 w-12 rounded-full bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center text-blue-400 group-hover:text-blue-600 transition-colors">
                                             <Upload className="h-6 w-6" />
                                         </div>
                                         <div className="space-y-1">
                                             <p className="text-sm font-medium text-gray-700">
-                                                <span className="text-primary">
+                                                <span className="text-blue-600">
                                                     Click to upload
                                                 </span>{" "}
                                                 or drag and drop
@@ -221,6 +232,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                 name="title"
                                 placeholder="e.g. Introduction to Computer Science"
                                 required
+                                className="focus-visible:ring-blue-500"
                             />
                         </div>
 
@@ -234,6 +246,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                 name="courseCode"
                                 placeholder="e.g. CS101"
                                 required
+                                className="focus-visible:ring-blue-500"
                             />
                         </div>
                     </div>
@@ -248,6 +261,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                 name="semester"
                                 placeholder="e.g. Fall 2024"
                                 required
+                                className="focus-visible:ring-blue-500"
                             />
                         </div>
 
@@ -261,6 +275,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                 name="university"
                                 placeholder="e.g. Stanford University"
                                 required
+                                className="focus-visible:ring-blue-500"
                             />
                         </div>
 
@@ -272,7 +287,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                 value={resourceTypeValue}
                                 onValueChange={setResourceTypeValue}
                             >
-                                <SelectTrigger>
+                                <SelectTrigger className="focus:ring-blue-500">
                                     <SelectValue placeholder="Select type" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -300,7 +315,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                             id="description"
                             name="description"
                             placeholder="Briefly describe what this resource covers..."
-                            className="min-h-[100px] resize-none"
+                            className="min-h-[100px] resize-none focus-visible:ring-blue-500"
                         />
                     </div>
 
@@ -310,24 +325,25 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                             id="tags"
                             name="tags"
                             placeholder="e.g. computer science, programming, java (comma separated)"
-                            className="min-h-[60px] resize-none"
+                            className="min-h-[60px] resize-none focus-visible:ring-blue-500"
                         />
                     </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 px-6 py-4 border-t bg-gray-50/50 sticky bottom-0">
+                <div className="flex items-center justify-end gap-3 px-6 py-4 border-t bg-blue-50/30 sticky bottom-0 backdrop-blur-sm">
                     <Button
                         variant="outline"
                         type="button"
                         onClick={onClose}
                         disabled={isPending}
+                        className="hover:bg-blue-50 hover:text-blue-600 border-blue-200"
                     >
                         Cancel
                     </Button>
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="min-w-[100px]"
+                        className="min-w-[100px] bg-blue-600 hover:bg-blue-700 text-white"
                     >
                         {isPending ? (
                             <>
