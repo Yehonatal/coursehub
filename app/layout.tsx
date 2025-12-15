@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-import { validateRequest } from "@/lib/auth/session";
-import { UserProvider } from "@/components/providers/UserProvider";
-import { User } from "@/app/types/user";
-import { error } from "@/lib/logger";
 
 // Force dynamic rendering for the entire app since we rely on session cookies
 // in the root layout. This prevents build errors with static generation.
@@ -38,17 +34,6 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    // Wrap session validation in a try-catch block to handle potential errors gracefully
-    // and prevent build failures during static generation.
-    let user = null;
-    try {
-        const result = await validateRequest();
-        user = result.user;
-    } catch (err) {
-        error("Failed to validate session in RootLayout:", err);
-        // Continue rendering with null user
-    }
-
     return (
         <html lang="en">
             <body
@@ -57,10 +42,8 @@ export default async function RootLayout({
                 suppressHydrationWarning
                 className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
             >
-                <UserProvider user={user as User | null}>
-                    <Toaster />
-                    {children}
-                </UserProvider>
+                <Toaster />
+                {children}
             </body>
         </html>
     );
