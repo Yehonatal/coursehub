@@ -11,6 +11,7 @@ import {
     Presentation,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/utils/cn";
 
 interface AIChatModalProps {
@@ -45,33 +46,46 @@ export function AIChatModal({
     return (
         <div
             className={cn(
-                "fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 transition-all duration-300",
+                "fixed inset-0  z-50 flex items-center justify-center p-4 sm:p-6 transition-all duration-300",
                 isOpen ? "opacity-100" : "opacity-0"
             )}
         >
             <div
-                className="absolute inset-0 scale-200 bg-black/20 backdrop-blur-sm transition-opacity"
+                className="absolute inset-0 scale-200 bg-black/50 backdrop-blur-sm transition-opacity"
                 onClick={onClose}
             />
 
-            <div
+            <Card
                 className={cn(
-                    "relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform",
+                    "relative w-full rounded-2xl max-w-4xl flex flex-col bg-white shadow-xl border-0 overflow-hidden transition-all duration-300 transform",
                     isOpen
                         ? "scale-100 translate-y-0"
                         : "scale-95 translate-y-4"
                 )}
                 style={{ height: "650px", maxHeight: "90vh" }}
             >
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors z-10 hover:bg-gray-100 rounded-full"
-                >
-                    <X className="w-5 h-5" />
-                </button>
+                <div className="flex items-center justify-between px-6 py-4 border-b bg-white shrink-0">
+                    <div>
+                        <h2 className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                            AI Assistant
+                        </h2>
+                        <p className="text-xl font-semibold text-[#0A251D]">
+                            Chat with {resourceTitle}
+                        </p>
+                    </div>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={onClose}
+                        className="h-8 w-8 rounded-full hover:bg-gray-100"
+                    >
+                        <X className="h-4 w-4" />
+                        <span className="sr-only">Close</span>
+                    </Button>
+                </div>
 
                 <div className="flex-1 flex flex-col justify-end p-8 pb-6 space-y-6 overflow-y-auto bg-[#F8F9FA]">
-                    <div className="w-full flex flex-col items-end space-y-4 max-w-2xl mx-auto">
+                    <div className="w-full flex flex-col items-end space-y-4 max-w-4xl mx-auto">
                         <div className="bg-white p-3 pr-6 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3 w-fit max-w-md transition-transform hover:scale-[1.02] cursor-pointer">
                             <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0 text-amber-600">
                                 <Presentation className="w-5 h-5" />
@@ -115,7 +129,7 @@ export function AIChatModal({
                     </div>
                 </div>
 
-                <div className="p-6 bg-white">
+                <div className="p-6 bg-white border-t shrink-0">
                     <div className="relative bg-gray-100 rounded-3xl p-4 transition-all focus-within:ring-2 focus-within:ring-[#0A251D]/10 focus-within:bg-white border border-transparent focus-within:border-gray-200">
                         <textarea
                             value={inputValue}
@@ -139,7 +153,7 @@ export function AIChatModal({
                         </div>
                     </div>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 }

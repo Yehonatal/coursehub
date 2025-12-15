@@ -48,6 +48,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-06-02: Status names are dynamic (view, download, rating, comments, reports).
 - [x] FR-06-03: Crud functionality for uploaded content (edit metadata, delete).
 - [x] FR-06-04: You can comment, rate, report and edit/delete(your own) resources 
+- [ ] FR-06-05: Upload AI generated content with proper tagging and metadata.
 - [x] FR-07: Require users to tag uploaded content with course code, semester, and university.
 - [x] FR-08: Allow users to download and view publicly available content.
 - [x] FR-08-01: Track and store download counts for each resource. 
