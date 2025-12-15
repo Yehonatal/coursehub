@@ -1,11 +1,11 @@
 import { LoginForm } from "@/components/auth/LoginForm";
 import { Suspense } from "react";
-import { validateRequest } from "@/lib/auth/session";
+import { getSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 
 export default async function LoginPage() {
-    const { user } = await validateRequest();
-    if (user) {
+    const session = await getSession();
+    if (session) {
         redirect("/dashboard");
     }
 

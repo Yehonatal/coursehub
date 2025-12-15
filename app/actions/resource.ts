@@ -306,7 +306,7 @@ export async function updateResource(
                     await deleteFile(pathParts[1]);
                 }
             } catch (e) {
-                console.warn("Failed to delete previous file from storage", e);
+                warn("Failed to delete previous file from storage", e);
             }
         }
 

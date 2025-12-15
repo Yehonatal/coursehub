@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { users, verificationTokens, passwordResetTokens } from "@/db/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { createSession, invalidateSession } from "@/lib/auth/session";
+import { warn, debug, error } from "@/lib/logger";
 import { uploadFile } from "@/lib/storage/upload";
 import { sendEmail } from "@/lib/email/client";
 import {
@@ -91,7 +92,7 @@ export async function signIn(
 
         await createSession(user.user_id);
     } catch (err) {
-        console.error("Sign in error:", err);
+        error("Sign in error:", err);
         return { success: false, message: "Server error" };
     }
 
@@ -145,8 +146,8 @@ export async function signUp(
                 );
                 const path = `school-ids/${Date.now()}-${sanitizedFilename}`;
                 schoolIdUrl = await uploadFile(schoolIdFile, path);
-            } catch (error) {
-                console.error("File upload error:", error);
+            } catch (err) {
+                error("File upload error:", err);
                 return {
                     success: false,
                     message: "Failed to upload school ID. Please try again.",
@@ -195,7 +196,7 @@ export async function signUp(
             html: verificationEmailTemplate(verificationUrl),
         });
         if (!emailResult?.success) {
-            console.warn(
+            warn(
                 "Failed to send verification email for %s: %o",
                 email,
                 emailResult?.error || emailResult
@@ -203,14 +204,12 @@ export async function signUp(
         }
         // In development, log verification link to console so we can test quickly if email sending is blocked
         if (process.env.NODE_ENV !== "production") {
-            console.debug(
-                `Dev verification link for ${email}: ${verificationUrl}`
-            );
+            debug(`Dev verification link for ${email}: ${verificationUrl}`);
         }
 
         await createSession(newUser.user_id);
     } catch (err) {
-        console.error("Sign up error:", err);
+        error("Sign up error:", err);
         return { success: false, message: "Server error" };
     }
 
@@ -292,7 +291,7 @@ export async function forgotPassword(
             message: "If an account exists, a reset link has been sent.",
         };
     } catch (err) {
-        console.error("Forgot password error:", err);
+        error("Forgot password error:", err);
         return { success: false, message: "Server error" };
     }
 }
@@ -358,7 +357,7 @@ export async function resetPassword(
 
         return { success: true, message: "Password reset successfully" };
     } catch (err) {
-        console.error("Reset password error:", err);
+        error("Reset password error:", err);
         return { success: false, message: "Server error" };
     }
 }

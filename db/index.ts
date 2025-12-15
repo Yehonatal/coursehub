@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
+import { warn } from "@/lib/logger";
 
 const connectionString = process.env.SUPABASE_DATABASE_URL;
 
@@ -32,7 +33,7 @@ if (connectionString) {
     }
     client = globalForDb.conn;
 } else {
-    console.warn("No SUPABASE_DATABASE_URL found — DB client not initialized.");
+    warn("No SUPABASE_DATABASE_URL found — DB client not initialized.");
 }
 
 export const db = client

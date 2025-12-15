@@ -5,6 +5,7 @@ import "./globals.css";
 import { validateRequest } from "@/lib/auth/session";
 import { UserProvider } from "@/components/providers/UserProvider";
 import { User } from "@/app/types/user";
+import { error } from "@/lib/logger";
 
 // Force dynamic rendering for the entire app since we rely on session cookies
 // in the root layout. This prevents build errors with static generation.
@@ -43,8 +44,8 @@ export default async function RootLayout({
     try {
         const result = await validateRequest();
         user = result.user;
-    } catch (error) {
-        console.error("Failed to validate session in RootLayout:", error);
+    } catch (err) {
+        error("Failed to validate session in RootLayout:", err);
         // Continue rendering with null user
     }
 

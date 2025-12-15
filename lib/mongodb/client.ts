@@ -11,10 +11,10 @@ declare global {
 }
 
 const uri = process.env.MONGODB_URI;
+import { warn } from "@/lib/logger";
 if (!uri) {
     // do not throw on import; allow callers to handle missing env during build
-    // eslint-disable-next-line no-console
-    console.warn(
+    warn(
         "MONGODB_URI not set — mongoose will not be initialized until connectMongo() is called"
     );
 }

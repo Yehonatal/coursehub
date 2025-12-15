@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateRequest } from "@/lib/auth/session";
+import { error } from "@/lib/logger";
 
 export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -17,8 +18,8 @@ export async function proxy(request: NextRequest) {
             if (!user) {
                 return NextResponse.redirect(new URL("/", request.url));
             }
-        } catch (error) {
-            console.error("Middleware auth error:", error);
+        } catch (err) {
+            error("Middleware auth error:", err);
             return NextResponse.redirect(new URL("/", request.url));
         }
     }

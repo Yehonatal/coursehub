@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
+import { error } from "@/lib/logger";
 
 interface RatingData {
     average: number;
@@ -29,8 +30,8 @@ export function useResourceRating(
                 if (json.success && json.data) {
                     setRatingData(json.data);
                 }
-            } catch (error) {
-                console.error("Failed to fetch rating:", error);
+            } catch (err) {
+                error("Failed to fetch rating:", err);
             }
         };
 
@@ -70,8 +71,8 @@ export function useResourceRating(
                     userRating: json.data.userRating,
                 });
                 toast.success("Rating submitted!");
-            } catch (error) {
-                console.error("Failed to submit rating:", error);
+            } catch (err) {
+                error("Failed to submit rating:", err);
                 setRatingData(previousData); // Revert on error
                 toast.error("Failed to submit rating");
             } finally {

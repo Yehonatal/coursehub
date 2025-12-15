@@ -5,10 +5,11 @@ const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const serviceKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
+import { warn } from "@/lib/logger";
+
 if (!url || !anonKey) {
     // Do not throw during import; allow callers to handle missing env during build
-    // eslint-disable-next-line no-console
-    console.warn(
+    warn(
         "Supabase URL or anon key not set — supabase client will not be initialized"
     );
 }

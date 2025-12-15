@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { toast } from "sonner";
+import { error } from "@/lib/logger";
 
 export interface CommentAuthor {
     name: string;
@@ -65,8 +66,8 @@ export function useResourceComments(
                 setTotalCount((prev) => prev + 1);
                 toast.success("Comment posted!");
                 return true;
-            } catch (error) {
-                console.error("Failed to post comment:", error);
+            } catch (err) {
+                error("Failed to post comment:", err);
                 toast.error("Failed to post comment");
                 return false;
             } finally {
@@ -124,8 +125,8 @@ export function useResourceComments(
                 setTotalCount((prev) => prev + 1);
                 toast.success("Reply posted!");
                 return true;
-            } catch (error) {
-                console.error("Failed to reply:", error);
+            } catch (err) {
+                error("Failed to reply:", err);
                 toast.error("Failed to post reply");
                 return false;
             }
@@ -221,8 +222,8 @@ export function useResourceComments(
                     };
                     return updateRecursive(prev);
                 });
-            } catch (error) {
-                console.error("Failed to react:", error);
+            } catch (err) {
+                error("Failed to react:", err);
                 toast.error("Failed to update reaction");
                 // Ideally revert optimistic update here, but for simplicity we skip it
                 // as the next fetch would correct it.

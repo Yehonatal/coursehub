@@ -7,8 +7,10 @@ const SENDER_EMAIL =
     process.env.MAIL_FROM ||
     `CourseHub <${GMAIL_USER || "noreply@example.com"}>`;
 
+import { warn, debug, info, error } from "@/lib/logger";
+
 if (!GMAIL_USER || !GMAIL_PASS) {
-    console.warn(
+    warn(
         "GMAIL_USER or GMAIL_PASS not set. Email sending will fail until you set these environment variables."
     );
 }
@@ -23,11 +25,11 @@ if (GMAIL_USER && GMAIL_PASS) {
             pass: GMAIL_PASS,
         },
     });
-    console.debug(
+    debug(
         "Gmail transporter initialized for %s",
         GMAIL_USER.replace(/.(?=.{4})/g, "*")
     );
-    console.debug("Gmail transporter ready");
+    debug("Gmail transporter ready");
 }
 
 interface SendEmailOptions {
@@ -44,7 +46,7 @@ export async function sendEmail({ to, subject, text, html }: SendEmailOptions) {
         const err = new Error(
             "No email transporter configured (GMAIL_USER/GMAIL_PASS missing)"
         );
-        console.error(err);
+        error(err);
         return { success: false, error: err };
     }
 
@@ -56,10 +58,10 @@ export async function sendEmail({ to, subject, text, html }: SendEmailOptions) {
             text,
             html,
         });
-        console.log(`Email sent to ${to} via Gmail`);
+        info(`Email sent to ${to} via Gmail`);
         return { success: true };
     } catch (err) {
-        console.error("Gmail send error:", err);
+        error("Gmail send error:", err);
         return { success: false, error: err };
     }
 }

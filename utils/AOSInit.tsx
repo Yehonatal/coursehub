@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { error } from "@/lib/logger";
 
 const AOSInit = () => {
     useEffect(() => {
@@ -12,8 +13,8 @@ const AOSInit = () => {
                     duration: 800,
                     easing: "ease-out-cubic",
                 });
-            } catch (error) {
-                console.error("Failed to initialize AOS:", error);
+            } catch (err) {
+                error("Failed to initialize AOS:", err);
             }
         };
 

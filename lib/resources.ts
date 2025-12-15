@@ -5,6 +5,7 @@ import {
     users,
     comment_reactions,
 } from "@/db/schema";
+import { error } from "@/lib/logger";
 import { eq, desc, and, ne, count, inArray } from "drizzle-orm";
 import {
     fetchResourceRows,
@@ -162,7 +163,7 @@ export async function getResourceComments(resourceId: string, userId?: string) {
 
         return topLevel;
     } catch (err) {
-        console.error("getResourceComments failed:", err);
+        error("getResourceComments failed:", err);
         return [];
     }
 }
@@ -185,7 +186,7 @@ export async function getUserResources(
 
         return mapResourceRows(rows, tagsById, stats);
     } catch (err) {
-        console.error("getUserResources failed:", err);
+        error("getUserResources failed:", err);
         return [];
     }
 }
@@ -208,7 +209,7 @@ export async function getResourceById(
         const result = mapResourceRows(rows, tagsById, stats);
         return result[0] || null;
     } catch (err) {
-        console.error("getResourceById failed:", err);
+        error("getResourceById failed:", err);
         return null;
     }
 }
@@ -227,7 +228,7 @@ export async function getRecommendedResources(
 
         return mapResourceRows(rows, tagsById, stats);
     } catch (err) {
-        console.error("getRecommendedResources failed:", err);
+        error("getRecommendedResources failed:", err);
         return [];
     }
 }
