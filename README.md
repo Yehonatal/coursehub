@@ -48,7 +48,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-06-02: Status names are dynamic (view, download, rating, comments, reports).
 - [x] FR-06-03: Crud functionality for uploaded content (edit metadata, delete).
 - [x] FR-06-04: You can comment, rate, report and edit/delete(your own) resources 
-- [ ] FR-06-05: Upload AI generated content with proper tagging and metadata.
+- [x] FR-06-05: Upload AI generated content with proper tagging and metadata.
 - [x] FR-07: Require users to tag uploaded content with course code, semester, and university.
 - [x] FR-08: Allow users to download and view publicly available content.
 - [x] FR-08-01: Track and store download counts for each resource. 
@@ -84,11 +84,11 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [ ] NFR-01: Respond to 90% of search and page-navigation requests within 3s under typical load (≤50 concurrent active users).
 - [ ] NFR-02: File uploads up to 50 MB complete within 10s in 90% of cases.
 - [ ] NFR-03: AI study-aid generation completes within 15s in 90% of requests (assuming typical external latency).
-- [ ] NFR-04: Support modern desktop and mobile browsers without plugins.
-- [ ] NFR-05: First-time users can upload and tag a resource within 5 minutes with ≤3 navigation errors.
+- [x] NFR-04: Support modern desktop and mobile browsers without plugins.
+- [x] NFR-05: First-time users can upload and tag a resource within 5 minutes with ≤3 navigation errors.
 - [ ] NFR-06: Conform to WCAG 2.1 Level AA accessibility.
-- [ ] NFR-07: All data in transit protected using HTTPS/TLS 1.2+.
-- [ ] NFR-08: Store passwords as salted bcrypt hashes (work factor ≥ 12).
+- [x] NFR-07: All data in transit protected using HTTPS/TLS 1.2+.
+- [x] NFR-08: Store passwords as salted bcrypt hashes (work factor ≥ 12).
 - [ ] NFR-09: Default session persistence up to one week; “Remember me” up to four weeks.
 - [ ] NFR-10: Validate and sanitize all user inputs against SQLi, XSS, and similar vulnerabilities.
 
