@@ -9,6 +9,7 @@ import { validateRequest } from "@/lib/auth/session";
 import { createResource } from "@/lib/dal/resource-helpers";
 import type { ActionResponse } from "@/app/actions/auth";
 import { revalidatePath } from "next/cache";
+import { error, warn } from "@/lib/logger";
 
 const UploadResourceSchema = z.object({
     title: z.string().trim().min(1).max(255),
@@ -139,7 +140,7 @@ export async function uploadResource(
             message: "Resource uploaded successfully",
         };
     } catch (err) {
-        console.error("uploadResource", err);
+        error("uploadResource", err);
         // Postgres error code 42703 indicates a missing column; this is
         // commonly caused by migrations that haven't been applied.
         const maybeCode = (err as { code?: string } | undefined)?.code;
@@ -191,15 +192,15 @@ export async function deleteResource(
                 await deleteFile(pathParts[1]);
             }
         } catch (e) {
-            console.error("Failed to delete file from storage", e);
+            warn("Failed to delete file from storage", e);
         }
 
         await db.delete(resources).where(eq(resources.resource_id, resourceId));
 
         revalidatePath("/dashboard/resources");
         return { success: true, message: "Resource deleted successfully" };
-    } catch (error) {
-        console.error("Delete resource failed:", error);
+    } catch (err) {
+        error("Delete resource failed:", err);
         return { success: false, message: "Failed to delete resource" };
     }
 }
@@ -328,10 +329,10 @@ export async function updateResource(
 
         revalidatePath(`/dashboard/resources/${resourceId}`);
         return { success: true, message: "Resource updated successfully" };
-    } catch (error) {
-        console.error("Update resource failed:", error);
+    } catch (err) {
+        error("Update resource failed:", err);
         const errorMessage =
-            error instanceof Error ? error.message : "Unknown error";
+            err instanceof Error ? err.message : "Unknown error";
         return {
             success: false,
             message: `Failed to update resource: ${errorMessage}`,

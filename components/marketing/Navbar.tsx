@@ -8,6 +8,14 @@ import { cn } from "@/utils/cn";
 
 export function Navbar() {
     const [isOpen, setIsOpen] = React.useState(false);
+    const [user, setUser] = React.useState<{ first_name: string } | null>(null);
+
+    React.useEffect(() => {
+        fetch("/api/me")
+            .then((res) => res.json())
+            .then((data) => setUser(data.user))
+            .catch(() => setUser(null));
+    }, []);
 
     React.useEffect(() => {
         if (isOpen) {
@@ -70,19 +78,35 @@ export function Navbar() {
                 </nav>
 
                 <div className="hidden md:flex items-center gap-4">
-                    <Button
-                        variant="ghost"
-                        className="text-base font-medium hover:bg-transparent hover:text-primary"
-                        asChild
-                    >
-                        <Link href="/login">Log in</Link>
-                    </Button>
-                    <Button
-                        className="rounded-md px-6 bg-[#0A251D] text-white hover:bg-[#0A251D]/90"
-                        asChild
-                    >
-                        <Link href="/register">Get Started</Link>
-                    </Button>
+                    {user ? (
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm font-medium text-muted-foreground">
+                                Signed in as {user.first_name}
+                            </span>
+                            <Button
+                                className="rounded-md px-6 bg-[#0A251D] text-white hover:bg-[#0A251D]/90"
+                                asChild
+                            >
+                                <Link href="/dashboard">Go to Dashboard</Link>
+                            </Button>
+                        </div>
+                    ) : (
+                        <>
+                            <Button
+                                variant="ghost"
+                                className="text-base font-medium hover:bg-transparent hover:text-primary"
+                                asChild
+                            >
+                                <Link href="/login">Log in</Link>
+                            </Button>
+                            <Button
+                                className="rounded-md px-6 bg-[#0A251D] text-white hover:bg-[#0A251D]/90"
+                                asChild
+                            >
+                                <Link href="/register">Get Started</Link>
+                            </Button>
+                        </>
+                    )}
                 </div>
 
                 <button
@@ -139,19 +163,38 @@ export function Navbar() {
                         )}
                         style={{ transitionDelay: "300ms" }}
                     >
-                        <Link href="/login" onClick={() => setIsOpen(false)}>
-                            <Button
-                                variant="outline"
-                                className="w-full h-12 text-lg border-white/20 text-white hover:bg-white hover:text-[#0A251D] bg-transparent rounded-full"
+                        {user ? (
+                            <Link
+                                href="/dashboard"
+                                onClick={() => setIsOpen(false)}
                             >
-                                Log in
-                            </Button>
-                        </Link>
-                        <Link href="/register" onClick={() => setIsOpen(false)}>
-                            <Button className="w-full h-12 text-lg bg-[#F5F2EB] text-[#0A251D] hover:bg-[#F5F2EB]/90 rounded-full">
-                                Get Started
-                            </Button>
-                        </Link>
+                                <Button className="w-full h-12 text-lg bg-[#F5F2EB] text-[#0A251D] hover:bg-[#F5F2EB]/90 rounded-full">
+                                    Go to Dashboard
+                                </Button>
+                            </Link>
+                        ) : (
+                            <>
+                                <Link
+                                    href="/login"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <Button
+                                        variant="outline"
+                                        className="w-full h-12 text-lg border-white/20 text-white hover:bg-white hover:text-[#0A251D] bg-transparent rounded-full"
+                                    >
+                                        Log in
+                                    </Button>
+                                </Link>
+                                <Link
+                                    href="/register"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <Button className="w-full h-12 text-lg bg-[#F5F2EB] text-[#0A251D] hover:bg-[#F5F2EB]/90 rounded-full">
+                                        Get Started
+                                    </Button>
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
