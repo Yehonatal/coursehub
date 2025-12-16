@@ -2,23 +2,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { parseFile, chunkText } from "../../lib/ai/parser";
 import JSZip from "jszip";
 
-// Mock pdfjs-dist
-vi.mock("pdfjs-dist/legacy/build/pdf.mjs", () => {
-    return {
-        getDocument: vi.fn().mockReturnValue({
-            promise: Promise.resolve({
-                numPages: 1,
-                getPage: vi.fn().mockResolvedValue({
-                    getTextContent: vi.fn().mockResolvedValue({
-                        items: [{ str: "Mock PDF Content" }],
-                    }),
-                }),
-            }),
-        }),
-        GlobalWorkerOptions: {
-            workerSrc: "",
-        },
-    };
+// Mock pdf-parse
+vi.mock("pdf-parse", () => {
+    const fn = vi.fn().mockResolvedValue({ text: "Mock PDF Content" });
+    // Support different module shapes (CJS, ESM default, named export)
+    (fn as any).default = fn;
+    (fn as any).parse = fn;
+    return fn;
 });
 
 // Mock JSZip
@@ -88,6 +78,66 @@ describe("parseFile", () => {
         const buffer = Buffer.from("dummy pdf content");
         const result = await parseFile(buffer, "application/pdf", "test.pdf");
         expect(result).toBe("Mock PDF Content");
+    });
+
+    it("should return a friendly message when parsing fails (both parsers fail)", async () => {
+        // Reset module registry and mock pdf-parse to throw
+        vi.resetModules();
+        vi.doMock("pdf-parse", () => {
+            const fn = () => {
+                throw new Error("pdf-parse internal error");
+            };
+            (fn as any).default = fn;
+            (fn as any).parse = fn;
+            return fn;
+        });
+
+        // Mock pdfjs to reject with the fake-worker error
+        vi.doMock("pdfjs-dist/legacy/build/pdf.mjs", () => {
+            return {
+                getDocument: () => ({
+                    promise: Promise.reject(
+                        new Error(
+                            'Setting up fake worker failed: "No "GlobalWorkerOptions.workerSrc" specified."'
+                        )
+                    ),
+                }),
+            };
+        });
+
+        const { parseFile: parseFileWithMocks } = await import(
+            "../../lib/ai/parser"
+        );
+        const buffer = Buffer.from("dummy pdf content");
+        const result = await parseFileWithMocks(
+            buffer,
+            "application/pdf",
+            "test.pdf"
+        );
+        expect(result).toContain("Sorry, we couldn't parse your PDF right now");
+
+        // Restore original mocks for subsequent tests
+        vi.doMock("pdf-parse", () => {
+            const fn = vi.fn().mockResolvedValue({ text: "Mock PDF Content" });
+            (fn as any).default = fn;
+            (fn as any).parse = fn;
+            return fn;
+        });
+
+        vi.doMock("pdfjs-dist/legacy/build/pdf.mjs", () => {
+            return {
+                getDocument: vi.fn().mockReturnValue({
+                    promise: Promise.resolve({
+                        numPages: 1,
+                        getPage: vi.fn().mockResolvedValue({
+                            getTextContent: vi.fn().mockResolvedValue({
+                                items: [{ str: "Mock PDF Content" }],
+                            }),
+                        }),
+                    }),
+                }),
+            };
+        });
     });
 
     it("should parse PPTX files correctly", async () => {

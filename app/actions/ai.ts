@@ -6,7 +6,6 @@ import { eq, sql } from "drizzle-orm";
 import { generateStudyNotes } from "@/lib/ai/summary";
 import { generateFlashcards, generateKnowledgeTree } from "@/lib/ai/flashcard";
 import { AIStudyNote, AIFlashcard, AIKnowledgeNode } from "@/types/ai";
-import { parseFile as parseFileLib } from "@/lib/ai/parser";
 
 import { getGeminiModel } from "@/lib/ai/gemini";
 
@@ -122,27 +121,6 @@ export async function createKnowledgeTree(
     await incrementQuota(user.user_id);
 
     return tree;
-}
-
-export async function parseFile(formData: FormData): Promise<string> {
-    const user = await getCurrentUser();
-    if (!user) throw new Error("Unauthorized");
-
-    await checkQuota(user.user_id);
-
-    const file = formData.get("file") as File;
-    if (!file) {
-        throw new Error("No file provided");
-    }
-
-    try {
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const text = await parseFileLib(buffer, file.type, file.name);
-        return text;
-    } catch (error) {
-        console.error("Error parsing file:", error);
-        throw new Error((error as Error).message || "Failed to parse file");
-    }
 }
 
 export async function sendChatMessage(

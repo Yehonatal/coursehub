@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/utils/cn";
 import {
-    parseFile,
     sendChatMessage,
     createStudyNotes,
     createFlashcards,
@@ -93,7 +92,17 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
         try {
             const formData = new FormData();
             formData.append("file", selectedFile);
-            const text = await parseFile(formData);
+
+            const response = await fetch("/api/ai/parse", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to parse file");
+            }
+
+            const { text } = await response.json();
 
             if (text.startsWith("Error:")) {
                 setMessages((prev) => [

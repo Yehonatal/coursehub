@@ -1,12 +1,19 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { X, Loader2, Settings, Maximize2, Minimize2 } from "lucide-react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { toast } from "sonner";
+import {
+    X,
+    Loader2,
+    Settings,
+    Maximize2,
+    Minimize2,
+    RefreshCw,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/utils/cn";
 import {
-    parseFile,
     sendChatMessage,
     createStudyNotes,
     createFlashcards,
@@ -83,6 +90,143 @@ export function AIChatModal({
     };
 
     useEffect(() => {
+        if (scrollAreaRef.current) {
+            scrollAreaRef.current.scrollTop =
+                scrollAreaRef.current.scrollHeight;
+        }
+    }, [messages, isLoading, isParsing]);
+
+    const loadFile = useCallback(async () => {
+        if (!fileUrl) return;
+        setIsParsing(true);
+        try {
+            // Fetch the file from the URL
+            const response = await fetch(fileUrl);
+            const blob = await response.blob();
+            const file = new File([blob], resourceTitle, { type: blob.type });
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const parseResponse = await fetch("/api/ai/parse", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!parseResponse.ok) {
+                throw new Error("Failed to parse file");
+            }
+
+            const { text } = await parseResponse.json();
+
+            if (text.startsWith("Error:")) {
+                // Friendly message already returned by the API
+                setMessages((prev) => [
+                    ...prev.filter(
+                        (m) =>
+                            !(
+                                m.role === "model" &&
+                                (m.parts.includes("I've analyzed") ||
+                                    m.parts.includes("Analyzing") ||
+                                    m.parts.includes("Re-analyzing"))
+                            )
+                    ),
+                    {
+                        role: "model",
+                        parts: `I encountered an issue reading this resource: ${text.substring(
+                            7
+                        )}.`,
+                    },
+                ]);
+                setContext("");
+
+                // Show failure toast
+                toast.error(
+                    "Sorry, we couldn't parse your PDF right now. Please try again later — we're working on a fix."
+                );
+            } else {
+                setContext(text);
+
+                // Clear existing analysis messages (avoid duplicates) then append fresh analysis message
+                setMessages((prev) => [
+                    ...prev.filter(
+                        (m) =>
+                            !(
+                                m.role === "model" &&
+                                (m.parts.includes("I've analyzed") ||
+                                    m.parts.includes("Analyzing") ||
+                                    m.parts.includes("Re-analyzing") ||
+                                    m.parts.includes(
+                                        "I encountered an issue reading this resource"
+                                    ))
+                            )
+                    ),
+                    {
+                        role: "model",
+                        parts: `I've analyzed ${resourceTitle}. What would you like to do? I can generate study notes, flashcards, or a knowledge tree, or you can just ask me questions about it.`,
+                    },
+                ]);
+
+                // Success toast
+                toast.success("Resource analyzed successfully.");
+            }
+        } catch (error: unknown) {
+            console.error("Error parsing file:", error);
+            const msg = error instanceof Error ? error.message : String(error);
+            if (
+                msg.includes("Free tier quota exceeded") ||
+                msg.includes("quota")
+            ) {
+                setShowRateLimitModal(true);
+                return;
+            }
+
+            // Friendly chat message + toast
+            setMessages((prev) => [
+                ...prev,
+                {
+                    role: "model",
+                    parts: "Sorry, we couldn't parse your PDF right now. Please try again later — we're working on a fix.",
+                },
+            ]);
+
+            toast.error(
+                "Sorry, we couldn't parse your PDF right now. Please try again later — we're working on a fix."
+            );
+        } finally {
+            setIsParsing(false);
+        }
+    }, [fileUrl, resourceTitle]);
+
+    const handleReload = useCallback(async () => {
+        if (!fileUrl) return;
+
+        // Remove previous analysis messages to avoid duplicates
+        setMessages((prev) =>
+            prev.filter(
+                (m) =>
+                    !(
+                        m.role === "model" &&
+                        (m.parts.includes("I've analyzed") ||
+                            m.parts.includes("Analyzing") ||
+                            m.parts.includes("Re-analyzing") ||
+                            m.parts.includes(
+                                "I encountered an issue reading this resource"
+                            ))
+                    )
+            )
+        );
+
+        // Add a user-facing temporary message and re-run the analysis
+        setMessages((prev) => [
+            ...prev,
+            { role: "model", parts: `Re-analyzing ${resourceTitle}...` },
+        ]);
+
+        await loadFile();
+    }, [fileUrl, resourceTitle, loadFile]);
+
+    useEffect(() => {
         if (isOpen) {
             setIsVisible(true);
             document.body.style.overflow = "hidden";
@@ -95,70 +239,7 @@ export function AIChatModal({
             document.body.style.overflow = "unset";
             return () => clearTimeout(timer);
         }
-    }, [isOpen, fileUrl]);
-
-    useEffect(() => {
-        if (scrollAreaRef.current) {
-            scrollAreaRef.current.scrollTop =
-                scrollAreaRef.current.scrollHeight;
-        }
-    }, [messages, isLoading, isParsing]);
-
-    const loadFile = async () => {
-        if (!fileUrl) return;
-        setIsParsing(true);
-        try {
-            // Fetch the file from the URL
-            const response = await fetch(fileUrl);
-            const blob = await response.blob();
-            const file = new File([blob], resourceTitle, { type: blob.type });
-
-            const formData = new FormData();
-            formData.append("file", file);
-
-            const text = await parseFile(formData);
-
-            if (text.startsWith("Error:")) {
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        role: "model",
-                        parts: `I encountered an issue reading this resource: ${text.substring(
-                            7
-                        )}.`,
-                    },
-                ]);
-                setContext("");
-            } else {
-                setContext(text);
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        role: "model",
-                        parts: `I've analyzed ${resourceTitle}. What would you like to do? I can generate study notes, flashcards, or a knowledge tree, or you can just ask me questions about it.`,
-                    },
-                ]);
-            }
-        } catch (error: any) {
-            console.error("Error parsing file:", error);
-            if (
-                error.message?.includes("Free tier quota exceeded") ||
-                error.message?.includes("quota")
-            ) {
-                setShowRateLimitModal(true);
-                return;
-            }
-            setMessages((prev) => [
-                ...prev,
-                {
-                    role: "model",
-                    parts: "Sorry, I encountered an error reading this resource. Please try again later.",
-                },
-            ]);
-        } finally {
-            setIsParsing(false);
-        }
-    };
+    }, [isOpen, fileUrl, messages.length, loadFile]);
 
     const handleSend = async (message?: string) => {
         const textToSend = message ?? inputValue;
@@ -240,14 +321,16 @@ export function AIChatModal({
                     { role: "model", parts: response },
                 ]);
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error sending message:", error);
+            const errMsg =
+                error instanceof Error ? error.message : String(error);
             if (
-                error.message === "RATE_LIMIT_EXCEEDED" ||
-                error.message?.includes("429") ||
-                error.message?.includes("503") ||
-                error.message?.includes("quota") ||
-                error.message?.includes("Free tier quota exceeded")
+                errMsg === "RATE_LIMIT_EXCEEDED" ||
+                errMsg.includes("429") ||
+                errMsg.includes("503") ||
+                errMsg.includes("quota") ||
+                errMsg.includes("Free tier quota exceeded")
             ) {
                 setShowRateLimitModal(true);
                 setMessages((prev) => [
@@ -310,6 +393,25 @@ export function AIChatModal({
                             </p>
                         </div>
                         <div className="flex items-center gap-2">
+                            {fileUrl && (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={handleReload}
+                                    disabled={isParsing}
+                                    className="h-8 w-8 rounded-full hover:bg-gray-100"
+                                >
+                                    {isParsing ? (
+                                        <Loader2 className="h-4 w-4 animate-spin text-[#0A251D]" />
+                                    ) : (
+                                        <RefreshCw className="h-4 w-4" />
+                                    )}
+                                    <span className="sr-only">
+                                        Reload resource
+                                    </span>
+                                </Button>
+                            )}
+
                             <Button
                                 variant="ghost"
                                 size="icon"
