@@ -157,7 +157,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - pnpm package manager
 - Supabase account and project
 - MongoDB Atlas account
-- Google Gemini API key
+ - Google Gemini API key (entered in-app via AI Settings; stored locally on your device, not on our servers)
 - SendGrid account (for notifications)
 
 **Email / Notifications (Gmail via Nodemailer)**
@@ -181,6 +181,9 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
    MONGODB_URI=your_mongodb_connection_string
 
    # AI
+   # Optional: default Gemini API key. If omitted, users can add
+   # their own key in the app's AI Settings. User-provided keys are
+   # stored locally (e.g., browser storage) and not persisted server-side.
    GEMINI_API_KEY=your_gemini_api_key
 
 
@@ -239,6 +242,15 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 3. Run tests:
    ```bash
    pnpm test
+
+### Using AI Features
+
+- Open the AI page or any resource's AI modal.
+- Click the Settings icon to open AI Settings.
+- Paste your Google Gemini API key and save.
+- Privacy note: Your key is stored locally in your browser (not sent to nor stored on our servers). You can remove or replace it anytime from the same Settings panel.
+
+If a server-side default `GEMINI_API_KEY` is set in `.env.local`, the app can use it by default. A key entered via AI Settings will take precedence for your session.
 
 ### Testing Auth Flows (Email Verification & Password Reset)
 
