@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { toast } from "sonner";
 import {
     ArrowRight,
     Sparkles,
@@ -105,6 +106,8 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
             const { text } = await response.json();
 
             if (text.startsWith("Error:")) {
+                const friendly =
+                    "We couldn't parse this file right now. Please try again later — our team is investigating.";
                 setMessages((prev) => [
                     ...prev,
                     {
@@ -115,11 +118,13 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
                         role: "model",
                         parts: `I encountered an issue with this file: ${text.substring(
                             7
-                        )}. Please try uploading a valid PDF or text file.`,
+                        )}.`,
                     },
                 ]);
                 setFile(null);
                 setContext("");
+
+                toast.error(friendly);
             } else {
                 setContext(text);
                 setMessages((prev) => [
@@ -130,27 +135,36 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
                     },
                     {
                         role: "model",
-                        parts: `I've analyzed ${selectedFile.name}. What would you like to do? I can generate study notes, flashcards, or a knowledge tree, or you can just ask me questions about it.`,
+                        parts: `Analysis complete for ${selectedFile.name}. What would you like to do next? I can generate study notes, flashcards, a knowledge tree, or answer questions about the file.`,
                     },
                 ]);
+
+                toast.success(
+                    "Analysis complete — you can now ask questions or generate study materials."
+                );
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error parsing file:", error);
+            const msg = error instanceof Error ? error.message : String(error);
             if (
-                error.message?.includes("Free tier quota exceeded") ||
-                error.message?.includes("quota")
+                msg.includes("Free tier quota exceeded") ||
+                msg.includes("quota")
             ) {
                 setShowRateLimitModal(true);
                 setFile(null);
                 return;
             }
+
+            const friendly =
+                "We couldn't parse this file right now. Please try again later — our team is investigating.";
             setMessages((prev) => [
                 ...prev,
                 {
                     role: "model",
-                    parts: "Sorry, I encountered an error reading that file. Please try again.",
+                    parts: friendly,
                 },
             ]);
+            toast.error(friendly);
             setFile(null);
         } finally {
             setIsParsing(false);
@@ -235,14 +249,16 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
                     { role: "model", parts: response },
                 ]);
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error sending message:", error);
+            const errMsg =
+                error instanceof Error ? error.message : String(error);
             if (
-                error.message === "RATE_LIMIT_EXCEEDED" ||
-                error.message?.includes("429") ||
-                error.message?.includes("503") ||
-                error.message?.includes("quota") ||
-                error.message?.includes("Free tier quota exceeded")
+                errMsg === "RATE_LIMIT_EXCEEDED" ||
+                errMsg.includes("429") ||
+                errMsg.includes("503") ||
+                errMsg.includes("quota") ||
+                errMsg.includes("Free tier quota exceeded")
             ) {
                 setShowRateLimitModal(true);
                 // Remove the user message that failed? Or keep it?

@@ -121,6 +121,8 @@ export function AIChatModal({
 
             if (text.startsWith("Error:")) {
                 // Friendly message already returned by the API
+                const friendly =
+                    "We couldn't parse this file right now. Please try again later — our team is investigating.";
                 setMessages((prev) => [
                     ...prev.filter(
                         (m) =>
@@ -140,14 +142,13 @@ export function AIChatModal({
                 ]);
                 setContext("");
 
-                // Show failure toast
-                toast.error(
-                    "Sorry, we couldn't parse your PDF right now. Please try again later — we're working on a fix."
-                );
+                // Show failure toast (professional)
+                toast.error(friendly);
             } else {
                 setContext(text);
 
                 // Clear existing analysis messages (avoid duplicates) then append fresh analysis message
+                const successMsg = `Analysis complete for ${resourceTitle}. What would you like to do next? I can generate study notes, flashcards, a knowledge tree, or answer questions about this resource.`;
                 setMessages((prev) => [
                     ...prev.filter(
                         (m) =>
@@ -163,12 +164,14 @@ export function AIChatModal({
                     ),
                     {
                         role: "model",
-                        parts: `I've analyzed ${resourceTitle}. What would you like to do? I can generate study notes, flashcards, or a knowledge tree, or you can just ask me questions about it.`,
+                        parts: successMsg,
                     },
                 ]);
 
-                // Success toast
-                toast.success("Resource analyzed successfully.");
+                // Success toast (professional)
+                toast.success(
+                    "Analysis complete — you can now ask questions or generate study materials."
+                );
             }
         } catch (error: unknown) {
             console.error("Error parsing file:", error);
@@ -222,6 +225,9 @@ export function AIChatModal({
             ...prev,
             { role: "model", parts: `Re-analyzing ${resourceTitle}...` },
         ]);
+
+        // Inform the user explicitly
+        toast("Re-analysis started — we'll notify you when it's complete.");
 
         await loadFile();
     }, [fileUrl, resourceTitle, loadFile]);
