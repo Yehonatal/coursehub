@@ -58,8 +58,11 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-12: Allow users to report inappropriate or low-quality content.
 - [ ] FR-13: Prioritize visibility of content with higher community ratings.
 - [ ] FR-14: Allow educator-contributors to formally tag and mark content as “verified”.
-- [ ] FR-15: Allow users to generate AI-based study notes from uploaded content.
-- [ ] FR-16: Allow users to generate flashcards and knowledge trees via the Gemini Studio API.
+- [x] FR-15: Allow users to generate AI-based study notes from uploaded content.
+- [x] FR-15-01: AI Features should work from AI Page and the AI modals in Resource pages 
+- [x] FR-15-02: Support input files in PDF, TXT, MD, and PPTX formats for AI note generation.
+- [x] FR-15-03: Take Gemini key from the user and store it locally
+- [x] FR-16: Allow users to generate flashcards and knowledge trees via the Gemini Studio API.
 - [ ] FR-17: Restrict AI-powered features to free-tier quotas or require subscription for extended use.
 - [x] FR-18: Send email or SMS notifications for account verification, password resets, and content interaction events.
 - [ ] FR-19: Notify users when their content receives a comment, rating, or verification tag.

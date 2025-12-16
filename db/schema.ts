@@ -288,3 +288,13 @@ export const passwordResetTokens = pgTable("password_reset_tokens", {
         .references(() => users.user_id, { onDelete: "cascade" }),
     expires_at: timestamp("expires_at", { withTimezone: true }).notNull(),
 });
+
+// ================= QUOTAS =================
+export const user_quotas = pgTable("user_quotas", {
+    user_id: uuid("user_id")
+        .notNull()
+        .references(() => users.user_id, { onDelete: "cascade" })
+        .primaryKey(),
+    ai_generations_count: integer("ai_generations_count").default(0).notNull(),
+    last_reset_date: timestamp("last_reset_date").defaultNow().notNull(),
+});

@@ -90,6 +90,7 @@ export function ResourceHeader({
                 onClose={() => setIsAIModalOpen(false)}
                 resourceTitle={title}
                 resourceType={type}
+                fileUrl={fileUrl}
             />
 
             {fileUrl && (

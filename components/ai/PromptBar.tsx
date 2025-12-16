@@ -34,8 +34,9 @@ export function PromptBar() {
             <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                 {[
                     "Summarize a PDF",
-                    "Draft an email",
+                    "Create a flashcard set",
                     "Explain this concept",
+                    "Generate a knowledge tree",
                 ].map((chip) => (
                     <button
                         key={chip}
