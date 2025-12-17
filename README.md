@@ -63,19 +63,20 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-15-02: Support input files in PDF, TXT, MD, and PPTX formats for AI note generation.
 - [x] FR-15-03: Take Gemini key from the user and store it locally
 - [x] FR-15-04: Allow users to save generated content.
-- [ ] FR-15-05: Track and limit AI generation requests based on user quotas or subscription status.
-- [ ] FR-15-06: Allow users to view their AI generation history and saved content.
-- [ ] FR-15-07: Resource pages display the AI generated content linked with them.
+- [x] FR-15-05: Track and limit AI generation requests based on user quotas or subscription status.
+- [x] FR-15-06: Allow users to view their AI generation history and saved content.
+- [x] FR-15-07: Resource pages display the AI generated content linked with them.
 - [x] FR-16: Allow users to generate flashcards and knowledge trees via the Gemini Studio API.
 - [ ] FR-17: Restrict AI-powered features to free-tier quotas or require subscription for extended use.
 - [x] FR-18: Send email or SMS notifications for account verification, password resets, and content interaction events.
 - [ ] FR-19: Notify users when their content receives a comment, rating, or verification tag.
 - [ ] FR-20: Send regular updates or reminders regarding saved content and trending materials.
 - [ ] FR-21: Generate university-specific dashboards summarizing uploaded content and engagement metrics.
-- [ ] FR-22: Allow users to view their personal content contributions and engagement statistics.
-- [ ] FR-23: Support a payment module for subscription to premium AI services.
-- [ ] FR-24: Validate subscription status via an external payment gateway.
-- [ ] FR-25: Restrict access to premium features when subscription inactive/expired.
+- [x] FR-22: Generate user-specific dashboards summarizing personal contributions and engagement statistics.
+- [ ] FR-23: Allow users to view their personal content contributions and engagement statistics.
+- [ ] FR-24: Support a payment module for subscription to premium AI services.
+- [ ] FR-25: Validate subscription status via an external payment gateway.
+- [ ] FR-26: Restrict access to premium features when subscription inactive/expired.
 
 ### Implemented (summary)
 
