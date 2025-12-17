@@ -10,6 +10,8 @@ import { validateRequest } from "@/lib/auth/session";
 import { getUserResources } from "@/lib/resources";
 import { getUserProfileStats, listUserGenerations } from "@/app/actions/ai";
 
+export const dynamic = "force-dynamic";
+
 type MiniResourceItem = {
     id: string;
     title: string;

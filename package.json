@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "eslint",
-        "test": "vitest",
+        "test": "vitest --run",
         "db:setup": "tsx scripts/mongo.setup.ts",
         "db:mongo:init": "pnpm run db:setup",
         "db:seed:pg": "tsx scripts/seed.pg.ts",

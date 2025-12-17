@@ -2,40 +2,15 @@
 
 import React from "react";
 import { RecentsList } from "@/components/dashboard/RecentsList";
+import { mapGenerationToRecentItem } from "@/lib/ai/mappers";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function ResourceGenerations({ generations }: { generations: any[] }) {
     if (!generations || generations.length === 0) return null;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const items = generations.map((gen: any) => ({
-        title:
-            gen.title ||
-            gen.prompt?.substring(0, 30) +
-                (gen.prompt?.length > 30 ? "..." : "") ||
-            gen.generationType.charAt(0).toUpperCase() +
-                gen.generationType.slice(1),
-        type:
-            gen.generationType === "notes"
-                ? "Note"
-                : gen.generationType === "tree"
-                ? "Knowledge Tree"
-                : "Flashcards",
-        meta:
-            gen.generationType === "notes"
-                ? "Study Notes"
-                : gen.generationType === "tree"
-                ? `${gen.content.nodes?.length || 0} Nodes`
-                : `${gen.content.length || 0} Cards`,
-        author: "Community",
-        iconType:
-            gen.generationType === "notes"
-                ? "note"
-                : gen.generationType === "tree"
-                ? "tree"
-                : "question",
-        data: gen.content,
-    }));
+    const items = generations.map((gen: any) =>
+        mapGenerationToRecentItem(gen, gen.userName || "You")
+    );
 
     return (
         <div className="mt-8">

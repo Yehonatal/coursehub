@@ -1,3 +1,5 @@
+import { AIKnowledgeNode } from "@/types/ai";
+
 function extractJSONSubstring(text: string, expectArray = true) {
     // Strip surrounding markdown fences
     const cleaned = text.replace(/```json\n?|\n?```/g, "").trim();

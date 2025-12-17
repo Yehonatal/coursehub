@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { connectMongo, closeMongo } from "../lib/mongodb/client";
-import { getResourceStatsModel, getEventsModel } from "../lib/mongodb/models";
+import { getAIGenerationsModel } from "@/lib/mongodb/models";
 
 async function main() {
     console.log("📡 Starting MongoDB Seeder (Mongoose)...");
@@ -8,33 +8,33 @@ async function main() {
     try {
         await connectMongo();
 
-        const Events = getEventsModel();
-        const ResourceStats = getResourceStatsModel();
+        // Insert a sample AI generation tied to this resource
+        try {
+            const AIGenerations = getAIGenerationsModel();
+            const sampleGen = await AIGenerations.create({
+                userId: "demo-user-1",
+                sessionId: null,
+                resourceId: "demo-resource-1",
+                generationType: "notes",
+                title: "Study Notes - Demo Resource",
+                prompt: "Intro to Demo",
+                content: {
+                    title: "Demo Study Notes",
+                    summary: "A short summary for demo resource.",
+                    keyPoints: ["Point A", "Point B"],
+                    explanation: "Detailed explanation of demo content.",
+                },
+                model: "gemini-demo",
+                apiKeySource: "server",
+                saved: true,
+                viewedCount: 0,
+                generationStatus: "succeeded",
+            });
 
-        // Sample demo analytic event
-        await Events.create({
-            event_id: `seed-event-${Date.now()}`,
-            type: "rating",
-            resource_id: "demo-resource-1",
-            user_id: "demo-user-1",
-            payload: { value: 5 },
-        });
-
-        // Analytics aggregation object
-        const stats = await ResourceStats.findOneAndUpdate(
-            { resource_id: "demo-resource-1" },
-            {
-                $inc: { ratings_count: 1, ratings_sum: 5 },
-                $set: { last_updated: new Date() },
-            },
-            { new: true, upsert: true }
-        );
-
-        // recompute rating
-        stats.avg_rating = stats.ratings_sum / stats.ratings_count;
-        await stats.save();
-
-        console.log("Inserted / updated resource:", stats);
+            console.log("Inserted sample AI generation:", sampleGen);
+        } catch (err: any) {
+            console.warn("Failed to insert sample AI generation:", err.message);
+        }
     } catch (err: any) {
         console.error("❌ MongoDB seeder failed:", err.message);
         process.exitCode = 1;

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { RecentsList } from "@/components/dashboard/RecentsList";
+import { mapGenerationToRecentItem } from "@/lib/ai/mappers";
 import {
     Dialog,
     DialogContent,
@@ -21,30 +22,10 @@ export function GeneratedContentModal({
     onClose,
     generations,
 }: GeneratedContentModalProps) {
-    // Map generations to RecentsList format
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const items = generations.map((gen: any) => ({
-        title:
-            gen.title ||
-            gen.prompt?.substring(0, 30) +
-                (gen.prompt?.length > 30 ? "..." : "") ||
-            "Untitled",
-        type:
-            gen.generationType === "notes"
-                ? "Note"
-                : gen.generationType === "tree"
-                ? "Knowledge Tree"
-                : "Flashcards",
-        meta: new Date(gen.createdAt).toLocaleDateString(),
-        author: "Community",
-        iconType:
-            gen.generationType === "notes"
-                ? "note"
-                : gen.generationType === "tree"
-                ? "tree"
-                : "question",
-        data: gen.content,
-    }));
+    const items = generations.map((gen: any) =>
+        mapGenerationToRecentItem(gen, "Community")
+    );
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>

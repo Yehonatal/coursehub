@@ -16,7 +16,6 @@ import {
 import { ViewTracker } from "@/components/resources/ViewTracker";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getResourceGenerations } from "@/app/actions/ai";
-import { ResourceGenerations } from "@/components/resources/ResourceGenerations";
 
 interface ResourcePageProps {
     params: Promise<{
@@ -128,7 +127,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                             objectives={[]}
                         />
 
-                        <ResourceGenerations generations={generations} />
+                        {/* <ResourceGenerations generations={generations} /> */}
 
                         <RelatedResources resources={relatedResources} />
                     </div>

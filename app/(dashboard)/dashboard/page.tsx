@@ -8,6 +8,7 @@ import { DashboardToast } from "@/components/dashboard/DashboardToast";
 import { getRecommendedResources } from "@/lib/resources";
 import { listUserGenerations } from "@/app/actions/ai";
 import { getCurrentUser } from "@/lib/auth/session";
+import { mapGenerationToRecentItem } from "@/lib/ai/mappers";
 
 export default async function StudentDashboard() {
     const user = await getCurrentUser();
@@ -18,34 +19,9 @@ export default async function StudentDashboard() {
     const recentGenerations = await listUserGenerations({ limit: 4 });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const recentItems = recentGenerations.map((gen: any) => ({
-        title:
-            gen.title ||
-            gen.prompt?.substring(0, 30) +
-                (gen.prompt?.length > 30 ? "..." : "") ||
-            gen.generationType.charAt(0).toUpperCase() +
-                gen.generationType.slice(1),
-        type:
-            gen.generationType === "notes"
-                ? "Note"
-                : gen.generationType === "tree"
-                ? "Knowledge Tree"
-                : "Flashcards",
-        meta:
-            gen.generationType === "notes"
-                ? "Study Notes"
-                : gen.generationType === "tree"
-                ? `${gen.content.nodes?.length || 0} Nodes`
-                : `${gen.content.length || 0} Cards`,
-        author: "You",
-        iconType:
-            gen.generationType === "notes"
-                ? "note"
-                : gen.generationType === "tree"
-                ? "tree"
-                : "question",
-        data: gen.content,
-    }));
+    const recentItems = recentGenerations.map((gen: any) =>
+        mapGenerationToRecentItem(gen, "You")
+    );
 
     const resourcesForGrid = recommendedResources.map((r) => ({
         id: r.resource_id,
@@ -67,12 +43,22 @@ export default async function StudentDashboard() {
             <DashboardToast />
             <div className="space-y-10">
                 <MobileQuickActions />
-                {recentItems.length > 0 && (
+                {recentItems.length > 0 ? (
                     <div>
                         <h3 className="text-lg font-serif font-bold text-[#0A251D] mb-4">
                             Recents
                         </h3>
                         <RecentsList items={recentItems} />
+                    </div>
+                ) : (
+                    <div className="mb-12">
+                        <h3 className="text-sm font-bold text-[#0A251D]/70 mb-4">
+                            Recents Created Content
+                        </h3>
+                        <div className="rounded-xl border border-dashed border-[#0A251D]/30 bg-white/60 p-6 text-sm text-[#0A251D]">
+                            You haven't generated any content yet. Start a chat
+                            or use the AI tools to create study materials.
+                        </div>
                     </div>
                 )}
 
