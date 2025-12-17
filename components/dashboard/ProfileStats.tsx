@@ -42,7 +42,16 @@ const CountUp = ({
     return <>{count}</>;
 };
 
-export function ProfileStats() {
+export function ProfileStats({
+    stats,
+}: {
+    stats: {
+        notes: number;
+        trees: number;
+        flashcards: number;
+        uploads: number;
+    };
+}) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <Card className="md:col-span-2 sm:p-5 bg-gradient-to-br from-blue-50/50 to-white border-border/60  relative overflow-hidden">
@@ -63,7 +72,7 @@ export function ProfileStats() {
                         </div>
                         <div>
                             <span className="text-2xl font-bold text-[#0A251D] block leading-none">
-                                <CountUp end={15} />
+                                <CountUp end={stats.notes} />
                             </span>
                             <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
                                 Notes
@@ -77,7 +86,7 @@ export function ProfileStats() {
                         </div>
                         <div>
                             <span className="text-2xl font-bold text-[#0A251D] block leading-none">
-                                <CountUp end={6} />
+                                <CountUp end={stats.trees} />
                             </span>
                             <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
                                 Trees
@@ -91,7 +100,7 @@ export function ProfileStats() {
                         </div>
                         <div>
                             <span className="text-2xl font-bold text-[#0A251D] block leading-none">
-                                <CountUp end={21} />
+                                <CountUp end={stats.flashcards} />
                             </span>
                             <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
                                 Questions

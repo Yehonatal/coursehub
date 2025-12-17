@@ -22,13 +22,18 @@ import {
     createStudyNotes,
     createFlashcards,
     createKnowledgeTree,
+    createChatSession,
+    appendChatMessage,
+    saveChatSession,
+    clearChatSession,
 } from "@/app/actions/ai";
 import { FlashcardModal } from "./FlashcardModal";
 import { ApiKeyModal } from "./ApiKeyModal";
 import { RateLimitModal } from "./RateLimitModal";
 import { AIFlashcard, AIStudyNote, AIKnowledgeNode } from "@/types/ai";
 import ReactMarkdown from "react-markdown";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AIStudyNoteModal } from "./chat/AIStudyNoteModal";
+import { AIKnowledgeTreeModal } from "./chat/AIKnowledgeTreeModal";
 
 interface Message {
     role: "user" | "model";
@@ -38,7 +43,17 @@ interface Message {
     data?: any;
 }
 
-export function ChatInterface({ children }: { children?: React.ReactNode }) {
+interface ChatInterfaceProps {
+    children?: React.ReactNode;
+    resourceId?: string;
+    resourceTitle?: string;
+}
+
+export function ChatInterface({
+    children,
+    resourceId,
+    resourceTitle,
+}: ChatInterfaceProps) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +77,7 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
     const [currentTree, setCurrentTree] = useState<AIKnowledgeNode | null>(
         null
     );
+    const [sessionId, setSessionId] = useState<string | null>(null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -74,6 +90,30 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
     const handleSaveApiKey = (key: string) => {
         setApiKey(key);
         localStorage.setItem("gemini_api_key", key);
+    };
+
+    const handleSaveSession = async () => {
+        if (!sessionId) return;
+        try {
+            await saveChatSession(sessionId);
+            toast.success("Chat session saved!");
+        } catch (error) {
+            toast.error("Failed to save session");
+        }
+    };
+
+    const handleClearSession = async () => {
+        if (confirm("Are you sure you want to clear the chat?")) {
+            if (sessionId) {
+                try {
+                    await clearChatSession(sessionId);
+                } catch (error) {
+                    console.error("Failed to clear session on server", error);
+                }
+            }
+            setMessages([]);
+            toast.success("Chat cleared");
+        }
     };
 
     useEffect(() => {
@@ -180,8 +220,39 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
         setIsLoading(true);
 
         try {
+            // Session Management
+            let currentSessionId = sessionId;
+            if (!currentSessionId) {
+                try {
+                    const session = await createChatSession(
+                        resourceId,
+                        resourceTitle
+                            ? `${resourceTitle} - Chat`
+                            : userMessage.substring(0, 30) + "..."
+                    );
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    currentSessionId = (session as any)._id;
+                    setSessionId(currentSessionId);
+                } catch (e) {
+                    console.error("Failed to create session", e);
+                }
+            }
+
+            if (currentSessionId) {
+                try {
+                    await appendChatMessage(currentSessionId, {
+                        role: "user",
+                        text: userMessage,
+                    });
+                } catch (e) {
+                    console.error("Failed to append user message", e);
+                }
+            }
+
             // Check for specific commands
             const lowerInput = userMessage.toLowerCase();
+            let responseMessage: Message | null = null;
+
             if (
                 lowerInput.includes("flashcard") ||
                 lowerInput.includes("flash cards")
@@ -191,15 +262,12 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
                     apiKey
                 );
                 setCurrentFlashcards(cards);
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        role: "model",
-                        parts: "I've generated some flashcards for you.",
-                        type: "flashcards",
-                        data: cards,
-                    },
-                ]);
+                responseMessage = {
+                    role: "model",
+                    parts: "I've generated some flashcards for you.",
+                    type: "flashcards",
+                    data: cards,
+                };
             } else if (
                 lowerInput.includes("note") ||
                 lowerInput.includes("summary")
@@ -209,15 +277,12 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
                     apiKey
                 );
                 setCurrentNotes(notes);
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        role: "model",
-                        parts: "Here are your study notes.",
-                        type: "notes",
-                        data: notes,
-                    },
-                ]);
+                responseMessage = {
+                    role: "model",
+                    parts: "Here are your study notes.",
+                    type: "notes",
+                    data: notes,
+                };
             } else if (
                 lowerInput.includes("tree") ||
                 lowerInput.includes("knowledge")
@@ -227,15 +292,12 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
                     apiKey
                 );
                 setCurrentTree(tree);
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        role: "model",
-                        parts: "I've created a knowledge tree structure for this topic.",
-                        type: "tree",
-                        data: tree,
-                    },
-                ]);
+                responseMessage = {
+                    role: "model",
+                    parts: "I've created a knowledge tree structure for this topic.",
+                    type: "tree",
+                    data: tree,
+                };
             } else {
                 // Regular chat
                 const response = await sendChatMessage(
@@ -244,10 +306,24 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
                     context,
                     apiKey
                 );
-                setMessages((prev) => [
-                    ...prev,
-                    { role: "model", parts: response },
-                ]);
+                responseMessage = { role: "model", parts: response };
+            }
+
+            if (responseMessage) {
+                setMessages((prev) => [...prev, responseMessage!]);
+
+                if (currentSessionId) {
+                    try {
+                        await appendChatMessage(currentSessionId, {
+                            role: "model",
+                            text: responseMessage.parts,
+                            type: responseMessage.type,
+                            meta: responseMessage.data,
+                        });
+                    } catch (e) {
+                        console.error("Failed to append model message", e);
+                    }
+                }
             }
         } catch (error: unknown) {
             console.error("Error sending message:", error);
@@ -297,14 +373,36 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
                 <h2 className="text-lg font-semibold flex items-center gap-2">
                     <Sparkles className="h-5 w-5 text-primary" />
                 </h2>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setShowApiKeyModal(true)}
-                    title="AI Settings"
-                >
-                    <Settings className="h-5 w-5" />
-                </Button>
+                <div className="flex items-center gap-2">
+                    {messages.length > 0 && (
+                        <>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleSaveSession}
+                                title="Save Session"
+                            >
+                                Save
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleClearSession}
+                                title="Clear Chat"
+                            >
+                                Clear
+                            </Button>
+                        </>
+                    )}
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setShowApiKeyModal(true)}
+                        title="AI Settings"
+                    >
+                        <Settings className="h-5 w-5" />
+                    </Button>
+                </div>
             </div>
             <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
                 <div className="space-y-4 pb-4">
@@ -484,6 +582,24 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
                 isOpen={showFlashcards}
                 onClose={() => setShowFlashcards(false)}
                 flashcards={currentFlashcards}
+                resourceId={resourceId}
+                resourceTitle={resourceTitle}
+            />
+
+            <AIStudyNoteModal
+                isOpen={showNotes}
+                onClose={() => setShowNotes(false)}
+                note={currentNotes}
+                resourceId={resourceId}
+                resourceTitle={resourceTitle}
+            />
+
+            <AIKnowledgeTreeModal
+                isOpen={showTree}
+                onClose={() => setShowTree(false)}
+                tree={currentTree}
+                resourceId={resourceId}
+                resourceTitle={resourceTitle}
             />
 
             <ApiKeyModal
@@ -497,112 +613,6 @@ export function ChatInterface({ children }: { children?: React.ReactNode }) {
                 isOpen={showRateLimitModal}
                 onClose={() => setShowRateLimitModal(false)}
             />
-
-            {/* Simple Notes Modal */}
-            {showNotes && currentNotes && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-                    <Card className="w-full max-w-3xl max-h-[80vh] overflow-y-auto relative">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="absolute top-2 right-2"
-                            onClick={() => setShowNotes(false)}
-                        >
-                            <X className="h-4 w-4" />
-                        </Button>
-                        <CardHeader>
-                            <CardTitle>{currentNotes.title}</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div>
-                                <h3 className="font-semibold mb-2">Summary</h3>
-                                <p className="text-muted-foreground">
-                                    {currentNotes.summary}
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold mb-2">
-                                    Key Points
-                                </h3>
-                                <ul className="list-disc pl-5 space-y-1">
-                                    {currentNotes.keyPoints.map((point, i) => (
-                                        <li key={i}>{point}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold mb-2">
-                                    Explanation
-                                </h3>
-                                <div className="prose dark:prose-invert max-w-none">
-                                    <ReactMarkdown>
-                                        {currentNotes.explanation}
-                                    </ReactMarkdown>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-            )}
-
-            {/* Simple Tree Modal */}
-            {showTree && currentTree && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-                    <Card className="w-full max-w-5xl max-h-[80vh] overflow-y-auto relative">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="absolute top-2 right-2"
-                            onClick={() => setShowTree(false)}
-                        >
-                            <X className="h-4 w-4" />
-                        </Button>
-                        <CardHeader>
-                            <CardTitle>Knowledge Tree</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <TreeRenderer node={currentTree} />
-                        </CardContent>
-                    </Card>
-                </div>
-            )}
-        </div>
-    );
-}
-
-function TreeRenderer({
-    node,
-    level = 0,
-}: {
-    node: AIKnowledgeNode;
-    level?: number;
-}) {
-    return (
-        <div className="ml-4">
-            <div className="flex items-center gap-2 py-1">
-                <div
-                    className={`w-2 h-2 rounded-full ${
-                        level === 0 ? "bg-primary" : "bg-muted-foreground"
-                    }`}
-                />
-                <span className="font-medium">{node.label}</span>
-                {node.description && (
-                    <span className="text-sm text-muted-foreground">
-                        - {node.description}
-                    </span>
-                )}
-            </div>
-            {node.children && (
-                <div className="border-l border-border ml-1 pl-4">
-                    {node.children.map((child) => (
-                        <TreeRenderer
-                            key={child.id}
-                            node={child}
-                            level={level + 1}
-                        />
-                    ))}
-                </div>
-            )}
         </div>
     );
 }

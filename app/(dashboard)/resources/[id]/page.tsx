@@ -15,6 +15,8 @@ import {
 } from "@/lib/resources";
 import { ViewTracker } from "@/components/resources/ViewTracker";
 import { getCurrentUser } from "@/lib/auth/session";
+import { getResourceGenerations } from "@/app/actions/ai";
+import { ResourceGenerations } from "@/components/resources/ResourceGenerations";
 
 interface ResourcePageProps {
     params: Promise<{
@@ -30,6 +32,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     const resource = await getResourceById(id);
     const stats = await getResourceStats(id);
     const comments = await getResourceComments(id);
+    const generations = await getResourceGenerations(id);
 
     if (!resource) {
         notFound();
@@ -126,6 +129,8 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                             studyTime="N/A"
                             objectives={[]}
                         />
+
+                        <ResourceGenerations generations={generations} />
 
                         <RelatedResources resources={relatedResources} />
                     </div>

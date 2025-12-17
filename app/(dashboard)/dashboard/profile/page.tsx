@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { mockDelay } from "@/utils/helpers";
 import { validateRequest } from "@/lib/auth/session";
 import { getUserResources } from "@/lib/resources";
+import { getUserProfileStats, listUserGenerations } from "@/app/actions/ai";
 
 type MiniResourceItem = {
     id: string;
@@ -27,6 +28,8 @@ type MiniResourceItem = {
 export default async function StudentProfilePage() {
     await mockDelay();
     const { user } = await validateRequest();
+    const stats = await getUserProfileStats();
+    const generations = await listUserGenerations({ limit: 4 });
 
     let userResources: MiniResourceItem[] = [];
     if (user) {
@@ -48,8 +51,8 @@ export default async function StudentProfilePage() {
     return (
         <div className="max-w-7xl mx-auto pb-12 space-y-8 px-4 sm:px-6 lg:px-8">
             <ProfileHeader />
-            <ProfileStats />
-            <ProfileRecents />
+            <ProfileStats stats={stats} />
+            <ProfileRecents generations={generations} />
 
             <div
                 className="space-y-4"

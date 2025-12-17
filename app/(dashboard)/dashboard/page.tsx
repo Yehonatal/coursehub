@@ -6,10 +6,47 @@ import { MobileQuickActions } from "@/components/dashboard/MobileQuickActions";
 import { mockDelay } from "@/utils/helpers";
 import { DashboardToast } from "@/components/dashboard/DashboardToast";
 import { getRecommendedResources } from "@/lib/resources";
+import { listUserGenerations } from "@/app/actions/ai";
+import { getCurrentUser } from "@/lib/auth/session";
 
 export default async function StudentDashboard() {
+    const user = await getCurrentUser();
+    if (!user) return null;
+
     await mockDelay();
     const recommendedResources = await getRecommendedResources(6);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const recentGenerations = await listUserGenerations({ limit: 4 });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const recentItems = recentGenerations.map((gen: any) => ({
+        title:
+            gen.title ||
+            gen.prompt?.substring(0, 30) +
+                (gen.prompt?.length > 30 ? "..." : "") ||
+            gen.generationType.charAt(0).toUpperCase() +
+                gen.generationType.slice(1),
+        type:
+            gen.generationType === "notes"
+                ? "Note"
+                : gen.generationType === "tree"
+                ? "Knowledge Tree"
+                : "Flashcards",
+        meta:
+            gen.generationType === "notes"
+                ? "Study Notes"
+                : gen.generationType === "tree"
+                ? `${gen.content.nodes?.length || 0} Nodes`
+                : `${gen.content.length || 0} Cards`,
+        author: "You",
+        iconType:
+            gen.generationType === "notes"
+                ? "note"
+                : gen.generationType === "tree"
+                ? "tree"
+                : "question",
+        data: gen.content,
+    }));
 
     const resourcesForGrid = recommendedResources.map((r) => ({
         id: r.resource_id,
@@ -31,31 +68,10 @@ export default async function StudentDashboard() {
             <DashboardToast />
             <div className="space-y-10">
                 <MobileQuickActions />
-                <RecentsList
-                    items={[
-                        {
-                            title: "Project Management",
-                            type: "Note",
-                            meta: "45 min read",
-                            author: "Yonatan .A",
-                            iconType: "note",
-                        },
-                        {
-                            title: "Object Oriented Systems Analysis and Design",
-                            type: "Knowledge Tree",
-                            meta: "20 Terms",
-                            author: "Yonatan .A",
-                            iconType: "tree",
-                        },
-                        {
-                            title: "Advanced Database systems",
-                            type: "Questions",
-                            meta: "35 questions",
-                            author: "Yonatan .A",
-                            iconType: "question",
-                        },
-                    ]}
-                />
+                <h3 className="text-lg font-serif font-bold text-[#0A251D] mb-4">
+                    Recents
+                </h3>
+                <RecentsList items={recentItems} />
 
                 <ResourceGrid
                     title="Recommended for You"

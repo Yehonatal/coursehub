@@ -32,6 +32,7 @@ const AIGenerationSchema = new Schema(
         sessionId: { type: String, default: null, index: true },
         resourceId: { type: String, default: null, index: true },
         generationType: { type: String, required: true, index: true },
+        title: { type: String },
         prompt: { type: String },
         content: { type: Object, required: true },
         model: { type: String },

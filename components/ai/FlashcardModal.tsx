@@ -1,25 +1,32 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, ChevronLeft, ChevronRight, RotateCw } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, RotateCw, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AIFlashcard } from "@/types/ai";
 import { cn } from "@/utils/cn";
+import { saveGeneration } from "@/app/actions/ai";
+import { toast } from "sonner";
 
 interface FlashcardModalProps {
     isOpen: boolean;
     onClose: () => void;
     flashcards: AIFlashcard[];
+    resourceId?: string;
+    resourceTitle?: string;
 }
 
 export function FlashcardModal({
     isOpen,
     onClose,
     flashcards,
+    resourceId,
+    resourceTitle,
 }: FlashcardModalProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     if (!isOpen || flashcards.length === 0) return null;
 
@@ -41,17 +48,49 @@ export function FlashcardModal({
         setIsFlipped(!isFlipped);
     };
 
+    const handleSave = async () => {
+        setIsSaving(true);
+        try {
+            await saveGeneration({
+                generationType: "flashcards",
+                content: flashcards,
+                prompt: "Flashcards Session",
+                resourceId,
+                title: resourceTitle
+                    ? `Flashcards - ${resourceTitle}`
+                    : "Flashcards Session",
+            });
+            toast.success("Flashcards saved to history");
+        } catch (error) {
+            toast.error("Failed to save flashcards");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
             <div className="relative w-full max-w-2xl">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute -top-12 right-0 text-muted-foreground hover:text-foreground"
-                    onClick={onClose}
-                >
-                    <X className="h-6 w-6" />
-                </Button>
+                <div className="absolute -top-12 right-0 flex gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="bg-background"
+                    >
+                        <Save className="h-4 w-4 mr-2" />
+                        {isSaving ? "Saving..." : "Save"}
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:text-foreground"
+                        onClick={onClose}
+                    >
+                        <X className="h-6 w-6" />
+                    </Button>
+                </div>
 
                 <div className="flex flex-col items-center gap-6">
                     <div className="w-full text-center space-y-2">
