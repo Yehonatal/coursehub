@@ -50,6 +50,7 @@ export function ProfileStats({
         trees: number;
         flashcards: number;
         uploads: number;
+        totalResources?: number;
     };
 }) {
     return (
@@ -115,13 +116,26 @@ export function ProfileStats({
                     <h3 className="text-xs font-bold text-[#0A251D]/60 uppercase tracking-wider mb-1">
                         Files Uploaded
                     </h3>
-                    <div className="flex items-baseline gap-1">
-                        <span className="text-4xl font-serif font-bold text-[#0A251D]">
-                            <CountUp end={7} />
-                        </span>
-                        <span className="text-xs font-medium text-[#0A251D]/60">
-                            total
-                        </span>
+                    <div className="flex items-baseline gap-3">
+                        <div>
+                            <span className="text-4xl font-serif font-bold text-[#0A251D]">
+                                <CountUp end={stats.uploads} />
+                            </span>
+                            <div className="text-xs text-muted-foreground uppercase">
+                                Your uploads
+                            </div>
+                        </div>
+
+                        {typeof stats.totalResources === "number" && (
+                            <div className="ml-2">
+                                <span className="text-sm font-medium text-[#0A251D]/70">
+                                    / {stats.totalResources}
+                                </span>
+                                <div className="text-xs text-muted-foreground uppercase">
+                                    total
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 

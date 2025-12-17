@@ -354,17 +354,21 @@ export async function getUserProfileStats() {
         { $group: { _id: "$generationType", count: { $sum: 1 } } },
     ]);
 
-    // Get uploaded resources count from Postgres
-    const resourcesCount = await db.query.resources.findMany({
+    // Get uploaded resources count from Postgres (user uploads)
+    const userResources = await db.query.resources.findMany({
         where: eq(resources.uploader_id, user.user_id),
     });
+
+    // Get total resources count on the platform
+    const allResources = await db.query.resources.findMany();
 
     // Format stats
     const stats = {
         notes: 0,
         flashcards: 0,
         trees: 0,
-        uploads: resourcesCount.length,
+        uploads: userResources.length,
+        totalResources: allResources.length,
     };
 
     typeStats.forEach((stat) => {
