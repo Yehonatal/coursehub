@@ -6,7 +6,7 @@ import { ResourceContent } from "@/components/resources/ResourceContent";
 import { ResourceSidebar } from "@/components/resources/ResourceSidebar";
 import { RelatedResources } from "@/components/common/RelatedResources";
 import { CommentsSection } from "@/components/common/CommentsSection";
-import { mockDelay } from "@/utils/helpers";
+
 import {
     getResourceById,
     getResourceStats,
@@ -25,8 +25,6 @@ interface ResourcePageProps {
 }
 
 export default async function ResourcePage({ params }: ResourcePageProps) {
-    await mockDelay();
-
     const { id } = await params;
     const user = await getCurrentUser();
     const resource = await getResourceById(id);

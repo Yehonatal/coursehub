@@ -5,7 +5,7 @@ import { ProfileRecents } from "@/components/dashboard/ProfileRecents";
 import { MiniResourceGrid } from "@/components/dashboard/MiniResourceGrid";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mockDelay } from "@/utils/helpers";
+
 import { validateRequest } from "@/lib/auth/session";
 import { getUserResources } from "@/lib/resources";
 import { getUserProfileStats, listUserGenerations } from "@/app/actions/ai";
@@ -26,7 +26,6 @@ type MiniResourceItem = {
 };
 
 export default async function StudentProfilePage() {
-    await mockDelay();
     const { user } = await validateRequest();
     const stats = await getUserProfileStats();
     const generations = await listUserGenerations({ limit: 4 });

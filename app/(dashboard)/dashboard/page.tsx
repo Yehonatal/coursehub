@@ -3,7 +3,7 @@ import { RecentsList } from "@/components/dashboard/RecentsList";
 import { ResourceGrid } from "@/components/dashboard/ResourceGrid";
 import { AIUploadCard } from "@/components/dashboard/AIUploadCard";
 import { MobileQuickActions } from "@/components/dashboard/MobileQuickActions";
-import { mockDelay } from "@/utils/helpers";
+
 import { DashboardToast } from "@/components/dashboard/DashboardToast";
 import { getRecommendedResources } from "@/lib/resources";
 import { listUserGenerations } from "@/app/actions/ai";
@@ -13,7 +13,6 @@ export default async function StudentDashboard() {
     const user = await getCurrentUser();
     if (!user) return null;
 
-    await mockDelay();
     const recommendedResources = await getRecommendedResources(6);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const recentGenerations = await listUserGenerations({ limit: 4 });
@@ -68,10 +67,14 @@ export default async function StudentDashboard() {
             <DashboardToast />
             <div className="space-y-10">
                 <MobileQuickActions />
-                <h3 className="text-lg font-serif font-bold text-[#0A251D] mb-4">
-                    Recents
-                </h3>
-                <RecentsList items={recentItems} />
+                {recentItems.length > 0 && (
+                    <div>
+                        <h3 className="text-lg font-serif font-bold text-[#0A251D] mb-4">
+                            Recents
+                        </h3>
+                        <RecentsList items={recentItems} />
+                    </div>
+                )}
 
                 <ResourceGrid
                     title="Recommended for You"

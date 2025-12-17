@@ -5,7 +5,6 @@ import { UniversityCommunity } from "@/components/dashboard/UniversityCommunity"
 import { MiniResourceGrid } from "@/components/dashboard/MiniResourceGrid";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mockDelay } from "@/utils/helpers";
 
 export default async function UniversityPage({
     params,
@@ -13,7 +12,6 @@ export default async function UniversityPage({
     params: Promise<{ slug: string }>;
 }) {
     const { slug } = await params;
-    await mockDelay();
 
     // Hardcoded resources for university page
     const resources = [
