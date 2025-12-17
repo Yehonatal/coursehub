@@ -103,11 +103,11 @@ export function FlashcardModal({
                     </div>
 
                     <div
-                        className="w-full aspect-3/2 cursor-pointer group"
+                        className="w-full aspect-3/2 cursor-pointer group "
                         onClick={handleFlip}
                     >
                         {!isFlipped ? (
-                            <Card className="w-full h-full flex flex-col items-center justify-center p-8 text-center border-2 border-primary/10 shadow-xl bg-card transition-opacity duration-300">
+                            <Card className="w-full h-full rounded-2xl flex flex-col items-center justify-center p-8 text-center border-2 border-primary/10 shadow-xl bg-card transition-opacity duration-300">
                                 <span className="absolute top-4 left-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                     Question
                                 </span>

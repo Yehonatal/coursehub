@@ -135,7 +135,10 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                         <RelatedResources resources={relatedResources} />
                     </div>
                     <div className="lg:col-span-4 order-2 lg:order-2">
-                        <ResourceSidebar />
+                        <ResourceSidebar
+                            generations={generations}
+                            resourceId={id}
+                        />
                     </div>
 
                     <div className="lg:col-span-8 order-3 lg:order-3">

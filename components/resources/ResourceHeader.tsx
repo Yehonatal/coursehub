@@ -91,6 +91,7 @@ export function ResourceHeader({
                 resourceTitle={title}
                 resourceType={type}
                 fileUrl={fileUrl}
+                resourceId={resourceId}
             />
 
             {fileUrl && (

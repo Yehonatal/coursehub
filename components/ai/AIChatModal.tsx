@@ -35,6 +35,7 @@ interface AIChatModalProps {
     resourceTitle: string;
     resourceType: string;
     fileUrl?: string;
+    resourceId?: string;
 }
 
 interface Message {
@@ -51,6 +52,7 @@ export function AIChatModal({
     resourceTitle,
     resourceType,
     fileUrl,
+    resourceId,
 }: AIChatModalProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [inputValue, setInputValue] = useState("");
@@ -520,6 +522,8 @@ export function AIChatModal({
                 isOpen={showFlashcards}
                 onClose={() => setShowFlashcards(false)}
                 flashcards={currentFlashcards}
+                resourceId={resourceId}
+                resourceTitle={resourceTitle}
             />
 
             <ApiKeyModal
@@ -538,12 +542,16 @@ export function AIChatModal({
                 isOpen={showNotes}
                 onClose={() => setShowNotes(false)}
                 note={currentNotes}
+                resourceId={resourceId}
+                resourceTitle={resourceTitle}
             />
 
             <AIKnowledgeTreeModal
                 isOpen={showTree}
                 onClose={() => setShowTree(false)}
                 tree={currentTree}
+                resourceId={resourceId}
+                resourceTitle={resourceTitle}
             />
         </>
     );

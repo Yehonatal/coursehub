@@ -48,7 +48,7 @@ export function AIStudyNoteModal({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-            <Card className="w-full max-w-3xl max-h-[80vh] overflow-y-auto relative">
+            <Card className="w-full max-w-4xl rounded-2xl max-h-[80vh] overflow-y-auto relative">
                 <div className="absolute top-2 right-2 flex gap-2">
                     <Button
                         variant="outline"
