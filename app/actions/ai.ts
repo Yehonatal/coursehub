@@ -4,7 +4,8 @@ import { db } from "@/db";
 import { user_quotas, users } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { generateStudyNotes } from "@/lib/ai/summary";
-import { generateFlashcards, generateKnowledgeTree } from "@/lib/ai/flashcard";
+import { generateFlashcards } from "@/lib/ai/flashcard";
+import { generateKnowledgeTree } from "@/lib/ai/knowledgetree";
 import { AIStudyNote, AIFlashcard, AIKnowledgeNode } from "@/types/ai";
 
 import { getGeminiModel } from "@/lib/ai/gemini";

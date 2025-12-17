@@ -4,7 +4,7 @@ const defaultApiKey = process.env.GEMINI_API;
 
 // Using gemini-1.5-flash as the standard flash model.
 // If gemini-2.5-flash becomes available, this string can be updated.
-export const MODEL_NAME = "gemini-2.5-flash-lite";
+export const MODEL_NAME = "gemini-2.5-flash";
 
 export function getGeminiModel(apiKey?: string) {
     const key = apiKey || defaultApiKey;
