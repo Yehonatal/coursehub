@@ -14,7 +14,7 @@ interface FlashcardModalProps {
     onClose: () => void;
     flashcards: AIFlashcard[];
     resourceId?: string;
-    resourceTitle?: string;
+    title?: string;
 }
 
 export function FlashcardModal({
@@ -22,7 +22,7 @@ export function FlashcardModal({
     onClose,
     flashcards,
     resourceId,
-    resourceTitle,
+    title,
 }: FlashcardModalProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
@@ -56,9 +56,7 @@ export function FlashcardModal({
                 content: flashcards,
                 prompt: "Flashcards Session",
                 resourceId,
-                title: resourceTitle
-                    ? `Flashcards - ${resourceTitle}`
-                    : "Flashcards Session",
+                title: title ? `Flashcards - ${title}` : "Flashcards Session",
             });
             toast.success("Flashcards saved to history");
         } catch (error) {

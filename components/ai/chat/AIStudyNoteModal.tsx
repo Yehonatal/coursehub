@@ -12,7 +12,7 @@ interface AIStudyNoteModalProps {
     onClose: () => void;
     note: AIStudyNote | null;
     resourceId?: string;
-    resourceTitle?: string;
+    title?: string;
 }
 
 export function AIStudyNoteModal({
@@ -20,7 +20,7 @@ export function AIStudyNoteModal({
     onClose,
     note,
     resourceId,
-    resourceTitle,
+    title,
 }: AIStudyNoteModalProps) {
     const [isSaving, setIsSaving] = useState(false);
 
@@ -34,9 +34,7 @@ export function AIStudyNoteModal({
                 content: note,
                 prompt: note.title,
                 resourceId,
-                title: resourceTitle
-                    ? `Study Notes - ${resourceTitle}`
-                    : note.title,
+                title: title ? `Study Notes - ${title}` : note.title,
             });
             toast.success("Study notes saved to history");
         } catch (error) {

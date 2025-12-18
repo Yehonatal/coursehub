@@ -12,7 +12,7 @@ interface AIKnowledgeTreeModalProps {
     onClose: () => void;
     tree: AIKnowledgeNode | null;
     resourceId?: string;
-    resourceTitle?: string;
+    title?: string;
 }
 
 export function AIKnowledgeTreeModal({
@@ -20,7 +20,7 @@ export function AIKnowledgeTreeModal({
     onClose,
     tree,
     resourceId,
-    resourceTitle,
+    title,
 }: AIKnowledgeTreeModalProps) {
     const [isSaving, setIsSaving] = useState(false);
 
@@ -34,9 +34,7 @@ export function AIKnowledgeTreeModal({
                 content: tree,
                 prompt: tree.label,
                 resourceId,
-                title: resourceTitle
-                    ? `Knowledge Tree - ${resourceTitle}`
-                    : tree.label,
+                title: title ? `Knowledge Tree - ${title}` : tree.label,
             });
             toast.success("Knowledge tree saved to history");
         } catch (error) {
