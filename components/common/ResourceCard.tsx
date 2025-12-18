@@ -20,6 +20,10 @@ interface ResourceCardProps {
     mimeType?: string;
     isAI?: boolean;
     isVerified?: boolean;
+    verifier?: {
+        name: string;
+        date: string;
+    };
     variant?: "default" | "mini";
     className?: string;
 }
@@ -37,6 +41,7 @@ export function ResourceCard({
     mimeType,
     isAI,
     isVerified,
+    verifier,
     variant = "default",
     className,
 }: ResourceCardProps) {
@@ -68,13 +73,29 @@ export function ResourceCard({
 
                     <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
                         {isAI && <Badge variant="ai">AI Enhanced</Badge>}
+                        {isVerified ? (
+                            <div className="group/verifier relative">
+                                <Badge variant="verified" />
+                                {verifier && (
+                                    <div className="absolute top-full left-0 mt-2 hidden group-hover/verifier:block w-40 p-2 bg-white/95 backdrop-blur-md border border-border/50 rounded-xl shadow-xl z-50 text-[9px] animate-in fade-in slide-in-from-top-1 duration-200">
+                                        <p className="font-bold text-primary">
+                                            Verified by:
+                                        </p>
+                                        <p className="text-muted-foreground">
+                                            {verifier.name}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <Badge
+                                variant="neutral"
+                                className="bg-white/60 backdrop-blur-sm text-muted-foreground/60 border-none shadow-none"
+                            >
+                                Unverified
+                            </Badge>
+                        )}
                     </div>
-
-                    {isVerified && (
-                        <div className="absolute top-4 right-4 z-10">
-                            <Badge variant="verified" />
-                        </div>
-                    )}
                 </div>
 
                 <div

@@ -103,6 +103,8 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                             fileUrl={resource.file_url}
                             resourceId={resource.resource_id}
                             isOwner={isOwner}
+                            isVerified={resource.is_verified}
+                            verifier={resource.verifier}
                             resourceData={{
                                 courseCode: resource.course_code ?? "",
                                 semester: resource.semester ?? "",

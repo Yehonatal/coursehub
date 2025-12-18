@@ -2,88 +2,55 @@ import React from "react";
 import { FilterSidebar } from "@/components/resources/filters/FilterSidebar";
 import { PopularResourcesList } from "@/components/resources/PopularResourcesList";
 import { ResourceCard } from "@/components/common/ResourceCard";
+import { searchResources, getPopularAIGenerations } from "@/lib/resources";
 
-export default function ResourcesPage() {
-    const resources = [
-        {
-            id: 1,
-            title: "Introduction to Software Engineering",
-            rating: 4.7,
-            reviews: 210,
-            description:
-                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-            tags: ["CS101", "HRU", "Slides"],
-            downloads: 148,
-            comments: 25,
-            isAI: true,
-            isVerified: true,
-        },
-        {
-            id: 2,
-            title: "Introduction to Software Engineering",
-            rating: 4.7,
-            reviews: 210,
-            description:
-                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-            tags: ["CS101", "HRU", "Slides"],
-            downloads: 148,
-            comments: 25,
-            isAI: true,
-            isVerified: true,
-        },
-        {
-            id: 3,
-            title: "Introduction to Software Engineering",
-            rating: 4.7,
-            reviews: 210,
-            description:
-                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-            tags: ["CS101", "HRU", "Slides"],
-            downloads: 148,
-            comments: 25,
-            isAI: true,
-            isVerified: true,
-        },
-        {
-            id: 4,
-            title: "Introduction to Software Engineering",
-            rating: 4.7,
-            reviews: 210,
-            description:
-                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-            tags: ["CS101", "HRU", "Slides"],
-            downloads: 148,
-            comments: 25,
-            isAI: true,
-            isVerified: true,
-        },
-        {
-            id: 5,
-            title: "Introduction to Software Engineering",
-            rating: 4.7,
-            reviews: 210,
-            description:
-                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-            tags: ["CS101", "HRU", "Slides"],
-            downloads: 148,
-            comments: 25,
-            isAI: true,
-            isVerified: true,
-        },
-        {
-            id: 6,
-            title: "Introduction to Software Engineering",
-            rating: 4.7,
-            reviews: 210,
-            description:
-                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-            tags: ["CS101", "HRU", "Slides"],
-            downloads: 148,
-            comments: 25,
-            isAI: true,
-            isVerified: true,
-        },
-    ];
+export default async function ResourcesPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+    const params = await searchParams;
+    const query = typeof params.q === "string" ? params.q : undefined;
+    const university =
+        typeof params.university === "string" ? params.university : undefined;
+    const courseCode =
+        typeof params.courseCode === "string" ? params.courseCode : undefined;
+    const semester =
+        typeof params.semester === "string" ? params.semester : undefined;
+    const resourceType =
+        typeof params.resourceType === "string"
+            ? params.resourceType
+            : undefined;
+    const tags =
+        typeof params.tags === "string" ? params.tags.split(",") : undefined;
+
+    const [resources, popularAI] = await Promise.all([
+        searchResources({
+            query,
+            university,
+            courseCode,
+            semester,
+            resourceType,
+            tags,
+        }),
+        getPopularAIGenerations(4),
+    ]);
+
+    const resourcesForGrid = resources.map((r) => ({
+        id: r.resource_id,
+        title: r.title,
+        rating: r.rating || 0,
+        reviews: r.reviews || 0,
+        description: r.description || "",
+        tags: r.tags,
+        downloads: r.downloads || 0,
+        comments: r.comments || 0,
+        isAI: r.is_ai || false,
+        isVerified: r.is_verified || false,
+        fileUrl: r.file_url,
+        mimeType: r.mime_type || undefined,
+        verifier: r.verifier,
+    }));
 
     return (
         <div className="space-y-12">
@@ -107,17 +74,28 @@ export default function ResourcesPage() {
 
                 {/* Main Content */}
                 <div className="space-y-12">
-                    <PopularResourcesList />
+                    <PopularResourcesList resources={popularAI} />
 
                     <div className="space-y-8">
                         <h3 className="text-xl font-serif font-bold text-primary">
                             All Resources
                         </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {resources.map((resource) => (
-                                <ResourceCard key={resource.id} {...resource} />
-                            ))}
-                        </div>
+                        {resourcesForGrid.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                {resourcesForGrid.map((resource) => (
+                                    <ResourceCard
+                                        key={resource.id}
+                                        {...resource}
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-20 bg-muted/5 rounded-4xl border border-dashed border-border/60">
+                                <p className="text-muted-foreground font-medium">
+                                    No resources found matching your filters.
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

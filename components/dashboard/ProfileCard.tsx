@@ -29,7 +29,7 @@ export function ProfileCard({
     location,
     avatarUrl,
     type = "student",
-    badge = "Student",
+    badge,
     headline,
 }: ProfileCardProps) {
     const { user } = useUser();
@@ -44,6 +44,8 @@ export function ProfileCard({
     const displayType =
         type || (user?.role === "educator" ? "university" : "student"); // Mapping educator to university type for now, adjust as needed
     const displayHeadline = headline || user?.headline;
+    const displayBadge =
+        badge || (user?.role === "educator" ? "Educator" : "Student");
 
     const [isMounted, setIsMounted] = useState(false);
 
@@ -95,9 +97,9 @@ export function ProfileCard({
                         {displayHeadline || displayRole}
                     </p>
                     <div className="flex items-center gap-3 text-xs text-muted-foreground/60 font-medium pt-1">
-                        {badge && (
+                        {displayBadge && (
                             <span className="px-2.5 py-1 rounded-full bg-muted/30 text-muted-foreground border border-border/50">
-                                {badge}
+                                {displayBadge}
                             </span>
                         )}
                         <span className="h-1 w-1 rounded-full bg-border" />

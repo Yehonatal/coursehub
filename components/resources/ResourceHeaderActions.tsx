@@ -10,12 +10,15 @@ import {
     Eye,
     Edit,
     Trash2,
+    ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReportModal } from "./ReportModal";
 import { ShareModal } from "./ShareModal";
 import { DeleteResourceModal } from "./DeleteResourceModal";
 import { EditResourceModal } from "./EditResourceModal";
+import { VerifyResourceModal } from "./VerifyResourceModal";
+import { useUser } from "@/components/providers/UserProvider";
 
 interface ResourceHeaderActionsProps {
     onGenerateContent: () => void;
@@ -24,6 +27,7 @@ interface ResourceHeaderActionsProps {
     resourceId: string;
     title: string;
     isOwner: boolean;
+    isVerified?: boolean;
     resourceData?: {
         courseCode: string;
         semester: string;
@@ -41,13 +45,19 @@ export function ResourceHeaderActions({
     resourceId,
     title,
     isOwner,
+    isVerified,
     resourceData,
 }: ResourceHeaderActionsProps) {
+    const { user } = useUser();
     const [isReportOpen, setIsReportOpen] = useState(false);
     const [isShareOpen, setIsShareOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isVerifyOpen, setIsVerifyOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const canVerify =
+        user?.role === "educator" && user?.is_verified && !isVerified;
 
     return (
         <>
@@ -78,6 +88,19 @@ export function ResourceHeaderActions({
                     <span className="hidden sm:inline">Download</span>
                     <span className="sm:hidden"></span>
                 </Button>
+
+                {canVerify && (
+                    <Button
+                        className="inline-flex cursor-pointer items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white shadow-sm border-0 px-3 py-2 text-sm whitespace-nowrap"
+                        onClick={() => setIsVerifyOpen(true)}
+                    >
+                        <ShieldCheck className="w-4 h-4" />
+                        <span className="hidden sm:inline">
+                            Verify Resource
+                        </span>
+                        <span className="sm:hidden">Verify</span>
+                    </Button>
+                )}
 
                 <div className="flex-1" />
 
@@ -181,6 +204,13 @@ export function ResourceHeaderActions({
                     />
                 </>
             )}
+
+            <VerifyResourceModal
+                isOpen={isVerifyOpen}
+                onClose={() => setIsVerifyOpen(false)}
+                resourceId={resourceId}
+                resourceTitle={title}
+            />
         </>
     );
 }

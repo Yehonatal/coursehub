@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { db } from "@/db";
-import { resources } from "@/db/schema";
+import { resources, verification } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { uploadFile, deleteFile } from "@/lib/storage/upload";
 import { validateRequest } from "@/lib/auth/session";
@@ -10,6 +10,60 @@ import { createResource } from "@/lib/dal/resource-helpers";
 import type { ActionResponse } from "@/app/actions/auth";
 import { revalidatePath } from "next/cache";
 import { error, warn } from "@/lib/logger";
+
+export async function verifyResource(
+    resourceId: string
+): Promise<ActionResponse> {
+    const { user } = await validateRequest();
+    if (!user || user.role !== "educator") {
+        return {
+            success: false,
+            message: "Only educators can verify resources.",
+        };
+    }
+
+    if (!user.is_verified) {
+        return {
+            success: false,
+            message:
+                "Your educator account must be verified before you can verify resources.",
+        };
+    }
+
+    try {
+        await db.transaction(async (tx: any) => {
+            // Update resource status
+            await tx
+                .update(resources)
+                .set({ is_verified: true })
+                .where(eq(resources.resource_id, resourceId));
+
+            // Record verification
+            await tx
+                .insert(verification)
+                .values({
+                    resource_id: resourceId,
+                    educator_id: user.user_id,
+                    status: "verified",
+                    verified_date: new Date(),
+                })
+                .onConflictDoUpdate({
+                    target: verification.resource_id,
+                    set: {
+                        educator_id: user.user_id,
+                        status: "verified",
+                        verified_date: new Date(),
+                    },
+                });
+        });
+
+        revalidatePath(`/resources/${resourceId}`);
+        return { success: true, message: "Resource verified successfully." };
+    } catch (err) {
+        error("Verify resource failed:", err);
+        return { success: false, message: "Failed to verify resource." };
+    }
+}
 
 const UploadResourceSchema = z.object({
     title: z.string().trim().min(1).max(255),

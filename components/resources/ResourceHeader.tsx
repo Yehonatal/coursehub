@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Download } from "lucide-react";
+import { Download, BadgeCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { AIChatModal } from "@/components/ai/AIChatModal";
 import { ResourceHeaderActions } from "./ResourceHeaderActions";
@@ -27,6 +27,11 @@ interface ResourceHeaderProps {
     fileUrl?: string;
     resourceId?: string;
     isOwner?: boolean;
+    isVerified?: boolean;
+    verifier?: {
+        name: string;
+        date: string;
+    };
     resourceData?: {
         courseCode: string;
         semester: string;
@@ -53,6 +58,8 @@ export function ResourceHeader({
     fileUrl,
     resourceId,
     isOwner = false,
+    isVerified = false,
+    verifier,
     resourceData,
 }: ResourceHeaderProps) {
     const [isAIModalOpen, setIsAIModalOpen] = useState(false);
@@ -118,6 +125,43 @@ export function ResourceHeader({
                         >
                             {courseCode}
                         </Badge>
+                        {isVerified ? (
+                            <div className="group relative inline-block">
+                                <Badge variant="verified" />
+                                {verifier && (
+                                    <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-48 p-3 bg-white border border-border/50 rounded-2xl shadow-2xl z-50 text-[10px] animate-in fade-in slide-in-from-bottom-1 duration-200">
+                                        <div className="space-y-1">
+                                            <p className="font-bold text-primary flex items-center gap-1.5">
+                                                <BadgeCheck className="h-3 w-3 text-blue-500" />
+                                                Verified Educator
+                                            </p>
+                                            <p className="text-muted-foreground font-medium">
+                                                {verifier.name}
+                                            </p>
+                                            <p className="text-muted-foreground/50 text-[9px]">
+                                                {new Date(
+                                                    verifier.date
+                                                ).toLocaleDateString(
+                                                    undefined,
+                                                    {
+                                                        year: "numeric",
+                                                        month: "long",
+                                                        day: "numeric",
+                                                    }
+                                                )}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <Badge
+                                variant="neutral"
+                                className="px-1.5 py-0 text-[8px] opacity-60"
+                            >
+                                Unverified
+                            </Badge>
+                        )}
                     </div>
 
                     <h1 className="text-xl md:text-2xl font-serif font-bold text-primary tracking-tight leading-tight">
@@ -198,6 +242,7 @@ export function ResourceHeader({
                 resourceId={resourceId || ""}
                 title={title}
                 isOwner={isOwner}
+                isVerified={isVerified}
                 resourceData={resourceData}
             />
         </div>

@@ -47,7 +47,8 @@ export function RelatedResources({ resources }: RelatedResourcesProps) {
                         tags={resource.tags}
                         downloads={resource.downloads || 0}
                         comments={resource.comments || 0}
-                        isVerified={false}
+                        isVerified={resource.is_verified}
+                        verifier={resource.verifier}
                         fileUrl={resource.file_url}
                         mimeType={resource.mime_type || undefined}
                     />

@@ -47,7 +47,8 @@ export function DeleteAccountModal({
 
             if (res.ok) {
                 toast.success("Account deleted successfully");
-                router.push("/register");
+                router.push("/");
+                router.refresh();
             } else {
                 const data = await res.json();
                 toast.error(data.error || "Failed to delete account");
