@@ -59,13 +59,13 @@ export default function NotificationsPage() {
         switch (type) {
             case "comment":
             case "reply":
-                return <MessageSquare className="h-5 w-5" />;
+                return MessageSquare;
             case "rating":
-                return <Star className="h-5 w-5" />;
+                return Star;
             case "report":
-                return <AlertTriangle className="h-5 w-5" />;
+                return AlertTriangle;
             default:
-                return <Bell className="h-5 w-5" />;
+                return Bell;
         }
     };
 
@@ -170,14 +170,12 @@ export default function NotificationsPage() {
                                             notification.is_read
                                         )}`}
                                     >
-                                        {React.cloneElement(
-                                            getIcon(
+                                        {(() => {
+                                            const Icon = getIcon(
                                                 notification.event_type
-                                            ) as React.ReactElement,
-                                            {
-                                                className: "h-5 w-5",
-                                            }
-                                        )}
+                                            );
+                                            return <Icon className="h-5 w-5" />;
+                                        })()}
                                     </div>
 
                                     <div className="flex-1 min-w-0 py-0.5">

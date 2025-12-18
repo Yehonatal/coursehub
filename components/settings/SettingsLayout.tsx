@@ -15,10 +15,20 @@ import {
 
 export default function SettingsLayout({
     children,
+    active,
 }: {
     children: React.ReactNode;
+    active?: string;
 }) {
-    const [activeSection, setActiveSection] = useState("account");
+    const [activeSection, setActiveSection] = useState<string>(
+        active || "account"
+    );
+
+    useEffect(() => {
+        if (active) {
+            setActiveSection(active);
+        }
+    }, [active]);
 
     const sections = [
         { id: "account", label: "Account", icon: User },

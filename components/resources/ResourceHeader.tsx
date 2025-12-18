@@ -130,7 +130,7 @@ export function ResourceHeader({
                                 value={userRating ?? displayRating}
                                 onChange={submitRating}
                                 readOnly={ratingLoading}
-                                size={12}
+                                size="md"
                             />
                             <div className="flex items-center gap-1">
                                 <span className="text-primary font-bold">
