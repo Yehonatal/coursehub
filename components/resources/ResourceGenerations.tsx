@@ -14,7 +14,7 @@ export function ResourceGenerations({ generations }: { generations: any[] }) {
 
     return (
         <div className="mt-8">
-            <h3 className="text-xl font-serif font-bold text-[#0A251D] mb-4">
+            <h3 className="text-xl font-serif font-bold text-foreground mb-4">
                 Community Generated Content
             </h3>
             <RecentsList items={items} />

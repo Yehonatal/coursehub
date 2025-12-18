@@ -100,10 +100,10 @@ export function ReportModal({ isOpen, onClose, resourceId }: ReportModalProps) {
                 onClick={onClose}
                 aria-hidden="true"
             />
-            <div className="relative z-10 w-full max-w-[450px] bg-white border-border/50 shadow-2xl rounded-[2rem] overflow-hidden">
+            <div className="relative z-10 w-full max-w-[450px] bg-card border border-border shadow-2xl rounded-3xl overflow-hidden">
                 <div className="p-8 space-y-6">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3 text-primary">
+                        <div className="flex items-center gap-3 text-foreground">
                             <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center">
                                 <Flag className="h-5 w-5 text-primary/70" />
                             </div>
@@ -126,18 +126,18 @@ export function ReportModal({ isOpen, onClose, resourceId }: ReportModalProps) {
                         <div className="space-y-2.5">
                             <Label
                                 htmlFor="reason"
-                                className="text-sm font-medium text-primary/80 ml-1"
+                                className="text-sm font-medium text-muted-foreground ml-1"
                             >
                                 Reason for reporting
                             </Label>
                             <Select value={reason} onValueChange={setReason}>
                                 <SelectTrigger
                                     id="reason"
-                                    className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
+                                    className="h-12 rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                                 >
                                     <SelectValue placeholder="Select a reason" />
                                 </SelectTrigger>
-                                <SelectContent className="rounded-xl border-border/50 shadow-xl">
+                                <SelectContent className="rounded-xl border-border shadow-xl">
                                     {REPORT_REASONS.map((r) => (
                                         <SelectItem key={r} value={r}>
                                             {r}
@@ -149,7 +149,7 @@ export function ReportModal({ isOpen, onClose, resourceId }: ReportModalProps) {
                         <div className="space-y-2.5">
                             <Label
                                 htmlFor="details"
-                                className="text-sm font-medium text-primary/80 ml-1"
+                                className="text-sm font-medium text-muted-foreground ml-1"
                             >
                                 Additional Details
                             </Label>
@@ -158,7 +158,7 @@ export function ReportModal({ isOpen, onClose, resourceId }: ReportModalProps) {
                                 placeholder="Please provide more context to help us understand the issue..."
                                 value={details}
                                 onChange={(e) => setDetails(e.target.value)}
-                                className="min-h-[120px] rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all resize-none"
+                                className="min-h-[120px] rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all resize-none"
                             />
                         </div>
                     </div>
@@ -175,7 +175,7 @@ export function ReportModal({ isOpen, onClose, resourceId }: ReportModalProps) {
                         <Button
                             onClick={handleSubmit}
                             disabled={loading || !reason}
-                            className="flex-1 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold shadow-lg shadow-primary/10 transition-all"
+                            className="flex-1 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/10 transition-all"
                         >
                             {loading ? (
                                 <>

@@ -26,7 +26,7 @@ export function FilterSection({
 }: FilterSectionProps) {
     return (
         <div className="space-y-3">
-            <h3 className="font-bold text-[#0A251D] text-sm">{title}</h3>
+            <h3 className="font-bold text-primary text-sm">{title}</h3>
             <div className="space-y-2">
                 {options.map((option) => (
                     <div
@@ -35,13 +35,13 @@ export function FilterSection({
                     >
                         <Checkbox
                             id={option.id}
-                            className="border-gray-300"
+                            className="border-border"
                             checked={selectedId === option.id}
                             onCheckedChange={() => onSelect?.(option.id)}
                         />
                         <Label
                             htmlFor={option.id}
-                            className="text-sm font-medium text-gray-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            className="text-sm font-medium text-muted-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                             {option.label}
                         </Label>
@@ -51,7 +51,7 @@ export function FilterSection({
             {showMore && (
                 <Button
                     variant="link"
-                    className="text-gray-500 text-xs p-0 h-auto font-normal hover:no-underline hover:text-gray-700"
+                    className="text-muted-foreground/70 text-xs p-0 h-auto font-normal hover:no-underline hover:text-foreground"
                 >
                     show more
                 </Button>

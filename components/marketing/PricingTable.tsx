@@ -12,12 +12,12 @@ import { Check, X } from "lucide-react";
 export function PricingTable() {
     return (
         <div className="max-w-5xl mx-auto mb-32" data-aos="fade-up">
-            <h2 className="text-3xl font-serif font-medium text-center mb-12">
+            <h2 className="text-3xl font-serif font-medium text-center mb-12 text-foreground">
                 Compare Plans
             </h2>
-            <div className="border md:rounded-xl overflow-hidden">
+            <div className="border border-border md:rounded-2xl overflow-hidden bg-card shadow-sm">
                 <Table>
-                    <TableHeader className="bg-muted/30">
+                    <TableHeader className="bg-muted/50">
                         <TableRow>
                             <TableHead className="w-[300px] pl-6">
                                 Feature

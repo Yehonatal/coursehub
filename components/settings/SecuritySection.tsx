@@ -44,7 +44,7 @@ export default function SecuritySection() {
 
             <div className="space-y-8">
                 {/* Change Password */}
-                <div className="p-8 rounded-2xl border border-border/50 bg-white/50 backdrop-blur-sm transition-all hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+                <div className="p-8 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all hover:border-primary/20 hover:shadow-md">
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-11 w-11 rounded-xl bg-primary/5 flex items-center justify-center text-primary/70">
                             <KeyRound className="h-5 w-5" />
@@ -77,7 +77,7 @@ export default function SecuritySection() {
                                 name="currentPassword"
                                 type="password"
                                 required
-                                className="bg-white/40 border-border/50 focus:border-primary/30 focus:ring-primary/5 rounded-xl h-11"
+                                className="bg-card/40 border-border/50 focus:border-primary/30 focus:ring-primary/5 rounded-xl h-11"
                             />
                             {state.errors?.currentPassword && (
                                 <p className="text-xs text-destructive font-medium">
@@ -97,7 +97,7 @@ export default function SecuritySection() {
                                 name="newPassword"
                                 type="password"
                                 required
-                                className="bg-white/40 border-border/50 focus:border-primary/30 focus:ring-primary/5 rounded-xl h-11"
+                                className="bg-card/40 border-border/50 focus:border-primary/30 focus:ring-primary/5 rounded-xl h-11"
                             />
                             {state.errors?.newPassword && (
                                 <p className="text-xs text-destructive font-medium">
@@ -117,7 +117,7 @@ export default function SecuritySection() {
                                 name="confirmPassword"
                                 type="password"
                                 required
-                                className="bg-white/40 border-border/50 focus:border-primary/30 focus:ring-primary/5 rounded-xl h-11"
+                                className="bg-card/40 border-border/50 focus:border-primary/30 focus:ring-primary/5 rounded-xl h-11"
                             />
                             {state.errors?.confirmPassword && (
                                 <p className="text-xs text-destructive font-medium">

@@ -81,7 +81,7 @@ export function FilterSidebar() {
     return (
         <div className="space-y-8 w-full">
             <div className="flex items-center justify-between">
-                <h2 className="font-bold text-[#0A251D]">Filter By</h2>
+                <h2 className="font-bold text-primary">Filter By</h2>
                 {isPending && (
                     <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                 )}
@@ -92,7 +92,7 @@ export function FilterSidebar() {
                 <div className="space-y-2">
                     <Label
                         htmlFor="courseCode"
-                        className="text-sm font-bold text-[#0A251D]"
+                        className="text-sm font-bold text-foreground"
                     >
                         Course Code
                     </Label>
@@ -108,7 +108,7 @@ export function FilterSidebar() {
                 <div className="space-y-2">
                     <Label
                         htmlFor="semester"
-                        className="text-sm font-bold text-[#0A251D]"
+                        className="text-sm font-bold text-foreground"
                     >
                         Semester
                     </Label>
@@ -124,7 +124,7 @@ export function FilterSidebar() {
                 <div className="space-y-2">
                     <Label
                         htmlFor="tags"
-                        className="text-sm font-bold text-[#0A251D]"
+                        className="text-sm font-bold text-foreground"
                     >
                         Tags (comma separated)
                     </Label>

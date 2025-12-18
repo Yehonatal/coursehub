@@ -61,9 +61,9 @@ export function ResourceHeaderActions({
 
     return (
         <>
-            <div className="flex items-center gap-3 border-t border-b border-gray-100 py-4 overflow-x-auto md:overflow-visible">
+            <div className="flex items-center gap-3 border-t border-b border-border py-4 overflow-x-auto md:overflow-visible">
                 <Button
-                    className="inline-flex cursor-pointer items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-sm border-0 px-3 py-2 text-sm whitespace-nowrap"
+                    className="inline-flex cursor-pointer items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm border-0 px-4 py-2 text-sm whitespace-nowrap rounded-xl"
                     onClick={() => onView && onView()}
                 >
                     <Eye className="w-4 h-4" />
@@ -72,7 +72,7 @@ export function ResourceHeaderActions({
                 </Button>
 
                 <Button
-                    className="inline-flex cursor-pointer items-center gap-2 bg-green-600 text-white shadow-sm border-0 px-3 py-2 text-sm whitespace-nowrap"
+                    className="inline-flex cursor-pointer items-center gap-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground shadow-sm border-0 px-4 py-2 text-sm whitespace-nowrap rounded-xl"
                     onClick={onGenerateContent}
                 >
                     <Sparkles className="w-4 h-4" />
@@ -81,7 +81,8 @@ export function ResourceHeaderActions({
                 </Button>
 
                 <Button
-                    className="inline-flex cursor-pointer items-center gap-2 bg-[#0E7490] hover:bg-[#0E7490]/90 text-white shadow-sm px-3 py-2 text-sm  whitespace-nowrap"
+                    variant="outline"
+                    className="inline-flex cursor-pointer items-center gap-2 shadow-sm px-4 py-2 text-sm whitespace-nowrap rounded-xl border-border"
                     onClick={() => onDownload && onDownload()}
                 >
                     <Download className="w-4 h-4" />
@@ -91,7 +92,7 @@ export function ResourceHeaderActions({
 
                 {canVerify && (
                     <Button
-                        className="inline-flex cursor-pointer items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white shadow-sm border-0 px-3 py-2 text-sm whitespace-nowrap"
+                        className="inline-flex cursor-pointer items-center gap-2 bg-accent hover:bg-accent/80 text-accent-foreground shadow-sm border-0 px-4 py-2 text-sm whitespace-nowrap rounded-xl"
                         onClick={() => setIsVerifyOpen(true)}
                     >
                         <ShieldCheck className="w-4 h-4" />
@@ -107,7 +108,7 @@ export function ResourceHeaderActions({
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="text-gray-400 cursor-pointer hover:text-gray-600"
+                    className="text-muted-foreground cursor-pointer hover:text-primary rounded-xl"
                     onClick={() => setIsShareOpen(true)}
                 >
                     <Share2 className="w-5 h-5" />
@@ -117,7 +118,7 @@ export function ResourceHeaderActions({
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="text-gray-400 cursor-pointer hover:text-gray-600"
+                        className="text-muted-foreground cursor-pointer hover:text-primary rounded-xl"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                     >
                         <MoreHorizontal className="w-5 h-5" />
@@ -129,7 +130,7 @@ export function ResourceHeaderActions({
                                 className="fixed inset-0 z-10"
                                 onClick={() => setIsMenuOpen(false)}
                             />
-                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20 border border-gray-100 py-1">
+                            <div className="absolute right-0 mt-2 w-48 bg-card rounded-xl shadow-xl z-20 border border-border py-1 overflow-hidden">
                                 {isOwner && (
                                     <>
                                         <button
@@ -137,7 +138,7 @@ export function ResourceHeaderActions({
                                                 setIsEditOpen(true);
                                                 setIsMenuOpen(false);
                                             }}
-                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                                            className="w-full text-left px-4 py-2.5 text-sm text-foreground hover:bg-muted flex items-center gap-2 transition-colors"
                                         >
                                             <Edit className="w-4 h-4" />
                                             Edit
@@ -147,7 +148,7 @@ export function ResourceHeaderActions({
                                                 setIsDeleteOpen(true);
                                                 setIsMenuOpen(false);
                                             }}
-                                            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                                            className="w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-destructive/5 flex items-center gap-2 transition-colors"
                                         >
                                             <Trash2 className="w-4 h-4" />
                                             Delete
@@ -160,7 +161,7 @@ export function ResourceHeaderActions({
                                             setIsReportOpen(true);
                                             setIsMenuOpen(false);
                                         }}
-                                        className="w-full text-left px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 flex items-center gap-2"
+                                        className="w-full text-left px-4 py-2.5 text-sm text-orange-600 hover:bg-orange-50 flex items-center gap-2 transition-colors"
                                     >
                                         <Flag className="w-4 h-4" />
                                         Report

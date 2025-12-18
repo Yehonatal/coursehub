@@ -3,7 +3,7 @@ import React from "react";
 export function PricingTestimonial() {
     return (
         <div
-            className="bg-[#0A251D] text-white mb-32 md:rounded-3xl p-12 md:p-20 text-center max-w-5xl mx-auto"
+            className="bg-primary text-primary-foreground mb-32 md:rounded-3xl p-12 md:p-20 text-center max-w-5xl mx-auto"
             data-aos="fade-up"
         >
             <div className="flex justify-center mb-6">
@@ -24,7 +24,7 @@ export function PricingTestimonial() {
             </blockquote>
             <div className="flex flex-col items-center">
                 <div className="font-bold text-lg">Natnael Abebe</div>
-                <div className="text-white/70">
+                <div className="text-primary-foreground/70">
                     Software Engineering Student, AAU
                 </div>
             </div>

@@ -76,7 +76,7 @@ const SelectTrigger = React.forwardRef<
             type="button"
             onClick={() => context.setOpen(!context.open)}
             className={cn(
-                "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                "flex h-10 w-full items-center justify-between rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
                 className
             )}
             {...props}
@@ -120,7 +120,7 @@ const SelectContent = React.forwardRef<
         <div
             ref={ref}
             className={cn(
-                "absolute z-50 min-w-32 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-80",
+                "absolute z-50 min-w-32 overflow-hidden rounded-xl border bg-popover text-popover-foreground shadow-md animate-in fade-in-80",
                 "top-full left-0 w-full mt-1",
                 className
             )}
@@ -153,7 +153,7 @@ const SelectItem = React.forwardRef<
         <div
             ref={ref}
             className={cn(
-                "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 hover:bg-accent hover:text-accent-foreground",
+                "relative flex w-full cursor-default select-none items-center rounded-lg py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 hover:bg-accent hover:text-accent-foreground",
                 className
             )}
             onClick={(e) => {

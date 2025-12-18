@@ -87,7 +87,7 @@ export function EditProfileModal({
 
     return (
         <Dialog open={open} onOpenChange={(val) => !val && onClose()}>
-            <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden border-none bg-white rounded-[2rem] shadow-2xl">
+            <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden border-none bg-card rounded-3xl shadow-2xl">
                 <div className="relative">
                     {/* Decorative Header Background */}
                     <div className="absolute inset-0 h-32 bg-linear-to-br from-primary/5 via-transparent to-transparent -z-10" />

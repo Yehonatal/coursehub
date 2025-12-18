@@ -31,13 +31,13 @@ export function GeneratedContentModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-4xl max-h-[85vh] p-0 overflow-hidden border-none shadow-2xl rounded-[2rem]">
+            <DialogContent className="max-w-4xl max-h-[85vh] p-0 overflow-hidden border-none shadow-2xl rounded-3xl">
                 <div className="p-8 flex flex-col h-full max-h-[85vh]">
                     <DialogHeader className="mb-6">
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3 text-primary">
+                            <div className="flex items-center gap-3 text-foreground">
                                 <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center">
-                                    <Sparkles className="h-5 w-5 fill-primary/20" />
+                                    <Sparkles className="h-5 w-5 fill-primary/20 text-primary" />
                                 </div>
                                 <DialogTitle className="text-2xl font-serif font-semibold tracking-tight">
                                     Generated Content

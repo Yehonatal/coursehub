@@ -21,7 +21,7 @@ export default function AccountSection() {
             </div>
 
             <div className="space-y-4">
-                <div className="flex items-center justify-between p-6 rounded-2xl border border-border/50 bg-white/50 backdrop-blur-sm transition-all hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+                <div className="flex items-center justify-between p-6 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all hover:border-primary/20 hover:shadow-md">
                     <div className="space-y-1">
                         <h3 className="text-base font-semibold text-primary/90">
                             Profile Information

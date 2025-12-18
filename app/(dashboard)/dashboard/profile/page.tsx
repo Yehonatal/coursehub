@@ -85,7 +85,7 @@ export default async function StudentProfilePage() {
                 {userResources.length ? (
                     <MiniResourceGrid resources={userResources} />
                 ) : (
-                    <div className="rounded-[2rem] border border-dashed border-border/60 bg-white/60 p-8 text-xs text-muted-foreground font-medium text-center">
+                    <div className="rounded-[2rem] border border-dashed border-border/60 bg-card/60 p-8 text-xs text-muted-foreground font-medium text-center">
                         You haven’t uploaded any resources yet. Uploading a
                         resource will populate this list so you can easily
                         highlight it as one of your most popular contributions.

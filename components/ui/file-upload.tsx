@@ -16,11 +16,11 @@ const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
             >
                 <label
                     htmlFor="dropzone-file"
-                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 border-gray-300"
+                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-2xl cursor-pointer bg-muted/50 hover:bg-muted border-border transition-colors"
                 >
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <Upload className="w-8 h-8 mb-2 text-gray-500" />
-                        <p className="mb-2 text-sm text-gray-500">
+                        <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
+                        <p className="mb-2 text-sm text-muted-foreground">
                             <span className="font-semibold">
                                 Drag and drop or Browse
                             </span>

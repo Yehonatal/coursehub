@@ -24,19 +24,14 @@ interface PopularResourcesListProps {
 
 const getIcon = (type: string) => {
     const t = type.toLowerCase();
-    if (t.includes("tree"))
-        return <Network className="h-5 w-5 text-emerald-600" />;
+    if (t.includes("tree")) return <Network className="h-5 w-5 text-primary" />;
     if (t.includes("question") || t.includes("flashcard"))
-        return <HelpCircle className="h-5 w-5 text-indigo-600" />;
-    return <FileText className="h-5 w-5 text-blue-600" />;
+        return <HelpCircle className="h-5 w-5 text-primary" />;
+    return <FileText className="h-5 w-5 text-primary" />;
 };
 
 const getBg = (type: string) => {
-    const t = type.toLowerCase();
-    if (t.includes("tree")) return "bg-emerald-50/50 border-emerald-100/50";
-    if (t.includes("question") || t.includes("flashcard"))
-        return "bg-indigo-50/50 border-indigo-100/50";
-    return "bg-blue-50/50 border-blue-100/50";
+    return "bg-primary/5 border-primary/10";
 };
 
 export function PopularResourcesList({
@@ -103,7 +98,7 @@ export function PopularResourcesList({
                 <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-bold">
                     Trending
                 </p>
-                <h3 className="text-xl font-serif font-semibold text-primary tracking-tight">
+                <h3 className="text-xl font-serif font-semibold text-foreground tracking-tight">
                     Most Popular AI Content
                 </h3>
             </div>
@@ -120,7 +115,7 @@ export function PopularResourcesList({
                                 {getIcon(item.iconType)}
                             </div>
                             <div className="space-y-1.5">
-                                <h4 className="font-serif font-semibold text-primary text-base group-hover:text-primary/80 transition-colors tracking-tight">
+                                <h4 className="font-serif font-semibold text-foreground text-sm leading-tight mb-1 group-hover:text-primary transition-colors tracking-tight">
                                     {item.title}
                                 </h4>
                                 <div className="flex items-center gap-3 text-[11px] text-muted-foreground/60 font-medium uppercase tracking-wider">
@@ -178,7 +173,7 @@ export function PopularResourcesList({
                 <AIKnowledgeTreeModal
                     isOpen={!!selectedItem}
                     onClose={() => setSelectedItem(null)}
-                    data={selectedItem.content}
+                    tree={selectedItem.content}
                     title={selectedItem.title}
                 />
             )}

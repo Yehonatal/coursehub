@@ -56,7 +56,11 @@ const AccordionItem = React.forwardRef<
     React.HTMLAttributes<HTMLDivElement> & { value: string }
 >(({ className, value, children, ...props }, ref) => (
     <AccordionItemContext.Provider value={{ value }}>
-        <div ref={ref} className={cn("border-b", className)} {...props}>
+        <div
+            ref={ref}
+            className={cn("border-b border-border", className)}
+            {...props}
+        >
             {children}
         </div>
     </AccordionItemContext.Provider>

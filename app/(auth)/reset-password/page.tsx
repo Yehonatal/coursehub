@@ -35,7 +35,7 @@ export default function ResetPasswordPage() {
                 </p>
                 <Link
                     href="/forgot-password"
-                    className="inline-flex items-center justify-center text-sm font-medium text-[#0A251D] hover:underline"
+                    className="inline-flex items-center justify-center text-sm font-medium text-foreground hover:underline"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Request a new link
@@ -47,9 +47,9 @@ export default function ResetPasswordPage() {
     return (
         <div className="w-full space-y-8">
             <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-3xl font-serif font-medium tracking-tight text-[#0A251D]">
+                <h1 className="text-3xl font-serif font-medium tracking-tight text-foreground">
                     Reset{" "}
-                    <HandDrawnUnderline className="text-[#F5A623]">
+                    <HandDrawnUnderline className="text-primary">
                         password
                     </HandDrawnUnderline>
                 </h1>
@@ -59,17 +59,17 @@ export default function ResetPasswordPage() {
             </div>
 
             {state.success ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                    <p className="text-green-800 font-medium">
+                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-center">
+                    <p className="text-green-600 dark:text-green-400 font-medium">
                         Password Reset Successful
                     </p>
-                    <p className="text-sm text-green-700 mt-1">
+                    <p className="text-sm text-green-600/80 dark:text-green-400/80 mt-1">
                         Your password has been updated. You can now log in with
                         your new password.
                     </p>
                     <Link
                         href="/login"
-                        className="inline-flex items-center justify-center mt-4 px-4 py-2 bg-[#0A251D] text-white rounded-md text-sm font-medium hover:bg-[#0A251D]/90"
+                        className="inline-flex items-center justify-center mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90"
                     >
                         Log in
                     </Link>
@@ -79,7 +79,7 @@ export default function ResetPasswordPage() {
                     <input type="hidden" name="token" value={token} />
 
                     <div className="space-y-2">
-                        <Label htmlFor="password" className="text-[#0A251D]">
+                        <Label htmlFor="password" className="text-foreground">
                             New Password
                         </Label>
                         <div className="relative">
@@ -89,7 +89,7 @@ export default function ResetPasswordPage() {
                                 type={showPassword ? "text" : "password"}
                                 placeholder="••••••••"
                                 required
-                                className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D] pr-10"
+                                className="h-11 bg-background border-border focus-visible:ring-primary pr-10"
                             />
                             <Button
                                 type="button"
@@ -99,9 +99,9 @@ export default function ResetPasswordPage() {
                                 onClick={() => setShowPassword(!showPassword)}
                             >
                                 {showPassword ? (
-                                    <EyeOff className="h-4 w-4 text-gray-400" />
+                                    <EyeOff className="h-4 w-4 text-muted-foreground" />
                                 ) : (
-                                    <Eye className="h-4 w-4 text-gray-400" />
+                                    <Eye className="h-4 w-4 text-muted-foreground" />
                                 )}
                             </Button>
                         </div>
@@ -115,7 +115,7 @@ export default function ResetPasswordPage() {
                     <div className="space-y-2">
                         <Label
                             htmlFor="confirmPassword"
-                            className="text-[#0A251D]"
+                            className="text-foreground"
                         >
                             Confirm Password
                         </Label>
@@ -125,7 +125,7 @@ export default function ResetPasswordPage() {
                             type="password"
                             placeholder="••••••••"
                             required
-                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                            className="h-11 bg-background border-border focus-visible:ring-primary"
                         />
                         {state?.errors?.confirmPassword && (
                             <p className="text-sm text-red-500">
@@ -142,7 +142,7 @@ export default function ResetPasswordPage() {
 
                     <Button
                         type="submit"
-                        className="w-full h-11 bg-[#0A251D] hover:bg-[#0A251D]/90 text-white font-medium"
+                        className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
                         disabled={isPending}
                     >
                         {isPending && (

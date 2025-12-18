@@ -92,15 +92,15 @@ export function CommunityHighlights() {
             </div>
 
             <div
-                className="bg-[#F5F2EB] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 lg:p-20 mb-16 sm:mb-20 md:mb-24 lg:mb-32"
+                className="bg-muted/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 lg:p-20 mb-16 sm:mb-20 md:mb-24 lg:mb-32"
                 data-aos="fade-up"
             >
                 <div className="text-center max-w-3xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 px-2 sm:px-4">
-                    <div className="inline-flex items-center rounded-full border border-primary/20 bg-white px-3 py-1 text-xs font-medium text-primary uppercase tracking-wider">
+                    <div className="inline-flex items-center rounded-full border border-primary/20 bg-card px-3 py-1 text-xs font-medium text-primary uppercase tracking-wider">
                         <Globe className="mr-2 h-3 w-3" />
                         Global Network
                     </div>
-                    <h2 className="text-3xl md:text-4xl font-serif font-medium text-[#0A251D]">
+                    <h2 className="text-3xl md:text-4xl font-serif font-medium text-foreground">
                         Join the Conversation
                     </h2>
                     <p className="text-lg text-muted-foreground leading-relaxed">

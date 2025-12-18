@@ -41,7 +41,7 @@ export function ModelCard({
             />
             <div className="relative flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4 sm:gap-5">
-                    <div className="rounded-xl bg-white/70 p-3.5 shadow-sm text-primary">
+                    <div className="rounded-xl bg-card/70 p-3.5 shadow-sm text-primary">
                         <Icon className="h-6 w-6" />
                     </div>
                     <div className="space-y-2">
@@ -53,7 +53,7 @@ export function ModelCard({
                                 className={cn(
                                     "rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider border",
                                     status === "Active"
-                                        ? "bg-green-500/10 border-green-500/30 text-green-600"
+                                        ? "bg-primary/10 border-primary/30 text-primary"
                                         : "bg-secondary border-border text-muted-foreground"
                                 )}
                             >

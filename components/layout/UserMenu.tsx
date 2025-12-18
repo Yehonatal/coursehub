@@ -25,10 +25,10 @@ export function UserMenu({ onSignOut }: UserMenuProps) {
     const displayAvatar = "https://github.com/shadcn.png";
 
     return (
-        <Card className="absolute right-0 top-full mt-4 w-80 p-3 z-50 shadow-2xl shadow-primary/10 border-border/40 animate-in fade-in zoom-in-95 duration-200 bg-white rounded-[1.5rem] overflow-hidden">
+        <Card className="absolute right-0 top-full mt-4 w-80 p-3 z-50 shadow-2xl shadow-primary/10 border-border animate-in fade-in zoom-in-95 duration-200 bg-card rounded-2xl overflow-hidden">
             {/* Profile Section */}
-            <div className="p-3 flex items-center gap-4 mb-2 bg-muted/30 rounded-2xl border border-border/40">
-                <div className="h-14 w-14 rounded-full bg-muted overflow-hidden shrink-0 relative border-2 border-white shadow-sm">
+            <div className="p-3 flex items-center gap-4 mb-2 bg-muted/30 rounded-2xl border border-border">
+                <div className="h-14 w-14 rounded-full bg-muted overflow-hidden shrink-0 relative border-2 border-card shadow-sm">
                     <Image
                         src={displayAvatar}
                         alt={displayName}
@@ -37,10 +37,10 @@ export function UserMenu({ onSignOut }: UserMenuProps) {
                     />
                 </div>
                 <div className="flex-1 min-w-0">
-                    <h4 className="font-serif font-bold text-primary truncate text-base">
+                    <h4 className="font-serif font-bold text-foreground truncate text-base">
                         {displayName}
                     </h4>
-                    <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-wider truncate">
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider truncate">
                         {user?.role || "Student"} •{" "}
                         {user?.university || "No University"}
                     </p>
@@ -50,7 +50,7 @@ export function UserMenu({ onSignOut }: UserMenuProps) {
             <div className="px-1 mb-4">
                 <Button
                     asChild
-                    className="w-full rounded-xl bg-primary text-white hover:bg-primary/90 h-10 text-xs font-bold shadow-lg shadow-primary/20"
+                    className="w-full rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 h-10 text-xs font-bold shadow-lg shadow-primary/20"
                 >
                     <Link
                         href="/dashboard/profile"
@@ -69,14 +69,14 @@ export function UserMenu({ onSignOut }: UserMenuProps) {
 
                 <button className="w-full group flex items-center justify-between p-2.5 rounded-xl hover:bg-primary/5 transition-all duration-300">
                     <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                        <div className="h-8 w-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-primary-foreground transition-colors">
                             <Crown className="h-4 w-4" />
                         </div>
                         <div className="text-left">
-                            <p className="text-sm font-bold text-primary">
+                            <p className="text-sm font-bold text-foreground">
                                 Try Premium
                             </p>
-                            <p className="text-[10px] text-muted-foreground/60 font-medium">
+                            <p className="text-[10px] text-muted-foreground font-medium">
                                 Unlock AI features
                             </p>
                         </div>
@@ -89,10 +89,10 @@ export function UserMenu({ onSignOut }: UserMenuProps) {
                     className="w-full group flex items-center justify-between p-2.5 rounded-xl hover:bg-primary/5 transition-all duration-300"
                 >
                     <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground group-hover:bg-primary group-hover:text-white transition-colors">
+                        <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                             <Settings className="h-4 w-4" />
                         </div>
-                        <p className="text-sm font-bold text-primary">
+                        <p className="text-sm font-bold text-foreground">
                             Settings & Privacy
                         </p>
                     </div>

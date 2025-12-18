@@ -84,10 +84,10 @@ export function ShareModal({ isOpen, onClose, title, url }: ShareModalProps) {
                 onClick={onClose}
                 aria-hidden="true"
             />
-            <div className="relative z-10 w-full max-w-[450px] bg-white border-border/50 shadow-2xl rounded-[2rem] overflow-hidden">
+            <div className="relative z-10 w-full max-w-[450px] bg-card border border-border shadow-2xl rounded-3xl overflow-hidden">
                 <div className="p-8 space-y-6">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3 text-primary">
+                        <div className="flex items-center gap-3 text-foreground">
                             <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center">
                                 <Share2 className="h-5 w-5 text-primary/70" />
                             </div>
@@ -123,7 +123,7 @@ export function ShareModal({ isOpen, onClose, title, url }: ShareModalProps) {
                         </div>
 
                         <div className="space-y-2.5">
-                            <p className="text-sm font-medium text-primary/80 ml-1">
+                            <p className="text-sm font-medium text-muted-foreground ml-1">
                                 Copy Link
                             </p>
                             <div className="flex items-center gap-2">
@@ -132,13 +132,13 @@ export function ShareModal({ isOpen, onClose, title, url }: ShareModalProps) {
                                         id="link"
                                         defaultValue={url}
                                         readOnly
-                                        className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all pr-10"
+                                        className="h-12 rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all pr-10"
                                     />
                                 </div>
                                 <Button
                                     type="button"
                                     size="icon"
-                                    className="h-12 w-12 rounded-xl bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/10 transition-all shrink-0"
+                                    className="h-12 w-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/10 transition-all shrink-0"
                                     onClick={handleCopy}
                                 >
                                     {copied ? (

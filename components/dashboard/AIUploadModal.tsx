@@ -104,7 +104,7 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden border-none shadow-2xl rounded-[2rem]">
+            <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden border-none shadow-2xl rounded-4xl">
                 <form action={action} className="flex flex-col max-h-[90vh]">
                     <input type="hidden" name="isAi" value="true" />
                     <div className="p-8 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500/10 scrollbar-track-transparent">
@@ -156,18 +156,18 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <Label className="text-sm font-medium text-blue-900/70 ml-1">
+                                <Label className="text-sm font-medium text-primary/70 ml-1">
                                     Resource File{" "}
                                     <span className="text-red-500/50">*</span>
                                 </Label>
                                 <div
                                     className={cn(
-                                        "relative group cursor-pointer rounded-[1.5rem] border-2 border-dashed transition-all duration-300 p-10 text-center",
+                                        "relative group cursor-pointer rounded-2xl border-2 border-dashed transition-all duration-300 p-10 text-center",
                                         dragActive
-                                            ? "border-blue-500 bg-blue-50/50"
-                                            : "border-blue-100 hover:border-blue-300 hover:bg-blue-50/30",
+                                            ? "border-primary bg-primary/5"
+                                            : "border-primary/10 hover:border-primary/30 hover:bg-primary/5",
                                         selectedFileName &&
-                                            "border-blue-500/30 bg-blue-50/30"
+                                            "border-primary/30 bg-primary/5"
                                     )}
                                     onDragEnter={handleDrag}
                                     onDragOver={handleDrag}
@@ -190,31 +190,31 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                     <div className="flex flex-col items-center gap-4">
                                         {selectedFileName ? (
                                             <>
-                                                <div className="h-14 w-14 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                                                <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-sm">
                                                     <FileText className="h-7 w-7" />
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <p className="text-sm font-semibold text-blue-700 break-all max-w-[300px]">
+                                                    <p className="text-sm font-semibold text-primary break-all max-w-[300px]">
                                                         {selectedFileName}
                                                     </p>
-                                                    <p className="text-xs font-medium text-blue-600/70">
+                                                    <p className="text-xs font-medium text-primary/70">
                                                         Click to change file
                                                     </p>
                                                 </div>
                                             </>
                                         ) : (
                                             <>
-                                                <div className="h-14 w-14 rounded-2xl bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center text-blue-300 group-hover:text-blue-500 transition-all duration-300">
+                                                <div className="h-14 w-14 rounded-2xl bg-primary/5 group-hover:bg-primary/10 flex items-center justify-center text-primary/30 group-hover:text-primary transition-all duration-300">
                                                     <Upload className="h-7 w-7" />
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <p className="text-sm font-medium text-blue-900/80">
-                                                        <span className="text-blue-600 font-bold">
+                                                    <p className="text-sm font-medium text-primary/80">
+                                                        <span className="text-primary font-bold">
                                                             Click to upload
                                                         </span>{" "}
                                                         or drag and drop
                                                     </p>
-                                                    <p className="text-xs text-blue-400/60">
+                                                    <p className="text-xs text-primary/40">
                                                         PDF, Word, or PowerPoint
                                                         (Max 20MB)
                                                     </p>
@@ -229,7 +229,7 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                 <div className="space-y-2">
                                     <Label
                                         htmlFor="title"
-                                        className="text-sm font-medium text-blue-900/70 ml-1"
+                                        className="text-sm font-medium text-primary/70 ml-1"
                                     >
                                         Title{" "}
                                         <span className="text-red-500/50">
@@ -241,14 +241,14 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                         name="title"
                                         placeholder="e.g. Introduction to Computer Science"
                                         required
-                                        className="h-12 rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all"
+                                        className="h-12 rounded-xl border-primary/10 bg-primary/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label
                                         htmlFor="courseCode"
-                                        className="text-sm font-medium text-blue-900/70 ml-1"
+                                        className="text-sm font-medium text-primary/70 ml-1"
                                     >
                                         Course Code{" "}
                                         <span className="text-red-500/50">
@@ -260,7 +260,7 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                         name="courseCode"
                                         placeholder="e.g. CS101"
                                         required
-                                        className="h-12 rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all"
+                                        className="h-12 rounded-xl border-primary/10 bg-primary/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                                     />
                                 </div>
                             </div>
@@ -269,7 +269,7 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                 <div className="space-y-2">
                                     <Label
                                         htmlFor="semester"
-                                        className="text-sm font-medium text-blue-900/70 ml-1"
+                                        className="text-sm font-medium text-primary/70 ml-1"
                                     >
                                         Semester{" "}
                                         <span className="text-red-500/50">
@@ -281,14 +281,14 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                         name="semester"
                                         placeholder="e.g. Fall 2024"
                                         required
-                                        className="h-12 rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all"
+                                        className="h-12 rounded-xl border-primary/10 bg-primary/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label
                                         htmlFor="university"
-                                        className="text-sm font-medium text-blue-900/70 ml-1"
+                                        className="text-sm font-medium text-primary/70 ml-1"
                                     >
                                         University{" "}
                                         <span className="text-red-500/50">
@@ -300,14 +300,14 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                         name="university"
                                         placeholder="e.g. Stanford University"
                                         required
-                                        className="h-12 rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all"
+                                        className="h-12 rounded-xl border-primary/10 bg-primary/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label
                                         htmlFor="resourceType"
-                                        className="text-sm font-medium text-blue-900/70 ml-1"
+                                        className="text-sm font-medium text-primary/70 ml-1"
                                     >
                                         Type{" "}
                                         <span className="text-red-500/50">
@@ -318,10 +318,10 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                         value={resourceTypeValue}
                                         onValueChange={setResourceTypeValue}
                                     >
-                                        <SelectTrigger className="h-12 rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all">
+                                        <SelectTrigger className="h-12 rounded-xl border-primary/10 bg-primary/5 focus:border-primary/30 focus:ring-primary/5 transition-all">
                                             <SelectValue placeholder="Select type" />
                                         </SelectTrigger>
-                                        <SelectContent className="rounded-xl border-blue-100 shadow-xl">
+                                        <SelectContent className="rounded-xl border-primary/10 shadow-xl">
                                             <SelectItem value="slides">
                                                 Slides
                                             </SelectItem>
@@ -347,7 +347,7 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                             <div className="space-y-2">
                                 <Label
                                     htmlFor="description"
-                                    className="text-sm font-medium text-blue-900/70 ml-1"
+                                    className="text-sm font-medium text-primary/70 ml-1"
                                 >
                                     Description
                                 </Label>
@@ -355,14 +355,14 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                     id="description"
                                     name="description"
                                     placeholder="Briefly describe what this resource covers..."
-                                    className="min-h-[100px] rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all resize-none"
+                                    className="min-h-[100px] rounded-xl border-primary/10 bg-primary/5 focus:border-primary/30 focus:ring-primary/5 transition-all resize-none"
                                 />
                             </div>
 
                             <div className="space-y-2">
                                 <Label
                                     htmlFor="tags"
-                                    className="text-sm font-medium text-blue-900/70 ml-1"
+                                    className="text-sm font-medium text-primary/70 ml-1"
                                 >
                                     Tags
                                 </Label>
@@ -370,26 +370,26 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                     id="tags"
                                     name="tags"
                                     placeholder="e.g. computer science, programming, java (comma separated)"
-                                    className="min-h-[60px] rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all resize-none"
+                                    className="min-h-[60px] rounded-xl border-primary/10 bg-primary/5 focus:border-primary/30 focus:ring-primary/5 transition-all resize-none"
                                 />
                             </div>
                         </div>
                     </div>
 
-                    <div className="p-8 border-t border-blue-100 bg-blue-50/30 flex items-center justify-end gap-3">
+                    <div className="p-8 border-t border-primary/10 bg-primary/5 flex items-center justify-end gap-3">
                         <Button
                             variant="ghost"
                             type="button"
                             onClick={onClose}
                             disabled={isPending}
-                            className="rounded-xl text-blue-400 hover:text-blue-600 hover:bg-blue-50 font-medium"
+                            className="rounded-xl text-primary/40 hover:text-primary hover:bg-primary/5 font-medium"
                         >
                             Cancel
                         </Button>
                         <Button
                             type="submit"
                             disabled={isPending}
-                            className="min-w-[120px] rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-600/10 transition-all"
+                            className="min-w-[120px] rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/10 transition-all"
                         >
                             {isPending ? (
                                 <>

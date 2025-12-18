@@ -13,7 +13,7 @@ function getInitials(name?: string) {
 }
 
 function stringToColor(str?: string) {
-    if (!str) return "bg-gray-300";
+    if (!str) return "bg-muted";
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash);

@@ -436,10 +436,10 @@ export function ChatInterface({
                             )}
                             <div
                                 className={cn(
-                                    "rounded-2xl px-4 py-2 max-w-[80%] text-sm",
+                                    "rounded-2xl px-4 py-2 max-w-[80%] text-sm shadow-sm",
                                     msg.role === "user"
                                         ? "bg-primary text-primary-foreground rounded-tr-none"
-                                        : "bg-secondary/50 border border-border/50 rounded-tl-none"
+                                        : "bg-card border border-border rounded-tl-none text-foreground"
                                 )}
                             >
                                 <div className="prose dark:prose-invert max-w-none text-sm">
@@ -498,8 +498,8 @@ export function ChatInterface({
                             <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                                 <Sparkles className="h-4 w-4 text-primary" />
                             </div>
-                            <div className="bg-secondary/50 border border-border/50 rounded-2xl rounded-tl-none px-4 py-2 flex items-center">
-                                <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                            <div className="bg-card border border-border rounded-2xl rounded-tl-none px-4 py-2 flex items-center shadow-sm">
+                                <Loader2 className="h-4 w-4 animate-spin text-primary" />
                             </div>
                         </div>
                     )}
@@ -507,9 +507,9 @@ export function ChatInterface({
             </ScrollArea>
 
             <div className="p-4">
-                <div className="rounded-3xl border border-border/80 bg-card/90 shadow-xl backdrop-blur-sm p-4 sm:p-5 space-y-3">
+                <div className="rounded-3xl border border-border bg-card shadow-xl p-4 sm:p-5 space-y-3">
                     {file && (
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground bg-secondary/50 px-3 py-1.5 rounded-lg w-fit">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted px-3 py-1.5 rounded-lg w-fit border border-border">
                             <FileText className="h-3 w-3" />
                             <span className="max-w-[200px] truncate">
                                 {file.name}
@@ -519,7 +519,7 @@ export function ChatInterface({
                                     setFile(null);
                                     setContext("");
                                 }}
-                                className="hover:text-foreground"
+                                className="hover:text-foreground transition-colors"
                             >
                                 <X className="h-3 w-3" />
                             </button>
@@ -527,10 +527,10 @@ export function ChatInterface({
                     )}
 
                     <div className="relative flex items-center">
-                        <div className="absolute left-4 text-muted-foreground">
+                        <div className="absolute left-4 text-muted-foreground z-10">
                             <button
                                 onClick={() => fileInputRef.current?.click()}
-                                className="hover:text-foreground transition-colors"
+                                className="hover:text-primary transition-colors"
                                 disabled={isParsing}
                             >
                                 {isParsing ? (
@@ -548,17 +548,17 @@ export function ChatInterface({
                             />
                         </div>
                         <Input
-                            className="h-14 sm:h-16 pl-12 pr-12 rounded-2xl border-border bg-secondary/40 text-base shadow-sm focus-visible:ring-primary/25 transition-all hover:bg-secondary/60 focus:bg-background"
+                            className="h-14 sm:h-16 pl-12 pr-14 rounded-2xl border-border bg-muted/50 text-base shadow-sm focus-visible:ring-primary/20 transition-all hover:bg-muted focus:bg-background"
                             placeholder="Ask CourseHub AI anything..."
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={handleKeyDown}
                             disabled={isLoading || isParsing}
                         />
-                        <div className="absolute right-3">
+                        <div className="absolute right-2">
                             <Button
                                 size="icon"
-                                className="h-11 w-11 rounded-xl bg-primary text-primary-foreground shadow-md hover:bg-primary/90 transition-all hover:scale-105"
+                                className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-primary text-primary-foreground shadow-md hover:bg-primary/90 transition-all hover:scale-105 active:scale-95"
                                 onClick={handleSend}
                                 disabled={
                                     isLoading ||
@@ -580,7 +580,7 @@ export function ChatInterface({
                             <button
                                 key={chip}
                                 onClick={() => setInput(chip)}
-                                className="px-3 py-1.5 rounded-full border border-border/60 bg-secondary/50 hover:border-primary/40 hover:text-foreground transition-colors"
+                                className="px-3 py-1.5 rounded-full border border-border bg-muted/50 hover:border-primary/50 hover:bg-primary/5 hover:text-primary transition-all"
                             >
                                 {chip}
                             </button>

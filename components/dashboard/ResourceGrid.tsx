@@ -36,7 +36,7 @@ export function ResourceGrid({
     return (
         <div data-aos="fade-up" data-aos-delay="300" suppressHydrationWarning>
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-serif font-bold text-[#0A251D]">
+                <h3 className="text-lg font-serif font-bold text-foreground">
                     {title}
                 </h3>
                 {viewAllLink && (

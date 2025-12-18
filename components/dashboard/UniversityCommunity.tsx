@@ -28,7 +28,7 @@ export function UniversityCommunity() {
     return (
         <div className="space-y-8">
             <div className="space-y-1">
-                <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/40 font-bold">
+                <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-bold">
                     Community
                 </p>
                 <h3 className="text-xl font-serif font-bold text-primary tracking-tight">
@@ -42,7 +42,7 @@ export function UniversityCommunity() {
                         key={index}
                         className="flex items-center gap-4 group cursor-pointer"
                     >
-                        <div className="h-12 w-12 rounded-xl bg-muted/30 overflow-hidden relative shrink-0 border border-border/20 group-hover:border-primary/20 transition-all">
+                        <div className="h-12 w-12 rounded-xl bg-card overflow-hidden relative shrink-0 border border-border group-hover:border-primary/20 transition-all">
                             {member.avatarUrl ? (
                                 <Image
                                     src={member.avatarUrl}
@@ -51,13 +51,13 @@ export function UniversityCommunity() {
                                     className="object-cover"
                                 />
                             ) : (
-                                <div className="w-full h-full bg-linear-to-br from-primary/5 to-primary/10 flex items-center justify-center text-primary/60 font-bold text-xs">
+                                <div className="w-full h-full bg-linear-to-br from-primary/5 to-primary/10 flex items-center justify-center text-primary font-bold text-xs">
                                     {member.name.substring(0, 2).toUpperCase()}
                                 </div>
                             )}
                         </div>
                         <div className="space-y-0.5 flex-1">
-                            <h4 className="text-sm font-bold text-primary tracking-tight group-hover:text-primary/70 transition-colors">
+                            <h4 className="text-sm font-bold text-foreground tracking-tight group-hover:text-primary transition-colors">
                                 {member.name}
                             </h4>
                             <p className="text-[11px] text-muted-foreground/60 font-medium leading-tight">

@@ -375,7 +375,7 @@ export function AIChatModal({
     };
 
     const cardClass = cn(
-        "relative w-full rounded-2xl max-w-4xl flex flex-col bg-white shadow-xl border-0 overflow-hidden transition-all duration-300 transform",
+        "relative w-full rounded-2xl max-w-4xl flex flex-col bg-card shadow-xl border-0 overflow-hidden transition-all duration-300 transform",
         isFullscreen
             ? "absolute inset-0 m-0 w-full h-full max-w-none rounded-none"
             : isOpen
@@ -405,20 +405,20 @@ export function AIChatModal({
                 <Card
                     className={cn(
                         cardClass,
-                        "rounded-[2rem] overflow-hidden border-none shadow-2xl"
+                        "rounded-3xl overflow-hidden border border-border shadow-2xl"
                     )}
                     style={cardStyle}
                 >
-                    <div className="flex items-center justify-between px-8 py-6 border-b border-border/50 bg-white shrink-0">
+                    <div className="flex items-center justify-between px-8 py-6 border-b border-border bg-card shrink-0">
                         <div className="flex items-center gap-4">
-                            <div className="h-12 w-12 rounded-2xl bg-primary/5 flex items-center justify-center">
-                                <Sparkles className="h-6 w-6 fill-primary/20 text-primary" />
+                            <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+                                <Sparkles className="h-6 w-6 text-primary" />
                             </div>
                             <div>
-                                <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">
+                                <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
                                     AI Assistant
                                 </h2>
-                                <p className="text-xl font-serif font-semibold text-primary">
+                                <p className="text-xl font-serif font-semibold text-foreground">
                                     {resourceTitle}
                                 </p>
                             </div>
@@ -430,7 +430,7 @@ export function AIChatModal({
                                     size="icon"
                                     onClick={handleReload}
                                     disabled={isParsing}
-                                    className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
+                                    className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/60 hover:text-primary transition-colors"
                                 >
                                     {isParsing ? (
                                         <Loader2 className="h-5 w-5 animate-spin text-primary" />
@@ -447,7 +447,7 @@ export function AIChatModal({
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => setShowApiKeyModal(true)}
-                                className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
+                                className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/60 hover:text-primary transition-colors"
                             >
                                 <Settings className="h-5 w-5" />
                             </Button>
@@ -456,7 +456,7 @@ export function AIChatModal({
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => setIsFullscreen((s) => !s)}
-                                className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
+                                className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/60 hover:text-primary transition-colors"
                                 aria-pressed={isFullscreen}
                             >
                                 {isFullscreen ? (
@@ -470,7 +470,7 @@ export function AIChatModal({
                                 variant="ghost"
                                 size="icon"
                                 onClick={onClose}
-                                className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
+                                className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/60 hover:text-primary transition-colors"
                             >
                                 <X className="h-5 w-5" />
                                 <span className="sr-only">Close</span>
@@ -480,7 +480,7 @@ export function AIChatModal({
 
                     <div
                         ref={scrollAreaRef}
-                        className="flex-1 flex flex-col p-8 pb-6 space-y-6 overflow-y-auto bg-muted/5"
+                        className="flex-1 flex flex-col p-8 pb-6 space-y-6 overflow-y-auto bg-muted/30 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent"
                     >
                         <AIChatEmptyState
                             resourceTitle={resourceTitle}
@@ -510,9 +510,9 @@ export function AIChatModal({
 
                         {isParsing && (
                             <div className="flex justify-start w-full">
-                                <div className="bg-white border border-gray-200 rounded-2xl rounded-tl-none px-4 py-3 shadow-sm flex items-center gap-2">
-                                    <Loader2 className="h-4 w-4 animate-spin text-[#0A251D]" />
-                                    <span className="text-sm text-gray-600">
+                                <div className="bg-card border border-border rounded-2xl rounded-tl-none px-4 py-3 shadow-sm flex items-center gap-2">
+                                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                                    <span className="text-sm text-muted-foreground">
                                         Analyzing resource...
                                     </span>
                                 </div>
@@ -521,9 +521,9 @@ export function AIChatModal({
 
                         {isLoading && (
                             <div className="flex justify-start w-full">
-                                <div className="bg-white border border-gray-200 rounded-2xl rounded-tl-none px-4 py-3 shadow-sm flex items-center gap-2">
-                                    <Loader2 className="h-4 w-4 animate-spin text-[#0A251D]" />
-                                    <span className="text-sm text-gray-600">
+                                <div className="bg-card border border-border rounded-2xl rounded-tl-none px-4 py-3 shadow-sm flex items-center gap-2">
+                                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                                    <span className="text-sm text-muted-foreground">
                                         Thinking...
                                     </span>
                                 </div>

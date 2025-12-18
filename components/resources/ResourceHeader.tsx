@@ -129,7 +129,7 @@ export function ResourceHeader({
                             <div className="group relative inline-block">
                                 <Badge variant="verified" />
                                 {verifier && (
-                                    <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-48 p-3 bg-white border border-border/50 rounded-2xl shadow-2xl z-50 text-[10px] animate-in fade-in slide-in-from-bottom-1 duration-200">
+                                    <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-48 p-3 bg-card border border-border rounded-2xl shadow-2xl z-50 text-[10px] animate-in fade-in slide-in-from-bottom-1 duration-200">
                                         <div className="space-y-1">
                                             <p className="font-bold text-primary flex items-center gap-1.5">
                                                 <BadgeCheck className="h-3 w-3 text-blue-500" />
@@ -164,7 +164,7 @@ export function ResourceHeader({
                         )}
                     </div>
 
-                    <h1 className="text-xl md:text-2xl font-serif font-bold text-primary tracking-tight leading-tight">
+                    <h1 className="text-xl md:text-2xl font-serif font-bold text-foreground tracking-tight leading-tight">
                         {title}
                     </h1>
 
@@ -185,12 +185,12 @@ export function ResourceHeader({
                                 </span>
                             </div>
                         </div>
-                        <div className="h-3 w-px bg-border/60 hidden sm:block" />
+                        <div className="h-3 w-px bg-border hidden sm:block" />
                         <div className="flex items-center gap-1.5 text-muted-foreground/70 font-medium">
                             <Download className="w-3 h-3" />
                             <span>{displayDownloads}</span>
                         </div>
-                        <div className="h-3 w-px bg-border/60 hidden sm:block" />
+                        <div className="h-3 w-px bg-border hidden sm:block" />
                         <div className="text-muted-foreground/70 font-medium">
                             {date}
                         </div>
@@ -216,14 +216,14 @@ export function ResourceHeader({
                                 .toLowerCase()
                                 .replace(/[^a-z0-9]+/g, "-")
                                 .replace(/(^-|-$)/g, "")}`}
-                            className="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-border/40 hover:shadow-lg hover:shadow-primary/5 transition-all duration-500 group"
+                            className="flex items-center gap-2.5 p-2 rounded-xl bg-card border border-border hover:shadow-lg hover:shadow-primary/5 transition-all duration-500 group"
                         >
                             <UniversityBadge
                                 university={university}
                                 size={32}
                             />
                             <div className="space-y-0">
-                                <p className="text-xs font-serif font-bold text-primary group-hover:text-primary/80 transition-colors">
+                                <p className="text-xs font-serif font-bold text-foreground group-hover:text-primary transition-colors">
                                     {university}
                                 </p>
                                 <p className="text-[9px] text-muted-foreground/60 font-medium">

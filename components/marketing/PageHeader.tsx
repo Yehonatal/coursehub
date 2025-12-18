@@ -19,7 +19,7 @@ export function PageHeader({
                 data-aos="fade-up"
             >
                 {tag && (
-                    <div className="inline-block rounded-md bg-secondary px-3 py-1 text-xs sm:text-sm font-medium text-secondary-foreground uppercase tracking-wider mb-2">
+                    <div className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs sm:text-sm font-medium text-primary uppercase tracking-wider mb-2">
                         {tag}
                     </div>
                 )}

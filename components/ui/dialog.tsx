@@ -74,13 +74,13 @@ export const DialogContent = React.forwardRef<
     return createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
             <div
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity animate-in fade-in-0"
+                className="fixed inset-0 bg-background/80 backdrop-blur-sm transition-opacity animate-in fade-in-0"
                 onClick={() => onOpenChange(false)}
             />
             <div
                 ref={ref}
                 className={cn(
-                    "relative z-50 grid w-full max-w-lg gap-4 border bg-white p-6 shadow-lg duration-200 sm:rounded-lg animate-in fade-in-0 zoom-in-95",
+                    "relative z-50 grid w-full max-w-lg gap-4 border bg-card p-6 shadow-lg duration-200 sm:rounded-3xl animate-in fade-in-0 zoom-in-95",
                     className
                 )}
                 {...props}

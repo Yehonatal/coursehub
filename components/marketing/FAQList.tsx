@@ -18,7 +18,7 @@ export function FAQList({ categories }: { categories: FAQCategory[] }) {
                     data-aos="fade-up"
                     data-aos-delay={catIndex * 100}
                 >
-                    <h2 className="text-lg sm:text-xl md:text-2xl font-serif font-bold mb-4 sm:mb-6 text-[#0A251D] border-b border-border/60 pb-3">
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-serif font-bold mb-4 sm:mb-6 text-foreground border-b border-border/60 pb-3">
                         {category.category}
                     </h2>
                     <Accordion

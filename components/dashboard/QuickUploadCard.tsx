@@ -18,14 +18,14 @@ export function QuickUploadCard() {
                     </span>
                 </div>
                 <Card
-                    className="p-10 border-dashed border-2 rounded-[2rem] border-border/50 bg-muted/5 flex flex-col items-center justify-center text-center gap-5 hover:bg-muted/10 hover:border-primary/30 transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-xl hover:shadow-primary/5"
+                    className="p-10 border-dashed border-2 rounded-3xl border-border bg-card flex flex-col items-center justify-center text-center gap-5 hover:bg-muted/10 hover:border-primary/30 transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-xl hover:shadow-primary/5"
                     onClick={() => setIsModalOpen(true)}
                 >
-                    <div className="h-14 w-14 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-500">
+                    <div className="h-14 w-14 rounded-2xl bg-muted/50 shadow-sm flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-500">
                         <Upload className="h-6 w-6 text-primary/40 group-hover:text-primary transition-colors" />
                     </div>
                     <div className="space-y-1.5">
-                        <p className="text-sm font-semibold text-primary/80">
+                        <p className="text-sm font-semibold text-foreground">
                             Drag and drop or{" "}
                             <span className="text-primary underline decoration-primary/20 group-hover:decoration-primary transition-all">
                                 Browse

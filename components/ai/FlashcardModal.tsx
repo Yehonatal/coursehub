@@ -15,6 +15,7 @@ interface FlashcardModalProps {
     flashcards: AIFlashcard[];
     resourceId?: string;
     title?: string;
+    resourceTitle?: string;
 }
 
 export function FlashcardModal({
@@ -23,7 +24,11 @@ export function FlashcardModal({
     flashcards,
     resourceId,
     title,
+    resourceTitle,
 }: FlashcardModalProps) {
+    // Prefer an explicit resourceTitle prop when available (some callers use `resourceTitle`)
+    const effectiveTitle = resourceTitle ?? title;
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -56,7 +61,9 @@ export function FlashcardModal({
                 content: flashcards,
                 prompt: "Flashcards Session",
                 resourceId,
-                title: title ? `Flashcards - ${title}` : "Flashcards Session",
+                title: effectiveTitle
+                    ? `Flashcards - ${effectiveTitle}`
+                    : "Flashcards Session",
             });
             toast.success("Flashcards saved to history");
         } catch (error) {
@@ -68,7 +75,7 @@ export function FlashcardModal({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-            <div className="relative w-full max-w-2xl bg-white rounded-[2rem] shadow-2xl border-none overflow-hidden">
+            <div className="relative w-full max-w-2xl bg-card rounded-3xl shadow-2xl border-none overflow-hidden">
                 <div className="p-8 space-y-8">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3 text-primary">
@@ -113,11 +120,11 @@ export function FlashcardModal({
                             onClick={handleFlip}
                         >
                             {!isFlipped ? (
-                                <Card className="w-full h-full rounded-[2rem] flex flex-col items-center justify-center p-12 text-center border-none shadow-inner bg-muted/5 transition-all duration-300">
+                                <Card className="w-full h-full rounded-3xl flex flex-col items-center justify-center p-12 text-center border border-border shadow-sm bg-card transition-all duration-300">
                                     <span className="absolute top-8 left-8 text-xs font-bold text-primary/40 uppercase tracking-widest">
                                         Question
                                     </span>
-                                    <p className="text-2xl font-serif font-medium leading-relaxed text-primary">
+                                    <p className="text-2xl font-serif font-medium leading-relaxed text-foreground">
                                         {currentCard.front}
                                     </p>
                                     <div className="absolute bottom-8 text-xs font-medium text-muted-foreground/40 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -126,8 +133,8 @@ export function FlashcardModal({
                                     </div>
                                 </Card>
                             ) : (
-                                <Card className="w-full h-full rounded-[2rem] flex flex-col items-center justify-center p-12 text-center border-none shadow-2xl bg-primary text-white transition-all duration-300 shadow-primary/20">
-                                    <span className="absolute top-8 left-8 text-xs font-bold text-white/40 uppercase tracking-widest">
+                                <Card className="w-full h-full rounded-3xl flex flex-col items-center justify-center p-12 text-center border-none shadow-2xl bg-primary text-primary-foreground transition-all duration-300 shadow-primary/20">
+                                    <span className="absolute top-8 left-8 text-xs font-bold text-primary-foreground/40 uppercase tracking-widest">
                                         Answer
                                     </span>
                                     <p className="text-2xl font-serif font-medium leading-relaxed">
@@ -135,7 +142,7 @@ export function FlashcardModal({
                                             "(No answer available)"}
                                     </p>
                                     {currentCard.tag && (
-                                        <span className="absolute bottom-8 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/10 text-white/90 backdrop-blur-sm">
+                                        <span className="absolute bottom-8 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-primary-foreground/10 text-primary-foreground/90 backdrop-blur-sm">
                                             {currentCard.tag}
                                         </span>
                                     )}

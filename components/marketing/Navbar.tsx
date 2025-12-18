@@ -33,7 +33,7 @@ export function Navbar() {
     ];
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-border/40">
+        <header className="sticky top-0 z-50 w-full border-b border-border">
             <div className="absolute inset-0 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60" />
             <div className="container relative flex h-20 items-center justify-between px-4 md:px-6 mx-auto">
                 <div className="flex items-center gap-2 z-50">
@@ -46,8 +46,8 @@ export function Navbar() {
                             className={cn(
                                 "flex h-6 w-6 items-center justify-center rounded-md transition-colors duration-300",
                                 isOpen
-                                    ? "bg-white text-[#0A251D]"
-                                    : "bg-[#0A251D] text-white"
+                                    ? "bg-primary-foreground text-primary"
+                                    : "bg-primary text-primary-foreground"
                             )}
                         >
                             <span className="text-lg font-serif font-bold">
@@ -57,7 +57,9 @@ export function Navbar() {
                         <span
                             className={cn(
                                 "font-serif font-extralight transition-colors duration-300",
-                                isOpen ? "text-white" : "text-foreground"
+                                isOpen
+                                    ? "text-primary-foreground"
+                                    : "text-foreground"
                             )}
                         >
                             COURSEHUB
@@ -84,7 +86,7 @@ export function Navbar() {
                                 Signed in as {user.first_name}
                             </span>
                             <Button
-                                className="rounded-md px-6 bg-[#0A251D] text-white hover:bg-[#0A251D]/90"
+                                className="rounded-md px-6 bg-primary text-primary-foreground hover:bg-primary/90"
                                 asChild
                             >
                                 <Link href="/dashboard">Go to Dashboard</Link>
@@ -100,7 +102,7 @@ export function Navbar() {
                                 <Link href="/login">Log in</Link>
                             </Button>
                             <Button
-                                className="rounded-md px-6 bg-[#0A251D] text-white hover:bg-[#0A251D]/90"
+                                className="rounded-md px-6 bg-primary text-primary-foreground hover:bg-primary/90"
                                 asChild
                             >
                                 <Link href="/register">Get Started</Link>
@@ -115,7 +117,7 @@ export function Navbar() {
                     aria-label="Toggle menu"
                 >
                     {isOpen ? (
-                        <X className="h-6 w-6 text-white" />
+                        <X className="h-6 w-6 text-primary-foreground" />
                     ) : (
                         <Menu className="h-6 w-6" />
                     )}
@@ -123,14 +125,14 @@ export function Navbar() {
 
                 <div
                     className={cn(
-                        "fixed inset-0 z-40 bg-[#0A251D] flex flex-col justify-center px-6 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] md:hidden",
+                        "fixed inset-0 z-40 bg-primary flex flex-col justify-center px-6 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] md:hidden",
                         isOpen
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 -translate-y-full pointer-events-none"
                     )}
                 >
-                    <div className="absolute top-[-20%] right-[-10%] w-[300px] h-[300px] rounded-full bg-white/5 blur-3xl" />
-                    <div className="absolute bottom-[-10%] left-[-10%] w-[200px] h-[200px] rounded-full bg-white/5 blur-3xl" />
+                    <div className="absolute top-[-20%] right-[-10%] w-[300px] h-[300px] rounded-full bg-primary-foreground/5 blur-3xl" />
+                    <div className="absolute bottom-[-10%] left-[-10%] w-[200px] h-[200px] rounded-full bg-primary-foreground/5 blur-3xl" />
 
                     <nav className="flex flex-col gap-6 relative z-10">
                         {navLinks.map((link, i) => (
@@ -139,7 +141,7 @@ export function Navbar() {
                                 href={link.href}
                                 onClick={() => setIsOpen(false)}
                                 className={cn(
-                                    "text-4xl font-serif font-medium text-white/90 hover:text-white transition-all transform",
+                                    "text-4xl font-serif font-medium text-primary-foreground/90 hover:text-primary-foreground transition-all transform",
                                     isOpen
                                         ? "opacity-100 translate-y-0"
                                         : "opacity-0 translate-y-8"
@@ -166,7 +168,7 @@ export function Navbar() {
                         {user ? (
                             <Button
                                 asChild
-                                className="w-full h-12 text-lg bg-[#F5F2EB] text-[#0A251D] hover:bg-[#F5F2EB]/90 rounded-full"
+                                className="w-full h-12 text-lg bg-primary-foreground text-primary hover:bg-primary-foreground/90 rounded-full"
                             >
                                 <Link
                                     href="/dashboard"
@@ -183,7 +185,7 @@ export function Navbar() {
                                 >
                                     <Button
                                         variant="outline"
-                                        className="w-full h-12 text-lg border-white/20 text-white hover:bg-white hover:text-[#0A251D] bg-transparent rounded-full"
+                                        className="w-full h-12 text-lg border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground hover:text-primary bg-transparent rounded-full"
                                     >
                                         Log in
                                     </Button>
@@ -192,7 +194,7 @@ export function Navbar() {
                                     href="/register"
                                     onClick={() => setIsOpen(false)}
                                 >
-                                    <Button className="w-full h-12 text-lg bg-[#F5F2EB] text-[#0A251D] hover:bg-[#F5F2EB]/90 rounded-full">
+                                    <Button className="w-full h-12 text-lg bg-primary-foreground text-primary hover:bg-primary-foreground/90 rounded-full">
                                         Get Started
                                     </Button>
                                 </Link>

@@ -112,6 +112,7 @@ export function AIStudyAssistant() {
                         <Button
                             onClick={handleGenerateNotes}
                             disabled={loading || !content}
+                            className="rounded-xl"
                         >
                             {loading ? (
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -122,14 +123,14 @@ export function AIStudyAssistant() {
                         </Button>
                     </div>
                     {notes && (
-                        <Card className="border-l-4 border-l-primary">
-                            <CardHeader>
-                                <CardTitle className="text-2xl font-serif">
+                        <Card className="border-l-4 border-l-primary rounded-2xl overflow-hidden shadow-md">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-2xl font-serif text-foreground">
                                     {notes.title}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-6">
-                                <div className="bg-muted/50 p-4 rounded-lg">
+                                <div className="bg-muted/30 p-5 rounded-2xl border border-border">
                                     <h3 className="font-semibold mb-2 text-primary flex items-center gap-2">
                                         <FileText className="h-4 w-4" /> Summary
                                     </h3>
@@ -143,16 +144,16 @@ export function AIStudyAssistant() {
                                         <Layers className="h-4 w-4" /> Key
                                         Points
                                     </h3>
-                                    <div className="grid gap-2">
+                                    <div className="grid gap-3">
                                         {notes.keyPoints.map((point, i) => (
                                             <div
                                                 key={i}
-                                                className="flex items-start gap-2 p-2 rounded hover:bg-muted/50 transition-colors"
+                                                className="flex items-start gap-3 p-3 rounded-xl hover:bg-muted/50 transition-colors border border-transparent hover:border-border"
                                             >
                                                 <div className="min-w-6 h-6 flex items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold">
                                                     {i + 1}
                                                 </div>
-                                                <span className="text-sm leading-relaxed">
+                                                <span className="text-sm leading-relaxed text-foreground/80">
                                                     {point}
                                                 </span>
                                             </div>
@@ -165,7 +166,7 @@ export function AIStudyAssistant() {
                                         <Network className="h-4 w-4" /> Detailed
                                         Explanation
                                     </h3>
-                                    <div className="prose dark:prose-invert max-w-none bg-card border rounded-lg p-6 shadow-sm">
+                                    <div className="prose prose-primary dark:prose-invert max-w-none bg-card border border-border rounded-2xl p-6 shadow-sm">
                                         <ReactMarkdown>
                                             {notes.explanation}
                                         </ReactMarkdown>
@@ -181,6 +182,7 @@ export function AIStudyAssistant() {
                         <Button
                             onClick={handleGenerateFlashcards}
                             disabled={loading || !content}
+                            className="rounded-xl"
                         >
                             {loading ? (
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -195,28 +197,28 @@ export function AIStudyAssistant() {
                             {flashcards.map((card, i) => (
                                 <Card
                                     key={i}
-                                    className="hover:shadow-md transition-shadow"
+                                    className="hover:shadow-lg transition-all duration-300 rounded-2xl border border-border bg-card group"
                                 >
                                     <CardContent className="p-6 space-y-4">
                                         <div>
-                                            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                                            <span className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">
                                                 Front
                                             </span>
-                                            <p className="font-medium mt-1">
+                                            <p className="font-serif font-medium mt-1 text-foreground text-lg">
                                                 {card.front}
                                             </p>
                                         </div>
-                                        <div className="pt-4 border-t">
-                                            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                                        <div className="pt-4 border-t border-border">
+                                            <span className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">
                                                 Back
                                             </span>
-                                            <p className="mt-1 text-muted-foreground">
+                                            <p className="mt-1 text-muted-foreground leading-relaxed">
                                                 {card.back}
                                             </p>
                                         </div>
                                         {card.tag && (
                                             <div className="pt-2">
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary uppercase tracking-wider">
                                                     {card.tag}
                                                 </span>
                                             </div>
@@ -266,8 +268,10 @@ function TreeRenderer({
         <div className="relative">
             <div
                 className={cn(
-                    "flex items-start gap-3 py-2 group transition-colors rounded-lg px-2",
-                    level === 0 ? "bg-primary/5 mb-4" : "hover:bg-muted/50"
+                    "flex items-start gap-3 py-3 group transition-all rounded-xl px-3",
+                    level === 0
+                        ? "bg-primary/5 mb-4 border border-primary/10"
+                        : "hover:bg-muted/50 border border-transparent hover:border-border"
                 )}
             >
                 <div className="mt-1.5 relative">
@@ -288,14 +292,16 @@ function TreeRenderer({
                     <div className="flex items-center gap-2">
                         <span
                             className={cn(
-                                "font-medium",
-                                level === 0 ? "text-lg text-primary" : "text-sm"
+                                "font-serif font-semibold tracking-tight",
+                                level === 0
+                                    ? "text-lg text-primary"
+                                    : "text-sm text-foreground"
                             )}
                         >
                             {node.label}
                         </span>
                         {node.children && node.children.length > 0 && (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider">
                                 {node.children.length}
                             </span>
                         )}
@@ -304,7 +310,7 @@ function TreeRenderer({
                     {node.description && (
                         <p
                             className={cn(
-                                "text-muted-foreground mt-0.5",
+                                "text-muted-foreground mt-1 leading-relaxed",
                                 level === 0 ? "text-sm" : "text-xs"
                             )}
                         >
@@ -315,7 +321,7 @@ function TreeRenderer({
             </div>
 
             {node.children && node.children.length > 0 && (
-                <div className="ml-1.5 pl-4 border-l border-border/50 space-y-1">
+                <div className="ml-1.5 pl-4 border-l border-border space-y-1">
                     {node.children.map((child, index) => (
                         <TreeRenderer
                             key={child.id || index}

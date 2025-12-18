@@ -85,7 +85,7 @@ export default function SettingsLayout({
                                         className={cn(
                                             "flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-300",
                                             activeSection === s.id
-                                                ? "bg-primary text-white shadow-sm"
+                                                ? "bg-primary text-primary-foreground shadow-sm"
                                                 : "text-muted-foreground hover:bg-primary/5 hover:text-primary"
                                         )}
                                     >
@@ -93,7 +93,7 @@ export default function SettingsLayout({
                                             className={cn(
                                                 "w-4 h-4",
                                                 activeSection === s.id
-                                                    ? "text-white"
+                                                    ? "text-primary-foreground"
                                                     : "text-muted-foreground/60"
                                             )}
                                         />

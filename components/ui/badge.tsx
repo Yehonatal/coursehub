@@ -23,7 +23,7 @@ export function Badge({
         return (
             <div
                 className={cn(
-                    "bg-primary text-white px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1.5 shadow-lg shadow-primary/20 tracking-wider uppercase",
+                    "bg-primary text-primary-foreground px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1.5 shadow-lg shadow-primary/20 tracking-wider uppercase",
                     className
                 )}
             >
@@ -37,11 +37,11 @@ export function Badge({
         return (
             <div
                 className={cn(
-                    "bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm border border-border/40 text-blue-600",
+                    "bg-card/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm border border-border/40 text-primary",
                     className
                 )}
             >
-                <BadgeCheck className="h-3.5 w-3.5 fill-blue-50" />
+                <BadgeCheck className="h-3.5 w-3.5 fill-primary/10" />
                 {content || "Verified"}
             </div>
         );

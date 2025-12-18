@@ -27,7 +27,7 @@ export function DateRangeFilter() {
 
     return (
         <Select value={dateRange} onValueChange={handleValueChange}>
-            <SelectTrigger className="w-full bg-blue-50/50 border-none text-[#0A251D] font-medium">
+            <SelectTrigger className="w-full bg-muted/50 border-none text-foreground font-medium">
                 <SelectValue placeholder="Date Range" />
             </SelectTrigger>
             <SelectContent>

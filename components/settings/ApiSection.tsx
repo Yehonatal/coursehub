@@ -39,7 +39,7 @@ export default function ApiSection() {
                 </p>
             </div>
 
-            <div className="p-8 rounded-2xl border border-border/50 bg-white/50 backdrop-blur-sm transition-all hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+            <div className="p-8 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all hover:border-primary/20 hover:shadow-md">
                 <div className="flex items-start justify-between gap-6">
                     <div className="space-y-6 flex-1">
                         <div className="space-y-2">
@@ -73,7 +73,7 @@ export default function ApiSection() {
                         <Button
                             size="sm"
                             onClick={() => setShowModal(true)}
-                            className="rounded-xl bg-primary text-white font-semibold px-6"
+                            className="rounded-xl bg-primary text-primary-foreground font-semibold px-6"
                         >
                             {apiKey ? "Update Key" : "Configure"}
                         </Button>

@@ -57,7 +57,7 @@ export function ProfileCard({
 
     return (
         <Card
-            className="overflow-hidden border-border/40 bg-white group transition-all duration-300 rounded-[2rem] shadow-sm hover:shadow-md"
+            className="overflow-hidden border-border bg-card group transition-all duration-300 rounded-3xl shadow-sm hover:shadow-md"
             data-aos="fade-up"
         >
             <div className="h-28 bg-linear-to-br from-primary/5 via-transparent to-transparent relative overflow-hidden">
@@ -74,7 +74,7 @@ export function ProfileCard({
                 </div>
             </div>
             <div className="px-6 pb-8 relative">
-                <div className="h-16 w-16 rounded-full border-4 border-white bg-muted absolute -top-20 left-4 overflow-hidden shadow-lg z-20">
+                <div className="h-16 w-16 rounded-full border-4 border-background bg-card absolute -top-20 left-4 overflow-hidden shadow-lg z-20">
                     <Image
                         src={displayAvatar}
                         alt="Profile"
@@ -83,12 +83,12 @@ export function ProfileCard({
                     />
                 </div>
                 <div className="mt-14 space-y-2">
-                    <h2 className="text-xl font-serif font-semibold text-primary flex items-center gap-2 tracking-tight">
+                    <h2 className="text-xl font-serif font-semibold text-foreground flex items-center gap-2 tracking-tight">
                         {displayName}
                         {isMounted && user?.is_verified ? (
-                            <BadgeCheck className="h-5 w-5 text-blue-500 fill-blue-50" />
+                            <BadgeCheck className="h-5 w-5 text-primary fill-primary/10" />
                         ) : isMounted && user ? (
-                            <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold uppercase tracking-wider border border-amber-100 whitespace-nowrap">
+                            <span className="px-2.5 py-0.5 rounded-full bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-wider border border-primary/20 whitespace-nowrap">
                                 Not Verified
                             </span>
                         ) : null}

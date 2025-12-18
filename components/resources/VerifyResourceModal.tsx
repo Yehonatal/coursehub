@@ -48,12 +48,12 @@ export function VerifyResourceModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl rounded-[2rem]">
+            <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl rounded-3xl">
                 <div className="p-8 space-y-6">
                     <DialogHeader className="space-y-3">
-                        <div className="flex items-center gap-3 text-primary">
+                        <div className="flex items-center gap-3 text-foreground">
                             <div className="h-12 w-12 rounded-2xl bg-primary/5 flex items-center justify-center">
-                                <ShieldCheck className="h-6 w-6" />
+                                <ShieldCheck className="h-6 w-6 text-primary" />
                             </div>
                             <DialogTitle className="text-2xl font-serif font-semibold tracking-tight">
                                 Verify Resource
@@ -61,7 +61,7 @@ export function VerifyResourceModal({
                         </div>
                         <DialogDescription className="text-base leading-relaxed text-muted-foreground">
                             By verifying{" "}
-                            <span className="font-semibold text-primary">
+                            <span className="font-semibold text-foreground">
                                 &quot;{resourceTitle}&quot;
                             </span>
                             , you confirm that this material meets the academic
@@ -69,8 +69,8 @@ export function VerifyResourceModal({
                         </DialogDescription>
                     </DialogHeader>
 
-                    <div className="space-y-4 bg-secondary/30 p-6 rounded-2xl border border-border/50">
-                        <h4 className="text-sm font-bold text-primary uppercase tracking-wider">
+                    <div className="space-y-4 bg-muted/50 p-6 rounded-2xl border border-border">
+                        <h4 className="text-sm font-bold text-foreground uppercase tracking-wider">
                             Verification Requirements:
                         </h4>
                         <ul className="space-y-3">

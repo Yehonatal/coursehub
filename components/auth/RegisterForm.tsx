@@ -20,9 +20,9 @@ export function RegisterForm() {
     return (
         <div className="w-full space-y-8">
             <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-3xl font-serif font-medium tracking-tight text-[#0A251D]">
+                <h1 className="text-3xl font-serif font-medium tracking-tight text-foreground">
                     Create an{" "}
-                    <HandDrawnBox className="text-[#F5A623] -rotate-2">
+                    <HandDrawnBox className="text-primary -rotate-2">
                         account
                     </HandDrawnBox>
                 </h1>
@@ -34,7 +34,7 @@ export function RegisterForm() {
             <form action={action} className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="firstName" className="text-[#0A251D]">
+                        <Label htmlFor="firstName" className="text-foreground">
                             First name
                         </Label>
                         <Input
@@ -42,7 +42,7 @@ export function RegisterForm() {
                             name="firstName"
                             placeholder="John"
                             required
-                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                            className="h-11 bg-background border-border focus-visible:ring-primary"
                         />
                         {state?.errors?.firstName && (
                             <p className="text-sm text-red-500">
@@ -51,7 +51,7 @@ export function RegisterForm() {
                         )}
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="lastName" className="text-[#0A251D]">
+                        <Label htmlFor="lastName" className="text-foreground">
                             Last name
                         </Label>
                         <Input
@@ -59,7 +59,7 @@ export function RegisterForm() {
                             name="lastName"
                             placeholder="Doe"
                             required
-                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                            className="h-11 bg-background border-border focus-visible:ring-primary"
                         />
                         {state?.errors?.lastName && (
                             <p className="text-sm text-red-500">
@@ -70,7 +70,7 @@ export function RegisterForm() {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="email" className="text-[#0A251D]">
+                    <Label htmlFor="email" className="text-foreground">
                         Email
                     </Label>
                     <Input
@@ -79,7 +79,7 @@ export function RegisterForm() {
                         type="email"
                         placeholder="name@example.com"
                         required
-                        className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                        className="h-11 bg-background border-border focus-visible:ring-primary"
                     />
                     {state?.errors?.email && (
                         <p className="text-sm text-red-500">
@@ -90,7 +90,10 @@ export function RegisterForm() {
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="accountType" className="text-[#0A251D]">
+                        <Label
+                            htmlFor="accountType"
+                            className="text-foreground"
+                        >
                             Account Type
                         </Label>
                         <div className="relative">
@@ -98,7 +101,7 @@ export function RegisterForm() {
                                 id="accountType"
                                 name="accountType"
                                 required
-                                className="flex h-11 w-full items-center justify-between rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#0A251D] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                className="flex h-11 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 <option value="student">Student</option>
                                 <option value="educator">Educator</option>
@@ -106,7 +109,7 @@ export function RegisterForm() {
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="university" className="text-[#0A251D]">
+                        <Label htmlFor="university" className="text-foreground">
                             University
                         </Label>
                         <div className="relative">
@@ -115,7 +118,7 @@ export function RegisterForm() {
                                 name="university"
                                 required
                                 defaultValue=""
-                                className="flex h-11 w-full items-center justify-between rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#0A251D] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                className="flex h-11 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 <option value="" disabled>
                                     Select University
@@ -141,23 +144,23 @@ export function RegisterForm() {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="schoolId" className="text-[#0A251D]">
+                    <Label htmlFor="schoolId" className="text-foreground">
                         School ID / Proof of Enrollment
                     </Label>
-                    <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div className="border-2 border-dashed border-border rounded-lg p-4 hover:bg-muted/50 transition-colors">
                         <Input
                             id="schoolId"
                             name="schoolId"
                             type="file"
                             accept="image/*,.pdf"
-                            className="cursor-pointer border-0 bg-transparent p-0 h-auto file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#0A251D]/10 file:text-[#0A251D] hover:file:bg-[#0A251D]/20"
+                            className="cursor-pointer border-0 bg-transparent p-0 h-auto file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                         />
                     </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="password" className="text-[#0A251D]">
+                        <Label htmlFor="password" className="text-foreground">
                             Password
                         </Label>
                         <Input
@@ -166,7 +169,7 @@ export function RegisterForm() {
                             type="password"
                             placeholder="••••••••"
                             required
-                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                            className="h-11 bg-background border-border focus-visible:ring-primary"
                         />
                         {state?.errors?.password && (
                             <p className="text-sm text-red-500">
@@ -177,7 +180,7 @@ export function RegisterForm() {
                     <div className="space-y-2">
                         <Label
                             htmlFor="confirmPassword"
-                            className="text-[#0A251D]"
+                            className="text-foreground"
                         >
                             Confirm Password
                         </Label>
@@ -187,7 +190,7 @@ export function RegisterForm() {
                             type="password"
                             placeholder="••••••••"
                             required
-                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                            className="h-11 bg-background border-border focus-visible:ring-primary"
                         />
                         {state?.errors?.confirmPassword && (
                             <p className="text-sm text-red-500">
@@ -205,7 +208,7 @@ export function RegisterForm() {
 
                 <Button
                     type="submit"
-                    className="w-full h-11 bg-[#0A251D] hover:bg-[#0A251D]/90 text-white font-medium"
+                    className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
                     disabled={isPending}
                 >
                     {isPending && (
@@ -221,7 +224,7 @@ export function RegisterForm() {
                 </span>
                 <Link
                     href="/login"
-                    className="font-medium text-[#0A251D] hover:underline underline-offset-4"
+                    className="font-medium text-foreground hover:underline underline-offset-4"
                 >
                     Sign in
                 </Link>

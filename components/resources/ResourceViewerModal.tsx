@@ -48,15 +48,15 @@ export function ResourceViewerModal({
                 className={`max-w-6xl w-[95vw] h-[90vh] flex flex-col p-0 gap-0 border-none shadow-2xl overflow-hidden transition-all duration-500 ${
                     isFullscreen
                         ? "max-w-[100vw] w-screen h-screen rounded-none"
-                        : "rounded-[2rem]"
+                        : "rounded-3xl"
                 }`}
             >
-                <DialogHeader className="flex flex-row items-center justify-between px-6 py-4 border-b border-border/50 bg-white space-y-0 shrink-0">
+                <DialogHeader className="flex flex-row items-center justify-between px-6 py-4 border-b border-border bg-card space-y-0 shrink-0">
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                         <div className="h-9 w-9 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
                             <FileText className="h-4.5 w-4.5 text-primary/70" />
                         </div>
-                        <DialogTitle className="text-lg font-serif font-semibold text-primary truncate tracking-tight">
+                        <DialogTitle className="text-lg font-serif font-semibold text-foreground truncate tracking-tight">
                             {title}
                         </DialogTitle>
                     </div>

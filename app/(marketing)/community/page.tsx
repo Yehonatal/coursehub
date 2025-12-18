@@ -12,7 +12,7 @@ export default function CommunityPage() {
                 title={
                     <>
                         A Thriving Academic{" "}
-                        <HandDrawnCircle className="text-[#F5A623] -rotate-2">
+                        <HandDrawnCircle className="text-primary -rotate-2">
                             Community
                         </HandDrawnCircle>
                     </>

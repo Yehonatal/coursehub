@@ -14,7 +14,7 @@ export default function PricingPage() {
                 title={
                     <>
                         Invest in your{" "}
-                        <HandDrawnUnderline className="text-[#F5A623]">
+                        <HandDrawnUnderline className="text-primary">
                             future
                         </HandDrawnUnderline>
                     </>

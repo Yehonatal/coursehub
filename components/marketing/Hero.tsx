@@ -9,7 +9,7 @@ import Image from "next/image";
 
 export function Hero() {
     return (
-        <section className="w-full py-8 sm:py-12 md:py-16 lg:py-24 xl:py-32 bg-[#F9F9F9]">
+        <section className="w-full py-8 sm:py-12 md:py-16 lg:py-24 xl:py-32 bg-card">
             <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
                 <div className="grid gap-8 sm:gap-10 md:gap-12 lg:grid-cols-2 lg:gap-16 items-center">
                     <div
@@ -18,11 +18,11 @@ export function Hero() {
                     >
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-medium tracking-tight text-foreground leading-[1.1]">
                             A centralized,
-                            <HandDrawnUnderline className="text-[#F5A623]">
+                            <HandDrawnUnderline className="text-primary">
                                 adaptive
                             </HandDrawnUnderline>{" "}
                             learning ecosystem for{" "}
-                            <HandDrawnCircle className="text-[#F5A623] -rotate-2">
+                            <HandDrawnCircle className="text-primary -rotate-2">
                                 everyone.
                             </HandDrawnCircle>
                         </h1>
@@ -37,7 +37,7 @@ export function Hero() {
                             <Link href="/register" className="w-full sm:w-auto">
                                 <Button
                                     size="lg"
-                                    className="h-12 px-8 bg-[#0A251D] hover:bg-[#0A251D]/90 text-white w-full"
+                                    className="h-12 px-8 bg-primary hover:bg-primary/90 text-primary-foreground w-full"
                                 >
                                     Start Learning Now
                                 </Button>
@@ -67,7 +67,7 @@ export function Hero() {
                         className="relative aspect-4/3 overflow-hidden rounded-3xl"
                         data-aos="fade-left"
                     >
-                        <div className="relative bg-background rounded-[16px] sm:rounded-[20px] md:rounded-[24px] border border-border overflow-hidden backdrop-blur">
+                        <div className="relative bg-background rounded-xl sm:rounded-2xl md:rounded-3xl border border-border overflow-hidden backdrop-blur">
                             <div className="flex items-center gap-1.5 sm:gap-2 h-8 sm:h-9 md:h-10 px-3 sm:px-4 bg-muted/70 border-b border-border/70">
                                 <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ff6b6b]" />
                                 <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ffd166]" />

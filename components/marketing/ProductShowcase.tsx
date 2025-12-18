@@ -114,7 +114,7 @@ export function ProductShowcase() {
                     </div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-medium tracking-tight mb-2 sm:mb-3 md:mb-4 text-foreground">
                         Explore the{" "}
-                        <HandDrawnUnderline className="text-[#F5A623]">
+                        <HandDrawnUnderline className="text-primary">
                             CourseHub
                         </HandDrawnUnderline>{" "}
                         Ecosystem
@@ -144,7 +144,7 @@ export function ProductShowcase() {
                             >
                                 <span
                                     className={cn(
-                                        "p-2 rounded-full bg-white/70 shadow-sm transition-colors",
+                                        "p-2 rounded-full bg-card/70 shadow-sm transition-colors",
                                         activeTab === product.id
                                             ? product.color
                                             : "text-muted-foreground"
@@ -175,7 +175,7 @@ export function ProductShowcase() {
                                 >
                                     <span
                                         className={cn(
-                                            "p-2 rounded-full bg-white/70 shadow-sm transition-colors",
+                                            "p-2 rounded-full bg-card/70 shadow-sm transition-colors",
                                             activeTab === product.id
                                                 ? product.color
                                                 : "text-muted-foreground"
@@ -257,11 +257,11 @@ export function ProductShowcase() {
                         <div className="relative group w-full max-w-md sm:max-w-lg md:max-w-2xl">
                             <div
                                 className={cn(
-                                    "absolute -inset-4 sm:-inset-6 rounded-[20px] sm:rounded-[24px] md:rounded-[28px] bg-gradient-to-tr blur-2xl sm:blur-3xl opacity-40 transition-opacity duration-700",
+                                    "absolute -inset-4 sm:-inset-6 rounded-2xl sm:rounded-3xl md:rounded-4xl bg-gradient-to-tr blur-2xl sm:blur-3xl opacity-40 transition-opacity duration-700",
                                     activeProduct.gradient
                                 )}
                             />
-                            <div className="relative bg-background rounded-[16px] sm:rounded-[20px] md:rounded-[24px] border border-border shadow-lg sm:shadow-xl md:shadow-2xl overflow-hidden backdrop-blur">
+                            <div className="relative bg-background rounded-xl sm:rounded-2xl md:rounded-3xl border border-border shadow-lg sm:shadow-xl md:shadow-2xl overflow-hidden backdrop-blur">
                                 <div className="flex items-center gap-1.5 sm:gap-2 h-8 sm:h-9 md:h-10 px-3 sm:px-4 bg-muted/70 border-b border-border/70">
                                     <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ff6b6b]" />
                                     <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ffd166]" />

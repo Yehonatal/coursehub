@@ -97,7 +97,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden border-none shadow-2xl rounded-[2rem]">
+            <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden border-none shadow-2xl rounded-4xl">
                 <form action={action} className="flex flex-col max-h-[90vh]">
                     <div className="p-8 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-primary/10 scrollbar-track-transparent">
                         <DialogHeader className="space-y-3">

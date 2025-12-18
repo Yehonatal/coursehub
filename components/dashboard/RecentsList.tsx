@@ -23,11 +23,11 @@ interface RecentsListProps {
 const getIcon = (type: string) => {
     switch (type) {
         case "note":
-            return <FileText className="h-5 w-5 text-blue-600" />;
+            return <FileText className="h-5 w-5 text-primary" />;
         case "tree":
-            return <Network className="h-5 w-5 text-emerald-600" />;
+            return <Network className="h-5 w-5 text-primary" />;
         case "question":
-            return <HelpCircle className="h-5 w-5 text-indigo-600" />;
+            return <HelpCircle className="h-5 w-5 text-primary" />;
         default:
             return <FileText className="h-5 w-5 text-muted-foreground" />;
     }
@@ -36,13 +36,13 @@ const getIcon = (type: string) => {
 const getBg = (type: string) => {
     switch (type) {
         case "note":
-            return "bg-blue-50/50 border-blue-100/50";
+            return "bg-primary/10 border-primary/20";
         case "tree":
-            return "bg-emerald-50/50 border-emerald-100/50";
+            return "bg-primary/10 border-primary/20";
         case "question":
-            return "bg-indigo-50/50 border-indigo-100/50";
+            return "bg-primary/10 border-primary/20";
         default:
-            return "bg-muted/5 border-border/40";
+            return "bg-muted border-border";
     }
 };
 
@@ -78,11 +78,11 @@ export function RecentsList({ items }: RecentsListProps) {
                                 {getIcon(item.iconType)}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h4 className="font-serif font-semibold text-primary text-base leading-tight mb-1.5 group-hover:text-primary/80 transition-colors tracking-tight">
+                                <h4 className="font-serif font-semibold text-foreground text-base leading-tight mb-1.5 group-hover:text-primary transition-colors tracking-tight">
                                     {item.title}
                                 </h4>
                                 <div className="flex items-center gap-3 text-[11px] font-medium text-muted-foreground/60 uppercase tracking-wider">
-                                    <span className="text-primary/60">
+                                    <span className="text-primary">
                                         {item.type}
                                     </span>
                                     <span className="h-1 w-1 rounded-full bg-border" />

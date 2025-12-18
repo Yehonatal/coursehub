@@ -23,8 +23,8 @@ export function RateLimitModal({ isOpen, onClose }: RateLimitModalProps) {
                 <div className="p-8 space-y-6">
                     <DialogHeader className="space-y-3">
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3 text-amber-600">
-                                <div className="h-10 w-10 rounded-xl bg-amber-50 flex items-center justify-center">
+                            <div className="flex items-center gap-3 text-primary">
+                                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
                                     <AlertCircle className="h-5 w-5" />
                                 </div>
                                 <DialogTitle className="text-2xl font-serif font-semibold tracking-tight">
@@ -35,7 +35,7 @@ export function RateLimitModal({ isOpen, onClose }: RateLimitModalProps) {
                                 variant="ghost"
                                 size="icon"
                                 onClick={onClose}
-                                className="rounded-full hover:bg-amber-50 text-muted-foreground/40 hover:text-amber-600 transition-colors"
+                                className="rounded-full hover:bg-primary/10 text-muted-foreground/40 hover:text-primary transition-colors"
                             >
                                 <X className="h-5 w-5" />
                             </Button>
@@ -47,8 +47,8 @@ export function RateLimitModal({ isOpen, onClose }: RateLimitModalProps) {
                         </DialogDescription>
                     </DialogHeader>
 
-                    <div className="bg-amber-50/50 rounded-2xl p-5 border border-amber-100">
-                        <p className="text-sm text-amber-800 leading-relaxed">
+                    <div className="bg-primary/5 rounded-2xl p-5 border border-primary/10">
+                        <p className="text-sm text-foreground leading-relaxed">
                             Please wait a few moments before trying again, or
                             consider using a different API key with higher
                             limits.
@@ -58,7 +58,7 @@ export function RateLimitModal({ isOpen, onClose }: RateLimitModalProps) {
                     <DialogFooter>
                         <Button
                             onClick={onClose}
-                            className="w-full rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-lg shadow-amber-600/10 transition-all"
+                            className="w-full rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/10 transition-all"
                         >
                             Got it
                         </Button>

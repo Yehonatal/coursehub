@@ -27,22 +27,35 @@ export function ProfileHeader() {
                 onClose={() => setIsEditOpen(false)}
                 user={user}
             />
-            <div className="h-20 sm:h-38 w-full rounded-[2rem] bg-linear-to-br from-primary/10 via-primary/5 to-transparent relative overflow-hidden border-x border-t border-border/40">
+            <div className="h-24 sm:h-48 w-full rounded-3xl  relative overflow-hidden border border-border/50 ">
                 <div
                     className="absolute inset-0 opacity-[0.03]"
                     style={{
-                        backgroundImage:
-                            "radial-gradient(circle, currentColor 1px, transparent 1px)",
-                        backgroundSize: "24px 24px",
+                        backgroundImage: `
+                            linear-gradient(to right, currentColor 1px, transparent 1px),
+                            linear-gradient(to bottom, currentColor 1px, transparent 1px)
+                        `,
+                        backgroundSize: "40px 40px",
                     }}
                 ></div>
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/40"></div>
+
+                <div
+                    className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                    }}
+                ></div>
+
+                <div className="absolute inset-0 bg-linear-to-t from-background/80 via-background/20 to-transparent"></div>
+
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse delay-700"></div>
             </div>
 
-            <div className="px-6 sm:px-10 pb-2 relative">
+            <div className="px-6 sm:px-10 pb-10 relative ">
                 <div className="flex flex-col sm:flex-row items-start md:items-end justify-between gap-4">
                     <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 -mt-8 md:-mt-12 relative z-10">
-                        <div className="h-16 w-16 md:h-24 md:w-24 rounded-full border-4 border-white bg-muted overflow-hidden shadow-xl relative">
+                        <div className="h-16 w-16 md:h-24 md:w-24 rounded-full border-4 border-background bg-card overflow-hidden shadow-xl relative">
                             <Image
                                 src={displayAvatar}
                                 alt="Profile"
@@ -51,9 +64,9 @@ export function ProfileHeader() {
                             />
                         </div>
 
-                        <div className="md:pb-1 space-y-0.5">
+                        <div className="md:pb-1 space-y-0.5 mt-14">
                             <div className="flex items-center gap-2">
-                                <h1 className="text-lg md:text-xl font-serif font-bold text-primary tracking-tight">
+                                <h1 className="text-lg md:text-xl font-serif font-bold text-foreground tracking-tight">
                                     {displayName}
                                 </h1>
                                 {user?.is_verified && (
@@ -65,7 +78,7 @@ export function ProfileHeader() {
                                     `${displayRole} at ${displayUniversity}`}
                             </p>
                             <div className="flex items-center gap-3 text-[9px] md:text-[10px] text-muted-foreground/60 font-medium">
-                                <span className="px-1.5 py-0.5 rounded-full bg-muted/50 border border-border/50">
+                                <span className="px-1.5 py-0.5 rounded-full bg-muted/50 border border-border">
                                     {displayRole}
                                 </span>
                                 <span className="h-1 w-1 rounded-full bg-border" />
@@ -94,15 +107,15 @@ export function ProfileHeader() {
                                 href={`/university/${displayUniversity
                                     .toLowerCase()
                                     .replace(/\s+/g, "-")}`}
-                                className="flex items-center gap-3 p-1.5 pr-3 rounded-xl hover:bg-muted/5 transition-all border border-transparent hover:border-border/40 group"
+                                className="flex items-center gap-3 p-1.5 pr-3 rounded-xl hover:bg-muted/5 transition-all border border-transparent hover:border-border group"
                             >
-                                <div className="h-9 w-9 rounded-lg bg-primary/5 flex items-center justify-center text-primary font-bold text-[10px] group-hover:bg-primary group-hover:text-white transition-all">
+                                <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-[10px] group-hover:bg-primary group-hover:text-primary-foreground transition-all">
                                     {displayUniversity
                                         .substring(0, 2)
                                         .toUpperCase()}
                                 </div>
                                 <div className="space-y-0">
-                                    <p className="text-xs font-bold text-primary tracking-tight">
+                                    <p className="text-xs font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">
                                         {displayUniversity}
                                     </p>
                                 </div>

@@ -71,7 +71,7 @@ export default function FAQPage() {
                 title={
                     <>
                         Frequently Asked{" "}
-                        <HandDrawnUnderline className="text-[#F5A623]">
+                        <HandDrawnUnderline className="text-primary">
                             Questions
                         </HandDrawnUnderline>
                     </>

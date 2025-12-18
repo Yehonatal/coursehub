@@ -71,7 +71,7 @@ export function DeleteResourceModal({
                 onClick={onClose}
                 aria-hidden="true"
             />
-            <div className="relative z-10 w-full max-w-[450px] bg-white border-border/50 shadow-2xl rounded-[2rem] overflow-hidden">
+            <div className="relative z-10 w-full max-w-[450px] bg-card border border-border shadow-2xl rounded-3xl overflow-hidden">
                 <div className="p-8 space-y-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3 text-destructive">
@@ -96,7 +96,7 @@ export function DeleteResourceModal({
                     <div className="space-y-3">
                         <p className="text-sm leading-relaxed text-muted-foreground">
                             Are you sure you want to delete{" "}
-                            <span className="font-bold text-primary">
+                            <span className="font-bold text-foreground">
                                 "{resourceTitle}"
                             </span>
                             ? This action is permanent and cannot be undone.
@@ -116,7 +116,7 @@ export function DeleteResourceModal({
                             variant="destructive"
                             onClick={handleDelete}
                             disabled={loading}
-                            className="flex-1 rounded-xl bg-destructive hover:bg-destructive/90 text-white font-semibold shadow-lg shadow-destructive/10 transition-all"
+                            className="flex-1 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold shadow-lg shadow-destructive/10 transition-all"
                         >
                             {loading ? (
                                 <>

@@ -22,42 +22,57 @@ export function UniversityHeader({
 }: UniversityHeaderProps) {
     return (
         <div className="relative mb-8">
-            <div className="h-20 sm:h-38 w-full rounded-[2rem] bg-linear-to-br from-primary/10 via-primary/5 to-transparent relative overflow-hidden border border-border/40">
+            <div className="h-24 sm:h-48 w-full rounded-3xl relative overflow-hidden border border-border/50 ">
                 {bannerUrl ? (
                     <Image
                         src={bannerUrl}
                         alt="Banner"
                         fill
-                        className="object-cover opacity-80"
+                        className="object-cover opacity-90"
                     />
                 ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="absolute inset-0">
                         <div
                             className="absolute inset-0 opacity-[0.03]"
                             style={{
-                                backgroundImage:
-                                    "radial-gradient(circle, currentColor 1px, transparent 1px)",
-                                backgroundSize: "24px 24px",
+                                backgroundImage: `
+                                    linear-gradient(to right, currentColor 1px, transparent 1px),
+                                    linear-gradient(to bottom, currentColor 1px, transparent 1px)
+                                `,
+                                backgroundSize: "40px 40px",
                             }}
-                        />
-                        <div className="flex flex-col items-center gap-4 opacity-40 text-center p-8">
-                            <div className="relative h-16 w-16 shrink-0 grayscale opacity-50">
-                                <Image
-                                    src={logoUrl}
-                                    alt={name}
-                                    fill
-                                    className="object-contain"
-                                />
+                        ></div>
+
+                        <div
+                            className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                            style={{
+                                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                            }}
+                        ></div>
+
+                        <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
+                        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse delay-700"></div>
+
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="flex flex-col items-center gap-4 opacity-20 text-center p-8">
+                                <div className="relative h-16 w-16 shrink-0 grayscale">
+                                    <Image
+                                        src={logoUrl}
+                                        alt={name}
+                                        fill
+                                        className="object-contain"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/40" />
+                <div className="absolute inset-0 bg-linear-to-t from-background/80 via-background/20 to-transparent" />
             </div>
 
             <div className="px-6 sm:px-10 pb-4 relative">
                 <div className="flex flex-col md:flex-row items-start gap-6 -mt-10 md:-mt-14 relative z-10">
-                    <div className="h-20 w-20 md:h-32 md:w-32 rounded-[2rem] border-4 border-white bg-white shadow-2xl relative overflow-hidden shrink-0 flex items-center justify-center p-4">
+                    <div className="h-20 w-20 md:h-32 md:w-32 rounded-3xl border-4 border-background bg-card shadow-2xl relative overflow-hidden shrink-0 flex items-center justify-center p-4">
                         <Image
                             src={logoUrl}
                             alt={name}
@@ -70,7 +85,7 @@ export function UniversityHeader({
                     <div className="flex-1 space-y-3 md:pt-16">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="space-y-1.5">
-                                <h1 className="text-2xl md:text-3xl font-serif font-bold text-primary tracking-tight">
+                                <h1 className="text-2xl md:text-3xl font-serif font-bold text-foreground tracking-tight">
                                     {name}
                                 </h1>
                                 <div className="flex items-center gap-3 text-[10px] md:text-xs text-muted-foreground/60 font-medium">

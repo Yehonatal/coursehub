@@ -77,7 +77,6 @@ export default async function ResourcesPage({
                     <FilterSidebar />
                 </aside>
 
-                {/* Main Content */}
                 <div className="space-y-12">
                     <PopularResourcesList resources={popularAI} />
 
@@ -86,7 +85,7 @@ export default async function ResourcesPage({
                             All Resources
                         </h3>
                         {resourcesForGrid.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
                                 {resourcesForGrid.map((resource) => (
                                     <ResourceCard
                                         key={resource.id}

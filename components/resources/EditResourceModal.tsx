@@ -74,7 +74,7 @@ function EditResourceForm({
             <div className="space-y-2.5">
                 <Label
                     htmlFor="title"
-                    className="text-sm font-medium text-primary/80 ml-1"
+                    className="text-sm font-medium text-muted-foreground ml-1"
                 >
                     Title
                 </Label>
@@ -84,7 +84,7 @@ function EditResourceForm({
                     defaultValue={resource.title}
                     placeholder="e.g. Introduction to Computer Science Notes"
                     required
-                    className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
+                    className="h-12 rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                 />
                 {state?.errors?.title && (
                     <p className="text-xs text-destructive font-medium ml-1">
@@ -97,7 +97,7 @@ function EditResourceForm({
                 <div className="space-y-2.5">
                     <Label
                         htmlFor="courseCode"
-                        className="text-sm font-medium text-primary/80 ml-1"
+                        className="text-sm font-medium text-muted-foreground ml-1"
                     >
                         Course Code
                     </Label>
@@ -107,7 +107,7 @@ function EditResourceForm({
                         defaultValue={resource.courseCode}
                         placeholder="e.g. CS101"
                         required
-                        className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
+                        className="h-12 rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                     />
                     {state?.errors?.courseCode && (
                         <p className="text-xs text-destructive font-medium ml-1">
@@ -118,7 +118,7 @@ function EditResourceForm({
                 <div className="space-y-2.5">
                     <Label
                         htmlFor="semester"
-                        className="text-sm font-medium text-primary/80 ml-1"
+                        className="text-sm font-medium text-muted-foreground ml-1"
                     >
                         Semester
                     </Label>
@@ -128,7 +128,7 @@ function EditResourceForm({
                         defaultValue={resource.semester}
                         placeholder="e.g. Fall 2024"
                         required
-                        className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
+                        className="h-12 rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                     />
                     {state?.errors?.semester && (
                         <p className="text-xs text-destructive font-medium ml-1">
@@ -142,7 +142,7 @@ function EditResourceForm({
                 <div className="space-y-2.5">
                     <Label
                         htmlFor="university"
-                        className="text-sm font-medium text-primary/80 ml-1"
+                        className="text-sm font-medium text-muted-foreground ml-1"
                     >
                         University
                     </Label>
@@ -151,7 +151,7 @@ function EditResourceForm({
                         name="university"
                         defaultValue={resource.university}
                         placeholder="University Name"
-                        className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
+                        className="h-12 rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                     />
                     {state?.errors?.university && (
                         <p className="text-xs text-destructive font-medium ml-1">
@@ -162,7 +162,7 @@ function EditResourceForm({
                 <div className="space-y-2.5">
                     <Label
                         htmlFor="resourceType"
-                        className="text-sm font-medium text-primary/80 ml-1"
+                        className="text-sm font-medium text-muted-foreground ml-1"
                     >
                         Type
                     </Label>
@@ -175,10 +175,10 @@ function EditResourceForm({
                         value={resourceType}
                         onValueChange={(v) => setResourceType(v)}
                     >
-                        <SelectTrigger className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all">
+                        <SelectTrigger className="h-12 rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all">
                             <SelectValue placeholder="Select type" />
                         </SelectTrigger>
-                        <SelectContent className="rounded-xl border-border/50 shadow-xl">
+                        <SelectContent className="rounded-xl border-border shadow-xl">
                             <SelectItem value="notes">Notes</SelectItem>
                             <SelectItem value="slides">Slides</SelectItem>
                             <SelectItem value="exam">Exam / Quiz</SelectItem>
@@ -198,7 +198,7 @@ function EditResourceForm({
             <div className="space-y-2.5">
                 <Label
                     htmlFor="description"
-                    className="text-sm font-medium text-primary/80 ml-1"
+                    className="text-sm font-medium text-muted-foreground ml-1"
                 >
                     Description
                 </Label>
@@ -207,7 +207,7 @@ function EditResourceForm({
                     name="description"
                     defaultValue={resource.description}
                     placeholder="Briefly describe this resource..."
-                    className="min-h-[120px] rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all resize-none"
+                    className="min-h-[120px] rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all resize-none"
                 />
                 {state?.errors?.description && (
                     <p className="text-xs text-destructive font-medium ml-1">
@@ -219,7 +219,7 @@ function EditResourceForm({
             <div className="space-y-2.5">
                 <Label
                     htmlFor="tags"
-                    className="text-sm font-medium text-primary/80 ml-1"
+                    className="text-sm font-medium text-muted-foreground ml-1"
                 >
                     Tags
                 </Label>
@@ -228,7 +228,7 @@ function EditResourceForm({
                     name="tags"
                     defaultValue={resource.tags}
                     placeholder="comma, separated, tags"
-                    className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
+                    className="h-12 rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                 />
                 {state?.errors?.tags && (
                     <p className="text-xs text-destructive font-medium ml-1">
@@ -240,7 +240,7 @@ function EditResourceForm({
             <div className="space-y-2.5">
                 <Label
                     htmlFor="file"
-                    className="text-sm font-medium text-primary/80 ml-1"
+                    className="text-sm font-medium text-muted-foreground ml-1"
                 >
                     Replace File (Optional)
                 </Label>
@@ -249,7 +249,7 @@ function EditResourceForm({
                         id="file"
                         name="file"
                         type="file"
-                        className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
+                        className="h-12 rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
                     />
                 </div>
                 {resource.fileName && (
@@ -272,7 +272,7 @@ function EditResourceForm({
                 <Button
                     type="submit"
                     disabled={isPending}
-                    className="rounded-xl px-8 bg-primary hover:bg-primary/90 text-white font-semibold shadow-lg shadow-primary/10 transition-all"
+                    className="rounded-xl px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/10 transition-all"
                 >
                     {isPending ? (
                         <>
@@ -305,14 +305,14 @@ export function EditResourceModal({
             <div
                 role="dialog"
                 aria-modal="true"
-                className="relative z-10 w-full max-w-2xl space-y-6 px-8 py-10 bg-white border-border/50 shadow-2xl rounded-[2rem] max-h-[90vh] overflow-y-auto"
+                className="relative z-10 w-full max-w-2xl space-y-6 px-8 py-10 bg-card border border-border shadow-2xl rounded-3xl max-h-[90vh] overflow-y-auto"
             >
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-bold">
                             Resource Settings
                         </p>
-                        <h2 className="text-2xl font-serif font-semibold text-primary tracking-tight">
+                        <h2 className="text-2xl font-serif font-semibold text-foreground tracking-tight">
                             Edit Resource
                         </h2>
                     </div>

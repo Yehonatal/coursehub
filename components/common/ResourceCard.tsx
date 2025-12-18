@@ -52,7 +52,7 @@ export function ResourceCard({
             href={`/resources/${id}`}
             className={cn("block group h-full", className)}
         >
-            <Card className="h-full flex flex-col overflow-hidden transition-all duration-500 border border-border/40 rounded-[2rem] hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-1 bg-white relative">
+            <Card className="h-full flex flex-col overflow-hidden transition-all duration-500 border border-border rounded-3xl hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-1 bg-card relative">
                 <div
                     className={cn(
                         "bg-muted/30 relative overflow-hidden",
@@ -77,7 +77,7 @@ export function ResourceCard({
                             <div className="group/verifier relative">
                                 <Badge variant="verified" />
                                 {verifier && (
-                                    <div className="absolute top-full left-0 mt-2 hidden group-hover/verifier:block w-40 p-2 bg-white/95 backdrop-blur-md border border-border/50 rounded-xl shadow-xl z-50 text-[9px] animate-in fade-in slide-in-from-top-1 duration-200">
+                                    <div className="absolute top-full left-0 mt-2 hidden group-hover/verifier:block w-40 p-2 bg-card backdrop-blur-md border border-border rounded-xl shadow-xl z-50 text-[9px] animate-in fade-in slide-in-from-top-1 duration-200">
                                         <p className="font-bold text-primary">
                                             Verified by:
                                         </p>
@@ -90,7 +90,7 @@ export function ResourceCard({
                         ) : (
                             <Badge
                                 variant="neutral"
-                                className="bg-white/60 backdrop-blur-sm text-muted-foreground/60 border-none shadow-none"
+                                className="bg-muted/60 backdrop-blur-sm text-muted-foreground border-none shadow-none"
                             >
                                 Unverified
                             </Badge>

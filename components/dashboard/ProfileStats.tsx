@@ -72,12 +72,12 @@ export function ProfileStats({
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 relative">
-                    <div className="flex items-center gap-4 p-5 rounded-2xl border border-border/40 hover:border-primary/20 transition-all group/stat shadow-sm">
-                        <div className="h-12 w-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 transition-transform">
-                            <FileText className="h-6 w-6 text-blue-600" />
+                    <div className="flex items-center gap-4 p-5 rounded-2xl border border-border bg-card hover:border-primary/20 transition-all group/stat shadow-sm">
+                        <div className="h-12 w-12 rounded-xl bg-primary/5 flex items-center justify-center shrink-0 transition-transform">
+                            <FileText className="h-6 w-6 text-primary" />
                         </div>
                         <div>
-                            <span className="text-3xl font-serif font-semibold text-primary block leading-none">
+                            <span className="text-3xl font-serif font-semibold text-foreground block leading-none">
                                 <CountUp end={stats.notes} />
                             </span>
                             <span className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">
@@ -86,12 +86,12 @@ export function ProfileStats({
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4 p-5 rounded-2xl border border-border/40 hover:border-primary/20 transition-all group/stat shadow-sm">
-                        <div className="h-12 w-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 transition-transform">
-                            <Network className="h-6 w-6 text-emerald-600" />
+                    <div className="flex items-center gap-4 p-5 rounded-2xl border border-border bg-card hover:border-primary/20 transition-all group/stat shadow-sm">
+                        <div className="h-12 w-12 rounded-xl bg-primary/5 flex items-center justify-center shrink-0 transition-transform">
+                            <Network className="h-6 w-6 text-primary" />
                         </div>
                         <div>
-                            <span className="text-3xl font-serif font-semibold text-primary block leading-none">
+                            <span className="text-3xl font-serif font-semibold text-foreground block leading-none">
                                 <CountUp end={stats.trees} />
                             </span>
                             <span className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">
@@ -100,12 +100,12 @@ export function ProfileStats({
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4 p-5 rounded-2xl border border-border/40 hover:border-primary/20 transition-all group/stat shadow-sm">
-                        <div className="h-12 w-12 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0 transition-transform">
-                            <HelpCircle className="h-6 w-6 text-indigo-600" />
+                    <div className="flex items-center gap-4 p-5 rounded-2xl border border-border bg-card hover:border-primary/20 transition-all group/stat shadow-sm">
+                        <div className="h-12 w-12 rounded-xl bg-primary/5 flex items-center justify-center shrink-0 transition-transform">
+                            <HelpCircle className="h-6 w-6 text-primary" />
                         </div>
                         <div>
-                            <span className="text-3xl font-serif font-semibold text-primary block leading-none">
+                            <span className="text-3xl font-serif font-semibold text-foreground block leading-none">
                                 <CountUp end={stats.flashcards} />
                             </span>
                             <span className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">
@@ -116,7 +116,7 @@ export function ProfileStats({
                 </div>
             </div>
 
-            <Card className="p-8 bg-primary text-primary-foreground rounded-[2rem] shadow-lg shadow-primary/20 relative overflow-hidden group border-none">
+            <Card className="p-8 bg-primary text-primary-foreground rounded-3xl shadow-lg shadow-primary/20 relative overflow-hidden group border-none">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent)]" />
                 <div className="relative h-full flex flex-col justify-between">
                     <div className="space-y-1">
@@ -138,8 +138,8 @@ export function ProfileStats({
                             </span>
                         </div>
                         <div className="mt-6 flex items-center gap-3">
-                            <div className="h-12 w-12 rounded-xl bg-white/10 flex items-center justify-center">
-                                <Folder className="h-6 w-6 text-white" />
+                            <div className="h-12 w-12 rounded-xl bg-primary-foreground/10 flex items-center justify-center">
+                                <Folder className="h-6 w-6 text-primary-foreground" />
                             </div>
                             <p className="text-xs text-primary-foreground/80 leading-relaxed font-medium">
                                 You've shared {stats.uploads} resources with the

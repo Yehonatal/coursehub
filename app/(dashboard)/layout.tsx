@@ -15,11 +15,11 @@ export default async function DashboardLayout({
 
     return (
         <UserProvider user={user}>
-            <div className="min-h-screen bg-[#F9F9F9] font-sans text-foreground pb-16 md:pb-0">
+            <div className="min-h-screen bg-background font-sans text-foreground pb-16 md:pb-0">
                 <AOSInit />
                 <Suspense
                     fallback={
-                        <div className="h-20 w-full bg-white border-b border-border/40" />
+                        <div className="h-20 w-full bg-card border-b border-border/40" />
                     }
                 >
                     <Header />

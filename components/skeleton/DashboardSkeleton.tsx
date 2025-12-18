@@ -7,14 +7,14 @@ export function DashboardSkeleton() {
             {/* Header Section */}
             <div className="space-y-2">
                 <div className="h-7 w-40 bg-muted rounded-xl"></div>
-                <div className="h-3 w-64 bg-muted/60 rounded-lg"></div>
+                <div className="h-3 w-64 bg-muted/60 rounded-xl"></div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-[2.5fr_9.5fr] gap-8">
                 {/* Sidebar Skeleton */}
                 <div className="hidden lg:block space-y-6">
-                    <div className="h-[300px] bg-muted rounded-[2rem]"></div>
-                    <div className="h-[150px] bg-muted rounded-[2rem]"></div>
+                    <div className="h-[300px] bg-muted rounded-3xl"></div>
+                    <div className="h-[150px] bg-muted rounded-3xl"></div>
                 </div>
 
                 {/* Main Content Skeleton */}
@@ -23,7 +23,7 @@ export function DashboardSkeleton() {
                         {[1, 2, 3].map((i) => (
                             <div
                                 key={i}
-                                className="h-24 bg-muted rounded-[2rem]"
+                                className="h-24 bg-muted rounded-3xl"
                             ></div>
                         ))}
                     </div>
@@ -34,7 +34,7 @@ export function DashboardSkeleton() {
                             {[1, 2, 3, 4, 5, 6].map((i) => (
                                 <div
                                     key={i}
-                                    className="h-64 bg-muted rounded-[2rem]"
+                                    className="h-64 bg-muted rounded-3xl"
                                 ></div>
                             ))}
                         </div>

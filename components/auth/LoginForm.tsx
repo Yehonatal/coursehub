@@ -48,9 +48,9 @@ export function LoginForm() {
     return (
         <div className="w-full space-y-8">
             <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-3xl font-serif font-medium tracking-tight text-[#0A251D]">
+                <h1 className="text-3xl font-serif font-medium tracking-tight text-foreground">
                     Welcome{" "}
-                    <HandDrawnUnderline className="text-[#F5A623]">
+                    <HandDrawnUnderline className="text-primary">
                         back
                     </HandDrawnUnderline>
                 </h1>
@@ -61,7 +61,7 @@ export function LoginForm() {
 
             <form action={action} className="space-y-6">
                 <div className="space-y-2">
-                    <Label htmlFor="email" className="text-[#0A251D]">
+                    <Label htmlFor="email" className="text-foreground">
                         Email
                     </Label>
                     <Input
@@ -70,7 +70,7 @@ export function LoginForm() {
                         type="email"
                         placeholder="name@example.com"
                         required
-                        className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                        className="h-11 bg-background border-border focus-visible:ring-primary"
                     />
                     {state?.errors?.email && (
                         <p className="text-sm text-red-500">
@@ -80,12 +80,12 @@ export function LoginForm() {
                 </div>
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                        <Label htmlFor="password" className="text-[#0A251D]">
+                        <Label htmlFor="password" className="text-foreground">
                             Password
                         </Label>
                         <Link
                             href="/forgot-password"
-                            className="text-sm font-medium text-[#0A251D] hover:underline"
+                            className="text-sm font-medium text-foreground hover:underline"
                         >
                             Forgot password?
                         </Link>
@@ -97,7 +97,7 @@ export function LoginForm() {
                             type={showPassword ? "text" : "password"}
                             placeholder="••••••••"
                             required
-                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D] pr-10"
+                            className="h-11 bg-background border-border focus-visible:ring-primary pr-10"
                         />
                         <Button
                             type="button"
@@ -107,9 +107,9 @@ export function LoginForm() {
                             onClick={() => setShowPassword(!showPassword)}
                         >
                             {showPassword ? (
-                                <EyeOff className="h-4 w-4 text-gray-400" />
+                                <EyeOff className="h-4 w-4 text-muted-foreground" />
                             ) : (
-                                <Eye className="h-4 w-4 text-gray-400" />
+                                <Eye className="h-4 w-4 text-muted-foreground" />
                             )}
                         </Button>
                     </div>
@@ -128,7 +128,7 @@ export function LoginForm() {
 
                 <Button
                     type="submit"
-                    className="w-full h-11 bg-[#0A251D] hover:bg-[#0A251D]/90 text-white font-medium"
+                    className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
                     disabled={isPending}
                 >
                     {isPending && (
@@ -144,7 +144,7 @@ export function LoginForm() {
                 </span>
                 <Link
                     href="/register"
-                    className="font-medium text-[#0A251D] hover:underline underline-offset-4"
+                    className="font-medium text-foreground hover:underline underline-offset-4"
                 >
                     Sign up
                 </Link>

@@ -19,7 +19,7 @@ export function MobileQuickActions() {
                     className={cn(
                         "h-auto py-3 flex flex-col gap-1 border-dashed border-2",
                         isOpen && activeTab === "upload"
-                            ? "border-blue-500 bg-blue-50 text-blue-700"
+                            ? "border-primary bg-primary/10 text-primary"
                             : "border-border/60"
                     )}
                     onClick={() => {
@@ -45,7 +45,7 @@ export function MobileQuickActions() {
                     className={cn(
                         "h-auto py-3 flex flex-col gap-1 border-dashed border-2",
                         isOpen && activeTab === "ai"
-                            ? "border-purple-500 bg-purple-50 text-purple-700"
+                            ? "border-secondary bg-secondary/10 text-secondary"
                             : "border-border/60"
                     )}
                     onClick={() => {

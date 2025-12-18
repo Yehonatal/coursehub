@@ -23,9 +23,9 @@ export default function ForgotPasswordPage() {
     return (
         <div className="w-full space-y-8">
             <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-3xl font-serif font-medium tracking-tight text-[#0A251D]">
+                <h1 className="text-3xl font-serif font-medium tracking-tight text-foreground">
                     Forgot{" "}
-                    <HandDrawnUnderline className="text-[#F5A623]">
+                    <HandDrawnUnderline className="text-primary">
                         password?
                     </HandDrawnUnderline>
                 </h1>
@@ -36,16 +36,16 @@ export default function ForgotPasswordPage() {
             </div>
 
             {state.success ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                    <p className="text-green-800 font-medium">
+                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-center">
+                    <p className="text-green-600 dark:text-green-400 font-medium">
                         Check your email
                     </p>
-                    <p className="text-sm text-green-700 mt-1">
+                    <p className="text-sm text-green-600/80 dark:text-green-400/80 mt-1">
                         We've sent a password reset link to your email address.
                     </p>
                     <Link
                         href="/login"
-                        className="inline-flex items-center justify-center mt-4 text-sm font-medium text-[#0A251D] hover:underline"
+                        className="inline-flex items-center justify-center mt-4 text-sm font-medium text-foreground hover:underline"
                     >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to login
@@ -54,7 +54,7 @@ export default function ForgotPasswordPage() {
             ) : (
                 <form action={action} className="space-y-6">
                     <div className="space-y-2">
-                        <Label htmlFor="email" className="text-[#0A251D]">
+                        <Label htmlFor="email" className="text-foreground">
                             Email
                         </Label>
                         <Input
@@ -63,7 +63,7 @@ export default function ForgotPasswordPage() {
                             type="email"
                             placeholder="name@example.com"
                             required
-                            className="h-11 bg-white border-gray-200 focus-visible:ring-[#0A251D]"
+                            className="h-11 bg-background border-border focus-visible:ring-primary"
                         />
                         {state?.errors?.email && (
                             <p className="text-sm text-red-500">
@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
 
                     <Button
                         type="submit"
-                        className="w-full h-11 bg-[#0A251D] hover:bg-[#0A251D]/90 text-white font-medium"
+                        className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
                         disabled={isPending}
                     >
                         {isPending && (
@@ -92,7 +92,7 @@ export default function ForgotPasswordPage() {
                     <div className="text-center">
                         <Link
                             href="/login"
-                            className="text-sm font-medium text-[#0A251D] hover:underline inline-flex items-center"
+                            className="text-sm font-medium text-foreground hover:underline inline-flex items-center"
                         >
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to login

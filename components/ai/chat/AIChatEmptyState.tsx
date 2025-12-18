@@ -23,23 +23,23 @@ export function AIChatEmptyState({
 }: AIChatEmptyStateProps) {
     return (
         <div className="w-full flex flex-col items-end space-y-4 max-w-4xl mx-auto mt-auto">
-            <div className="bg-white p-3 pr-6 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-3 w-fit max-w-md transition-transform hover:scale-[1.02]">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0 text-amber-600">
+            <div className="bg-card p-3 pr-6 rounded-2xl shadow-sm border border-border flex items-center gap-3 w-fit max-w-md transition-transform hover:scale-[1.02]">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 text-primary">
                     <Presentation className="w-5 h-5" />
                 </div>
                 <div className="text-left">
                     <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">
+                        <h3 className="font-semibold text-foreground text-sm line-clamp-1">
                             {resourceTitle}
                         </h3>
                         {isParsing && (
                             <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                <Loader2 className="w-3 h-3 animate-spin text-[#0A251D]" />
+                                <Loader2 className="w-3 h-3 animate-spin text-primary" />
                                 <span>Analyzing...</span>
                             </div>
                         )}
                     </div>
-                    <p className="text-xs text-gray-500 font-medium">
+                    <p className="text-xs text-muted-foreground font-medium">
                         {resourceType}
                     </p>
                 </div>
@@ -48,37 +48,37 @@ export function AIChatEmptyState({
             <div className="flex flex-wrap justify-end gap-2">
                 <button
                     onClick={() => onCommand("Make flashcards")}
-                    className="flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-xl hover:bg-amber-100 transition-all shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-xl hover:bg-primary/20 transition-all shadow-sm group"
                 >
-                    <Lightbulb className="w-4 h-4 text-amber-600" />
-                    <span className="text-sm font-medium text-amber-700">
+                    <Lightbulb className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+                    <span className="text-sm font-medium text-primary">
                         Make flashcards
                     </span>
                 </button>
                 <button
                     onClick={() => onCommand("Quiz me")}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:border-red-400 hover:bg-red-50 transition-all group shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all group shadow-sm"
                 >
-                    <HelpCircle className="w-4 h-4 text-red-500 group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-medium text-gray-600 group-hover:text-gray-900">
+                    <HelpCircle className="w-4 h-4 text-primary/60 group-hover:text-primary group-hover:scale-110 transition-all" />
+                    <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground">
                         Quiz me
                     </span>
                 </button>
                 <button
                     onClick={() => onCommand("Summarize this")}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all group shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all group shadow-sm"
                 >
-                    <FileText className="w-4 h-4 text-blue-500 group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-medium text-gray-600 group-hover:text-gray-900">
+                    <FileText className="w-4 h-4 text-primary/60 group-hover:text-primary group-hover:scale-110 transition-all" />
+                    <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground">
                         Summarize this
                     </span>
                 </button>
                 <button
                     onClick={() => onCommand("Map this topic")}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:border-green-400 hover:bg-green-50 transition-all group shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all group shadow-sm"
                 >
-                    <Network className="w-4 h-4 text-green-500 group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-medium text-gray-600 group-hover:text-gray-900">
+                    <Network className="w-4 h-4 text-primary/60 group-hover:text-primary group-hover:scale-110 transition-all" />
+                    <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground">
                         Map this topic
                     </span>
                 </button>

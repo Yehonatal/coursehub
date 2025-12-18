@@ -16,7 +16,7 @@ export default function ContactPage() {
                 title={
                     <>
                         We&apos;d love to{" "}
-                        <HandDrawnUnderline className="text-[#F5A623]">
+                        <HandDrawnUnderline className="text-primary">
                             hear from you
                         </HandDrawnUnderline>
                     </>
@@ -167,7 +167,7 @@ export default function ContactPage() {
 
                             <Button
                                 type="submit"
-                                className="w-full bg-[#0A251D] hover:bg-[#0A251D]/90 text-white"
+                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                             >
                                 Send Message
                             </Button>

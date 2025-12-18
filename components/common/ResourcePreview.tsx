@@ -31,7 +31,7 @@ export function ResourcePreview({
     if (!fileUrl || hasError) {
         return (
             <div
-                className={`flex items-center justify-center bg-gray-100 text-gray-400 ${className}`}
+                className={`flex items-center justify-center bg-muted text-muted-foreground/40 ${className}`}
             >
                 {isPdf ? (
                     <FileText className="h-12 w-12" />
@@ -59,12 +59,12 @@ export function ResourcePreview({
 
     return (
         <div
-            className={`relative w-full h-full overflow-hidden bg-white ${className}`}
+            className={`relative w-full h-full overflow-hidden bg-card ${className}`}
         >
             {/* Loading State */}
             {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-10">
-                    <div className="animate-pulse w-8 h-8 rounded-full bg-gray-200" />
+                <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-10">
+                    <div className="animate-pulse w-8 h-8 rounded-full bg-muted" />
                 </div>
             )}
 

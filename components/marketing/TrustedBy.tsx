@@ -3,24 +3,24 @@ import { HandDrawnUnderline } from "@/components/ui/decorations";
 
 export function TrustedBy() {
     return (
-        <section className="w-full py-20 bg-[#F5F2EB]">
+        <section className="w-full py-20 bg-muted/30">
             <div className="container px-4 md:px-6 mx-auto">
                 <div className="text-center mb-16">
                     <h3 className="text-xs font-bold tracking-widest text-muted-foreground uppercase mb-8">
                         Trusted By{" "}
-                        <HandDrawnUnderline className="text-[#F5A623]">
+                        <HandDrawnUnderline className="text-primary">
                             Leading
                         </HandDrawnUnderline>{" "}
                         Ethiopian Universities
                     </h3>
                     <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-70 grayscale">
-                        <div className="h-12 w-48 bg-neutral-800/10 rounded flex items-center justify-center font-serif font-bold text-neutral-800/40">
+                        <div className="h-12 w-48 bg-foreground/5 rounded flex items-center justify-center font-serif font-bold text-foreground/40">
                             Addis Ababa University
                         </div>
-                        <div className="h-12 w-48 bg-neutral-800/10 rounded flex items-center justify-center font-serif font-bold text-neutral-800/40">
+                        <div className="h-12 w-48 bg-foreground/5 rounded flex items-center justify-center font-serif font-bold text-foreground/40">
                             Adama Science & Tech
                         </div>
-                        <div className="h-12 w-48 bg-neutral-800/10 rounded flex items-center justify-center font-serif font-bold text-neutral-800/40">
+                        <div className="h-12 w-48 bg-foreground/5 rounded flex items-center justify-center font-serif font-bold text-foreground/40">
                             Jimma University
                         </div>
                     </div>
@@ -40,7 +40,7 @@ export function TrustedBy() {
                             “
                         </div>
                         <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-full bg-neutral-200 flex items-center justify-center font-bold text-neutral-600">
+                            <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center font-bold text-muted-foreground">
                                 A
                             </div>
                             <div>
@@ -65,7 +65,7 @@ export function TrustedBy() {
                             “
                         </div>
                         <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-full bg-neutral-200 flex items-center justify-center font-bold text-neutral-600">
+                            <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center font-bold text-muted-foreground">
                                 T
                             </div>
                             <div>

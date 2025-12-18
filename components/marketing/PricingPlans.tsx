@@ -21,7 +21,7 @@ export function PricingPlans() {
                         </p>
                     </div>
                     <div className="flex items-baseline text-3xl sm:text-4xl font-serif font-bold mb-6 sm:mb-8">
-                        <HandDrawnCircle className="text-[#F5A623] -rotate-2">
+                        <HandDrawnCircle className="text-primary -rotate-2">
                             Free
                         </HandDrawnCircle>
                         <span className="ml-2 text-base sm:text-lg font-sans font-normal text-muted-foreground">
@@ -57,7 +57,7 @@ export function PricingPlans() {
                 </div>
 
                 <div
-                    className="flex flex-col p-6 sm:p-8 bg-[#F5F2EB] border-2 border-primary rounded-xl sm:rounded-2xl shadow-xl relative"
+                    className="flex flex-col p-6 sm:p-8 bg-primary/5 border-2 border-primary rounded-xl sm:rounded-2xl shadow-xl relative"
                     data-aos="fade-left"
                 >
                     <div className="absolute top-0 right-0 -mt-3 sm:-mt-4 mr-3 sm:mr-6 px-3 sm:px-4 py-0.5 sm:py-1 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider rounded-full shadow-sm">

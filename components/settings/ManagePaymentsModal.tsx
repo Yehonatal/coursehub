@@ -60,7 +60,7 @@ export function ManagePaymentsModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden border-none shadow-2xl rounded-[2rem]">
+            <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden border-none shadow-2xl rounded-3xl">
                 <div className="p-8 space-y-6">
                     <DialogHeader className="space-y-3">
                         <div className="flex items-center gap-3 text-primary">
@@ -82,7 +82,7 @@ export function ManagePaymentsModal({
                             {payments.map((payment) => (
                                 <div
                                     key={payment.id}
-                                    className="flex items-center justify-between p-4 rounded-2xl border border-border/50 bg-white/50 backdrop-blur-sm transition-all hover:border-primary/20"
+                                    className="flex items-center justify-between p-4 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all hover:border-primary/20"
                                 >
                                     <div className="flex items-center gap-4">
                                         <div className="h-11 w-11 rounded-xl bg-primary/5 flex items-center justify-center">

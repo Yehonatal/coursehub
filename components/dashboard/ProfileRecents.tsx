@@ -12,10 +12,10 @@ export function ProfileRecents({ generations }: { generations: any[] }) {
     if (!generations || generations.length === 0) {
         return (
             <div className="mb-8">
-                <h3 className="text-xs font-bold text-primary/70 mb-3 uppercase tracking-wider">
+                <h3 className="text-xs font-bold text-primary mb-3 uppercase tracking-wider">
                     Recents Created Content
                 </h3>
-                <div className="rounded-[2rem] border border-dashed border-border/60 bg-white/60 p-6 text-xs text-muted-foreground font-medium">
+                <div className="rounded-3xl border border-dashed border-border bg-card p-6 text-xs text-muted-foreground font-medium">
                     You haven't generated any content yet. Start a chat or use
                     the AI tools to create study materials.
                 </div>
@@ -31,7 +31,7 @@ export function ProfileRecents({ generations }: { generations: any[] }) {
     return (
         <div className="mb-8">
             <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xs font-bold text-primary/70 uppercase tracking-wider">
+                <h3 className="text-xs font-bold text-primary uppercase tracking-wider">
                     Recents Created Content
                 </h3>
                 <Link href="/dashboard/history">

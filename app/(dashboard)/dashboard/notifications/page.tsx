@@ -74,13 +74,13 @@ export default function NotificationsPage() {
         switch (type) {
             case "comment":
             case "reply":
-                return "text-blue-600/80 bg-blue-50/50";
+                return "text-blue-500 bg-blue-500/10";
             case "rating":
-                return "text-amber-600/80 bg-amber-50/50";
+                return "text-amber-500 bg-amber-500/10";
             case "report":
-                return "text-red-600/80 bg-red-50/50";
+                return "text-red-500 bg-red-500/10";
             default:
-                return "text-primary/70 bg-primary/5";
+                return "text-primary bg-primary/10";
         }
     };
 
@@ -125,8 +125,8 @@ export default function NotificationsPage() {
 
             <div className="space-y-3">
                 {notifications.length === 0 ? (
-                    <div className="py-32 flex flex-col items-center justify-center text-center space-y-6 rounded-[2rem] border border-border/50 bg-white/40 backdrop-blur-sm">
-                        <div className="h-20 w-20 rounded-full bg-white shadow-sm flex items-center justify-center border border-border/50">
+                    <div className="py-32 flex flex-col items-center justify-center text-center space-y-6 rounded-[2rem] border border-border/50 bg-card/40 backdrop-blur-sm">
+                        <div className="h-20 w-20 rounded-full bg-card shadow-sm flex items-center justify-center border border-border/50">
                             <Bell className="h-10 w-10 text-primary/10" />
                         </div>
                         <div className="space-y-1.5 max-w-xs">
@@ -154,10 +154,10 @@ export default function NotificationsPage() {
                                 className="group block"
                             >
                                 <Card
-                                    className={`relative overflow-hidden p-5 flex items-start gap-5 transition-all duration-500 border-border/50 hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-2xl ${
+                                    className={`relative overflow-hidden p-5 flex items-start gap-5 transition-all duration-500 border-border/50 hover:border-primary/20 hover:shadow-md rounded-2xl ${
                                         !notification.is_read
-                                            ? "bg-white ring-1 ring-primary/5"
-                                            : "bg-white/60 opacity-75"
+                                            ? "bg-card ring-1 ring-primary/5"
+                                            : "bg-card/60 opacity-75"
                                     }`}
                                 >
                                     {!notification.is_read && (

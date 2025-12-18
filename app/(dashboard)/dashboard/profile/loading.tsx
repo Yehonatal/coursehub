@@ -12,7 +12,7 @@ export default function Loading() {
             <ProfileStatsSkeleton />
             <ProfileRecentsSkeleton />
             <div className="space-y-4">
-                <div className="h-8 w-64 bg-gray-200 rounded animate-pulse" />
+                <div className="h-8 w-64 bg-muted rounded-xl animate-pulse" />
                 <ProfileRecentsSkeleton />
             </div>
         </div>

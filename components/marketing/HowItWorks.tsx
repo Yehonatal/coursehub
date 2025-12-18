@@ -5,7 +5,7 @@ import { BookOpen, Users, Zap } from "lucide-react";
 
 export function HowItWorks() {
     return (
-        <section className="w-full py-12 sm:py-16 md:py-20 lg:py-32 bg-muted/30">
+        <section className="w-full py-12 sm:py-16 md:py-20 lg:py-32 bg-muted/50">
             <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
                 <div className="text-center mb-12 sm:mb-16" data-aos="fade-up">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-medium tracking-tight mb-3 sm:mb-4">
@@ -21,13 +21,13 @@ export function HowItWorks() {
                         data-aos="fade-up"
                         data-aos-delay="100"
                     >
-                        <div className="flex h-20 sm:h-24 w-20 sm:w-24 items-center justify-center rounded-full bg-background border border-border shadow-sm mb-4 sm:mb-6">
+                        <div className="flex h-20 sm:h-24 w-20 sm:w-24 items-center justify-center rounded-full bg-card border border-border shadow-sm mb-4 sm:mb-6">
                             <BookOpen
                                 className="h-8 sm:h-10 w-8 sm:w-10 text-primary"
                                 strokeWidth={1.5}
                             />
                         </div>
-                        <div className="inline-block rounded-md bg-muted px-2 py-1 text-xs font-medium uppercase tracking-wider mb-2 sm:mb-3">
+                        <div className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary uppercase tracking-wider mb-2 sm:mb-3">
                             Step 01
                         </div>
                         <h3 className="text-lg sm:text-xl font-serif font-bold mb-2 sm:mb-3">
@@ -45,13 +45,13 @@ export function HowItWorks() {
                         data-aos="fade-up"
                         data-aos-delay="200"
                     >
-                        <div className="flex h-20 sm:h-24 w-20 sm:w-24 items-center justify-center rounded-full bg-background border border-border shadow-sm mb-4 sm:mb-6">
+                        <div className="flex h-20 sm:h-24 w-20 sm:w-24 items-center justify-center rounded-full bg-card border border-border shadow-sm mb-4 sm:mb-6">
                             <Users
                                 className="h-8 sm:h-10 w-8 sm:w-10 text-primary"
                                 strokeWidth={1.5}
                             />
                         </div>
-                        <div className="inline-block rounded-md bg-muted px-2 py-1 text-xs font-medium uppercase tracking-wider mb-2 sm:mb-3">
+                        <div className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary uppercase tracking-wider mb-2 sm:mb-3">
                             Step 02
                         </div>
                         <h3 className="text-lg sm:text-xl font-serif font-bold mb-2 sm:mb-3">
@@ -69,13 +69,13 @@ export function HowItWorks() {
                         data-aos="fade-up"
                         data-aos-delay="300"
                     >
-                        <div className="flex h-20 sm:h-24 w-20 sm:w-24 items-center justify-center rounded-full bg-background border border-border shadow-sm mb-4 sm:mb-6">
+                        <div className="flex h-20 sm:h-24 w-20 sm:w-24 items-center justify-center rounded-full bg-card border border-border shadow-sm mb-4 sm:mb-6">
                             <Zap
                                 className="h-8 sm:h-10 w-8 sm:w-10 text-primary"
                                 strokeWidth={1.5}
                             />
                         </div>
-                        <div className="inline-block rounded-md bg-muted px-2 py-1 text-xs font-medium uppercase tracking-wider mb-2 sm:mb-3">
+                        <div className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary uppercase tracking-wider mb-2 sm:mb-3">
                             Step 03
                         </div>
                         <h3 className="text-lg sm:text-xl font-serif font-bold mb-2 sm:mb-3">

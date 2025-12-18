@@ -12,9 +12,9 @@ export function RelatedResources({ resources }: RelatedResourcesProps) {
     if (!resources || resources.length === 0) return null;
 
     return (
-        <div className="space-y-6 pt-8 border-t border-gray-100">
+        <div className="space-y-6 pt-8 border-t border-border">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-[#0A251D]">
+                <h2 className="text-xl font-serif font-bold text-foreground">
                     Recommended Resources
                 </h2>
                 <div className="flex gap-2">

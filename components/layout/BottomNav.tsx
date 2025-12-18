@@ -40,7 +40,7 @@ export function BottomNav() {
 
     return (
         <>
-            <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border/40 pb-safe md:hidden">
+            <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border/40 pb-safe md:hidden">
                 <div className="flex items-center justify-around h-16">
                     {items.map((item) => {
                         const isActive = pathname === item.href;
@@ -52,7 +52,7 @@ export function BottomNav() {
                                 className={cn(
                                     "flex flex-col items-center justify-center gap-1 w-full h-full transition-colors",
                                     isActive
-                                        ? "text-[#0A251D]"
+                                        ? "text-primary"
                                         : "text-muted-foreground hover:text-foreground"
                                 )}
                             >

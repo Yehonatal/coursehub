@@ -51,7 +51,7 @@ export function ApiKeyModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl rounded-[2rem]">
+            <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl rounded-3xl">
                 <div className="p-8 space-y-6">
                     <DialogHeader className="space-y-3">
                         <div className="flex items-center justify-between">

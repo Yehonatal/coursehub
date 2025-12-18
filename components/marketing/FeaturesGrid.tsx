@@ -58,7 +58,7 @@ export function FeaturesGrid() {
                     </h2>
                     <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
                         Built for the specific rigors of higher education in
-                        <HandDrawnUnderline className="text-[#F5A623]">
+                        <HandDrawnUnderline className="text-primary">
                             Ethiopia.
                         </HandDrawnUnderline>
                     </p>

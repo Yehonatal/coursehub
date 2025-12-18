@@ -82,19 +82,19 @@ export function Header() {
     };
 
     return (
-        <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-xl border-b border-border/40">
+        <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-xl border-b border-border">
             <div className="max-w-[1600px] flex h-20 items-center justify-between px-4 md:px-8 mx-auto">
                 <div className="flex items-center gap-4">
                     <Link
                         href="/dashboard"
                         className="flex items-center gap-3 group"
                     >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-white  group-hover:scale-105 transition-transform duration-300">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground group-hover:scale-105 transition-transform duration-300">
                             <span className="text-xl font-serif font-bold">
                                 H
                             </span>
                         </div>
-                        <span className="hidden md:block text-lg font-serif font-bold text-primary tracking-tight">
+                        <span className="hidden md:block text-lg font-serif font-bold text-foreground tracking-tight">
                             COURSE HUB
                         </span>
                     </Link>
@@ -112,7 +112,7 @@ export function Header() {
                             placeholder="Search for resources, universities, or courses..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full h-12 pl-12 bg-muted/40 border-transparent focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all duration-300 rounded-2xl text-sm font-medium"
+                            className="w-full h-12 pl-12 bg-muted/40 border-transparent focus:bg-card focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all duration-300 rounded-2xl text-sm font-medium"
                         />
                     </form>
                 </div>
@@ -120,19 +120,19 @@ export function Header() {
                 <div className="flex items-center gap-3 md:gap-5">
                     <Link
                         href="/dashboard/notifications"
-                        className="relative h-10 w-10 flex items-center justify-center rounded-xl border border-border/40 bg-white/50 hover:bg-white hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
+                        className="relative h-10 w-10 flex items-center justify-center rounded-xl border border-border/40 bg-card/50 hover:bg-card hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
                         aria-label="View notifications"
                     >
                         <Bell className="h-5 w-5 text-muted-foreground" />
                         {unreadCount > 0 && (
-                            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white border-2 border-white shadow-sm">
+                            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground border-2 border-card shadow-sm">
                                 {unreadCount > 9 ? "9+" : unreadCount}
                             </span>
                         )}
                     </Link>
                     <Link
                         href="/ai"
-                        className="hidden sm:flex h-10 w-10 items-center justify-center rounded-xl border border-border/40 bg-white/50 hover:bg-white hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
+                        className="hidden sm:flex h-10 w-10 items-center justify-center rounded-xl border border-border/40 bg-card/50 hover:bg-card hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
                         aria-label="Open AI workspace"
                     >
                         <Sparkles className="h-5 w-5 text-primary" />

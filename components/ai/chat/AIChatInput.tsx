@@ -43,8 +43,8 @@ export function AIChatInput({
     };
 
     return (
-        <div className="p-6 bg-white border-t shrink-0">
-            <div className="flex flex-wrap gap-2 text-xs mb-2 text-muted-foreground">
+        <div className="p-6 bg-card border-t border-border shrink-0">
+            <div className="flex flex-wrap gap-2 text-xs mb-3 text-muted-foreground">
                 {[
                     "Summarize a PDF",
                     "Create a flashcard set",
@@ -55,20 +55,20 @@ export function AIChatInput({
                         type="button"
                         key={chip}
                         onClick={() => handleChipClick(chip)}
-                        className="px-3 py-1.5 rounded-full border border-border/60 bg-secondary/50 hover:border-primary/40 hover:text-foreground transition-colors"
+                        className="px-3 py-1.5 rounded-full border border-border bg-muted/50 hover:border-primary/50 hover:bg-primary/5 hover:text-primary transition-all"
                     >
                         {chip}
                     </button>
                 ))}
             </div>
-            <div className="relative bg-gray-100 rounded-3xl p-4 transition-all focus-within:ring-2 focus-within:ring-[#0A251D]/10 focus-within:bg-white border border-transparent focus-within:border-gray-200">
+            <div className="relative bg-muted/30 rounded-3xl p-4 transition-all focus-within:ring-2 focus-within:ring-primary/10 focus-within:bg-background border border-border/50 focus-within:border-primary/30">
                 <textarea
                     ref={textareaRef}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Need flashcards, summaries, or quiz questions? Just ask."
-                    className="w-full bg-transparent border-none p-0 text-gray-700 placeholder:text-gray-500 focus:ring-0 resize-none min-h-[60px] text-base"
+                    className="w-full bg-transparent border-none p-0 text-foreground placeholder:text-muted-foreground focus:ring-0 resize-none min-h-[60px] text-base"
                     rows={2}
                     disabled={isLoading || isParsing}
                 />
@@ -76,10 +76,10 @@ export function AIChatInput({
                     <button
                         onClick={onSend}
                         className={cn(
-                            "p-2 rounded-full transition-all duration-200 border border-transparent",
+                            "p-2.5 rounded-full transition-all duration-200 border border-transparent",
                             value.trim() && !isLoading && !isParsing
-                                ? "bg-[#0A251D] text-white hover:bg-[#0A251D]/90 shadow-md"
-                                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                                ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:scale-105 active:scale-95"
+                                : "bg-muted text-muted-foreground cursor-not-allowed"
                         )}
                         disabled={!value.trim() || isLoading || isParsing}
                     >
