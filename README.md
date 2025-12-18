@@ -69,7 +69,10 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-16: Allow users to generate flashcards and knowledge trees via the Gemini Studio API.
 - [ ] FR-17: Restrict AI-powered features to free-tier quotas or require subscription for extended use.
 - [x] FR-18: Send email or SMS notifications for account verification, password resets, and content interaction events.
-- [ ] FR-19: Notify users when their content receives a comment, rating, or verification tag.
+- [x] FR-19: Notify users when their content receives a comment, rating, or verification tag.
+- [x] FR-19-01: Notification preferences can be managed in user settings.
+- [x] FR-19-02: Support opt-in/opt-out for different notification types (email, SMS).
+- [x] FR-19-03: Get notified when password changed, preferences updated, subscription status changed.
 - [ ] FR-20: Send regular updates or reminders regarding saved content and trending materials.
 - [ ] FR-21: Generate university-specific dashboards summarizing uploaded content and engagement metrics.
 - [x] FR-22: Generate user-specific dashboards summarizing personal contributions and engagement statistics.
@@ -77,6 +80,8 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [ ] FR-24: Support a payment module for subscription to premium AI services.
 - [ ] FR-25: Validate subscription status via an external payment gateway.
 - [ ] FR-26: Restrict access to premium features when subscription inactive/expired.
+- [x] FR-27: User settings to manage profile, notification preferences, and subscription details.
+- [x] FR-27-01: Allow users to change password, delete account, and manage linked payment methods.
 
 ### Implemented (summary)
 

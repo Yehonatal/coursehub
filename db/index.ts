@@ -25,7 +25,7 @@ if (connectionString) {
         // console.log("🔌 Initializing new DB connection pool...");
         globalForDb.conn = postgres(url, {
             prepare: false, // Crucial for Supabase Transaction Pooler (port 6543)
-            max: 1, // Limit to 1 connection per serverless function instance
+            max: 10, // Increased from 1 to handle more concurrent requests
             ssl: { rejectUnauthorized: false }, // Required for Supabase
             idle_timeout: 20, // Close idle connections quickly to avoid timeouts
             connect_timeout: 30,
