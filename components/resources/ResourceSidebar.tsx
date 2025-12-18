@@ -44,62 +44,62 @@ export function ResourceSidebar({
     };
 
     return (
-        <div className="space-y-6">
-            <div className="sticky top-8">
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-bold text-[#0A251D]">
-                        Generated Content
+        <div className="space-y-8">
+            <div className="sticky top-24">
+                <div className="flex items-center justify-between mb-6">
+                    <h3 className="font-serif font-bold text-primary text-lg">
+                        AI Insights
                     </h3>
                     {resourceId && generations && generations.length > 0 && (
-                        <span
+                        <button
                             onClick={() => setIsModalOpen(true)}
-                            className="text-xs text-blue-600 font-medium cursor-pointer hover:underline"
+                            className="text-xs text-primary font-bold hover:opacity-70 transition-opacity uppercase tracking-wider"
                         >
                             View All
-                        </span>
+                        </button>
                     )}
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                     {displayGenerations.length > 0 ? (
                         displayGenerations.map((item, i) => (
                             <Card
                                 key={item.id ?? i}
-                                className="p-4 hover:border-blue-200 transition-colors cursor-pointer group"
+                                className="p-5 hover:border-primary/30 transition-all duration-300 cursor-pointer group rounded-[1.5rem] border-border/40 bg-white hover:shadow-lg hover:shadow-primary/5"
                                 onClick={() => handleItemClick(item)}
                             >
                                 <div className="flex gap-4">
                                     <div
-                                        className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                                        className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
                                             item.iconType === "note"
-                                                ? "bg-blue-50 text-blue-600 group-hover:bg-blue-100"
+                                                ? "bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white"
                                                 : item.iconType === "tree"
-                                                ? "bg-green-50 text-green-600 group-hover:bg-green-100"
-                                                : "bg-yellow-50 text-yellow-600 group-hover:bg-yellow-100"
+                                                ? "bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white"
+                                                : "bg-amber-50 text-amber-600 group-hover:bg-amber-600 group-hover:text-white"
                                         }`}
                                     >
                                         {item.iconType === "note" ? (
-                                            <FileText className="w-5 h-5" />
+                                            <FileText className="w-6 h-6" />
                                         ) : item.iconType === "tree" ? (
-                                            <Network className="w-5 h-5" />
+                                            <Network className="w-6 h-6" />
                                         ) : (
-                                            <HelpCircle className="w-5 h-5" />
+                                            <HelpCircle className="w-6 h-6" />
                                         )}
                                     </div>
-                                    <div>
+                                    <div className="flex-1 min-w-0">
                                         <h4
                                             suppressHydrationWarning
-                                            className="font-bold text-[#0A251D] text-sm line-clamp-1"
+                                            className="font-bold text-primary text-sm line-clamp-1 group-hover:text-primary/80 transition-colors"
                                         >
                                             {item.title}
                                         </h4>
                                         <p
                                             suppressHydrationWarning
-                                            className="text-xs text-gray-500 mt-0.5"
+                                            className="text-[10px] text-muted-foreground/60 mt-1 font-bold uppercase tracking-wider"
                                         >
                                             {item.type}
                                         </p>
-                                        <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
+                                        <div className="flex items-center gap-2 mt-2 text-[10px] text-muted-foreground/40 font-medium">
                                             <span suppressHydrationWarning>
                                                 {item.createdAt
                                                     ? new Date(
@@ -113,9 +113,13 @@ export function ResourceSidebar({
                             </Card>
                         ))
                     ) : (
-                        <div className="text-sm text-gray-500 italic">
-                            No content generated yet. Be the first to generate
-                            study materials!
+                        <div className="p-8 rounded-[2rem] border border-dashed border-border/60 bg-muted/5 text-center space-y-3">
+                            <div className="h-12 w-12 rounded-full bg-muted/10 flex items-center justify-center mx-auto">
+                                <Network className="h-6 w-6 text-muted-foreground/40" />
+                            </div>
+                            <p className="text-xs text-muted-foreground/60 font-medium">
+                                No AI content generated yet.
+                            </p>
                         </div>
                     )}
                 </div>

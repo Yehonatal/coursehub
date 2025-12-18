@@ -18,7 +18,7 @@ export default async function DashboardLayout({
             <div className="min-h-screen bg-[#F9F9F9] font-sans text-foreground pb-16 md:pb-0">
                 <AOSInit />
                 <Header />
-                <main className="container mx-auto px-4 py-8 md:px-6">
+                <main className="max-w-[1600px] mx-auto px-4 py-8 md:px-8">
                     <SidebarWrapper>{children}</SidebarWrapper>
                 </main>
                 <BottomNav />

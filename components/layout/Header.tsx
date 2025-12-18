@@ -4,20 +4,12 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-    Search,
-    LogOut,
-    Settings,
-    FileText,
-    Sparkles,
-    Bell,
-} from "lucide-react";
+import { Bell, Search, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { useUser } from "@/components/providers/UserProvider";
 import { error } from "@/lib/logger";
 import { getUnreadNotificationCount } from "@/app/actions/notifications";
+import { UserMenu } from "./UserMenu";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -69,147 +61,73 @@ export function Header() {
     };
 
     return (
-        <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md">
-            <div className="container flex h-16 items-center justify-between px-4 md:px-6 mx-auto">
+        <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-xl border-b border-border/40">
+            <div className="max-w-[1600px] flex h-20 items-center justify-between px-4 md:px-8 mx-auto">
                 <div className="flex items-center gap-4">
-                    <Link href="/dashboard" className="flex items-center gap-2">
-                        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#0A251D] text-white">
-                            <span className="text-lg font-serif font-bold">
+                    <Link
+                        href="/dashboard"
+                        className="flex items-center gap-3 group"
+                    >
+                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-white  group-hover:scale-105 transition-transform duration-300">
+                            <span className="text-xl font-serif font-bold">
                                 H
                             </span>
                         </div>
-                        <span className="hidden md:block text-lg font-serif font-extralight text-[#0A251D]">
+                        <span className="hidden md:block text-lg font-serif font-bold text-primary tracking-tight">
                             COURSE HUB
                         </span>
                     </Link>
                 </div>
 
-                <div className="flex-1 max-w-xl mx-4">
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <div className="flex-1 max-w-2xl mx-8">
+                    <div className="relative group">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60 group-focus-within:text-primary transition-colors" />
                         <Input
                             type="search"
-                            placeholder="Search"
-                            className="w-full pl-10 bg-muted/50 border-transparent focus:bg-white transition-colors rounded-full"
+                            placeholder="Search for resources, universities, or courses..."
+                            className="w-full h-12 pl-12 bg-muted/40 border-transparent focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all duration-300 rounded-2xl text-sm font-medium"
                         />
                     </div>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 md:gap-5">
                     <Link
                         href="/dashboard/notifications"
-                        className="relative h-8 w-8  hidden md:flex items-center justify-center rounded-full border border-border/60 bg-white/80 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A251D] focus-visible:ring-offset-2 transition"
+                        className="relative h-10 w-10 flex items-center justify-center rounded-xl border border-border/40 bg-white/50 hover:bg-white hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
                         aria-label="View notifications"
                     >
                         <Bell className="h-5 w-5 text-muted-foreground" />
                         {unreadCount > 0 && (
-                            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white border-2 border-white shadow-sm">
                                 {unreadCount > 9 ? "9+" : unreadCount}
                             </span>
                         )}
                     </Link>
                     <Link
                         href="/ai"
-                        className="hidden sm:inline-flex h-8 w-8 items-center justify-center rounded-full border border-border/60 bg-white/80 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A251D] focus-visible:ring-offset-2 transition"
+                        className="hidden sm:flex h-10 w-10 items-center justify-center rounded-xl border border-border/40 bg-white/50 hover:bg-white hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
                         aria-label="Open AI workspace"
                     >
                         <Sparkles className="h-5 w-5 text-primary" />
                     </Link>
+
+                    <div className="h-8 w-px bg-border/40 mx-1 hidden md:block" />
+
                     <div className="relative" ref={menuRef}>
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden border border-border focus:outline-none focus:ring-2 focus:ring-[#0A251D] focus:ring-offset-2 transition-all"
+                            className="h-10 w-10 rounded-xl bg-muted overflow-hidden border border-border/40 hover:border-primary/40 transition-all duration-300 shadow-sm"
                         >
                             <Image
                                 src="https://github.com/shadcn.png"
                                 alt="User"
-                                width={32}
-                                height={32}
+                                width={40}
+                                height={40}
                                 className="h-full w-full object-cover"
                             />
                         </button>
 
-                        {isMenuOpen && (
-                            <Card className="absolute right-0 rounded-xl top-full mt-2 w-72 p-2 z-50 shadow-sm border-border/60 animate-in fade-in zoom-in-95 duration-200 bg-white">
-                                <div className="p-2 flex items-start gap-3 mb-2">
-                                    <div className="h-12 w-12 rounded-full bg-gray-200 overflow-hidden shrink-0 relative">
-                                        <Image
-                                            src="https://github.com/shadcn.png"
-                                            alt="User"
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <h4 className="font-bold text-[#0A251D] truncate">
-                                            {user
-                                                ? `${user.first_name} ${user.last_name}`
-                                                : "Guest"}
-                                        </h4>
-                                        <p className="text-xs text-muted-foreground line-clamp-2">
-                                            {user?.role || "Visitor"} |{" "}
-                                            {user?.university ||
-                                                "No University"}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="px-2 mb-2">
-                                    <Button
-                                        variant="outline"
-                                        asChild
-                                        className="w-full rounded-full text-[#0A251D] border-[#0A251D] hover:bg-[#0A251D]/5 h-8 text-xs font-medium"
-                                    >
-                                        <Link href="/dashboard/profile">
-                                            View Profile
-                                        </Link>
-                                    </Button>
-                                </div>
-
-                                <div className="h-px bg-border/40 my-1" />
-
-                                <div className="py-1">
-                                    <h5 className="px-2 py-1 text-xs font-bold text-[#0A251D]">
-                                        Account
-                                    </h5>
-                                    <button className="w-full text-left px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/50 rounded-md flex items-center gap-2 transition-colors">
-                                        <div className="h-4 w-4 rounded bg-yellow-400/20 flex items-center justify-center">
-                                            <div className="h-2 w-2 bg-yellow-500 rounded-sm" />
-                                        </div>
-                                        Try Premium for free
-                                    </button>
-                                    <Link
-                                        href="/dashboard/settings"
-                                        className="w-full text-left px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/50 rounded-md flex items-center gap-2 transition-colors"
-                                    >
-                                        <Settings className="h-4 w-4" />{" "}
-                                        Settings & Privacy
-                                    </Link>
-                                </div>
-
-                                <div className="h-px bg-border/40 my-1" />
-
-                                <div className="py-1">
-                                    <h5 className="px-2 py-1 text-xs font-bold text-[#0A251D]">
-                                        Manage
-                                    </h5>
-                                    <button className="w-full text-left px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/50 rounded-md flex items-center gap-2 transition-colors">
-                                        <FileText className="h-4 w-4" /> Posts &
-                                        Activity
-                                    </button>
-                                </div>
-
-                                <div className="h-px bg-border/40 my-1" />
-
-                                <div className="py-1">
-                                    <button
-                                        onClick={handleSignOut}
-                                        className="w-full text-left px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/50 rounded-md flex items-center gap-2 transition-colors"
-                                    >
-                                        <LogOut className="h-4 w-4" /> Sign Out
-                                    </button>
-                                </div>
-                            </Card>
-                        )}
+                        {isMenuOpen && <UserMenu onSignOut={handleSignOut} />}
                     </div>
                 </div>
             </div>

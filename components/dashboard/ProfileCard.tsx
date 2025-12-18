@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { HandDrawnShape } from "@/components/ui/decorations";
-import { FolderOpen, BadgeCheck } from "lucide-react";
+import { FolderOpen, BadgeCheck, MapPin } from "lucide-react";
 import { useUser } from "@/components/providers/UserProvider";
 
 interface ProfileCardProps {
@@ -55,24 +55,24 @@ export function ProfileCard({
 
     return (
         <Card
-            className="overflow-hidden border-border/60 bg-white group transition-all duration-300 rounded-2xl"
+            className="overflow-hidden border-border/40 bg-white group transition-all duration-300 rounded-[2rem] shadow-sm hover:shadow-md"
             data-aos="fade-up"
         >
-            <div className="h-24 bg-[#0A251D]/5 relative overflow-hidden">
+            <div className="h-28 bg-linear-to-br from-primary/5 via-transparent to-transparent relative overflow-hidden">
                 <div
-                    className="absolute inset-0 opacity-10"
+                    className="absolute inset-0 opacity-[0.03]"
                     style={{
                         backgroundImage:
-                            "radial-gradient(#0A251D 1px, transparent 1px)",
-                        backgroundSize: "10px 10px",
+                            "radial-gradient(circle, currentColor 1px, transparent 1px)",
+                        backgroundSize: "20px 20px",
                     }}
                 ></div>
-                <div className="absolute -right-4 -top-4 opacity-30 rotate-12 z-10">
-                    <HandDrawnShape className="w-32 h-32 text-[#0A251D]" />
+                <div className="absolute -right-4 -top-4 opacity-10 rotate-12 z-10">
+                    <HandDrawnShape className="w-32 h-32 text-primary" />
                 </div>
             </div>
-            <div className="px-4 pb-6 sm:px-6 relative">
-                <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full border-4 border-white bg-gray-200 absolute -top-20 sm:-top-24 overflow-hidden shadow-sm z-20">
+            <div className="px-6 pb-8 relative">
+                <div className="h-20 w-20 rounded-full border-4 border-white bg-muted absolute -top-24 left-4 overflow-hidden shadow-lg z-20">
                     <Image
                         src={displayAvatar}
                         alt="Profile"
@@ -80,28 +80,31 @@ export function ProfileCard({
                         className="object-cover"
                     />
                 </div>
-                <div className="mt-10 space-y-1 sm:mt-12">
-                    <h2 className="text-xl font-serif font-bold text-[#0A251D] flex items-center gap-2">
+                <div className="mt-14 space-y-2">
+                    <h2 className="text-2xl font-serif font-semibold text-primary flex items-center gap-2 tracking-tight">
                         {displayName}
                         {isMounted && user?.is_verified ? (
-                            <BadgeCheck className="h-5 w-5 text-blue-500" />
+                            <BadgeCheck className="h-5 w-5 text-blue-500 fill-blue-50" />
                         ) : isMounted && user ? (
-                            <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-medium border border-amber-200 whitespace-nowrap">
+                            <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold uppercase tracking-wider border border-amber-100 whitespace-nowrap">
                                 Not Verified
                             </span>
                         ) : null}
                     </h2>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground/80 font-medium leading-relaxed">
                         {displayHeadline || displayRole}
                     </p>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground/60 font-medium pt-1">
                         {badge && (
-                            <span className="px-2 py-0.5 rounded-full bg-gray-100 text-xs font-medium">
+                            <span className="px-2.5 py-1 rounded-full bg-muted/30 text-muted-foreground border border-border/50">
                                 {badge}
                             </span>
                         )}
-                        <span>•</span>
-                        <span>{displayLocation}</span>
+                        <span className="h-1 w-1 rounded-full bg-border" />
+                        <span className="flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            {displayLocation}
+                        </span>
                     </div>
                 </div>
 
@@ -110,16 +113,18 @@ export function ProfileCard({
                         href={`/university/${displayUniversity
                             .toLowerCase()
                             .replace(/\s+/g, "-")}`}
-                        className="mt-6 pt-6 border-t border-border/40 flex items-center gap-3 hover:bg-gray-50 transition-colors rounded-md p-2 -mx-2"
+                        className="mt-8 pt-6 border-t border-border/40 flex items-center gap-4 hover:bg-muted/5 transition-all rounded-2xl p-3 -mx-3 group/uni"
                     >
-                        <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-xs">
+                        <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary font-bold text-xs group-hover/uni:bg-primary group-hover/uni:text-white transition-colors">
                             {displayUniversity.substring(0, 2).toUpperCase()}
                         </div>
-                        <div className="text-xs text-muted-foreground">
-                            <p className="font-medium text-foreground">
+                        <div className="space-y-0.5">
+                            <p className="text-sm font-semibold text-primary tracking-tight">
                                 {displayUniversity}
                             </p>
-                            <p>{department || "Department"}</p>
+                            <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">
+                                {department || "Department"}
+                            </p>
                         </div>
                     </Link>
                 )}

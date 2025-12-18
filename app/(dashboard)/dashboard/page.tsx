@@ -44,20 +44,35 @@ export default async function StudentDashboard() {
             <div className="space-y-10">
                 <MobileQuickActions />
                 {recentItems.length > 0 ? (
-                    <div>
-                        <h3 className="text-lg font-serif font-bold text-[#0A251D] mb-4">
-                            Recents
-                        </h3>
+                    <div className="space-y-6">
+                        <div className="space-y-1">
+                            <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-bold">
+                                Continue Learning
+                            </p>
+                            <h3 className="text-2xl font-serif font-semibold text-primary tracking-tight">
+                                Recent Activity
+                            </h3>
+                        </div>
                         <RecentsList items={recentItems} />
                     </div>
                 ) : (
-                    <div className="mb-12">
-                        <h3 className="text-sm font-bold text-[#0A251D]/70 mb-4">
-                            Recents Created Content
-                        </h3>
-                        <div className="rounded-xl border border-dashed border-[#0A251D]/30 bg-white/60 p-6 text-sm text-[#0A251D]">
-                            You haven't generated any content yet. Start a chat
-                            or use the AI tools to create study materials.
+                    <div className="mb-12 space-y-6">
+                        <div className="space-y-1">
+                            <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-bold">
+                                Getting Started
+                            </p>
+                            <h3 className="text-2xl font-serif font-semibold text-primary tracking-tight">
+                                Recent Activity
+                            </h3>
+                        </div>
+                        <div className="rounded-[2rem] border border-dashed border-border/60 bg-muted/5 p-12 text-center space-y-3">
+                            <p className="text-sm text-muted-foreground font-medium">
+                                You haven't generated any content yet.
+                            </p>
+                            <p className="text-xs text-muted-foreground/60">
+                                Start a chat or use the AI tools to create study
+                                materials.
+                            </p>
                         </div>
                     </div>
                 )}

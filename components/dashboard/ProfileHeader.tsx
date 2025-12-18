@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/components/providers/UserProvider";
-import { BadgeCheck, Pencil } from "lucide-react";
+import { BadgeCheck, Pencil, MapPin } from "lucide-react";
 import { EditProfileModal } from "@/components/dashboard/EditProfileModal";
 
 export function ProfileHeader() {
@@ -21,23 +21,28 @@ export function ProfileHeader() {
     const displayAvatar = "https://github.com/shadcn.png"; // Placeholder
 
     return (
-        <div className="relative mb-8">
-            <div className="h-28 sm:h-40 w-full rounded-t-xl bg-[#4F46E5]/10 relative overflow-hidden border-x border-t border-border/60">
+        <div className="relative mb-6">
+            <EditProfileModal
+                open={isEditOpen}
+                onClose={() => setIsEditOpen(false)}
+                user={user}
+            />
+            <div className="h-20 sm:h-38 w-full rounded-[2rem] bg-linear-to-br from-primary/10 via-primary/5 to-transparent relative overflow-hidden border-x border-t border-border/40">
                 <div
-                    className="absolute inset-0 opacity-10"
+                    className="absolute inset-0 opacity-[0.03]"
                     style={{
                         backgroundImage:
-                            "radial-gradient(#0A251D 1px, transparent 1px)",
-                        backgroundSize: "10px 10px",
+                            "radial-gradient(circle, currentColor 1px, transparent 1px)",
+                        backgroundSize: "24px 24px",
                     }}
                 ></div>
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/20"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/40"></div>
             </div>
 
-            <div className="px-4 sm:px-8 pb-4 relative">
+            <div className="px-6 sm:px-10 pb-2 relative">
                 <div className="flex flex-col sm:flex-row items-start md:items-end justify-between gap-4">
-                    <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 -mt-10 md:-mt-12 relative z-10">
-                        <div className="h-20 w-20 md:h-32 md:w-32 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-md relative">
+                    <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 -mt-8 md:-mt-12 relative z-10">
+                        <div className="h-16 w-16 md:h-24 md:w-24 rounded-full border-4 border-white bg-muted overflow-hidden shadow-xl relative">
                             <Image
                                 src={displayAvatar}
                                 alt="Profile"
@@ -46,35 +51,42 @@ export function ProfileHeader() {
                             />
                         </div>
 
-                        <div className="-mt-2 md:mt-16 space-y-1">
-                            <h1 className="text-2xl font-serif font-bold text-[#0A251D] flex items-center gap-2">
-                                {displayName}
+                        <div className="md:pb-1 space-y-0.5">
+                            <div className="flex items-center gap-2">
+                                <h1 className="text-lg md:text-xl font-serif font-bold text-primary tracking-tight">
+                                    {displayName}
+                                </h1>
                                 {user?.is_verified && (
-                                    <BadgeCheck className="h-6 w-6 text-blue-500" />
+                                    <BadgeCheck className="h-4 w-4 text-blue-500 fill-blue-50" />
                                 )}
-                            </h1>
-                            <p className="text-sm md:text-sm font-medium text-[#0A251D]">
+                            </div>
+                            <p className="text-xs md:text-sm font-medium text-muted-foreground/80 leading-relaxed">
                                 {user?.headline ||
-                                    `${displayRole} | @${displayUniversity}`}
+                                    `${displayRole} at ${displayUniversity}`}
                             </p>
-                            <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground">
-                                <span>{displayRole}</span>
-                                <span>•</span>
-                                <span>{displayLocation}</span>
+                            <div className="flex items-center gap-3 text-[9px] md:text-[10px] text-muted-foreground/60 font-medium">
+                                <span className="px-1.5 py-0.5 rounded-full bg-muted/50 border border-border/50">
+                                    {displayRole}
+                                </span>
+                                <span className="h-1 w-1 rounded-full bg-border" />
+                                <span className="flex items-center gap-1">
+                                    <MapPin className="h-3 w-3" />
+                                    {displayLocation}
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 mt-4 md:mt-0">
+                    <div className="flex items-center gap-3 mt-3 md:mt-0 md:pb-2">
                         {user && (
                             <Button
                                 size="icon"
-                                variant="ghost"
+                                variant="outline"
                                 type="button"
                                 onClick={() => setIsEditOpen(true)}
-                                className="h-8 w-8"
+                                className="h-9 w-9 rounded-xl border-border/50 hover:bg-primary/5 hover:text-primary transition-all"
                             >
-                                <Pencil className="h-4 w-4" />
+                                <Pencil className="h-3.5 w-3.5" />
                             </Button>
                         )}
                         {displayUniversity && (
@@ -82,33 +94,23 @@ export function ProfileHeader() {
                                 href={`/university/${displayUniversity
                                     .toLowerCase()
                                     .replace(/\s+/g, "-")}`}
-                                className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                                className="flex items-center gap-3 p-1.5 pr-3 rounded-xl hover:bg-muted/5 transition-all border border-transparent hover:border-border/40 group"
                             >
-                                <div className="h-10 w-10 rounded-full bg-white border border-border flex items-center justify-center overflow-hidden relative">
-                                    <div className="absolute inset-0 bg-green-600/20 flex items-center justify-center text-[10px] font-bold text-green-800">
-                                        {displayUniversity
-                                            .substring(0, 2)
-                                            .toUpperCase()}
-                                    </div>
+                                <div className="h-9 w-9 rounded-lg bg-primary/5 flex items-center justify-center text-primary font-bold text-[10px] group-hover:bg-primary group-hover:text-white transition-all">
+                                    {displayUniversity
+                                        .substring(0, 2)
+                                        .toUpperCase()}
                                 </div>
-                                <div className="text-xs text-[#0A251D]">
-                                    <p className="font-bold">
+                                <div className="space-y-0">
+                                    <p className="text-xs font-bold text-primary tracking-tight">
                                         {displayUniversity}
                                     </p>
-                                    <p>Department</p>
                                 </div>
                             </Link>
                         )}
                     </div>
                 </div>
             </div>
-            {isEditOpen && user && (
-                <EditProfileModal
-                    open={isEditOpen}
-                    onClose={() => setIsEditOpen(false)}
-                    user={user}
-                />
-            )}
         </div>
     );
 }

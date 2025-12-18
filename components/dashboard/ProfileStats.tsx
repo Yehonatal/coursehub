@@ -54,97 +54,100 @@ export function ProfileStats({
     };
 }) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <Card className="md:col-span-2 sm:p-5 bg-gradient-to-br from-blue-50/50 to-white border-border/60  relative overflow-hidden">
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-sm font-bold text-[#0A251D]">
-                        Current Repo Status
-                    </h3>
-                    <div className="px-2 py-1 rounded-full bg-blue-100/50 text-[10px] font-medium text-blue-700 flex items-center gap-1">
-                        <TrendingUp className="h-3 w-3" />
-                        Top 5%
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="md:col-span-2 p-0 bg-transparent relative overflow-hidden group">
+                <div className="flex items-center justify-between mb-8 relative">
+                    <div className="space-y-1">
+                        <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground/60 font-bold">
+                            Overview
+                        </p>
+                        <h3 className="text-2xl font-serif font-semibold text-primary tracking-tight">
+                            Academic Repository
+                        </h3>
+                    </div>
+                    <div className="px-3 py-1.5 rounded-full bg-primary/5 text-xs font-bold text-primary flex items-center gap-2 uppercase tracking-wider border border-primary/10">
+                        <TrendingUp className="h-3.5 w-3.5" />
+                        Top 5% Contributor
                     </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                    <div className="flex flex-1 items-center gap-3 p-3 sm:p-3 rounded-xl bg-white/60 border border-blue-100/50 hover:border-blue-200 transition-colors group">
-                        <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                            <FileText className="h-5 w-5 text-blue-600" />
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 relative">
+                    <div className="flex items-center gap-4 p-5 rounded-2xl border border-border/40 hover:border-primary/20 transition-all group/stat shadow-sm">
+                        <div className="h-12 w-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 transition-transform">
+                            <FileText className="h-6 w-6 text-blue-600" />
                         </div>
                         <div>
-                            <span className="text-2xl font-bold text-[#0A251D] block leading-none">
+                            <span className="text-3xl font-serif font-semibold text-primary block leading-none">
                                 <CountUp end={stats.notes} />
                             </span>
-                            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
+                            <span className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">
                                 Notes
                             </span>
                         </div>
                     </div>
 
-                    <div className="flex flex-1 items-center gap-3 p-3 rounded-xl bg-white/60 border border-teal-100/50 hover:border-teal-200 transition-colors group">
-                        <div className="h-10 w-10 rounded-lg bg-teal-100 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                            <Network className="h-5 w-5 text-teal-600" />
+                    <div className="flex items-center gap-4 p-5 rounded-2xl border border-border/40 hover:border-primary/20 transition-all group/stat shadow-sm">
+                        <div className="h-12 w-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 transition-transform">
+                            <Network className="h-6 w-6 text-emerald-600" />
                         </div>
                         <div>
-                            <span className="text-2xl font-bold text-[#0A251D] block leading-none">
+                            <span className="text-3xl font-serif font-semibold text-primary block leading-none">
                                 <CountUp end={stats.trees} />
                             </span>
-                            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
+                            <span className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">
                                 Trees
                             </span>
                         </div>
                     </div>
 
-                    <div className="flex flex-1 items-center gap-3 p-3 rounded-xl bg-white/60 border border-indigo-100/50 hover:border-indigo-200 transition-colors group">
-                        <div className="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                            <HelpCircle className="h-5 w-5 text-indigo-600" />
+                    <div className="flex items-center gap-4 p-5 rounded-2xl border border-border/40 hover:border-primary/20 transition-all group/stat shadow-sm">
+                        <div className="h-12 w-12 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0 transition-transform">
+                            <HelpCircle className="h-6 w-6 text-indigo-600" />
                         </div>
                         <div>
-                            <span className="text-2xl font-bold text-[#0A251D] block leading-none">
+                            <span className="text-3xl font-serif font-semibold text-primary block leading-none">
                                 <CountUp end={stats.flashcards} />
                             </span>
-                            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
+                            <span className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">
                                 Questions
                             </span>
                         </div>
                     </div>
                 </div>
-            </Card>
+            </div>
 
-            <Card className="p-5 bg-[#FDF8C5] border-none  relative overflow-hidden flex items-center justify-between">
-                <div className="relative z-10">
-                    <h3 className="text-xs font-bold text-[#0A251D]/60 uppercase tracking-wider mb-1">
-                        Files Uploaded
-                    </h3>
-                    <div className="flex items-baseline gap-3">
-                        <div>
-                            <span className="text-4xl font-serif font-bold text-[#0A251D]">
+            <Card className="p-8 bg-primary text-primary-foreground rounded-[2rem] shadow-lg shadow-primary/20 relative overflow-hidden group border-none">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent)]" />
+                <div className="relative h-full flex flex-col justify-between">
+                    <div className="space-y-1">
+                        <p className="text-[10px] uppercase tracking-[0.3em] text-primary-foreground/60 font-bold">
+                            Contributions
+                        </p>
+                        <h3 className="text-xl font-serif font-semibold tracking-tight">
+                            Total Uploads
+                        </h3>
+                    </div>
+
+                    <div className="mt-8">
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-6xl font-serif font-semibold tracking-tighter">
                                 <CountUp end={stats.uploads} />
                             </span>
-                            <div className="text-xs text-muted-foreground uppercase">
-                                Your uploads
-                            </div>
+                            <span className="text-primary-foreground/60 font-medium">
+                                Resources
+                            </span>
                         </div>
-
-                        {typeof stats.totalResources === "number" && (
-                            <div className="ml-2">
-                                <span className="text-sm font-medium text-[#0A251D]/70">
-                                    / {stats.totalResources}
-                                </span>
-                                <div className="text-xs text-muted-foreground uppercase">
-                                    total
-                                </div>
+                        <div className="mt-6 flex items-center gap-3">
+                            <div className="h-12 w-12 rounded-xl bg-white/10 flex items-center justify-center">
+                                <Folder className="h-6 w-6 text-white" />
                             </div>
-                        )}
+                            <p className="text-xs text-primary-foreground/80 leading-relaxed font-medium">
+                                You've shared {stats.uploads} resources with the
+                                community. Keep it up!
+                            </p>
+                        </div>
                     </div>
                 </div>
-
-                <div className="h-14 w-14 rounded-2xl bg-[#0A251D]/5 flex items-center justify-center rotate-3 transition-transform hover:rotate-6">
-                    <Folder className="h-7 w-7 text-[#0A251D]" />
-                </div>
-
-                {/* Decorative circle */}
-                <div className="absolute -right-6 -bottom-6 h-24 w-24 rounded-full bg-[#0A251D]/5 pointer-events-none"></div>
             </Card>
         </div>
     );

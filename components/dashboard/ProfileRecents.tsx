@@ -11,11 +11,11 @@ import { mapGenerationToRecentItem } from "@/lib/ai/mappers";
 export function ProfileRecents({ generations }: { generations: any[] }) {
     if (!generations || generations.length === 0) {
         return (
-            <div className="mb-12">
-                <h3 className="text-sm font-bold text-[#0A251D]/70 mb-4">
+            <div className="mb-8">
+                <h3 className="text-xs font-bold text-primary/70 mb-3 uppercase tracking-wider">
                     Recents Created Content
                 </h3>
-                <div className="rounded-xl border border-dashed border-[#0A251D]/30 bg-white/60 p-6 text-sm text-[#0A251D]">
+                <div className="rounded-[2rem] border border-dashed border-border/60 bg-white/60 p-6 text-xs text-muted-foreground font-medium">
                     You haven't generated any content yet. Start a chat or use
                     the AI tools to create study materials.
                 </div>
@@ -29,18 +29,18 @@ export function ProfileRecents({ generations }: { generations: any[] }) {
     );
 
     return (
-        <div className="mb-12">
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-bold text-[#0A251D]/70">
+        <div className="mb-8">
+            <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xs font-bold text-primary/70 uppercase tracking-wider">
                     Recents Created Content
                 </h3>
                 <Link href="/dashboard/history">
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="text-[#0A251D] hover:text-[#0A251D]/80"
+                        className="text-primary hover:text-primary/80 text-xs h-8"
                     >
-                        Load All <ArrowRight className="ml-2 h-4 w-4" />
+                        Load All <ArrowRight className="ml-2 h-3 w-3" />
                     </Button>
                 </Link>
             </div>

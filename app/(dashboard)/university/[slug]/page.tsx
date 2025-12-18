@@ -2,7 +2,7 @@ import React from "react";
 import { UniversityHeader } from "@/components/dashboard/UniversityHeader";
 import { UniversityStats } from "@/components/dashboard/UniversityStats";
 import { UniversityCommunity } from "@/components/dashboard/UniversityCommunity";
-import { MiniResourceGrid } from "@/components/dashboard/MiniResourceGrid";
+import { ResourceCard } from "@/components/common/ResourceCard";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -16,7 +16,7 @@ export default async function UniversityPage({
     // Hardcoded resources for university page
     const resources = [
         {
-            id: 1,
+            id: "1",
             title: "Introduction to Software Engineering",
             rating: 4.7,
             reviews: 210,
@@ -26,48 +26,52 @@ export default async function UniversityPage({
             downloads: 148,
             comments: 25,
             isAI: true,
+            isVerified: true,
         },
         {
-            id: 2,
-            title: "Introduction to Software Engineering",
-            rating: 4.7,
-            reviews: 210,
+            id: "2",
+            title: "Advanced Database Systems",
+            rating: 4.9,
+            reviews: 156,
             description:
-                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-            tags: ["CS101", "HRU", "Slides"],
-            downloads: 148,
-            comments: 25,
+                "Deep dive into query optimization, indexing strategies, and distributed databases.",
+            tags: ["CS302", "DB", "Notes"],
+            downloads: 89,
+            comments: 12,
             isAI: false,
+            isVerified: true,
         },
         {
-            id: 3,
-            title: "Introduction to Software Engineering",
-            rating: 4.7,
-            reviews: 210,
+            id: "3",
+            title: "Computer Networks Fundamentals",
+            rating: 4.5,
+            reviews: 98,
             description:
-                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-            tags: ["CS101", "HRU", "Slides"],
-            downloads: 148,
-            comments: 25,
+                "Complete guide to OSI model, TCP/IP protocols, and network security basics.",
+            tags: ["CS205", "Networking", "Guide"],
+            downloads: 234,
+            comments: 45,
             isAI: false,
+            isVerified: false,
         },
         {
-            id: 4,
-            title: "Introduction to Software Engineering",
-            rating: 4.7,
-            reviews: 210,
+            id: "4",
+            title: "Operating Systems Concepts",
+            rating: 4.8,
+            reviews: 187,
             description:
-                "This set of lecture slides provides a comprehensive overview of the fundamental...",
-            tags: ["CS101", "HRU", "Slides"],
-            downloads: 148,
-            comments: 25,
+                "Detailed notes on process management, memory allocation, and file systems.",
+            tags: ["CS202", "OS", "Slides"],
+            downloads: 167,
+            comments: 31,
             isAI: true,
+            isVerified: true,
         },
     ];
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-            <div className="space-y-8">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+            <div className="space-y-16">
                 <UniversityHeader
                     name="Haramaya University"
                     description="Haramaya University is a public research university in Haramaya, Oromia Region, Ethiopia."
@@ -76,39 +80,67 @@ export default async function UniversityPage({
                     logoUrl="/hu-logo.jpg"
                 />
 
-                <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_1fr] py-6 gap-8">
-                    <div>
-                        <h3 className="text-sm font-medium text-muted-foreground mb-4">
-                            University's Community on The Platform
-                        </h3>
+                {/* Community & Impact Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                    <div className="lg:col-span-8">
                         <UniversityStats />
                     </div>
-                    <UniversityCommunity />
+                    <div className="lg:col-span-4 pt-4">
+                        <UniversityCommunity />
+                    </div>
                 </div>
 
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-[#0A251D]">
-                            Top verified Material
-                        </h3>
-                        <div className="flex gap-2">
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                className="h-8 w-8 rounded-full border-[#0A251D]/20 text-[#0A251D]"
-                            >
-                                <ArrowLeft className="h-4 w-4" />
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                className="h-8 w-8 rounded-full border-[#0A251D]/20 text-[#0A251D]"
-                            >
-                                <ArrowRight className="h-4 w-4" />
-                            </Button>
+                {/* Materials Section */}
+                <div className="space-y-16">
+                    <div className="space-y-8">
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-1">
+                                <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-bold">
+                                    Curated
+                                </p>
+                                <h3 className="text-2xl md:text-3xl font-serif font-bold text-primary">
+                                    Top Verified Materials
+                                </h3>
+                            </div>
+                            <div className="flex gap-3">
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="h-12 w-12 rounded-2xl border-border/40 text-primary hover:bg-primary/5 transition-all"
+                                >
+                                    <ArrowLeft className="h-5 w-5" />
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="h-12 w-12 rounded-2xl border-border/40 text-primary hover:bg-primary/5 transition-all"
+                                >
+                                    <ArrowRight className="h-5 w-5" />
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                            {resources.map((resource) => (
+                                <ResourceCard key={resource.id} {...resource} />
+                            ))}
                         </div>
                     </div>
-                    <MiniResourceGrid resources={resources} />
+
+                    <div className="space-y-8">
+                        <div className="space-y-1">
+                            <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-bold">
+                                Latest
+                            </p>
+                            <h3 className="text-2xl md:text-3xl font-serif font-bold text-primary">
+                                Recent Contributions
+                            </h3>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                            {resources.slice(0, 4).map((resource) => (
+                                <ResourceCard key={resource.id} {...resource} />
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

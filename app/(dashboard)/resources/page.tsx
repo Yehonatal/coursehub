@@ -86,22 +86,34 @@ export default function ResourcesPage() {
     ];
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-8">
+        <div className="space-y-12">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="space-y-2">
+                    <h1 className="text-2xl md:text-3xl font-serif font-bold text-primary tracking-tight">
+                        Explore Resources
+                    </h1>
+                    <p className="text-muted-foreground/70 font-medium">
+                        Discover high-quality study materials shared by your
+                        community.
+                    </p>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-10">
                 {/* Sidebar Filters */}
-                <aside className="hidden lg:block">
+                <aside className="hidden lg:block sticky top-24 self-start">
                     <FilterSidebar />
                 </aside>
 
                 {/* Main Content */}
-                <div className="space-y-10">
+                <div className="space-y-12">
                     <PopularResourcesList />
 
-                    <div className="space-y-6">
-                        <h3 className="text-lg font-bold text-[#0A251D]">
-                            Resources
+                    <div className="space-y-8">
+                        <h3 className="text-xl font-serif font-bold text-primary">
+                            All Resources
                         </h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                             {resources.map((resource) => (
                                 <ResourceCard key={resource.id} {...resource} />
                             ))}

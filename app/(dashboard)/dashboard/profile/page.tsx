@@ -50,7 +50,7 @@ export default async function StudentProfilePage() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto pb-12 space-y-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-8xl mx-auto pb-12 space-y-8 px-4 sm:px-6 lg:px-8">
             <ProfileHeader />
             <ProfileStats stats={stats} />
             <ProfileRecents generations={generations} />
@@ -62,21 +62,21 @@ export default async function StudentProfilePage() {
                 suppressHydrationWarning
             >
                 <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-[#0A251D]">
+                    <h3 className="text-lg font-serif font-bold text-primary tracking-tight">
                         Most Popular Resources Posted
                     </h3>
                     <div className="flex gap-2">
                         <Button
                             variant="outline"
                             size="icon"
-                            className="h-8 w-8 rounded-full border-[#0A251D]/20 text-[#0A251D]"
+                            className="h-8 w-8 rounded-full border-border/40 text-primary hover:bg-primary/5"
                         >
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
                         <Button
                             variant="outline"
                             size="icon"
-                            className="h-8 w-8 rounded-full border-[#0A251D]/20 text-[#0A251D]"
+                            className="h-8 w-8 rounded-full border-border/40 text-primary hover:bg-primary/5"
                         >
                             <ArrowRight className="h-4 w-4" />
                         </Button>
@@ -85,7 +85,7 @@ export default async function StudentProfilePage() {
                 {userResources.length ? (
                     <MiniResourceGrid resources={userResources} />
                 ) : (
-                    <div className="rounded-xl border border-dashed border-[#0A251D]/30 bg-white/60 p-6 text-sm text-[#0A251D]">
+                    <div className="rounded-[2rem] border border-dashed border-border/60 bg-white/60 p-8 text-xs text-muted-foreground font-medium text-center">
                         You haven’t uploaded any resources yet. Uploading a
                         resource will populate this list so you can easily
                         highlight it as one of your most popular contributions.

@@ -149,7 +149,7 @@ export function AIStudyAssistant() {
                                                 key={i}
                                                 className="flex items-start gap-2 p-2 rounded hover:bg-muted/50 transition-colors"
                                             >
-                                                <div className="min-w-[24px] h-6 flex items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold">
+                                                <div className="min-w-6 h-6 flex items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold">
                                                     {i + 1}
                                                 </div>
                                                 <span className="text-sm leading-relaxed">
@@ -258,11 +258,9 @@ export function AIStudyAssistant() {
 function TreeRenderer({
     node,
     level = 0,
-    isLast = true,
 }: {
     node: AIKnowledgeNode;
     level?: number;
-    isLast?: boolean;
 }) {
     return (
         <div className="relative">
@@ -323,7 +321,6 @@ function TreeRenderer({
                             key={child.id || index}
                             node={child}
                             level={level + 1}
-                            isLast={index === node.children!.length - 1}
                         />
                     ))}
                 </div>

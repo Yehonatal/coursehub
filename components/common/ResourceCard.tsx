@@ -47,36 +47,32 @@ export function ResourceCard({
             href={`/resources/${id}`}
             className={cn("block group h-full", className)}
         >
-            <Card className="h-full flex flex-col overflow-hidden hover:shadow-md transition-all duration-300 border border-amber-100 rounded-xl hover:-translate-y-1 bg-white">
+            <Card className="h-full flex flex-col overflow-hidden transition-all duration-500 border border-border/40 rounded-[2rem] hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-1 bg-white relative">
                 <div
                     className={cn(
-                        "bg-gray-100 relative overflow-hidden border border-dashed border-amber-100",
-                        isMini ? "h-28" : "h-32"
+                        "bg-muted/30 relative overflow-hidden",
+                        isMini ? "h-28" : "h-40"
                     )}
                 >
-                    {/* Resource Preview */}
                     {fileUrl ? (
                         <ResourcePreview
                             fileUrl={fileUrl}
                             mimeType={mimeType}
-                            className="absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+                            className="absolute inset-0 group-hover:scale-110 transition-transform duration-700 ease-out"
                         />
                     ) : (
-                        <div className="absolute inset-0 bg-linear-to-br from-gray-50 to-gray-100 group-hover:scale-105 transition-transform duration-500" />
+                        <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-primary/5 group-hover:scale-110 transition-transform duration-700 ease-out" />
                     )}
 
-                    {isAI && (
-                        <div className="absolute top-2 left-2 z-10">
-                            <Badge variant="ai" />
-                        </div>
-                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                    <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
+                        {isAI && <Badge variant="ai">AI Enhanced</Badge>}
+                    </div>
 
                     {isVerified && (
-                        <div className="absolute top-2 right-2">
-                            <Badge
-                                variant="verified"
-                                className="h-6 text-[10px] px-2 bg-white/90 backdrop-blur-sm shadow-sm"
-                            />
+                        <div className="absolute top-4 right-4 z-10">
+                            <Badge variant="verified" />
                         </div>
                     )}
                 </div>
@@ -84,67 +80,97 @@ export function ResourceCard({
                 <div
                     className={cn(
                         "flex flex-col flex-1 gap-3",
-                        isMini ? "p-3" : "p-4"
+                        isMini ? "p-4" : "p-6"
                     )}
                 >
-                    <div className="space-y-1">
-                        <h3 className="font-bold text-[#0A251D] text-sm leading-tight line-clamp-2 min-h-[2.5em] group-hover:text-primary transition-colors">
+                    <div className="space-y-1.5">
+                        <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-1">
+                                <div className="flex items-center">
+                                    {[...Array(5)].map((_, i) => (
+                                        <Star
+                                            key={i}
+                                            className={cn(
+                                                isMini
+                                                    ? "h-2.5 w-2.5"
+                                                    : "h-3 w-3",
+                                                i < Math.floor(rating)
+                                                    ? "fill-amber-400 text-amber-400"
+                                                    : "fill-muted text-muted"
+                                            )}
+                                        />
+                                    ))}
+                                </div>
+                                <span className="text-[9px] font-bold text-muted-foreground/60">
+                                    ({reviews})
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-1 text-[9px] font-bold text-primary/60 uppercase tracking-widest">
+                                <Download className="h-2.5 w-2.5" />
+                                {downloads}
+                            </div>
+                        </div>
+
+                        <h3
+                            className={cn(
+                                "font-serif font-bold text-primary tracking-tight leading-tight line-clamp-2 group-hover:text-primary/80 transition-colors",
+                                isMini ? "text-base" : "text-lg"
+                            )}
+                        >
                             {title}
                         </h3>
-                        <div className="flex items-center gap-1 text-xs">
-                            <Star className="h-3 w-3 fill-current text-yellow-400" />
-                            <span className="font-bold text-[#0A251D]">
-                                {rating}
-                            </span>
-                            <span className="text-muted-foreground">
-                                ({reviews})
-                            </span>
-                        </div>
                     </div>
 
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                    <p
+                        className={cn(
+                            "text-muted-foreground/70 line-clamp-2 leading-relaxed font-medium",
+                            isMini ? "text-xs" : "text-sm"
+                        )}
+                    >
                         {description}
                     </p>
 
-                    {!isMini && (
-                        <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
-                            {tags.map((tag, i) => (
+                    {!isMini && tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-auto pt-2">
+                            {tags.slice(0, 3).map((tag, i) => (
                                 <span
                                     key={i}
-                                    className="px-2 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-medium rounded"
+                                    className="px-3 py-1 bg-muted/50 text-muted-foreground text-[10px] font-bold rounded-full border border-border/50"
                                 >
                                     {tag}
                                 </span>
                             ))}
+                            {tags.length > 3 && (
+                                <span className="text-[10px] font-bold text-muted-foreground/40 self-center">
+                                    +{tags.length - 3}
+                                </span>
+                            )}
                         </div>
                     )}
 
                     <div
                         className={cn(
-                            "flex items-center justify-between pt-2 mt-2 border-t border-gray-100",
+                            "flex items-center justify-between pt-3 mt-1 border-t border-border/40",
                             isMini && "mt-auto"
                         )}
                     >
-                        <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-[10px] font-bold">
-                                <Download className="h-3 w-3" />
-                                {downloads}
-                            </div>
-                            <div className="flex items-center gap-1 text-muted-foreground text-[10px] font-medium">
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-1.5 text-muted-foreground/60 text-[10px] font-bold">
                                 <MessageSquare className="h-3 w-3" />
                                 {comments}
                             </div>
                         </div>
 
-                        {!isMini && (
-                            <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-6 w-6 p-0 hover:bg-gray-100 rounded-full"
-                            >
-                                <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-                            </Button>
-                        )}
+                        <div
+                            className={cn(
+                                "rounded-full bg-primary/5 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300",
+                                isMini ? "h-7 w-7" : "h-8 w-8"
+                            )}
+                        >
+                            <MoreHorizontal
+                                className={isMini ? "h-3.5 w-3.5" : "h-4 w-4"}
+                            />
+                        </div>
                     </div>
                 </div>
             </Card>

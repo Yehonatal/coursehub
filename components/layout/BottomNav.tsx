@@ -36,11 +36,6 @@ export function BottomNav() {
                 setIsUploadModalOpen(true);
             },
         },
-        {
-            label: "Notifications",
-            icon: Bell,
-            href: "/dashboard/notifications",
-        },
     ];
 
     return (

@@ -84,7 +84,7 @@ export function ResourceHeader({
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4">
             <AIChatModal
                 isOpen={isAIModalOpen}
                 onClose={() => setIsAIModalOpen(false)}
@@ -103,68 +103,88 @@ export function ResourceHeader({
                 />
             )}
 
-            <div className="flex flex-col md:flex-row justify-between gap-4">
-                <div className="space-y-3">
-                    <h1 className="text-2xl md:text-3xl font-bold text-[#0A251D]">
+            <div className="flex flex-col md:flex-row justify-between items-start gap-4">
+                <div className="space-y-2 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <Badge
+                            variant="primary"
+                            className="px-1.5 py-0 text-[8px]"
+                        >
+                            {type}
+                        </Badge>
+                        <Badge
+                            variant="outline"
+                            className="px-1.5 py-0 text-[8px]"
+                        >
+                            {courseCode}
+                        </Badge>
+                    </div>
+
+                    <h1 className="text-xl md:text-2xl font-serif font-bold text-primary tracking-tight leading-tight">
                         {title}
                     </h1>
-                    <div className="flex flex-wrap items-center gap-4 text-sm">
-                        <div className="flex items-center gap-2">
+
+                    <div className="flex flex-wrap items-center gap-3 text-[10px] md:text-xs">
+                        <div className="flex items-center gap-1.5">
                             <StarRating
                                 value={userRating ?? displayRating}
                                 onChange={submitRating}
                                 readOnly={ratingLoading}
+                                size={12}
                             />
-                            <span className="text-gray-600 font-medium">
-                                {displayRating.toFixed(1)} / 5
-                            </span>
-                            <span className="text-gray-400">
-                                ({displayCount} reviews)
-                            </span>
+                            <div className="flex items-center gap-1">
+                                <span className="text-primary font-bold">
+                                    {displayRating.toFixed(1)}
+                                </span>
+                                <span className="text-muted-foreground/60 font-medium">
+                                    ({displayCount})
+                                </span>
+                            </div>
                         </div>
-                        <span className="text-gray-300 hidden sm:inline">
-                            •
-                        </span>
-                        <div className="flex items-center gap-1 text-gray-600">
-                            <Download className="w-4 h-4" />
-                            <span>{displayDownloads} downloads</span>
+                        <div className="h-3 w-px bg-border/60 hidden sm:block" />
+                        <div className="flex items-center gap-1.5 text-muted-foreground/70 font-medium">
+                            <Download className="w-3 h-3" />
+                            <span>{displayDownloads}</span>
+                        </div>
+                        <div className="h-3 w-px bg-border/60 hidden sm:block" />
+                        <div className="text-muted-foreground/70 font-medium">
+                            {date}
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mt-2">
-                        <span className="font-medium text-[#0A251D]">
-                            {courseCode}
-                        </span>
-                        <span>•</span>
-                        <span>{type}</span>
-                        <span>•</span>
-                        <span>{date}</span>
-                        <span>•</span>
-                        <span>By {author}</span>
-                    </div>
-
-                    <div className="pt-2 w-fit">
-                        <Badge variant="verified" label="Verified" />
+                    <div className="flex items-center gap-2 pt-0.5">
+                        <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-[9px]">
+                            {author.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div className="text-[10px] md:text-xs">
+                            <span className="text-muted-foreground">By </span>
+                            <span className="font-bold text-primary">
+                                {author}
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div className="hidden md:flex items-center gap-3">
+
+                <div className="hidden md:block shrink-0">
                     {university && (
                         <Link
                             href={`/university/${university
                                 .toLowerCase()
                                 .replace(/[^a-z0-9]+/g, "-")
                                 .replace(/(^-|-$)/g, "")}`}
-                            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                            className="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-border/40 hover:shadow-lg hover:shadow-primary/5 transition-all duration-500 group"
                         >
                             <UniversityBadge
                                 university={university}
-                                size={48}
+                                size={32}
                             />
-                            <div className="text-sm">
-                                <p className="font-medium text-[#0A251D]">
+                            <div className="space-y-0">
+                                <p className="text-xs font-serif font-bold text-primary group-hover:text-primary/80 transition-colors">
                                     {university}
                                 </p>
-                                <p className="text-gray-500">{department}</p>
+                                <p className="text-[9px] text-muted-foreground/60 font-medium">
+                                    {department || "Academic Department"}
+                                </p>
                             </div>
                         </Link>
                     )}

@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface UniversityHeaderProps {
     name: string;
@@ -21,18 +22,26 @@ export function UniversityHeader({
 }: UniversityHeaderProps) {
     return (
         <div className="relative mb-8">
-            <div className="h-32 sm:h-48 w-full rounded-t-xl bg-white border border-border/60 relative overflow-hidden group">
+            <div className="h-20 sm:h-38 w-full rounded-[2rem] bg-linear-to-br from-primary/10 via-primary/5 to-transparent relative overflow-hidden border border-border/40">
                 {bannerUrl ? (
                     <Image
                         src={bannerUrl}
                         alt="Banner"
                         fill
-                        className="object-cover"
+                        className="object-cover opacity-80"
                     />
                 ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-green-50 to-emerald-50">
-                        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 opacity-80 text-center md:text-left p-4">
-                            <div className="relative rounded-full h-12 w-12 md:h-16 md:w-16 shrink-0">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div
+                            className="absolute inset-0 opacity-[0.03]"
+                            style={{
+                                backgroundImage:
+                                    "radial-gradient(circle, currentColor 1px, transparent 1px)",
+                                backgroundSize: "24px 24px",
+                            }}
+                        />
+                        <div className="flex flex-col items-center gap-4 opacity-40 text-center p-8">
+                            <div className="relative h-16 w-16 shrink-0 grayscale opacity-50">
                                 <Image
                                     src={logoUrl}
                                     alt={name}
@@ -40,65 +49,54 @@ export function UniversityHeader({
                                     className="object-contain"
                                 />
                             </div>
-                            <div className="space-y-1">
-                                <h1 className="text-xl md:text-3xl font-serif font-bold text-green-700 line-clamp-1">
-                                    {name}
-                                </h1>
-                                <p className="text-xs md:text-sm text-orange-400 font-medium italic line-clamp-1">
-                                    — Building the Basis for Development —
-                                </p>
-                            </div>
                         </div>
                     </div>
                 )}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/40" />
             </div>
 
-            <div className="relative px-4 md:px-0">
-                <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-4">
-                    <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 w-full">
-                        <div className="h-16 w-16 md:h-24 md:w-24 rounded-full border-4 border-white bg-white shadow-sm relative md:ml-4 -mt-12 md:-mt-10 overflow-hidden shrink-0">
-                            <Image
-                                src={logoUrl}
-                                alt={name}
-                                fill
-                                sizes="96"
-                                className="object-contain p-1"
-                            />
-                        </div>
-                        <div className="space-y-2 pt-0 md:pt-2 text-center md:text-left w-full">
-                            <div>
-                                <h1 className="text-2xl md:text-3xl font-bold text-[#0A251D]">
-                                    {name}
-                                </h1>
-                                <a
-                                    href={website}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-xs text-blue-500 hover:underline flex items-center justify-center md:justify-start gap-1 md:hidden"
-                                >
-                                    {website}
-                                    <ExternalLink className="h-3 w-3" />
-                                </a>
-                            </div>
-                            <p className="text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed mx-auto md:mx-0">
-                                {description}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                                {type}
-                            </p>
-                        </div>
+            <div className="px-6 sm:px-10 pb-4 relative">
+                <div className="flex flex-col md:flex-row items-start gap-6 -mt-10 md:-mt-14 relative z-10">
+                    <div className="h-20 w-20 md:h-32 md:w-32 rounded-[2rem] border-4 border-white bg-white shadow-2xl relative overflow-hidden shrink-0 flex items-center justify-center p-4">
+                        <Image
+                            src={logoUrl}
+                            alt={name}
+                            fill
+                            sizes="(max-width: 768px) 80px, 128px"
+                            className="object-contain p-4"
+                        />
                     </div>
 
-                    <div>
-                        <a
-                            href={website}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hidden md:flex text-sm text-blue-500 hover:underline items-center gap-1 pt-4"
-                        >
-                            {website}
-                            <ExternalLink className="h-3 w-3" />
-                        </a>
+                    <div className="flex-1 space-y-3 md:pt-16">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="space-y-1.5">
+                                <h1 className="text-2xl md:text-3xl font-serif font-bold text-primary tracking-tight">
+                                    {name}
+                                </h1>
+                                <div className="flex items-center gap-3 text-[10px] md:text-xs text-muted-foreground/60 font-medium">
+                                    <Badge
+                                        variant="outline"
+                                        className="text-[10px] px-2 py-0"
+                                    >
+                                        {type}
+                                    </Badge>
+                                    <span className="h-1 w-1 rounded-full bg-border" />
+                                    <a
+                                        href={website}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-1.5 hover:text-primary transition-colors"
+                                    >
+                                        {website.replace(/^https?:\/\//, "")}
+                                        <ExternalLink className="h-3 w-3" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p className="text-sm md:text-base text-muted-foreground/80 max-w-3xl leading-relaxed font-medium">
+                            {description}
+                        </p>
                     </div>
                 </div>
             </div>

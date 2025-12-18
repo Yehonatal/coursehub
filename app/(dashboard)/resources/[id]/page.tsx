@@ -49,37 +49,46 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     const uploadDate = new Date(resource.upload_date);
 
     return (
-        <div className="min-h-screen bg-gray-50/50 pb-20">
+        <div className="min-h-screen bg-[#F9F9F9] pb-20">
             <ViewTracker resourceId={id} />
-            <div className="w-full border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-                    <div className="h-32 sm:h-48 w-full rounded-t-xl bg-white border border-border/60 relative overflow-hidden group">
-                        <div className="absolute inset-0 flex items-center justify-center bg-linear-to-r from-green-50 to-emerald-50">
-                            <div className="flex items-center gap-4 opacity-80">
-                                <div className="relative h-16 w-16">
+            <div className="w-full border-b border-border/40">
+                <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pb-6">
+                    <div className="h-20 sm:h-38 w-full rounded-[2rem] bg-linear-to-br from-primary/10 via-primary/5 to-transparent relative overflow-hidden border-x border-t border-border/40">
+                        <div
+                            className="absolute inset-0 opacity-[0.03]"
+                            style={{
+                                backgroundImage:
+                                    "radial-gradient(circle, currentColor 1px, transparent 1px)",
+                                backgroundSize: "24px 24px",
+                            }}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="flex items-center gap-4 md:gap-6 opacity-80">
+                                <div className="relative h-16 w-16 md:h-20 md:w-20">
                                     <UniversityBadge
                                         university={
                                             resource.university ||
                                             authorUniversity
                                         }
-                                        size={64}
+                                        size={80}
                                     />
                                 </div>
-                                <div className="space-y-1">
-                                    <h1 className="text-3xl font-serif font-bold text-green-700">
+                                <div className="space-y-0.5">
+                                    <h1 className="text-2xl md:text-3xl font-serif font-bold text-primary tracking-tight">
                                         {resource.university ||
                                             authorUniversity}
                                     </h1>
                                 </div>
                             </div>
                         </div>
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/40" />
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div className="lg:col-span-8 space-y-8 order-1 lg:order-1">
+            <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    <div className="lg:col-span-8 space-y-12 order-1 lg:order-1">
                         <ResourceHeader
                             title={resource.title}
                             rating={stats.rating}
