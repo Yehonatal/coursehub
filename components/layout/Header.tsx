@@ -6,25 +6,38 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
     Search,
-    Grid,
     LogOut,
     Settings,
-    HelpCircle,
-    Globe,
     FileText,
     Sparkles,
+    Bell,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useUser } from "@/components/providers/UserProvider";
 import { error } from "@/lib/logger";
+import { getUnreadNotificationCount } from "@/app/actions/notifications";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
     const menuRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const { user } = useUser();
+
+    useEffect(() => {
+        if (user) {
+            const fetchUnreadCount = async () => {
+                const count = await getUnreadNotificationCount();
+                setUnreadCount(count);
+            };
+            fetchUnreadCount();
+            // Refresh count every minute
+            const interval = setInterval(fetchUnreadCount, 60000);
+            return () => clearInterval(interval);
+        }
+    }, [user]);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -83,6 +96,18 @@ export function Header() {
                 </div>
 
                 <div className="flex items-center gap-4">
+                    <Link
+                        href="/dashboard/notifications"
+                        className="relative h-8 w-8  hidden md:flex items-center justify-center rounded-full border border-border/60 bg-white/80 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A251D] focus-visible:ring-offset-2 transition"
+                        aria-label="View notifications"
+                    >
+                        <Bell className="h-5 w-5 text-muted-foreground" />
+                        {unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                                {unreadCount > 9 ? "9+" : unreadCount}
+                            </span>
+                        )}
+                    </Link>
                     <Link
                         href="/ai"
                         className="hidden sm:inline-flex h-8 w-8 items-center justify-center rounded-full border border-border/60 bg-white/80 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A251D] focus-visible:ring-offset-2 transition"
@@ -152,10 +177,13 @@ export function Header() {
                                         </div>
                                         Try Premium for free
                                     </button>
-                                    <button className="w-full text-left px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/50 rounded-md flex items-center gap-2 transition-colors">
+                                    <Link
+                                        href="/dashboard/settings"
+                                        className="w-full text-left px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/50 rounded-md flex items-center gap-2 transition-colors"
+                                    >
                                         <Settings className="h-4 w-4" />{" "}
                                         Settings & Privacy
-                                    </button>
+                                    </Link>
                                 </div>
 
                                 <div className="h-px bg-border/40 my-1" />

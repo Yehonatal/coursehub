@@ -132,14 +132,14 @@ export function EditProfileModal({
             <Card
                 role="dialog"
                 aria-modal="true"
-                className="relative z-10 w-full max-w-2xl space-y-6 px-6 py-8 dark:bg-slate-900 rounded-2xl"
+                className="relative z-10 w-full max-w-2xl space-y-6 px-8 py-10 bg-white border-border/50 shadow-2xl rounded-[2rem]"
             >
                 <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                            Profile
+                    <div className="space-y-1">
+                        <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-bold">
+                            Profile Settings
                         </p>
-                        <h2 className="text-xl font-semibold text-[#0A251D]">
+                        <h2 className="text-2xl font-serif font-semibold text-primary tracking-tight">
                             Update your details
                         </h2>
                     </div>
@@ -148,100 +148,126 @@ export function EditProfileModal({
                         size="icon"
                         type="button"
                         onClick={onClose}
+                        className="rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
                         aria-label="Close edit profile modal"
                     >
-                        <X className="h-4 w-4" />
+                        <X className="h-5 w-5" />
                     </Button>
                 </div>
+
                 {state.message && (
-                    <p
-                        className={`text-sm ${
+                    <div
+                        className={`p-3 rounded-xl text-sm font-medium ${
                             state.errors && Object.keys(state.errors).length
-                                ? "text-destructive"
-                                : "text-emerald-600"
+                                ? "bg-destructive/5 text-destructive border border-destructive/10"
+                                : "bg-emerald-50 text-emerald-600 border border-emerald-100"
                         }`}
                     >
                         {state.message}
-                    </p>
+                    </div>
                 )}
-                <form className="space-y-6" action={action}>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="firstName">First name</Label>
+
+                <form className="space-y-8" action={action}>
+                    <div className="grid gap-6 sm:grid-cols-2">
+                        <div className="space-y-2.5">
+                            <Label
+                                htmlFor="firstName"
+                                className="text-sm font-medium text-primary/80 ml-1"
+                            >
+                                First name
+                            </Label>
                             <Input
                                 id="firstName"
                                 ref={firstInputRef}
                                 name="firstName"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
-                                placeholder="Addis"
+                                placeholder="e.g. John"
+                                className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                                 aria-label="First name"
                             />
                             {state.errors?.firstName && (
-                                <p className="text-xs text-destructive">
+                                <p className="text-xs text-destructive font-medium ml-1">
                                     {state.errors.firstName[0]}
                                 </p>
                             )}
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="lastName">Last name</Label>
+                        <div className="space-y-2.5">
+                            <Label
+                                htmlFor="lastName"
+                                className="text-sm font-medium text-primary/80 ml-1"
+                            >
+                                Last name
+                            </Label>
                             <Input
                                 id="lastName"
                                 name="lastName"
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
-                                placeholder="Gebremedhin"
+                                placeholder="e.g. Doe"
+                                className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                             />
                             {state.errors?.lastName && (
-                                <p className="text-xs text-destructive">
+                                <p className="text-xs text-destructive font-medium ml-1">
                                     {state.errors.lastName[0]}
                                 </p>
                             )}
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="headline">Headline</Label>
+                    <div className="space-y-2.5">
+                        <div className="flex items-center justify-between ml-1">
+                            <Label
+                                htmlFor="headline"
+                                className="text-sm font-medium text-primary/80"
+                            >
+                                Headline
+                            </Label>
+                            <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-wider">
+                                {headline.length}/150
+                            </span>
+                        </div>
                         <Input
                             id="headline"
                             name="headline"
                             value={headline}
                             onChange={(e) => setHeadline(e.target.value)}
-                            placeholder="Software Engineering Student | AI Enthusiast"
+                            placeholder="e.g. Software Engineering Student | AI Enthusiast"
+                            className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                         />
-                        <div
-                            className="text-xs text-muted-foreground text-right"
-                            aria-live="polite"
-                        >
-                            {headline.length}/150
-                        </div>
                         {state.errors?.headline && (
-                            <p className="text-xs text-destructive">
+                            <p className="text-xs text-destructive font-medium ml-1">
                                 {state.errors.headline[0]}
                             </p>
                         )}
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="university">University</Label>
+                    <div className="space-y-2.5">
+                        <Label
+                            htmlFor="university"
+                            className="text-sm font-medium text-primary/80 ml-1"
+                        >
+                            University
+                        </Label>
                         <Input
                             id="university"
                             name="university"
                             value={university}
                             onChange={(e) => setUniversity(e.target.value)}
-                            placeholder="Addis Ababa Science and Technology University"
+                            placeholder="e.g. Stanford University"
+                            className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
                         />
                         {state.errors?.university && (
-                            <p className="text-xs text-destructive">
+                            <p className="text-xs text-destructive font-medium ml-1">
                                 {state.errors.university[0]}
                             </p>
                         )}
                     </div>
 
-                    <div className="flex items-center justify-end gap-3">
+                    <div className="flex items-center justify-end gap-3 pt-4">
                         <Button
-                            variant="outline"
+                            variant="ghost"
                             type="button"
                             onClick={() => {
                                 if (isPending) return;
@@ -252,10 +278,15 @@ export function EditProfileModal({
                                 onClose();
                             }}
                             disabled={isPending}
+                            className="rounded-xl px-6 text-muted-foreground hover:text-primary hover:bg-primary/5 font-medium"
                         >
                             Cancel
                         </Button>
-                        <Button type="submit" disabled={isPending}>
+                        <Button
+                            type="submit"
+                            disabled={isPending}
+                            className="rounded-xl px-8 bg-primary hover:bg-primary/90 text-white font-semibold shadow-lg shadow-primary/10 transition-all"
+                        >
                             {isPending ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
