@@ -49,3 +49,49 @@ export const passwordResetEmailTemplate = (url: string) => `
 </body>
 </html>
 `;
+
+export const passwordChangedEmailTemplate = () => `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .footer { margin-top: 20px; font-size: 0.8em; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Password Changed</h1>
+    <p>Your CourseHub account password was recently changed. If you made this change, you can safely ignore this email.</p>
+    <p><strong>If you did not change your password, please contact support immediately or reset your password.</strong></p>
+    <div class="footer">
+      <p>This is an automated security notification.</p>
+    </div>
+  </div>
+</body>
+</html>
+`;
+
+export const notificationPreferenceChangedEmailTemplate = () => `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .footer { margin-top: 20px; font-size: 0.8em; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Notification Preferences Updated</h1>
+    <p>Your notification preferences on CourseHub have been updated.</p>
+    <p>If you didn't make this change, please check your account settings.</p>
+    <div class="footer">
+      <p>This is an automated notification.</p>
+    </div>
+  </div>
+</body>
+</html>
+`;
