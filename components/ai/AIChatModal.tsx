@@ -9,6 +9,7 @@ import {
     Maximize2,
     Minimize2,
     RefreshCw,
+    Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -401,29 +402,40 @@ export function AIChatModal({
                     onClick={onClose}
                 />
 
-                <Card className={cardClass} style={cardStyle}>
-                    <div className="flex items-center justify-between px-6 py-4 border-b bg-white shrink-0">
-                        <div>
-                            <h2 className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                                AI Assistant
-                            </h2>
-                            <p className="text-xl font-semibold text-[#0A251D]">
-                                Chat with {resourceTitle}
-                            </p>
+                <Card
+                    className={cn(
+                        cardClass,
+                        "rounded-[2rem] overflow-hidden border-none shadow-2xl"
+                    )}
+                    style={cardStyle}
+                >
+                    <div className="flex items-center justify-between px-8 py-6 border-b border-border/50 bg-white shrink-0">
+                        <div className="flex items-center gap-4">
+                            <div className="h-12 w-12 rounded-2xl bg-primary/5 flex items-center justify-center">
+                                <Sparkles className="h-6 w-6 fill-primary/20 text-primary" />
+                            </div>
+                            <div>
+                                <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">
+                                    AI Assistant
+                                </h2>
+                                <p className="text-xl font-serif font-semibold text-primary">
+                                    {resourceTitle}
+                                </p>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                             {fileUrl && (
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={handleReload}
                                     disabled={isParsing}
-                                    className="h-8 w-8 rounded-full hover:bg-gray-100"
+                                    className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
                                 >
                                     {isParsing ? (
-                                        <Loader2 className="h-4 w-4 animate-spin text-[#0A251D]" />
+                                        <Loader2 className="h-5 w-5 animate-spin text-primary" />
                                     ) : (
-                                        <RefreshCw className="h-4 w-4" />
+                                        <RefreshCw className="h-5 w-5" />
                                     )}
                                     <span className="sr-only">
                                         Reload resource
@@ -435,22 +447,22 @@ export function AIChatModal({
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => setShowApiKeyModal(true)}
-                                className="h-8 w-8 rounded-full hover:bg-gray-100"
+                                className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
                             >
-                                <Settings className="h-4 w-4" />
+                                <Settings className="h-5 w-5" />
                             </Button>
 
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => setIsFullscreen((s) => !s)}
-                                className="h-8 w-8 rounded-full hover:bg-gray-100"
+                                className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
                                 aria-pressed={isFullscreen}
                             >
                                 {isFullscreen ? (
-                                    <Minimize2 className="h-4 w-4" />
+                                    <Minimize2 className="h-5 w-5" />
                                 ) : (
-                                    <Maximize2 className="h-4 w-4" />
+                                    <Maximize2 className="h-5 w-5" />
                                 )}
                             </Button>
 
@@ -458,9 +470,9 @@ export function AIChatModal({
                                 variant="ghost"
                                 size="icon"
                                 onClick={onClose}
-                                className="h-8 w-8 rounded-full hover:bg-gray-100"
+                                className="h-10 w-10 rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
                             >
-                                <X className="h-4 w-4" />
+                                <X className="h-5 w-5" />
                                 <span className="sr-only">Close</span>
                             </Button>
                         </div>
@@ -468,7 +480,7 @@ export function AIChatModal({
 
                     <div
                         ref={scrollAreaRef}
-                        className="flex-1 flex flex-col p-8 pb-6 space-y-6 overflow-y-auto bg-[#F8F9FA]"
+                        className="flex-1 flex flex-col p-8 pb-6 space-y-6 overflow-y-auto bg-muted/5"
                     >
                         <AIChatEmptyState
                             resourceTitle={resourceTitle}

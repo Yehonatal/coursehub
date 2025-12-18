@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { X, Share2, Copy, Check, Twitter, Linkedin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Copy, Check, Twitter, Linkedin, Send } from "lucide-react";
 import { toast } from "sonner";
 
 interface ShareModalProps {
@@ -85,62 +84,81 @@ export function ShareModal({ isOpen, onClose, title, url }: ShareModalProps) {
                 onClick={onClose}
                 aria-hidden="true"
             />
-            <div className="relative z-10 w-full max-w-md bg-white rounded-2xl shadow-2xl p-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                            Share
-                        </p>
-                        <h2 className="text-xl font-semibold text-[#0A251D]">
-                            Share Resource
-                        </h2>
-                    </div>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={onClose}
-                        aria-label="Close share modal"
-                    >
-                        <X className="h-4 w-4" />
-                    </Button>
-                </div>
-
-                <div className="flex flex-col gap-4 py-4">
-                    <div className="flex gap-2 justify-center">
-                        {shareLinks.map((link) => (
-                            <a
-                                key={link.name}
-                                href={link.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`p-3 rounded-full text-white transition-colors ${link.color}`}
-                                title={`Share on ${link.name}`}
-                            >
-                                <link.icon className="w-5 h-5" />
-                            </a>
-                        ))}
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <div className="grid flex-1 gap-2">
-                            <Input
-                                id="link"
-                                defaultValue={url}
-                                readOnly
-                                className="h-9"
-                            />
+            <div className="relative z-10 w-full max-w-[450px] bg-white border-border/50 shadow-2xl rounded-[2rem] overflow-hidden">
+                <div className="p-8 space-y-6">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3 text-primary">
+                            <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center">
+                                <Share2 className="h-5 w-5 text-primary/70" />
+                            </div>
+                            <h2 className="text-xl font-serif font-semibold tracking-tight">
+                                Share Resource
+                            </h2>
                         </div>
                         <Button
-                            type="submit"
-                            size="sm"
-                            className="px-3"
-                            onClick={handleCopy}
+                            variant="ghost"
+                            size="icon"
+                            onClick={onClose}
+                            className="rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
+                            aria-label="Close share modal"
                         >
-                            {copied ? (
-                                <Check className="w-4 h-4" />
-                            ) : (
-                                <Copy className="w-4 h-4" />
-                            )}
-                            <span className="sr-only">Copy</span>
+                            <X className="h-5 w-5" />
+                        </Button>
+                    </div>
+
+                    <div className="space-y-6">
+                        <div className="flex gap-4 justify-center">
+                            {shareLinks.map((link) => (
+                                <a
+                                    key={link.name}
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`h-12 w-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 hover:shadow-lg ${link.color}`}
+                                    title={`Share on ${link.name}`}
+                                >
+                                    <link.icon className="w-5 h-5" />
+                                </a>
+                            ))}
+                        </div>
+
+                        <div className="space-y-2.5">
+                            <p className="text-sm font-medium text-primary/80 ml-1">
+                                Copy Link
+                            </p>
+                            <div className="flex items-center gap-2">
+                                <div className="relative flex-1">
+                                    <Input
+                                        id="link"
+                                        defaultValue={url}
+                                        readOnly
+                                        className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all pr-10"
+                                    />
+                                </div>
+                                <Button
+                                    type="button"
+                                    size="icon"
+                                    className="h-12 w-12 rounded-xl bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/10 transition-all shrink-0"
+                                    onClick={handleCopy}
+                                >
+                                    {copied ? (
+                                        <Check className="w-5 h-5" />
+                                    ) : (
+                                        <Copy className="w-5 h-5" />
+                                    )}
+                                    <span className="sr-only">Copy</span>
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="pt-2">
+                        <Button
+                            variant="ghost"
+                            onClick={onClose}
+                            className="w-full rounded-xl text-muted-foreground hover:text-primary hover:bg-primary/5 font-medium"
+                        >
+                            Close
                         </Button>
                     </div>
                 </div>

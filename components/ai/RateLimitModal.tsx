@@ -9,6 +9,7 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { AlertCircle, X } from "lucide-react";
 
 interface RateLimitModalProps {
     isOpen: boolean;
@@ -18,18 +19,51 @@ interface RateLimitModalProps {
 export function RateLimitModal({ isOpen, onClose }: RateLimitModalProps) {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>Rate Limit Exceeded</DialogTitle>
-                    <DialogDescription>
-                        The AI service is currently experiencing high traffic or
-                        you have exceeded your rate limit. Please try again in a
-                        few moments.
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                    <Button onClick={onClose}>Close</Button>
-                </DialogFooter>
+            <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden border-none shadow-2xl rounded-[2rem]">
+                <div className="p-8 space-y-6">
+                    <DialogHeader className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3 text-amber-600">
+                                <div className="h-10 w-10 rounded-xl bg-amber-50 flex items-center justify-center">
+                                    <AlertCircle className="h-5 w-5" />
+                                </div>
+                                <DialogTitle className="text-2xl font-serif font-semibold tracking-tight">
+                                    Rate Limit Reached
+                                </DialogTitle>
+                            </div>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={onClose}
+                                className="rounded-full hover:bg-amber-50 text-muted-foreground/40 hover:text-amber-600 transition-colors"
+                            >
+                                <X className="h-5 w-5" />
+                            </Button>
+                        </div>
+                        <DialogDescription className="text-sm leading-relaxed text-muted-foreground">
+                            The AI service is currently experiencing high
+                            traffic or you have exceeded your rate limit. This
+                            usually happens with free-tier API keys.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="bg-amber-50/50 rounded-2xl p-5 border border-amber-100">
+                        <p className="text-sm text-amber-800 leading-relaxed">
+                            Please wait a few moments before trying again, or
+                            consider using a different API key with higher
+                            limits.
+                        </p>
+                    </div>
+
+                    <DialogFooter>
+                        <Button
+                            onClick={onClose}
+                            className="w-full rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-lg shadow-amber-600/10 transition-all"
+                        >
+                            Got it
+                        </Button>
+                    </DialogFooter>
+                </div>
             </DialogContent>
         </Dialog>
     );

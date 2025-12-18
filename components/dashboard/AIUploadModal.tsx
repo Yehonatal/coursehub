@@ -21,6 +21,13 @@ import {
     SelectItem,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from "@/components/ui/dialog";
 import { uploadResource } from "@/app/actions/resource";
 import { uploadResourceInitialState } from "@/app/actions/resource.client";
 import { toast } from "sonner";
@@ -63,8 +70,6 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
         return () => window.clearTimeout(id);
     }, [isOpen]);
 
-    if (!isOpen) return null;
-
     const handleDrag = (e: React.DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -98,264 +103,308 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 animate-in fade-in duration-200">
-            <div
-                className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
-                onClick={onClose}
-                aria-hidden="true"
-            />
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden border-none shadow-2xl rounded-[2rem]">
+                <form action={action} className="flex flex-col max-h-[90vh]">
+                    <input type="hidden" name="isAi" value="true" />
+                    <div className="p-8 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500/10 scrollbar-track-transparent">
+                        <DialogHeader className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3 text-blue-600">
+                                    <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                                        <Sparkles className="h-5 w-5 fill-blue-500/20" />
+                                    </div>
+                                    <DialogTitle className="text-2xl font-serif font-semibold tracking-tight">
+                                        Upload AI Resource
+                                    </DialogTitle>
+                                </div>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    type="button"
+                                    onClick={onClose}
+                                    className="rounded-full hover:bg-blue-50 text-blue-400 hover:text-blue-600 transition-colors"
+                                >
+                                    <X className="h-5 w-5" />
+                                </Button>
+                            </div>
+                            <DialogDescription className="text-sm leading-relaxed text-muted-foreground">
+                                Share AI generated content with the community.
+                                Your contributions help others learn faster.
+                            </DialogDescription>
+                        </DialogHeader>
 
-            <form
-                action={action}
-                className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col border-2 border-dashed border-blue-200"
-            >
-                <input type="hidden" name="isAi" value="true" />
-                <div className="flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-blue-50/30 z-20 backdrop-blur-sm">
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <Sparkles className="h-5 w-5 text-blue-500" />
-                            <p className="text-xs uppercase tracking-[0.2em] text-blue-900 ">
-                                Upload AI Resource
-                            </p>
-                        </div>
-                        <h2 className="text-lg font-semibold text-blue-600/80">
-                            Share AI generated content with the community
-                        </h2>
-                    </div>
-
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        type="button"
-                        onClick={onClose}
-                        className="h-8 w-8 rounded-full hover:bg-blue-100 text-blue-500"
-                    >
-                        <X className="h-4 w-4" />
-                        <span className="sr-only">Close</span>
-                    </Button>
-                </div>
-
-                <div className="p-6 space-y-6">
-                    {state?.message && (
-                        <div
-                            className={cn(
-                                "p-3 rounded-lg text-sm flex items-center gap-2",
-                                state.success
-                                    ? "bg-blue-50 text-blue-700 border border-blue-200"
-                                    : "bg-red-50 text-red-700 border border-red-200"
-                            )}
-                        >
-                            {state.success ? (
-                                <CheckCircle2 className="h-4 w-4" />
-                            ) : (
-                                <AlertCircle className="h-4 w-4" />
-                            )}
-                            {state.message}
-                        </div>
-                    )}
-
-                    <div className="space-y-2">
-                        <Label className="text-sm font-medium">
-                            Resource File{" "}
-                            <span className="text-red-500">*</span>
-                        </Label>
-                        <div
-                            className={cn(
-                                "relative group cursor-pointer rounded-lg border-2 border-dashed transition-all duration-200 ease-in-out p-8 text-center",
-                                dragActive
-                                    ? "border-blue-500 bg-blue-50/50"
-                                    : "border-blue-200 hover:border-blue-400 hover:bg-blue-50/30",
-                                selectedFileName &&
-                                    "border-blue-500 bg-blue-50/30"
-                            )}
-                            onDragEnter={handleDrag}
-                            onDragOver={handleDrag}
-                            onDragLeave={handleDrag}
-                            onDrop={handleDrop}
-                            onClick={() => fileInputRef.current?.click()}
-                        >
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                name="file"
-                                accept=".pdf,.doc,.docx,.ppt,.pptx"
-                                className="sr-only"
-                                onChange={handleFileChange}
-                                required
-                            />
-
-                            <div className="flex flex-col items-center gap-2">
-                                {selectedFileName ? (
-                                    <>
-                                        <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                                            <FileText className="h-6 w-6" />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-sm font-medium text-blue-700 break-all max-w-[300px]">
-                                                {selectedFileName}
-                                            </p>
-                                            <p className="text-xs text-blue-600">
-                                                Click to change file
-                                            </p>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="h-12 w-12 rounded-full bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center text-blue-400 group-hover:text-blue-600 transition-colors">
-                                            <Upload className="h-6 w-6" />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-sm font-medium text-gray-700">
-                                                <span className="text-blue-600">
-                                                    Click to upload
-                                                </span>{" "}
-                                                or drag and drop
-                                            </p>
-                                            <p className="text-xs text-muted-foreground">
-                                                PDF, Word, or PowerPoint (Max
-                                                20MB)
-                                            </p>
-                                        </div>
-                                    </>
+                        {state?.message && (
+                            <div
+                                className={cn(
+                                    "p-4 rounded-2xl text-sm flex items-center gap-3 border animate-in fade-in slide-in-from-top-2",
+                                    state.success
+                                        ? "bg-blue-50/50 text-blue-700 border-blue-100"
+                                        : "bg-red-50/50 text-red-700 border-red-100"
                                 )}
+                            >
+                                {state.success ? (
+                                    <CheckCircle2 className="h-5 w-5 shrink-0" />
+                                ) : (
+                                    <AlertCircle className="h-5 w-5 shrink-0" />
+                                )}
+                                <span className="font-medium">
+                                    {state.message}
+                                </span>
+                            </div>
+                        )}
+
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label className="text-sm font-medium text-blue-900/70 ml-1">
+                                    Resource File{" "}
+                                    <span className="text-red-500/50">*</span>
+                                </Label>
+                                <div
+                                    className={cn(
+                                        "relative group cursor-pointer rounded-[1.5rem] border-2 border-dashed transition-all duration-300 p-10 text-center",
+                                        dragActive
+                                            ? "border-blue-500 bg-blue-50/50"
+                                            : "border-blue-100 hover:border-blue-300 hover:bg-blue-50/30",
+                                        selectedFileName &&
+                                            "border-blue-500/30 bg-blue-50/30"
+                                    )}
+                                    onDragEnter={handleDrag}
+                                    onDragOver={handleDrag}
+                                    onDragLeave={handleDrag}
+                                    onDrop={handleDrop}
+                                    onClick={() =>
+                                        fileInputRef.current?.click()
+                                    }
+                                >
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        name="file"
+                                        accept=".pdf,.doc,.docx,.ppt,.pptx"
+                                        className="sr-only"
+                                        onChange={handleFileChange}
+                                        required
+                                    />
+
+                                    <div className="flex flex-col items-center gap-4">
+                                        {selectedFileName ? (
+                                            <>
+                                                <div className="h-14 w-14 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                                                    <FileText className="h-7 w-7" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-sm font-semibold text-blue-700 break-all max-w-[300px]">
+                                                        {selectedFileName}
+                                                    </p>
+                                                    <p className="text-xs font-medium text-blue-600/70">
+                                                        Click to change file
+                                                    </p>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="h-14 w-14 rounded-2xl bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center text-blue-300 group-hover:text-blue-500 transition-all duration-300">
+                                                    <Upload className="h-7 w-7" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-sm font-medium text-blue-900/80">
+                                                        <span className="text-blue-600 font-bold">
+                                                            Click to upload
+                                                        </span>{" "}
+                                                        or drag and drop
+                                                    </p>
+                                                    <p className="text-xs text-blue-400/60">
+                                                        PDF, Word, or PowerPoint
+                                                        (Max 20MB)
+                                                    </p>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid gap-5 sm:grid-cols-2">
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor="title"
+                                        className="text-sm font-medium text-blue-900/70 ml-1"
+                                    >
+                                        Title{" "}
+                                        <span className="text-red-500/50">
+                                            *
+                                        </span>
+                                    </Label>
+                                    <Input
+                                        id="title"
+                                        name="title"
+                                        placeholder="e.g. Introduction to Computer Science"
+                                        required
+                                        className="h-12 rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor="courseCode"
+                                        className="text-sm font-medium text-blue-900/70 ml-1"
+                                    >
+                                        Course Code{" "}
+                                        <span className="text-red-500/50">
+                                            *
+                                        </span>
+                                    </Label>
+                                    <Input
+                                        id="courseCode"
+                                        name="courseCode"
+                                        placeholder="e.g. CS101"
+                                        required
+                                        className="h-12 rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid gap-5 sm:grid-cols-3">
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor="semester"
+                                        className="text-sm font-medium text-blue-900/70 ml-1"
+                                    >
+                                        Semester{" "}
+                                        <span className="text-red-500/50">
+                                            *
+                                        </span>
+                                    </Label>
+                                    <Input
+                                        id="semester"
+                                        name="semester"
+                                        placeholder="e.g. Fall 2024"
+                                        required
+                                        className="h-12 rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor="university"
+                                        className="text-sm font-medium text-blue-900/70 ml-1"
+                                    >
+                                        University{" "}
+                                        <span className="text-red-500/50">
+                                            *
+                                        </span>
+                                    </Label>
+                                    <Input
+                                        id="university"
+                                        name="university"
+                                        placeholder="e.g. Stanford University"
+                                        required
+                                        className="h-12 rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor="resourceType"
+                                        className="text-sm font-medium text-blue-900/70 ml-1"
+                                    >
+                                        Type{" "}
+                                        <span className="text-red-500/50">
+                                            *
+                                        </span>
+                                    </Label>
+                                    <Select
+                                        value={resourceTypeValue}
+                                        onValueChange={setResourceTypeValue}
+                                    >
+                                        <SelectTrigger className="h-12 rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all">
+                                            <SelectValue placeholder="Select type" />
+                                        </SelectTrigger>
+                                        <SelectContent className="rounded-xl border-blue-100 shadow-xl">
+                                            <SelectItem value="slides">
+                                                Slides
+                                            </SelectItem>
+                                            <SelectItem value="notes">
+                                                Notes
+                                            </SelectItem>
+                                            <SelectItem value="exam">
+                                                Exam
+                                            </SelectItem>
+                                            <SelectItem value="assignment">
+                                                Assignment
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <input
+                                        type="hidden"
+                                        name="resourceType"
+                                        value={resourceTypeValue}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label
+                                    htmlFor="description"
+                                    className="text-sm font-medium text-blue-900/70 ml-1"
+                                >
+                                    Description
+                                </Label>
+                                <Textarea
+                                    id="description"
+                                    name="description"
+                                    placeholder="Briefly describe what this resource covers..."
+                                    className="min-h-[100px] rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all resize-none"
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label
+                                    htmlFor="tags"
+                                    className="text-sm font-medium text-blue-900/70 ml-1"
+                                >
+                                    Tags
+                                </Label>
+                                <Textarea
+                                    id="tags"
+                                    name="tags"
+                                    placeholder="e.g. computer science, programming, java (comma separated)"
+                                    className="min-h-[60px] rounded-xl border-blue-100 bg-blue-50/30 focus:border-blue-300 focus:ring-blue-500/5 transition-all resize-none"
+                                />
                             </div>
                         </div>
                     </div>
 
-                    <div className="grid gap-6 sm:grid-cols-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="title">
-                                Title <span className="text-red-500">*</span>
-                            </Label>
-                            <Input
-                                id="title"
-                                name="title"
-                                placeholder="e.g. Introduction to Computer Science"
-                                required
-                                className="focus-visible:ring-blue-500"
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="courseCode">
-                                Course Code{" "}
-                                <span className="text-red-500">*</span>
-                            </Label>
-                            <Input
-                                id="courseCode"
-                                name="courseCode"
-                                placeholder="e.g. CS101"
-                                required
-                                className="focus-visible:ring-blue-500"
-                            />
-                        </div>
+                    <div className="p-8 border-t border-blue-100 bg-blue-50/30 flex items-center justify-end gap-3">
+                        <Button
+                            variant="ghost"
+                            type="button"
+                            onClick={onClose}
+                            disabled={isPending}
+                            className="rounded-xl text-blue-400 hover:text-blue-600 hover:bg-blue-50 font-medium"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            disabled={isPending}
+                            className="min-w-[120px] rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-600/10 transition-all"
+                        >
+                            {isPending ? (
+                                <>
+                                    <span className="animate-spin mr-2">
+                                        ⏳
+                                    </span>
+                                    Uploading...
+                                </>
+                            ) : (
+                                "Upload AI Resource"
+                            )}
+                        </Button>
                     </div>
-
-                    <div className="grid gap-6 sm:grid-cols-3">
-                        <div className="space-y-2">
-                            <Label htmlFor="semester">
-                                Semester <span className="text-red-500">*</span>
-                            </Label>
-                            <Input
-                                id="semester"
-                                name="semester"
-                                placeholder="e.g. Fall 2024"
-                                required
-                                className="focus-visible:ring-blue-500"
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="university">
-                                University{" "}
-                                <span className="text-red-500">*</span>
-                            </Label>
-                            <Input
-                                id="university"
-                                name="university"
-                                placeholder="e.g. Stanford University"
-                                required
-                                className="focus-visible:ring-blue-500"
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="resourceType">
-                                Type <span className="text-red-500">*</span>
-                            </Label>
-                            <Select
-                                value={resourceTypeValue}
-                                onValueChange={setResourceTypeValue}
-                            >
-                                <SelectTrigger className="focus:ring-blue-500">
-                                    <SelectValue placeholder="Select type" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="slides">
-                                        Slides
-                                    </SelectItem>
-                                    <SelectItem value="notes">Notes</SelectItem>
-                                    <SelectItem value="exam">Exam</SelectItem>
-                                    <SelectItem value="assignment">
-                                        Assignment
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <input
-                                type="hidden"
-                                name="resourceType"
-                                value={resourceTypeValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="description">Description</Label>
-                        <Textarea
-                            id="description"
-                            name="description"
-                            placeholder="Briefly describe what this resource covers..."
-                            className="min-h-[100px] resize-none focus-visible:ring-blue-500"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="tags">Tags</Label>
-                        <Textarea
-                            id="tags"
-                            name="tags"
-                            placeholder="e.g. computer science, programming, java (comma separated)"
-                            className="min-h-[60px] resize-none focus-visible:ring-blue-500"
-                        />
-                    </div>
-                </div>
-
-                <div className="flex items-center justify-end gap-3 px-6 py-4 border-t bg-blue-50/30 sticky bottom-0 backdrop-blur-sm">
-                    <Button
-                        variant="outline"
-                        type="button"
-                        onClick={onClose}
-                        disabled={isPending}
-                        className="hover:bg-blue-50 hover:text-blue-600 border-blue-200"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        type="submit"
-                        disabled={isPending}
-                        className="min-w-[100px] bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                        {isPending ? (
-                            <>
-                                <span className="animate-spin mr-2">⏳</span>
-                                Uploading...
-                            </>
-                        ) : (
-                            "Upload"
-                        )}
-                    </Button>
-                </div>
-            </form>
-        </div>
+                </form>
+            </DialogContent>
+        </Dialog>
     );
 }

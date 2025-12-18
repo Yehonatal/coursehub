@@ -9,22 +9,29 @@ export function QuickUploadCard() {
     return (
         <>
             <div className="space-y-4" data-aos="fade-up" data-aos-delay="100">
-                <div className="flex items-center gap-2 text-[#0A251D] font-medium">
-                    <Folder className="h-5 w-5 fill-blue-400 text-blue-400" />
-                    <span>Upload File</span>
+                <div className="flex items-center gap-3 text-primary font-medium ml-1">
+                    <div className="h-8 w-8 rounded-lg bg-primary/5 flex items-center justify-center">
+                        <Folder className="h-4 w-4 fill-primary/20" />
+                    </div>
+                    <span className="font-serif font-semibold tracking-tight">
+                        Upload File
+                    </span>
                 </div>
                 <Card
-                    className="p-8 border-dashed border-2 rounded-2xl border-border/60 bg-muted/30 flex flex-col items-center justify-center text-center gap-4 hover:bg-muted/50 transition-colors cursor-pointer group"
+                    className="p-10 border-dashed border-2 rounded-[2rem] border-border/50 bg-muted/5 flex flex-col items-center justify-center text-center gap-5 hover:bg-muted/10 hover:border-primary/30 transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-xl hover:shadow-primary/5"
                     onClick={() => setIsModalOpen(true)}
                 >
-                    <div className="h-10 w-10 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <Upload className="h-5 w-5 text-muted-foreground" />
+                    <div className="h-14 w-14 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-500">
+                        <Upload className="h-6 w-6 text-primary/40 group-hover:text-primary transition-colors" />
                     </div>
-                    <div className="space-y-1">
-                        <p className="text-sm font-medium">
-                            Drag and drop or Browse
+                    <div className="space-y-1.5">
+                        <p className="text-sm font-semibold text-primary/80">
+                            Drag and drop or{" "}
+                            <span className="text-primary underline decoration-primary/20 group-hover:decoration-primary transition-all">
+                                Browse
+                            </span>
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-muted-foreground/60 font-medium">
                             Max file size 20MB
                         </p>
                     </div>

@@ -12,67 +12,72 @@ export function AIUploadCard() {
     return (
         <>
             <Card
-                className="p-6 space-y-6 border-border/60 rounded-2xl"
+                className="p-8 space-y-8 border-none rounded-[2rem] sticky top-24 shadow-2xl shadow-primary/5 bg-white"
                 data-aos="fade-left"
                 data-aos-delay="400"
                 suppressHydrationWarning
             >
-                <div className="flex items-start gap-2 text-[#0A251D] font-medium">
-                    <Folder className="h-5 w-5 fill-blue-400 text-blue-400 " />
-                    <h3 className="font-serif font-bold">
-                        Upload AI Generated Content
-                    </h3>
-                </div>
+                <div className="space-y-6">
+                    <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 rounded-2xl bg-blue-50 flex items-center justify-center">
+                            <Folder className="h-6 w-6 fill-blue-500/20 text-blue-500" />
+                        </div>
+                        <div>
+                            <h3 className="font-serif font-semibold text-lg text-primary tracking-tight">
+                                AI Generated Content
+                            </h3>
+                            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
+                                <span>100 MB</span>
+                                <span className="h-1 w-1 rounded-full bg-muted-foreground/20" />
+                                <span>13 Items</span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div className="text-xs text-muted-foreground flex items-center gap-2">
-                    <span>100 MB</span>
-                    <span>•</span>
-                    <span>Yesterday</span>
-                    <span>•</span>
-                    <span>13 Items</span>
-                </div>
+                    <div className="flex flex-wrap gap-2">
+                        <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                            Tree
+                        </span>
+                        <span className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                            Questions
+                        </span>
+                        <span className="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                            Note
+                        </span>
+                    </div>
 
-                <div className="flex flex-wrap gap-2">
-                    <span className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium">
-                        Tree
-                    </span>
-                    <span className="px-2 py-1 bg-teal-50 text-teal-600 rounded text-xs font-medium">
-                        Questions
-                    </span>
-                    <span className="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs font-medium">
-                        Note
-                    </span>
-                    <Button
-                        variant="link"
-                        className="text-xs h-auto p-0 ml-auto"
+                    <div
+                        className="aspect-square rounded-[1.5rem] bg-blue-50/30 border-2 border-dashed border-blue-100 flex flex-col items-center justify-center text-center p-6 gap-5 hover:bg-blue-50/50 hover:border-blue-300 transition-all duration-300 cursor-pointer group"
+                        onClick={() => setIsModalOpen(true)}
                     >
-                        Edit
-                    </Button>
-                </div>
-
-                <div
-                    className="aspect-square rounded-xl bg-blue-50/50 border-2 border-dashed border-blue-200 flex flex-col items-center justify-center text-center p-4 gap-4 hover:bg-blue-50 transition-colors cursor-pointer group"
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    <div className="h-12 w-12 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <Upload className="h-6 w-6 text-blue-500" />
+                        <div className="h-14 w-14 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-500">
+                            <Upload className="h-6 w-6 text-blue-400 group-hover:text-blue-600 transition-colors" />
+                        </div>
+                        <div className="space-y-1.5">
+                            <p className="text-sm font-semibold text-blue-900/80">
+                                Drag and drop or{" "}
+                                <span className="text-blue-600 underline decoration-blue-600/20 group-hover:decoration-blue-600 transition-all">
+                                    Browse
+                                </span>
+                            </p>
+                            <p className="text-xs text-blue-400/60 font-medium">
+                                Max file size 10MB
+                            </p>
+                        </div>
                     </div>
-                    <div className="space-y-1">
-                        <p className="text-sm font-medium text-blue-900">
-                            Drag and drop or Browse
-                        </p>
-                        <p className="text-xs text-blue-400">
-                            Max file size 10MB
-                        </p>
-                    </div>
-                </div>
 
-                <div className="pt-4 border-t border-border/40">
-                    <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                        Resource
-                    </h4>
-                    <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full w-3/4 bg-[#0A251D] rounded-full"></div>
+                    <div className="pt-6 border-t border-border/50">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
+                                Storage Usage
+                            </h4>
+                            <span className="text-[10px] font-bold text-primary/60">
+                                75%
+                            </span>
+                        </div>
+                        <div className="h-1.5 bg-muted/10 rounded-full overflow-hidden">
+                            <div className="h-full w-3/4 bg-primary rounded-full shadow-[0_0_8px_rgba(10,37,29,0.2)]"></div>
+                        </div>
                     </div>
                 </div>
             </Card>

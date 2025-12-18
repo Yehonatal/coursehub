@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { X, Flag, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -100,68 +100,93 @@ export function ReportModal({ isOpen, onClose, resourceId }: ReportModalProps) {
                 onClick={onClose}
                 aria-hidden="true"
             />
-            <div className="relative z-10 w-full max-w-[425px] bg-white rounded-2xl shadow-2xl p-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                            Report
-                        </p>
-                        <h2 className="text-xl font-semibold text-[#0A251D]">
-                            Report Resource
-                        </h2>
+            <div className="relative z-10 w-full max-w-[450px] bg-white border-border/50 shadow-2xl rounded-[2rem] overflow-hidden">
+                <div className="p-8 space-y-6">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3 text-primary">
+                            <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center">
+                                <Flag className="h-5 w-5 text-primary/70" />
+                            </div>
+                            <h2 className="text-xl font-serif font-semibold tracking-tight">
+                                Report Resource
+                            </h2>
+                        </div>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={onClose}
+                            className="rounded-full hover:bg-primary/5 text-muted-foreground/40 hover:text-primary transition-colors"
+                            aria-label="Close report modal"
+                        >
+                            <X className="h-5 w-5" />
+                        </Button>
                     </div>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={onClose}
-                        aria-label="Close report modal"
-                    >
-                        <X className="h-4 w-4" />
-                    </Button>
-                </div>
 
-                <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="reason">Reason</Label>
-                        <Select value={reason} onValueChange={setReason}>
-                            <SelectTrigger id="reason">
-                                <SelectValue placeholder="Select a reason" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {REPORT_REASONS.map((r) => (
-                                    <SelectItem key={r} value={r}>
-                                        {r}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                    <div className="space-y-4">
+                        <div className="space-y-2.5">
+                            <Label
+                                htmlFor="reason"
+                                className="text-sm font-medium text-primary/80 ml-1"
+                            >
+                                Reason for reporting
+                            </Label>
+                            <Select value={reason} onValueChange={setReason}>
+                                <SelectTrigger
+                                    id="reason"
+                                    className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
+                                >
+                                    <SelectValue placeholder="Select a reason" />
+                                </SelectTrigger>
+                                <SelectContent className="rounded-xl border-border/50 shadow-xl">
+                                    {REPORT_REASONS.map((r) => (
+                                        <SelectItem key={r} value={r}>
+                                            {r}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2.5">
+                            <Label
+                                htmlFor="details"
+                                className="text-sm font-medium text-primary/80 ml-1"
+                            >
+                                Additional Details
+                            </Label>
+                            <Textarea
+                                id="details"
+                                placeholder="Please provide more context to help us understand the issue..."
+                                value={details}
+                                onChange={(e) => setDetails(e.target.value)}
+                                className="min-h-[120px] rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all resize-none"
+                            />
+                        </div>
                     </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="details">Additional Details</Label>
-                        <Textarea
-                            id="details"
-                            placeholder="Please provide more context..."
-                            value={details}
-                            onChange={(e) => setDetails(e.target.value)}
-                            rows={3}
-                        />
-                    </div>
-                </div>
 
-                <div className="flex items-center justify-end gap-3 mt-4">
-                    <Button
-                        variant="outline"
-                        onClick={onClose}
-                        disabled={loading}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handleSubmit}
-                        disabled={loading || !reason}
-                    >
-                        {loading ? "Submitting..." : "Submit Report"}
-                    </Button>
+                    <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                        <Button
+                            variant="ghost"
+                            onClick={onClose}
+                            disabled={loading}
+                            className="flex-1 rounded-xl text-muted-foreground hover:text-primary hover:bg-primary/5 font-medium"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleSubmit}
+                            disabled={loading || !reason}
+                            className="flex-1 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold shadow-lg shadow-primary/10 transition-all"
+                        >
+                            {loading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Submitting...
+                                </>
+                            ) : (
+                                "Submit Report"
+                            )}
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
