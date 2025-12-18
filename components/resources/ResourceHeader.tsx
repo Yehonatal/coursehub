@@ -117,7 +117,7 @@ export function ResourceHeader({
                             variant="primary"
                             className="px-1.5 py-0 text-[8px]"
                         >
-                            {type}
+                            {type.charAt(0).toUpperCase() + type.slice(1)}
                         </Badge>
                         <Badge
                             variant="outline"

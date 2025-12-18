@@ -379,7 +379,7 @@ export function ChatInterface({
     };
 
     return (
-        <div className="flex flex-col h-full w-full max-w-4xl mx-auto relative">
+        <div className="flex flex-col h-full w-full max-w-4xl mx-auto relative overflow-hidden">
             <div className="flex items-center justify-between p-4  z-10">
                 <h2 className="text-lg font-semibold flex items-center gap-2">
                     <Sparkles className="h-5 w-5 text-primary" />
@@ -415,7 +415,7 @@ export function ChatInterface({
                     </Button>
                 </div>
             </div>
-            <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+            <ScrollArea className="flex-1 p-4 min-h-0" ref={scrollAreaRef}>
                 <div className="space-y-4 pb-4">
                     {messages.length === 0 && children}
 

@@ -14,6 +14,10 @@ interface ResourceItem {
     comments: number;
     isAI?: boolean;
     isVerified?: boolean;
+    verifier?: {
+        name: string;
+        date: string;
+    };
     fileUrl?: string;
     mimeType?: string;
 }

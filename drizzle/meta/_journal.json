@@ -120,6 +120,27 @@
       "when": 1766035045977,
       "tag": "0016_spotty_cerebro",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1766069415648,
+      "tag": "0017_rich_sue_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1766073547332,
+      "tag": "0018_little_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1766075313291,
+      "tag": "0019_exotic_norman_osborn",
+      "breakpoints": true
     }
   ]
 }

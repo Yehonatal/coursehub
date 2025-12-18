@@ -7,7 +7,7 @@ import { ChatInterface } from "@/components/ai/ChatInterface";
 
 export default function AIPage() {
     return (
-        <div className="h-[calc(100vh-4rem)] rounded-t-xl bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.08),transparent_45%),radial-gradient(circle_at_80%_10%,rgba(236,72,153,0.1),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(56,189,248,0.08),transparent_35%)] flex flex-col overflow-hidden">
+        <div className="h-[calc(100vh-13rem)] md:h-[calc(100vh-9rem)] rounded-t-xl bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.08),transparent_45%),radial-gradient(circle_at_80%_10%,rgba(236,72,153,0.1),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(56,189,248,0.08),transparent_35%)] flex flex-col overflow-hidden">
             <ChatInterface>
                 <div className="flex flex-col gap-8 sm:gap-10 pb-10">
                     <div className="text-center space-y-4 md:space-y-6 pt-8">

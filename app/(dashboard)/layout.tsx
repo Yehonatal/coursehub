@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { SidebarWrapper } from "@/components/layout/SidebarWrapper";
@@ -17,7 +17,13 @@ export default async function DashboardLayout({
         <UserProvider user={user}>
             <div className="min-h-screen bg-[#F9F9F9] font-sans text-foreground pb-16 md:pb-0">
                 <AOSInit />
-                <Header />
+                <Suspense
+                    fallback={
+                        <div className="h-20 w-full bg-white border-b border-border/40" />
+                    }
+                >
+                    <Header />
+                </Suspense>
                 <main className="max-w-[1600px] mx-auto px-4 py-8 md:px-8">
                     <SidebarWrapper>{children}</SidebarWrapper>
                 </main>

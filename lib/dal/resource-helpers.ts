@@ -4,8 +4,17 @@ import {
     ratings,
     comments,
     users,
+    verification,
 } from "@/db/schema";
-import { eq, inArray, count, avg, desc, SQL } from "drizzle-orm";
+import {
+    eq,
+    inArray,
+    count,
+    avg,
+    desc,
+    SQL,
+    aliasedTable as alias,
+} from "drizzle-orm";
 import { Resource } from "@/app/types/resource";
 
 export type ResourceWithTags = Resource & {
@@ -13,6 +22,10 @@ export type ResourceWithTags = Resource & {
     author?: {
         name: string;
         university?: string;
+    };
+    verifier?: {
+        name: string;
+        date: string;
     };
     rating?: number;
     reviews?: number;
@@ -40,6 +53,8 @@ export async function fetchResourceRows(
     limit?: number,
     orderBy?: SQL
 ) {
+    const verifierUser = alias(users, "verifier_user");
+
     try {
         return await db
             .select({
@@ -64,18 +79,30 @@ export async function fetchResourceRows(
                 author_first: users.first_name,
                 author_last: users.last_name,
                 author_uni: users.university,
+                // Verifier info join
+                verifier_first: verifierUser.first_name,
+                verifier_last: verifierUser.last_name,
+                verified_date: verification.verified_date,
             })
             .from(resourcesTable)
             .leftJoin(users, eq(resourcesTable.uploader_id, users.user_id))
+            .leftJoin(
+                verification,
+                eq(resourcesTable.resource_id, verification.resource_id)
+            )
+            .leftJoin(
+                verifierUser,
+                eq(verification.educator_id, verifierUser.user_id)
+            )
             .where(whereClause)
             .limit(limit || 100)
             .orderBy(orderBy || desc(resourcesTable.upload_date));
-    } catch (err) {
+    } catch {
         return [];
     }
 }
 
-export async function fetchTagsByIds(ids: string[]) {
+export async function fetchTagsByIds(_: string[]) {
     return new Map<string, string[]>();
 }
 
@@ -199,6 +226,15 @@ export function mapResourceRows(
                 name: `${r.author_first} ${r.author_last}`,
                 university: r.author_uni || undefined,
             },
+            verifier: r.verifier_first
+                ? {
+                      name: `${r.verifier_first} ${r.verifier_last}`,
+                      date:
+                          r.verified_date instanceof Date
+                              ? r.verified_date.toISOString()
+                              : r.verified_date,
+                  }
+                : undefined,
             rating: ratingData?.average || 0,
             reviews: ratingData?.count || 0,
             views: r.views_count ?? stats.viewById.get(r.resource_id) ?? 0,

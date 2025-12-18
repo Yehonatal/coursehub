@@ -13,12 +13,16 @@ interface FilterSectionProps {
     title: string;
     options: FilterOption[];
     showMore?: boolean;
+    selectedId?: string;
+    onSelect?: (id: string) => void;
 }
 
 export function FilterSection({
     title,
     options,
     showMore,
+    selectedId,
+    onSelect,
 }: FilterSectionProps) {
     return (
         <div className="space-y-3">
@@ -29,7 +33,12 @@ export function FilterSection({
                         key={option.id}
                         className="flex items-center space-x-2"
                     >
-                        <Checkbox id={option.id} className="border-gray-300" />
+                        <Checkbox
+                            id={option.id}
+                            className="border-gray-300"
+                            checked={selectedId === option.id}
+                            onCheckedChange={() => onSelect?.(option.id)}
+                        />
                         <Label
                             htmlFor={option.id}
                             className="text-sm font-medium text-gray-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

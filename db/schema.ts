@@ -53,6 +53,13 @@ export const resources = pgTable(
     },
     (table) => ({
         idx_uploader: index("idx_resources_uploader").on(table.uploader_id),
+        idx_course_code: index("idx_resources_course_code").on(
+            table.course_code
+        ),
+        idx_university: index("idx_resources_university").on(table.university),
+        idx_title: index("idx_resources_title").on(table.title),
+        idx_resource_type: index("idx_resources_type").on(table.resource_type),
+        idx_semester: index("idx_resources_semester").on(table.semester),
     })
 );
 
@@ -135,7 +142,7 @@ export const verification = pgTable(
             .references(() => resources.resource_id, { onDelete: "cascade" }),
         educator_id: uuid("educator_id")
             .notNull()
-            .references(() => users.user_id),
+            .references(() => users.user_id, { onDelete: "cascade" }),
         status: varchar("status", { length: 10 }).notNull(),
         verified_date: timestamp("verified_date"),
     },
@@ -215,7 +222,7 @@ export const report_flags = pgTable(
             .references(() => resources.resource_id, { onDelete: "cascade" }),
         reporter_id: uuid("reporter_id")
             .notNull()
-            .references(() => users.user_id),
+            .references(() => users.user_id, { onDelete: "cascade" }),
         reason: varchar("reason", { length: 255 }).notNull(),
         status: varchar("status", { length: 20 }).default("Pending").notNull(),
         reported_at: timestamp("reported_at").defaultNow().notNull(),

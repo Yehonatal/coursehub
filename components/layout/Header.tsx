@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Bell, Search, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/components/providers/UserProvider";
@@ -14,9 +14,30 @@ import { UserMenu } from "./UserMenu";
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [isSearching, setIsSearching] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { user } = useUser();
+
+    const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+
+    useEffect(() => {
+        setSearchQuery(searchParams.get("q") || "");
+        setIsSearching(false);
+    }, [searchParams]);
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSearching(true);
+        if (searchQuery.trim()) {
+            router.push(
+                `/resources?q=${encodeURIComponent(searchQuery.trim())}`
+            );
+        } else {
+            router.push("/resources");
+        }
+    };
 
     useEffect(() => {
         if (user) {
@@ -80,14 +101,20 @@ export function Header() {
                 </div>
 
                 <div className="flex-1 max-w-2xl mx-8">
-                    <div className="relative group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60 group-focus-within:text-primary transition-colors" />
+                    <form onSubmit={handleSearch} className="relative group">
+                        {isSearching ? (
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60 group-focus-within:text-primary transition-colors" />
+                        )}
                         <Input
                             type="search"
                             placeholder="Search for resources, universities, or courses..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full h-12 pl-12 bg-muted/40 border-transparent focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all duration-300 rounded-2xl text-sm font-medium"
                         />
-                    </div>
+                    </form>
                 </div>
 
                 <div className="flex items-center gap-3 md:gap-5">

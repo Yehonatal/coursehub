@@ -52,12 +52,12 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-07: Require users to tag uploaded content with course code, semester, and university.
 - [x] FR-08: Allow users to download and view publicly available content.
 - [x] FR-08-01: Track and store download counts for each resource. 
-- [ ] FR-09: Provide advanced search filtering using course codes, university, tags, and semester.
+- [x] FR-09: Provide advanced search filtering using course codes, university, tags, and semester.
 - [x] FR-10: Allow users to rate content on a 5-star scale.
 - [x] FR-11: Allow users to comment on content.
 - [x] FR-12: Allow users to report inappropriate or low-quality content.
-- [ ] FR-13: Prioritize visibility of content with higher community ratings.
-- [ ] FR-14: Allow educator-contributors to formally tag and mark content as “verified”.
+- [x] FR-13: Prioritize visibility of content with higher community ratings.
+- [x] FR-14: Allow educator-contributors to formally tag and mark content as “verified”.
 - [x] FR-15: Allow users to generate AI-based study notes from uploaded content.
 - [x] FR-15-01: AI Features should work from AI Page and the AI modals in Resource pages 
 - [x] FR-15-02: Support input files in PDF, TXT, MD, and PPTX formats for AI note generation.
@@ -76,7 +76,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [ ] FR-20: Send regular updates or reminders regarding saved content and trending materials.
 - [ ] FR-21: Generate university-specific dashboards summarizing uploaded content and engagement metrics.
 - [x] FR-22: Generate user-specific dashboards summarizing personal contributions and engagement statistics.
-- [ ] FR-23: Allow users to view their personal content contributions and engagement statistics.
+- [x] FR-23: Allow users to view their personal content contributions and engagement statistics.
 - [ ] FR-24: Support a payment module for subscription to premium AI services.
 - [ ] FR-25: Validate subscription status via an external payment gateway.
 - [ ] FR-26: Restrict access to premium features when subscription inactive/expired.

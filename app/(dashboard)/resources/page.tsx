@@ -21,8 +21,12 @@ export default async function ResourcesPage({
         typeof params.resourceType === "string"
             ? params.resourceType
             : undefined;
+    const dateRange =
+        typeof params.dateRange === "string" ? params.dateRange : undefined;
     const tags =
-        typeof params.tags === "string" ? params.tags.split(",") : undefined;
+        typeof params.tags === "string"
+            ? params.tags.split(",").map((t) => t.trim())
+            : undefined;
 
     const [resources, popularAI] = await Promise.all([
         searchResources({
@@ -31,6 +35,7 @@ export default async function ResourcesPage({
             courseCode,
             semester,
             resourceType,
+            dateRange,
             tags,
         }),
         getPopularAIGenerations(4),

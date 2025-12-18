@@ -128,3 +128,48 @@ export function CommentsSectionSkeleton() {
         </div>
     );
 }
+
+export function ResourcePageSkeleton() {
+    return (
+        <div className="space-y-12 animate-pulse">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="space-y-2">
+                    <div className="h-8 w-48 bg-muted rounded-xl"></div>
+                    <div className="h-4 w-64 bg-muted/60 rounded-lg"></div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-10">
+                <aside className="hidden lg:block space-y-8">
+                    <div className="h-[400px] bg-muted rounded-[2rem]"></div>
+                </aside>
+
+                <div className="space-y-12">
+                    <div className="space-y-4">
+                        <div className="h-6 w-32 bg-muted rounded-xl"></div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {[1, 2].map((i) => (
+                                <div
+                                    key={i}
+                                    className="h-24 bg-muted rounded-2xl"
+                                ></div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="space-y-8">
+                        <div className="h-6 w-32 bg-muted rounded-xl"></div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                            {[1, 2, 3, 4, 5, 6].map((i) => (
+                                <div
+                                    key={i}
+                                    className="h-64 bg-muted rounded-[2rem]"
+                                ></div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}

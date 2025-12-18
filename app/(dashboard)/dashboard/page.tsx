@@ -36,6 +36,7 @@ export default async function StudentDashboard() {
         isVerified: r.is_verified || false,
         fileUrl: r.file_url,
         mimeType: r.mime_type || undefined,
+        verifier: r.verifier,
     }));
 
     return (

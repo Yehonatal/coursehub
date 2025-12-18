@@ -6,7 +6,18 @@ import {
     comment_reactions,
 } from "@/db/schema";
 import { error } from "@/lib/logger";
-import { eq, desc, and, ne, count, inArray } from "drizzle-orm";
+import {
+    eq,
+    desc,
+    and,
+    or,
+    ne,
+    count,
+    inArray,
+    ilike,
+    SQL,
+    gte,
+} from "drizzle-orm";
 import {
     fetchResourceRows,
     fetchTagsByIds,
@@ -14,6 +25,8 @@ import {
     mapResourceRows,
     ResourceWithTags,
 } from "@/lib/dal/resource-helpers";
+import { connectMongo } from "./mongodb/client";
+import { getAIGenerationsModel } from "./mongodb/models";
 
 export type { ResourceWithTags };
 
@@ -33,8 +46,10 @@ export async function getRelatedResources(
     if (rows.length === 0) return [];
 
     const ids = rows.map((r: any) => r.resource_id);
-    const tagsById = await fetchTagsByIds(ids);
-    const stats = await fetchStatsByIds(ids);
+    const [tagsById, stats] = await Promise.all([
+        fetchTagsByIds(ids),
+        fetchStatsByIds(ids),
+    ]);
 
     return mapResourceRows(rows, tagsById, stats);
 }
@@ -181,8 +196,10 @@ export async function getUserResources(
         if (rows.length === 0) return [];
 
         const ids = rows.map((r: any) => r.resource_id);
-        const tagsById = await fetchTagsByIds(ids);
-        const stats = await fetchStatsByIds(ids);
+        const [tagsById, stats] = await Promise.all([
+            fetchTagsByIds(ids),
+            fetchStatsByIds(ids),
+        ]);
 
         return mapResourceRows(rows, tagsById, stats);
     } catch (err) {
@@ -203,8 +220,10 @@ export async function getResourceById(
         if (rows.length === 0) return null;
 
         const ids = [rows[0].resource_id];
-        const tagsById = await fetchTagsByIds(ids);
-        const stats = await fetchStatsByIds(ids);
+        const [tagsById, stats] = await Promise.all([
+            fetchTagsByIds(ids),
+            fetchStatsByIds(ids),
+        ]);
 
         const result = mapResourceRows(rows, tagsById, stats);
         return result[0] || null;
@@ -223,12 +242,134 @@ export async function getRecommendedResources(
         if (rows.length === 0) return [];
 
         const ids = rows.map((r: any) => r.resource_id);
-        const tagsById = await fetchTagsByIds(ids);
-        const stats = await fetchStatsByIds(ids);
+        const [tagsById, stats] = await Promise.all([
+            fetchTagsByIds(ids),
+            fetchStatsByIds(ids),
+        ]);
 
         return mapResourceRows(rows, tagsById, stats);
     } catch (err) {
         error("getRecommendedResources failed:", err);
+        return [];
+    }
+}
+
+export async function searchResources(filters: {
+    courseCode?: string;
+    university?: string;
+    tags?: string[];
+    semester?: string;
+    resourceType?: string;
+    query?: string;
+    dateRange?: string;
+    limit?: number;
+}): Promise<ResourceWithTags[]> {
+    const {
+        courseCode,
+        university,
+        tags,
+        semester,
+        resourceType,
+        query,
+        dateRange,
+        limit = 20,
+    } = filters;
+
+    const conditions: SQL[] = [];
+
+    if (courseCode) {
+        conditions.push(ilike(resourcesTable.course_code, `%${courseCode}%`));
+    }
+    if (university) {
+        conditions.push(ilike(resourcesTable.university, `%${university}%`));
+    }
+    if (semester) {
+        conditions.push(ilike(resourcesTable.semester, `%${semester}%`));
+    }
+    if (resourceType) {
+        // Handle plural/singular by stripping trailing 's' and using partial match
+        const normalizedType = resourceType.toLowerCase().endsWith("s")
+            ? resourceType.slice(0, -1)
+            : resourceType;
+        conditions.push(
+            ilike(resourcesTable.resource_type, `%${normalizedType}%`)
+        );
+    }
+
+    if (dateRange && dateRange !== "all") {
+        const now = new Date();
+        let startDate: Date | null = null;
+
+        if (dateRange === "today") {
+            startDate = new Date(now.setHours(0, 0, 0, 0));
+        } else if (dateRange === "week") {
+            startDate = new Date(now.setDate(now.getDate() - 7));
+        } else if (dateRange === "month") {
+            startDate = new Date(now.setMonth(now.getMonth() - 1));
+        } else if (dateRange === "year") {
+            startDate = new Date(now.setFullYear(now.getFullYear() - 1));
+        }
+
+        if (startDate) {
+            conditions.push(gte(resourcesTable.upload_date, startDate));
+        }
+    }
+    if (query) {
+        conditions.push(
+            or(
+                ilike(resourcesTable.title, `%${query}%`),
+                ilike(resourcesTable.course_code, `%${query}%`),
+                ilike(resourcesTable.university, `%${query}%`),
+                ilike(resourcesTable.resource_type, `%${query}%`)
+            ) as SQL
+        );
+    }
+    if (tags && tags.length > 0) {
+        tags.forEach((tag) => {
+            if (tag) {
+                conditions.push(ilike(resourcesTable.tags, `%${tag}%`));
+            }
+        });
+    }
+
+    try {
+        console.log("Searching resources with conditions:", conditions.length);
+        const rows = await fetchResourceRows(
+            conditions.length > 0 ? and(...conditions) : undefined,
+            limit
+        );
+
+        if (rows.length === 0) return [];
+
+        const ids = rows.map((r: any) => r.resource_id);
+        const [tagsById, stats] = await Promise.all([
+            fetchTagsByIds(ids),
+            fetchStatsByIds(ids),
+        ]);
+
+        return mapResourceRows(rows, tagsById, stats);
+    } catch (err) {
+        error("searchResources failed:", err);
+        return [];
+    }
+}
+
+export async function getPopularAIGenerations(limit = 4) {
+    try {
+        await connectMongo();
+        const Generation = getAIGenerationsModel();
+
+        // Fetch globally popular (most viewed) generations
+        const generations = await Generation.find({
+            generationStatus: "succeeded",
+        })
+            .sort({ viewedCount: -1, createdAt: -1 })
+            .limit(limit)
+            .lean();
+
+        return JSON.parse(JSON.stringify(generations));
+    } catch (err) {
+        error("getPopularAIGenerations failed:", err);
         return [];
     }
 }

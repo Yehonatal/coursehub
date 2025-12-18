@@ -1,49 +1,176 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect, useCallback, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FilterSection } from "./FilterSection";
 import { DateRangeFilter } from "./DateRangeFilter";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function FilterSidebar() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [isPending, startTransition] = useTransition();
+
+    // Local state for text inputs to avoid lag
+    const [localCourseCode, setLocalCourseCode] = useState(
+        searchParams.get("courseCode") || ""
+    );
+    const [localSemester, setLocalSemester] = useState(
+        searchParams.get("semester") || ""
+    );
+    const [localTags, setLocalTags] = useState(searchParams.get("tags") || "");
+
+    const university = searchParams.get("university") || "";
+    const resourceType = searchParams.get("resourceType") || "";
+
+    // Update local state when searchParams change (e.g. on back button)
+    useEffect(() => {
+        setLocalCourseCode(searchParams.get("courseCode") || "");
+        setLocalSemester(searchParams.get("semester") || "");
+        setLocalTags(searchParams.get("tags") || "");
+    }, [searchParams]);
+
+    const updateFilter = useCallback(
+        (key: string, value: string | undefined) => {
+            const params = new URLSearchParams(searchParams.toString());
+            if (value) {
+                params.set(key, value);
+            } else {
+                params.delete(key);
+            }
+            // Use replace instead of push for smoother filtering experience
+            // and to avoid cluttering history
+            startTransition(() => {
+                router.replace(`/resources?${params.toString()}`, {
+                    scroll: false,
+                });
+            });
+        },
+        [router, searchParams]
+    );
+
+    // Debounced updates for text inputs
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (localCourseCode !== (searchParams.get("courseCode") || "")) {
+                updateFilter("courseCode", localCourseCode);
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [localCourseCode, updateFilter, searchParams]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (localSemester !== (searchParams.get("semester") || "")) {
+                updateFilter("semester", localSemester);
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [localSemester, updateFilter, searchParams]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (localTags !== (searchParams.get("tags") || "")) {
+                updateFilter("tags", localTags);
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [localTags, updateFilter, searchParams]);
+
     return (
         <div className="space-y-8 w-full">
-            <div>
-                <h2 className="font-bold text-[#0A251D] mb-4">Filter By</h2>
-                <DateRangeFilter />
+            <div className="flex items-center justify-between">
+                <h2 className="font-bold text-[#0A251D]">Filter By</h2>
+                {isPending && (
+                    <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                )}
             </div>
+            <DateRangeFilter />
 
-            <FilterSection
-                title="Rating"
-                options={[
-                    { id: "rating-4", label: "> 4" },
-                    { id: "rating-3", label: "> 3" },
-                ]}
-            />
+            <div className="space-y-4">
+                <div className="space-y-2">
+                    <Label
+                        htmlFor="courseCode"
+                        className="text-sm font-bold text-[#0A251D]"
+                    >
+                        Course Code
+                    </Label>
+                    <Input
+                        id="courseCode"
+                        placeholder="e.g. CS101"
+                        value={localCourseCode}
+                        onChange={(e) => setLocalCourseCode(e.target.value)}
+                        className="bg-muted/5 border-border/40"
+                    />
+                </div>
 
-            <FilterSection
-                title=""
-                options={[
-                    { id: "verified", label: "Only verified" },
-                    { id: "no-ai", label: "No AI tags" },
-                ]}
-            />
+                <div className="space-y-2">
+                    <Label
+                        htmlFor="semester"
+                        className="text-sm font-bold text-[#0A251D]"
+                    >
+                        Semester
+                    </Label>
+                    <Input
+                        id="semester"
+                        placeholder="e.g. Semester 1"
+                        value={localSemester}
+                        onChange={(e) => setLocalSemester(e.target.value)}
+                        className="bg-muted/5 border-border/40"
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <Label
+                        htmlFor="tags"
+                        className="text-sm font-bold text-[#0A251D]"
+                    >
+                        Tags (comma separated)
+                    </Label>
+                    <Input
+                        id="tags"
+                        placeholder="e.g. Slides, Exam"
+                        value={localTags}
+                        onChange={(e) => setLocalTags(e.target.value)}
+                        className="bg-muted/5 border-border/40"
+                    />
+                </div>
+            </div>
 
             <FilterSection
                 title="University"
                 options={[
-                    { id: "hru", label: "Haramaya University" },
-                    { id: "hu", label: "Hawassa University" },
-                    { id: "amu", label: "Arba Minch University" },
-                    { id: "hru-2", label: "Haramaya University" },
+                    { id: "Haramaya University", label: "Haramaya University" },
+                    { id: "Hawassa University", label: "Hawassa University" },
+                    {
+                        id: "Arba Minch University",
+                        label: "Arba Minch University",
+                    },
+                    {
+                        id: "Addis Ababa University",
+                        label: "Addis Ababa University",
+                    },
                 ]}
+                selectedId={university}
+                onSelect={(id) =>
+                    updateFilter("university", id === university ? "" : id)
+                }
                 showMore
             />
 
             <FilterSection
                 title="Type of Resource"
                 options={[
-                    { id: "slide", label: "Slide" },
-                    { id: "knowledge-graph", label: "Knowledge graph" },
-                    { id: "note", label: "Note" },
+                    { id: "slides", label: "Slides" },
+                    { id: "notes", label: "Notes" },
+                    { id: "exam", label: "Exam" },
+                    { id: "assignment", label: "Assignment" },
                 ]}
+                selectedId={resourceType}
+                onSelect={(id) =>
+                    updateFilter("resourceType", id === resourceType ? "" : id)
+                }
                 showMore
             />
         </div>
