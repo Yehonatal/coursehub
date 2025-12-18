@@ -1,42 +1,50 @@
 import React from "react";
-import { Card } from "@/components/ui/card";
 
 export function UniversityPageSkeleton() {
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 animate-pulse">
-            <div className="space-y-8">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pb-12 animate-pulse">
+            <div className="space-y-12">
+                {/* Header Section */}
                 <div className="space-y-6">
-                    <div className="h-32 sm:h-48 w-full rounded-t-xl bg-gray-200"></div>
-                    <div className="flex flex-col md:flex-row items-start gap-6">
-                        <div className="h-24 w-24 rounded-full bg-gray-200 -mt-12 border-4 border-white shrink-0"></div>
-                        <div className="space-y-2 flex-1 pt-2">
-                            <div className="h-8 w-64 bg-gray-200 rounded"></div>
-                            <div className="h-4 w-full max-w-2xl bg-gray-200 rounded"></div>
-                            <div className="h-4 w-32 bg-gray-200 rounded"></div>
+                    <div className="h-32 sm:h-48 w-full rounded-[2rem] bg-muted"></div>
+                    <div className="flex flex-col md:flex-row items-start gap-6 px-4">
+                        <div className="h-20 w-20 md:h-32 md:w-32 rounded-[2rem] bg-muted -mt-10 md:-mt-14 border-4 border-background shrink-0"></div>
+                        <div className="space-y-3 flex-1 pt-2 md:pt-16">
+                            <div className="h-8 w-64 bg-muted rounded-xl"></div>
+                            <div className="h-4 w-full max-w-2xl bg-muted rounded-lg"></div>
+                            <div className="flex gap-4">
+                                <div className="h-4 w-32 bg-muted rounded-lg"></div>
+                                <div className="h-4 w-32 bg-muted rounded-lg"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_1fr] gap-8">
-                    <div className="space-y-4">
-                        <div className="h-4 w-48 bg-gray-200 rounded"></div>
-                        <div className="grid grid-cols-2 md:grid-cols-[1fr_1.5fr] gap-4">
-                            <div className="space-y-4">
-                                <div className="h-24 bg-gray-200 rounded-xl"></div>
-                                <div className="h-24 bg-gray-200 rounded-xl"></div>
-                            </div>
-                            <div className="h-full bg-gray-200 rounded-xl min-h-[200px]"></div>
+                {/* Stats & Community Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    {/* Stats Section */}
+                    <div className="lg:col-span-8 space-y-6">
+                        <div className="h-6 w-48 bg-muted rounded-lg"></div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="h-32 bg-muted rounded-[2rem]"></div>
+                            <div className="h-32 bg-muted rounded-[2rem]"></div>
                         </div>
+                        <div className="h-48 bg-muted rounded-[2rem]"></div>
                     </div>
-                    <div className="space-y-6">
-                        <div className="h-4 w-48 bg-gray-200 rounded"></div>
+
+                    {/* Community Section */}
+                    <div className="lg:col-span-4 space-y-6">
+                        <div className="h-6 w-48 bg-muted rounded-lg"></div>
                         <div className="space-y-6">
-                            {[1, 2].map((i) => (
-                                <div key={i} className="flex items-start gap-3">
-                                    <div className="h-10 w-10 rounded-full bg-gray-200"></div>
+                            {[1, 2, 3, 4].map((i) => (
+                                <div
+                                    key={i}
+                                    className="flex items-center gap-3"
+                                >
+                                    <div className="h-10 w-10 rounded-full bg-muted"></div>
                                     <div className="space-y-2 flex-1">
-                                        <div className="h-4 w-32 bg-gray-200 rounded"></div>
-                                        <div className="h-3 w-48 bg-gray-200 rounded"></div>
+                                        <div className="h-4 w-32 bg-muted rounded-lg"></div>
+                                        <div className="h-3 w-24 bg-muted rounded-lg"></div>
                                     </div>
                                 </div>
                             ))}
@@ -44,19 +52,20 @@ export function UniversityPageSkeleton() {
                     </div>
                 </div>
 
-                <div className="space-y-4">
+                {/* Resources Section */}
+                <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                        <div className="h-8 w-48 bg-gray-200 rounded"></div>
+                        <div className="h-8 w-48 bg-muted rounded-xl"></div>
                         <div className="flex gap-2">
-                            <div className="h-8 w-8 rounded-full bg-gray-200"></div>
-                            <div className="h-8 w-8 rounded-full bg-gray-200"></div>
+                            <div className="h-10 w-10 rounded-full bg-muted"></div>
+                            <div className="h-10 w-10 rounded-full bg-muted"></div>
                         </div>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {[1, 2, 3, 4].map((i) => (
-                            <Card
+                            <div
                                 key={i}
-                                className="h-48 bg-gray-100 border-none"
+                                className="h-72 bg-muted rounded-[2rem]"
                             />
                         ))}
                     </div>
