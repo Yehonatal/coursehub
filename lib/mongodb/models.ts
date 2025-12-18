@@ -56,3 +56,21 @@ export const getAIChatSessionsModel = () =>
 
 export const getAIGenerationsModel = () =>
     mongoose.models.AIGenerations ?? model("AIGenerations", AIGenerationSchema);
+
+// Notifications: User preferences for different notification types
+const NotificationPreferenceSchema = new Schema(
+    {
+        userId: { type: String, required: true, unique: true, index: true },
+        emailNotifications: { type: Boolean, default: true },
+        pushNotifications: { type: Boolean, default: false },
+        marketingEmails: { type: Boolean, default: false },
+        resourceUpdates: { type: Boolean, default: true },
+        commentReplies: { type: Boolean, default: true },
+        pushToken: { type: String, default: null }, // For future FCM/WebPush integration
+    },
+    { timestamps: true }
+);
+
+export const getNotificationPreferencesModel = () =>
+    mongoose.models.NotificationPreferences ??
+    model("NotificationPreferences", NotificationPreferenceSchema);
