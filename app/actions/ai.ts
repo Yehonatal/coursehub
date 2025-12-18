@@ -83,14 +83,15 @@ async function incrementQuota(userId: string) {
 
 export async function createStudyNotes(
     content: string,
-    apiKey?: string
+    apiKey?: string,
+    model?: string
 ): Promise<AIStudyNote> {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
     await checkQuota(user.user_id);
 
-    const notes = await generateStudyNotes(content, apiKey);
+    const notes = await generateStudyNotes(content, apiKey, model);
 
     await incrementQuota(user.user_id);
 
@@ -99,14 +100,15 @@ export async function createStudyNotes(
 
 export async function createFlashcards(
     content: string,
-    apiKey?: string
+    apiKey?: string,
+    model?: string
 ): Promise<AIFlashcard[]> {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
     await checkQuota(user.user_id);
 
-    const flashcards = await generateFlashcards(content, apiKey);
+    const flashcards = await generateFlashcards(content, apiKey, model);
 
     await incrementQuota(user.user_id);
 
@@ -115,14 +117,15 @@ export async function createFlashcards(
 
 export async function createKnowledgeTree(
     content: string,
-    apiKey?: string
+    apiKey?: string,
+    model?: string
 ): Promise<AIKnowledgeNode> {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
     await checkQuota(user.user_id);
 
-    const tree = await generateKnowledgeTree(content, apiKey);
+    const tree = await generateKnowledgeTree(content, apiKey, model);
 
     await incrementQuota(user.user_id);
 
@@ -133,7 +136,8 @@ export async function sendChatMessage(
     history: { role: "user" | "model"; parts: string }[],
     message: string,
     context?: string,
-    apiKey?: string
+    apiKey?: string,
+    modelName?: string
 ) {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
@@ -141,7 +145,7 @@ export async function sendChatMessage(
     await checkQuota(user.user_id);
 
     try {
-        const model = getGeminiModel(apiKey);
+        const model = getGeminiModel(apiKey, modelName);
 
         // Ensure history starts with a user message (Gemini requirement)
         const formattedHistory = history.map((m) => ({

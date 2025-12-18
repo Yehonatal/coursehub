@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,12 +22,23 @@ export function AIStudyAssistant() {
     const [flashcards, setFlashcards] = useState<AIFlashcard[] | null>(null);
     const [tree, setTree] = useState<AIKnowledgeNode | null>(null);
     const [error, setError] = useState("");
+    const [selectedModel, setSelectedModel] = useState<string | null>(null);
+
+    // Read persisted model selection
+    useEffect(() => {
+        const m = localStorage.getItem("gemini_model");
+        if (m) setSelectedModel(m);
+    }, []);
 
     const handleGenerateNotes = async () => {
         setLoading(true);
         setError("");
         try {
-            const result = await createStudyNotes(content);
+            const result = await createStudyNotes(
+                content,
+                undefined,
+                selectedModel ?? undefined
+            );
             setNotes(result);
         } catch (err: unknown) {
             setError((err as Error).message || "Failed to generate notes");
@@ -40,7 +51,11 @@ export function AIStudyAssistant() {
         setLoading(true);
         setError("");
         try {
-            const result = await createFlashcards(content);
+            const result = await createFlashcards(
+                content,
+                undefined,
+                selectedModel ?? undefined
+            );
             setFlashcards(result);
         } catch (err: unknown) {
             setError((err as Error).message || "Failed to generate flashcards");
@@ -53,7 +68,11 @@ export function AIStudyAssistant() {
         setLoading(true);
         setError("");
         try {
-            const result = await createKnowledgeTree(content);
+            const result = await createKnowledgeTree(
+                content,
+                undefined,
+                selectedModel ?? undefined
+            );
             setTree(result);
         } catch (err: unknown) {
             setError(

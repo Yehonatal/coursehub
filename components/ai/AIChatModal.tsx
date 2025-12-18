@@ -61,8 +61,9 @@ export function AIChatModal({
     const [context, setContext] = useState("");
     const [isParsing, setIsParsing] = useState(false);
 
-    // API Key & Rate Limit states
+    // API Key, model & Rate Limit states
     const [apiKey, setApiKey] = useState("");
+    const [selectedModel, setSelectedModel] = useState<string | null>(null);
     const [showApiKeyModal, setShowApiKeyModal] = useState(false);
     const [showRateLimitModal, setShowRateLimitModal] = useState(false);
 
@@ -84,11 +85,17 @@ export function AIChatModal({
     useEffect(() => {
         const storedKey = localStorage.getItem("gemini_api_key");
         if (storedKey) setApiKey(storedKey);
+        const storedModel = localStorage.getItem("gemini_model");
+        if (storedModel) setSelectedModel(storedModel);
     }, []);
 
-    const handleSaveApiKey = (key: string) => {
+    const handleSaveApiKey = (key: string, model?: string) => {
         setApiKey(key);
         localStorage.setItem("gemini_api_key", key);
+        if (model) {
+            setSelectedModel(model);
+            localStorage.setItem("gemini_model", model);
+        }
     };
 
     useEffect(() => {
@@ -266,7 +273,8 @@ export function AIChatModal({
             ) {
                 const cards = await createFlashcards(
                     context || textToSend,
-                    apiKey
+                    apiKey,
+                    selectedModel ?? undefined
                 );
                 setCurrentFlashcards(cards);
                 setMessages((prev) => [
@@ -285,7 +293,8 @@ export function AIChatModal({
             ) {
                 const notes = await createStudyNotes(
                     context || textToSend,
-                    apiKey
+                    apiKey,
+                    selectedModel ?? undefined
                 );
                 setCurrentNotes(notes);
                 setMessages((prev) => [
@@ -304,7 +313,8 @@ export function AIChatModal({
             ) {
                 const tree = await createKnowledgeTree(
                     context || textToSend,
-                    apiKey
+                    apiKey,
+                    selectedModel ?? undefined
                 );
                 setCurrentTree(tree);
                 setMessages((prev) => [
@@ -322,7 +332,8 @@ export function AIChatModal({
                     messages.map((m) => ({ role: m.role, parts: m.parts })),
                     textToSend,
                     context,
-                    apiKey
+                    apiKey,
+                    selectedModel ?? undefined
                 );
                 setMessages((prev) => [
                     ...prev,
@@ -531,6 +542,7 @@ export function AIChatModal({
                 onClose={() => setShowApiKeyModal(false)}
                 onSave={handleSaveApiKey}
                 initialKey={apiKey}
+                initialModel={selectedModel ?? undefined}
             />
 
             <RateLimitModal

@@ -27,10 +27,11 @@ function extractJSONSubstring(text: string) {
 
 export async function generateStudyNotes(
     content: string,
-    apiKey?: string
+    apiKey?: string,
+    modelName?: string
 ): Promise<AIStudyNote> {
     try {
-        const model = getGeminiModel(apiKey);
+        const model = getGeminiModel(apiKey, modelName);
         const result = await model.generateContent(
             STUDY_NOTES_PROMPT + content
         );

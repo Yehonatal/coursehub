@@ -12,12 +12,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectTrigger,
+    SelectContent,
+    SelectItem,
+    SelectValue,
+} from "@/components/ui/select";
 
 interface ApiKeyModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (key: string) => void;
+    onSave: (key: string, model?: string) => void;
     initialKey?: string;
+    initialModel?: string;
 }
 
 export function ApiKeyModal({
@@ -25,15 +33,18 @@ export function ApiKeyModal({
     onClose,
     onSave,
     initialKey = "",
+    initialModel = "gemini-2.5-flash-lite",
 }: ApiKeyModalProps) {
     const [key, setKey] = useState(initialKey);
+    const [model, setModel] = useState(initialModel);
 
     useEffect(() => {
         setKey(initialKey);
-    }, [initialKey]);
+        setModel(initialModel);
+    }, [initialKey, initialModel]);
 
     const handleSave = () => {
-        onSave(key);
+        onSave(key, model);
         onClose();
     };
 
@@ -60,6 +71,37 @@ export function ApiKeyModal({
                             placeholder="AIzaSy..."
                             type="password"
                         />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="model" className="text-right">
+                            Model
+                        </Label>
+                        <div className="col-span-3">
+                            {/* Using the project's Select component for a nice dropdown */}
+                            <Select
+                                defaultValue={model}
+                                value={model}
+                                onValueChange={(v) => setModel(v)}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select a model" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="gemini-2.5-flash">
+                                        gemini-2.5-flash
+                                    </SelectItem>
+                                    <SelectItem value="gemini-2.5-flash-lite">
+                                        gemini-2.5-flash-lite
+                                    </SelectItem>
+                                    <SelectItem value="gemini-3-flash">
+                                        gemini-3-flash
+                                    </SelectItem>
+                                    <SelectItem value="gemma-3-12b-it">
+                                        gemma-3-12b-it
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
                 </div>
                 <DialogFooter>

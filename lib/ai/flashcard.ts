@@ -5,10 +5,11 @@ import { extractJSONSubstring } from "./helpers";
 
 export async function generateFlashcards(
     content: string,
-    apiKey?: string
+    apiKey?: string,
+    modelName?: string
 ): Promise<AIFlashcard[]> {
     try {
-        const model = getGeminiModel(apiKey);
+        const model = getGeminiModel(apiKey, modelName);
         const result = await model.generateContent(FLASHCARDS_PROMPT + content);
         const response = await result.response;
         const text = response.text();
@@ -69,7 +70,7 @@ export async function generateFlashcards(
         );
 
         if (needsGeneration.length > 0) {
-            const modelForAnswers = getGeminiModel(apiKey);
+            const modelForAnswers = getGeminiModel(apiKey, modelName);
             for (const c of needsGeneration) {
                 try {
                     const prompt = `Provide a concise (1-2 sentence) answer for the following flashcard front:\n\nQ: ${c.front}\n\nAnswer:`;

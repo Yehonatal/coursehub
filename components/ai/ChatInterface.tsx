@@ -61,8 +61,9 @@ export function ChatInterface({
     const [context, setContext] = useState("");
     const [isParsing, setIsParsing] = useState(false);
 
-    // API Key & Rate Limit states
+    // API Key, model & Rate Limit states
     const [apiKey, setApiKey] = useState("");
+    const [selectedModel, setSelectedModel] = useState<string | null>(null);
     const [showApiKeyModal, setShowApiKeyModal] = useState(false);
     const [showRateLimitModal, setShowRateLimitModal] = useState(false);
 
@@ -85,11 +86,17 @@ export function ChatInterface({
     useEffect(() => {
         const storedKey = localStorage.getItem("gemini_api_key");
         if (storedKey) setApiKey(storedKey);
+        const storedModel = localStorage.getItem("gemini_model");
+        if (storedModel) setSelectedModel(storedModel);
     }, []);
 
-    const handleSaveApiKey = (key: string) => {
+    const handleSaveApiKey = (key: string, model?: string) => {
         setApiKey(key);
         localStorage.setItem("gemini_api_key", key);
+        if (model) {
+            setSelectedModel(model);
+            localStorage.setItem("gemini_model", model);
+        }
     };
 
     const handleSaveSession = async () => {
@@ -259,7 +266,8 @@ export function ChatInterface({
             ) {
                 const cards = await createFlashcards(
                     context || userMessage,
-                    apiKey
+                    apiKey,
+                    selectedModel ?? undefined
                 );
                 setCurrentFlashcards(cards);
                 responseMessage = {
@@ -274,7 +282,8 @@ export function ChatInterface({
             ) {
                 const notes = await createStudyNotes(
                     context || userMessage,
-                    apiKey
+                    apiKey,
+                    selectedModel ?? undefined
                 );
                 setCurrentNotes(notes);
                 responseMessage = {
@@ -289,7 +298,8 @@ export function ChatInterface({
             ) {
                 const tree = await createKnowledgeTree(
                     context || userMessage,
-                    apiKey
+                    apiKey,
+                    selectedModel ?? undefined
                 );
                 setCurrentTree(tree);
                 responseMessage = {
@@ -304,7 +314,8 @@ export function ChatInterface({
                     messages.map((m) => ({ role: m.role, parts: m.parts })),
                     userMessage,
                     context,
-                    apiKey
+                    apiKey,
+                    selectedModel ?? undefined
                 );
                 responseMessage = { role: "model", parts: response };
             }
@@ -607,6 +618,7 @@ export function ChatInterface({
                 onClose={() => setShowApiKeyModal(false)}
                 onSave={handleSaveApiKey}
                 initialKey={apiKey}
+                initialModel={selectedModel ?? undefined}
             />
 
             <RateLimitModal

@@ -5,10 +5,11 @@ import { extractJSONSubstring, ensureNodeDefaults } from "./helpers";
 
 export async function generateKnowledgeTree(
     content: string,
-    apiKey?: string
+    apiKey?: string,
+    modelName?: string
 ): Promise<AIKnowledgeNode> {
     try {
-        const model = getGeminiModel(apiKey);
+        const model = getGeminiModel(apiKey, modelName);
         const result = await model.generateContent(
             KNOWLEDGE_TREE_PROMPT + content
         );
