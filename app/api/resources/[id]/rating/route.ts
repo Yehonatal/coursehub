@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { ratings } from "@/db/schema";
+import { ratings, resources } from "@/db/schema";
 import { validateRequest } from "@/lib/auth/session";
 import { eq, and, avg, count } from "drizzle-orm";
+import { createNotification } from "@/app/actions/notifications";
 
 export async function GET(
     request: Request,
@@ -98,6 +99,24 @@ export async function POST(
             await db
                 .insert(ratings)
                 .values({ resource_id: id, user_id: user.user_id, value });
+
+            // Trigger notification for resource owner only on new rating
+            const [resource] = await db
+                .select({
+                    uploader_id: resources.uploader_id,
+                    title: resources.title,
+                })
+                .from(resources)
+                .where(eq(resources.resource_id, id));
+
+            if (resource && resource.uploader_id !== user.user_id) {
+                await createNotification({
+                    userId: resource.uploader_id,
+                    eventType: "rating",
+                    message: `${user.first_name} ${user.last_name} rated your resource "${resource.title}" with ${value} stars`,
+                    link: `/resources/${id}`,
+                });
+            }
         }
 
         // return updated agg

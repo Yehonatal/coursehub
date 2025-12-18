@@ -94,3 +94,42 @@ export async function updateProfile(
         };
     }
 }
+
+export async function updateSubscriptionStatus(
+    status: "free" | "premium"
+): Promise<ActionResponse> {
+    const { user } = await validateRequest();
+    if (!user) {
+        return {
+            success: false,
+            message: "You must be signed in to update your subscription",
+        };
+    }
+
+    try {
+        if (!db) {
+            throw new Error("Database connection not available");
+        }
+        await db
+            .update(users)
+            .set({
+                subscription_status: status,
+            })
+            .where(eq(users.user_id, user.user_id));
+
+        revalidatePath("/");
+        revalidatePath("/dashboard");
+        revalidatePath("/dashboard/settings");
+
+        return {
+            success: true,
+            message: `Successfully updated to ${status} plan`,
+        };
+    } catch (err) {
+        console.error("updateSubscriptionStatus", err);
+        return {
+            success: false,
+            message: "Failed to update subscription status",
+        };
+    }
+}

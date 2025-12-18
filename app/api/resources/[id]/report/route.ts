@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { report_flags } from "@/db/schema";
+import { report_flags, resources } from "@/db/schema";
 import { validateRequest } from "@/lib/auth/session";
+import { createNotification } from "@/app/actions/notifications";
+import { eq } from "drizzle-orm";
 
 export async function POST(
     request: Request,
@@ -33,6 +35,24 @@ export async function POST(
             reporter_id: user.user_id,
             reason: reason.slice(0, 255), // Truncate to fit schema
         });
+
+        // Trigger notification for resource owner
+        const [resource] = await db
+            .select({
+                uploader_id: resources.uploader_id,
+                title: resources.title,
+            })
+            .from(resources)
+            .where(eq(resources.resource_id, id));
+
+        if (resource && resource.uploader_id !== user.user_id) {
+            await createNotification({
+                userId: resource.uploader_id,
+                eventType: "report",
+                message: `Your resource "${resource.title}" has been reported for: ${reason}`,
+                link: `/resources/${id}`,
+            });
+        }
 
         return NextResponse.json({
             success: true,

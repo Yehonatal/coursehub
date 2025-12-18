@@ -13,6 +13,7 @@ import { sendEmail } from "@/lib/email/client";
 import {
     verificationEmailTemplate,
     passwordResetEmailTemplate,
+    passwordChangedEmailTemplate,
 } from "@/lib/email/templates";
 import { headers } from "next/headers";
 
@@ -358,6 +359,87 @@ export async function resetPassword(
         return { success: true, message: "Password reset successfully" };
     } catch (err) {
         error("Reset password error:", err);
+        return { success: false, message: "Server error" };
+    }
+}
+
+const ChangePasswordSchema = z
+    .object({
+        currentPassword: z.string().min(1, "Current password is required"),
+        newPassword: z
+            .string()
+            .min(6, "New password must be at least 6 characters"),
+        confirmPassword: z.string().min(1, "Please confirm your new password"),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+    });
+
+export async function changePassword(
+    prevState: ActionResponse,
+    formData: FormData
+): Promise<ActionResponse> {
+    const { getSession } = await import("@/lib/auth/session");
+    const session = await getSession();
+
+    if (!session) {
+        return { success: false, message: "Unauthorized" };
+    }
+
+    const data = Object.fromEntries(formData) as Record<string, string>;
+    const parsed = ChangePasswordSchema.safeParse(data);
+
+    if (!parsed.success) {
+        return {
+            success: false,
+            message: "Validation failed",
+            errors: parsed.error.flatten().fieldErrors,
+        };
+    }
+
+    const { currentPassword, newPassword } = parsed.data;
+
+    try {
+        const existingUsers = await db
+            .select({
+                email: users.email,
+                password_hash: users.password_hash,
+            })
+            .from(users)
+            .where(eq(users.user_id, session.userId));
+
+        if (existingUsers.length === 0) {
+            return { success: false, message: "User not found" };
+        }
+
+        const user = existingUsers[0];
+        const match = await bcrypt.compare(currentPassword, user.password_hash);
+        if (!match) {
+            return {
+                success: false,
+                message: "Incorrect current password",
+                errors: { currentPassword: ["Incorrect current password"] },
+            };
+        }
+
+        const newPasswordHash = await bcrypt.hash(newPassword, 12);
+        await db
+            .update(users)
+            .set({ password_hash: newPasswordHash })
+            .where(eq(users.user_id, session.userId));
+
+        // Send security notification email
+        await sendEmail({
+            to: user.email,
+            subject: "Your CourseHub password has been changed",
+            text: "Your CourseHub account password was recently changed. If you did not make this change, please contact support.",
+            html: passwordChangedEmailTemplate(),
+        });
+
+        return { success: true, message: "Password updated successfully" };
+    } catch (err) {
+        error("Change password error:", err);
         return { success: false, message: "Server error" };
     }
 }

@@ -175,6 +175,8 @@ export const notifications = pgTable(
             .references(() => users.user_id, { onDelete: "cascade" }),
         event_type: varchar("event_type", { length: 50 }).notNull(),
         message: text("message").notNull(),
+        link: varchar("link", { length: 512 }),
+        is_read: boolean("is_read").default(false).notNull(),
         sent_date: timestamp("sent_date").defaultNow().notNull(),
     },
     (table) => ({

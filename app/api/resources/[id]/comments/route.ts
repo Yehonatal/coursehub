@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { getResourceComments } from "@/lib/resources";
 import { db } from "@/db";
-import { comments } from "@/db/schema";
+import { comments, resources } from "@/db/schema";
 import { validateRequest } from "@/lib/auth/session";
 import { eq } from "drizzle-orm";
+import { createNotification } from "@/app/actions/notifications";
 
 export async function GET(
     request: Request,
@@ -95,6 +96,45 @@ export async function POST(
             author: `${user.first_name} ${user.last_name}`,
             parentId: parentValue,
         };
+
+        // Trigger notification for resource owner
+        const [resource] = await db
+            .select({
+                uploader_id: resources.uploader_id,
+                title: resources.title,
+            })
+            .from(resources)
+            .where(eq(resources.resource_id, id));
+
+        if (resource && resource.uploader_id !== user.user_id) {
+            await createNotification({
+                userId: resource.uploader_id,
+                eventType: "comment",
+                message: `${user.first_name} ${user.last_name} commented on your resource: ${resource.title}`,
+                link: `/resources/${id}`,
+            });
+        }
+
+        // If it's a reply, notify the parent comment author
+        if (parentId) {
+            const [parentComment] = await db
+                .select({ user_id: comments.user_id })
+                .from(comments)
+                .where(eq(comments.comment_id, Number(parentId)));
+
+            if (
+                parentComment &&
+                parentComment.user_id !== user.user_id &&
+                parentComment.user_id !== resource?.uploader_id
+            ) {
+                await createNotification({
+                    userId: parentComment.user_id,
+                    eventType: "reply",
+                    message: `${user.first_name} ${user.last_name} replied to your comment on: ${resource?.title}`,
+                    link: `/resources/${id}`,
+                });
+            }
+        }
 
         return NextResponse.json(
             { success: true, data: response },
