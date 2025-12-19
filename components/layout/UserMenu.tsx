@@ -22,11 +22,11 @@ interface UserMenuProps {
 export function UserMenu({ onSignOut }: UserMenuProps) {
     const { user } = useUser();
     const displayName = user ? `${user.first_name} ${user.last_name}` : "Guest";
-    const displayAvatar = "https://github.com/shadcn.png";
+    const displayAvatar =
+        user?.profile_image_url ?? "https://github.com/shadcn.png";
 
     return (
         <Card className="absolute right-0 top-full mt-4 w-80 p-3 z-50 shadow-2xl shadow-primary/10 border-border animate-in fade-in zoom-in-95 duration-200 bg-card rounded-2xl overflow-hidden">
-            {/* Profile Section */}
             <div className="p-3 flex items-center gap-4 mb-2 bg-muted/30 rounded-2xl border border-border">
                 <div className="h-14 w-14 rounded-full bg-muted overflow-hidden shrink-0 relative border border-card shadow-sm">
                     <Image
