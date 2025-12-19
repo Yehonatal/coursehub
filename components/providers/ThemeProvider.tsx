@@ -32,7 +32,7 @@ interface ThemeContextType {
 }
 
 const defaultPreferences: ThemePreferences = {
-    fontSize: 16,
+    fontSize: 14,
     headingFont: "var(--font-playfair)",
     bodyFont: "var(--font-geist-sans)",
     radius: 0.625,
