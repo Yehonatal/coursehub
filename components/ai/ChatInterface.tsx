@@ -85,7 +85,11 @@ export function ChatInterface({
 
     useEffect(() => {
         const storedKey = localStorage.getItem("gemini_api_key");
-        if (storedKey) setApiKey(storedKey);
+        if (storedKey) {
+            setApiKey(storedKey);
+        } else {
+            setShowApiKeyModal(true);
+        }
         const storedModel = localStorage.getItem("gemini_model");
         if (storedModel) setSelectedModel(storedModel);
     }, []);

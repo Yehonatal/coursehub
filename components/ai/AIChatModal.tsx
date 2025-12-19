@@ -85,10 +85,14 @@ export function AIChatModal({
 
     useEffect(() => {
         const storedKey = localStorage.getItem("gemini_api_key");
-        if (storedKey) setApiKey(storedKey);
+        if (storedKey) {
+            setApiKey(storedKey);
+        } else if (isOpen) {
+            setShowApiKeyModal(true);
+        }
         const storedModel = localStorage.getItem("gemini_model");
         if (storedModel) setSelectedModel(storedModel);
-    }, []);
+    }, [isOpen]);
 
     const handleSaveApiKey = (key: string, model?: string) => {
         setApiKey(key);
