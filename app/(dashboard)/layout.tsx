@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { SidebarWrapper } from "@/components/layout/SidebarWrapper";
+import AppContainer from "@/components/layout/AppContainer";
 import AOSInit from "@/utils/AOSInit";
 import { validateRequest } from "@/lib/auth/session";
 import { UserProvider } from "@/components/providers/UserProvider";
@@ -24,8 +25,10 @@ export default async function DashboardLayout({
                 >
                     <Header />
                 </Suspense>
-                <main className="max-w-[1600px] mx-auto px-4 py-8 md:px-8">
-                    <SidebarWrapper>{children}</SidebarWrapper>
+                <main className="w-full px-4 py-8 md:px-8">
+                    <AppContainer>
+                        <SidebarWrapper>{children}</SidebarWrapper>
+                    </AppContainer>
                 </main>
                 <BottomNav />
             </div>

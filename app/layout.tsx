@@ -64,7 +64,7 @@ export default async function RootLayout({
                 // Suppress hydration warnings caused by browser extensions or theme providers
                 // that modify the DOM before React hydrates.
                 suppressHydrationWarning
-                className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${inter.variable} ${lora.variable} ${firaCode.variable} font-sans antialiased max-w-[1500px] mx-auto`}
+                className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${inter.variable} ${lora.variable} ${firaCode.variable} font-sans antialiased`}
             >
                 <Toaster />
                 <ThemeProvider>

@@ -8,14 +8,14 @@ export default function AuthLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="flex min-h-screen w-full font-sans bg-primary lg:bg-background lg:flex-row">
+        <div className="flex min-h-screen w-full font-sans bg-primary lg:bg-background lg:flex-row overflow-x-hidden">
             <div className="absolute inset-0 z-0 lg:hidden overflow-hidden pointer-events-none">
-                <div className="absolute inset-0 opacity-10 bg-[url('/auth-pattern.png')] bg-cover bg-center mix-blend-overlay"></div>
+                <div className="absolute inset-0 opacity-20 bg-[url('/auth-pattern.png')] bg-cover bg-center mix-blend-soft-light data-[theme=midnight]:opacity-40 data-[theme=midnight]:mix-blend-screen"></div>
                 <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] rounded-full bg-primary-foreground/5 blur-3xl" />
                 <div className="absolute bottom-[-10%] left-[-10%] w-[200px] h-[200px] rounded-full bg-primary-foreground/5 blur-3xl" />
             </div>
 
-            <div className="relative z-10 flex flex-1 flex-col justify-center px-4 py-8 sm:px-6 lg:px-20 xl:px-24 lg:w-1/2 lg:bg-background">
+            <div className="relative z-10 flex w-full lg:w-1/2 flex-col justify-center px-4 py-8 sm:px-6 lg:px-20 xl:px-24 lg:bg-background">
                 <div className="bg-card rounded-3xl shadow-2xl p-6 sm:p-8 lg:shadow-none lg:p-0 lg:bg-transparent lg:rounded-none w-full max-w-md mx-auto lg:max-w-full">
                     <div className="mb-8 lg:mb-10">
                         <Link
@@ -57,7 +57,7 @@ export default function AuthLayout({
                 </div>
             </div>
 
-            <div className="hidden lg:block lg:w-1/2 relative bg-primary overflow-hidden">
+            <div className="hidden lg:flex lg:flex-1 relative bg-primary overflow-hidden">
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-primary-foreground p-12 text-center z-10">
                     <h1 className="text-4xl xl:text-5xl font-serif font-medium mb-6 tracking-tight">
                         Elevate your academic journey.
@@ -67,7 +67,7 @@ export default function AuthLayout({
                         advanced adaptive learning platform in Ethiopia.
                     </p>
                 </div>
-                <div className="absolute inset-0 opacity-10 bg-[url('/auth-pattern.png')] bg-cover bg-center mix-blend-overlay"></div>
+                <div className="absolute inset-0 opacity-20 bg-[url('/auth-pattern.png')] bg-cover bg-center mix-blend-soft-light data-[theme=midnight]:opacity-40 data-[theme=midnight]:mix-blend-screen"></div>
 
                 <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary-foreground/5 blur-3xl" />
                 <div className="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] rounded-full bg-primary-foreground/5 blur-3xl" />
