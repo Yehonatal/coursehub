@@ -163,27 +163,6 @@ export const verification = pgTable(
     })
 );
 
-// ================= AI REQUESTS =================
-export const ai_requests = pgTable(
-    "ai_requests",
-    {
-        request_id: uuid("request_id").defaultRandom().primaryKey(),
-        resource_id: uuid("resource_id")
-            .notNull()
-            .references(() => resources.resource_id, { onDelete: "cascade" }),
-        user_id: uuid("user_id")
-            .notNull()
-            .references(() => users.user_id, { onDelete: "cascade" }),
-        type: varchar("type", { length: 20 }).notNull(),
-        request_date: timestamp("request_date").defaultNow().notNull(),
-        response_url: varchar("response_url", { length: 512 }),
-    },
-    (table) => ({
-        idx_resource: index("idx_ai_requests_resource").on(table.resource_id),
-        idx_user: index("idx_ai_requests_user").on(table.user_id),
-    })
-);
-
 // ================= NOTIFICATIONS =================
 export const notifications = pgTable(
     "notifications",
@@ -200,27 +179,6 @@ export const notifications = pgTable(
     },
     (table) => ({
         idx_user: index("idx_notifications_user").on(table.user_id),
-    })
-);
-
-// ============== BOOKMARKS / SAVED RESOURCES ==============
-export const saved_resources = pgTable(
-    "saved_resources",
-    {
-        saved_id: serial("saved_id").primaryKey(),
-        user_id: uuid("user_id")
-            .notNull()
-            .references(() => users.user_id, { onDelete: "cascade" }),
-        resource_id: uuid("resource_id")
-            .notNull()
-            .references(() => resources.resource_id, { onDelete: "cascade" }),
-        saved_at: timestamp("saved_at").defaultNow().notNull(),
-    },
-    (table) => ({
-        unique_save: uniqueIndex("unique_saved").on(
-            table.user_id,
-            table.resource_id
-        ),
     })
 );
 

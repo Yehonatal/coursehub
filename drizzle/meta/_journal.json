@@ -176,6 +176,20 @@
       "when": 1766145859588,
       "tag": "0024_slow_skrulls",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1766149410572,
+      "tag": "0025_cold_ironclad",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1766149489022,
+      "tag": "0026_demonic_spiral",
+      "breakpoints": true
     }
   ]
 }
