@@ -17,10 +17,13 @@ import {
     User as UserIcon,
     GraduationCap,
     Briefcase,
+    Upload,
+    Image as ImageIcon,
 } from "lucide-react";
 import type { User } from "@/app/types/user";
 import { updateProfile } from "@/app/actions/profile";
 import type { ActionResponse } from "@/app/actions/auth";
+import Image from "next/image";
 
 const initialActionState: ActionResponse = {
     success: false,
@@ -48,6 +51,12 @@ export function EditProfileModal({
     const [lastName, setLastName] = useState(user?.last_name ?? "");
     const [university, setUniversity] = useState(user?.university ?? "");
     const [headline, setHeadline] = useState(user?.headline ?? "");
+    const [profilePreview, setProfilePreview] = useState<string | null>(
+        user?.profile_image_url ?? null
+    );
+    const [bannerPreview, setBannerPreview] = useState<string | null>(
+        user?.banner_url ?? null
+    );
 
     useEffect(() => {
         if (open && user) {
@@ -55,8 +64,32 @@ export function EditProfileModal({
             setLastName(user.last_name ?? "");
             setUniversity(user.university ?? "");
             setHeadline(user.headline ?? "");
+            setProfilePreview(user.profile_image_url ?? null);
+            setBannerPreview(user.banner_url ?? null);
         }
     }, [open, user]);
+
+    const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfilePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setBannerPreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const hasNotifiedRef = useRef(false);
     useEffect(() => {
@@ -134,6 +167,70 @@ export function EditProfileModal({
                         )}
 
                         <form action={action} className="space-y-6">
+                            {/* Banner & Profile Image Upload */}
+                            <div className="space-y-4">
+                                <div className="relative">
+                                    <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70 ml-1 mb-2 block">
+                                        Profile Branding
+                                    </Label>
+                                    <div className="relative h-32 w-full rounded-2xl border-2 border-dashed border-border/40 overflow-hidden group transition-all hover:border-primary/40 bg-muted/5">
+                                        {bannerPreview ? (
+                                            <Image
+                                                src={bannerPreview}
+                                                alt="Banner Preview"
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        ) : (
+                                            <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground/40">
+                                                <Upload className="h-8 w-8 mb-2" />
+                                                <span className="text-xs font-medium">
+                                                    Upload Banner
+                                                </span>
+                                            </div>
+                                        )}
+                                        <input
+                                            type="file"
+                                            name="banner"
+                                            accept="image/*"
+                                            onChange={handleBannerChange}
+                                            className="absolute inset-0 opacity-0 cursor-pointer z-20"
+                                        />
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-10">
+                                            <ImageIcon className="h-6 w-6 text-white" />
+                                        </div>
+                                    </div>
+
+                                    {/* Profile Image Overlay */}
+                                    <div className="absolute -bottom-6 left-6 h-20 w-20 rounded-2xl border-4 border-card bg-card shadow-xl overflow-hidden group/profile z-30">
+                                        {profilePreview ? (
+                                            <Image
+                                                src={profilePreview}
+                                                alt="Profile Preview"
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        ) : (
+                                            <div className="absolute inset-0 flex items-center justify-center bg-muted text-muted-foreground/40">
+                                                <UserIcon className="h-8 w-8" />
+                                            </div>
+                                        )}
+                                        <input
+                                            type="file"
+                                            name="profileImage"
+                                            accept="image/*"
+                                            onChange={handleProfileChange}
+                                            className="absolute inset-0 opacity-0 cursor-pointer z-20"
+                                        />
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/profile:opacity-100 transition-opacity flex items-center justify-center z-10">
+                                            <Upload className="h-5 w-5 text-white" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="h-6" />{" "}
+                                {/* Spacer for profile image overlap */}
+                            </div>
+
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label

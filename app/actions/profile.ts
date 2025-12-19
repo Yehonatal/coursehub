@@ -4,9 +4,12 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { validateRequest } from "@/lib/auth/session";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { users, universities } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import type { ActionResponse } from "@/app/actions/auth";
+import { slugify } from "@/utils/helpers";
+import { uploadFile } from "@/lib/storage/upload";
+import { error } from "@/lib/logger";
 
 const UpdateProfileSchema = z.object({
     firstName: z
@@ -44,6 +47,9 @@ export async function updateProfile(
     }
 
     const { firstName, lastName, university, headline } = parsed.data;
+    const profileImageFile = formData.get("profileImage") as File | null;
+    const bannerFile = formData.get("banner") as File | null;
+
     const normalizedUniversity =
         university && university.trim().length > 0 ? university.trim() : null;
     const normalizedHeadline =
@@ -61,14 +67,58 @@ export async function updateProfile(
         if (!db) {
             throw new Error("Database connection not available");
         }
+
+        let universityId: number | null = null;
+        if (normalizedUniversity) {
+            const existingUni = await db
+                .select()
+                .from(universities)
+                .where(eq(universities.name, normalizedUniversity));
+
+            if (existingUni.length === 0) {
+                const [newUni] = await db
+                    .insert(universities)
+                    .values({
+                        name: normalizedUniversity,
+                        slug: slugify(normalizedUniversity),
+                    })
+                    .returning();
+                universityId = newUni.university_id;
+            } else {
+                universityId = existingUni[0].university_id;
+            }
+        }
+
+        const updateData: any = {
+            first_name: firstName,
+            last_name: lastName,
+            university: normalizedUniversity,
+            university_id: universityId,
+            headline: normalizedHeadline,
+        };
+
+        // Handle profile image upload
+        if (profileImageFile && profileImageFile.size > 0) {
+            const profileImagePath = `users/${
+                user.user_id
+            }/profile-${Date.now()}`;
+            const profileImageUrl = await uploadFile(
+                profileImageFile,
+                profileImagePath
+            );
+            updateData.profile_image_url = profileImageUrl;
+        }
+
+        // Handle banner upload
+        if (bannerFile && bannerFile.size > 0) {
+            const bannerPath = `users/${user.user_id}/banner-${Date.now()}`;
+            const bannerUrl = await uploadFile(bannerFile, bannerPath);
+            updateData.banner_url = bannerUrl;
+        }
+
         await db
             .update(users)
-            .set({
-                first_name: firstName,
-                last_name: lastName,
-                university: normalizedUniversity,
-                headline: normalizedHeadline,
-            })
+            .set(updateData)
             .where(eq(users.user_id, user.user_id));
 
         // revalidatePath("/", "layout");
@@ -86,8 +136,7 @@ export async function updateProfile(
             message: "Profile updated successfully",
         };
     } catch (err) {
-        console.error("updateProfile");
-        console.error(err);
+        error("updateProfile failed:", err);
         return {
             success: false,
             message: "Failed to update profile. Please try again.",

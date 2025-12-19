@@ -40,7 +40,9 @@ export function ProfileCard({
         role || (user?.role === "educator" ? "Educator" : "Student");
     const displayUniversity = university || user?.university || "No University";
     const displayLocation = location || "Addis Ababa, Ethiopia"; // Could be dynamic if we had location in user
-    const displayAvatar = avatarUrl || "https://github.com/shadcn.png"; // Placeholder
+    const displayAvatar =
+        avatarUrl || user?.profile_image_url || "https://github.com/shadcn.png";
+    const displayBanner = user?.banner_url;
     const displayType =
         type || (user?.role === "educator" ? "university" : "student"); // Mapping educator to university type for now, adjust as needed
     const displayHeadline = headline || user?.headline;
@@ -61,14 +63,23 @@ export function ProfileCard({
             data-aos="fade-up"
         >
             <div className="h-28 bg-linear-to-br from-primary/5 via-transparent to-transparent relative overflow-hidden">
-                <div
-                    className="absolute inset-0 opacity-[0.03]"
-                    style={{
-                        backgroundImage:
-                            "radial-gradient(circle, currentColor 1px, transparent 1px)",
-                        backgroundSize: "20px 20px",
-                    }}
-                ></div>
+                {displayBanner ? (
+                    <Image
+                        src={displayBanner}
+                        alt="Banner"
+                        fill
+                        className="object-cover opacity-90"
+                    />
+                ) : (
+                    <div
+                        className="absolute inset-0 opacity-[0.03]"
+                        style={{
+                            backgroundImage:
+                                "radial-gradient(circle, currentColor 1px, transparent 1px)",
+                            backgroundSize: "20px 20px",
+                        }}
+                    ></div>
+                )}
                 <div className="absolute -right-4 -top-4 opacity-10 rotate-12 z-10">
                     <HandDrawnShape className="w-32 h-32 text-primary" />
                 </div>

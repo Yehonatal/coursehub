@@ -146,8 +146,15 @@ export function Header() {
                             className="h-10 w-10 rounded-xl bg-muted overflow-hidden border border-border/40 hover:border-primary/40 transition-all duration-300 shadow-sm"
                         >
                             <Image
-                                src="https://github.com/shadcn.png"
-                                alt="User"
+                                src={
+                                    user?.profile_image_url ||
+                                    "https://github.com/shadcn.png"
+                                }
+                                alt={
+                                    user
+                                        ? `${user.first_name} ${user.last_name}`
+                                        : "User"
+                                }
                                 width={40}
                                 height={40}
                                 className="h-full w-full object-cover"

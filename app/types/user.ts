@@ -5,8 +5,11 @@ export interface User {
     email: string;
     role: "student" | "educator";
     university?: string | null;
+    university_id?: number | null;
     headline?: string | null;
     school_id_url?: string | null;
+    profile_image_url?: string | null;
+    banner_url?: string | null;
     is_verified: boolean;
     subscription_status?: string | null;
     created_at: Date;

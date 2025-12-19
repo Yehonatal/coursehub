@@ -18,7 +18,9 @@ export function ProfileHeader() {
     const displayRole = user?.role === "educator" ? "Educator" : "Student";
     const displayUniversity = user?.university || "No University";
     const displayLocation = "Addis Ababa, Ethiopia"; // Placeholder
-    const displayAvatar = "https://github.com/shadcn.png"; // Placeholder
+    const displayAvatar =
+        user?.profile_image_url || "https://github.com/shadcn.png";
+    const displayBanner = user?.banner_url;
 
     return (
         <div className="relative mb-6">
@@ -28,23 +30,34 @@ export function ProfileHeader() {
                 user={user}
             />
             <div className="h-24 sm:h-48 w-full rounded-3xl  relative overflow-hidden border border-border/50 ">
-                <div
-                    className="absolute inset-0 opacity-[0.03]"
-                    style={{
-                        backgroundImage: `
-                            linear-gradient(to right, currentColor 1px, transparent 1px),
-                            linear-gradient(to bottom, currentColor 1px, transparent 1px)
-                        `,
-                        backgroundSize: "40px 40px",
-                    }}
-                ></div>
+                {displayBanner ? (
+                    <Image
+                        src={displayBanner}
+                        alt="Banner"
+                        fill
+                        className="object-cover opacity-90"
+                    />
+                ) : (
+                    <>
+                        <div
+                            className="absolute inset-0 opacity-[0.03]"
+                            style={{
+                                backgroundImage: `
+                                    linear-gradient(to right, currentColor 1px, transparent 1px),
+                                    linear-gradient(to bottom, currentColor 1px, transparent 1px)
+                                `,
+                                backgroundSize: "40px 40px",
+                            }}
+                        ></div>
 
-                <div
-                    className="absolute inset-0 opacity-[0.03] pointer-events-none"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                    }}
-                ></div>
+                        <div
+                            className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                            style={{
+                                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                            }}
+                        ></div>
+                    </>
+                )}
 
                 <div className="absolute inset-0 bg-linear-to-t from-background/80 via-background/20 to-transparent"></div>
 
