@@ -20,8 +20,13 @@ export const users = pgTable("users", {
     password_hash: varchar("password_hash", { length: 255 }).notNull(),
     role: varchar("role", { length: 20 }).notNull(),
     university: varchar("university", { length: 100 }),
+    university_id: integer("university_id").references(
+        () => universities.university_id
+    ),
     headline: varchar("headline", { length: 150 }),
     school_id_url: varchar("school_id_url", { length: 512 }),
+    profile_image_url: varchar("profile_image_url", { length: 512 }),
+    banner_url: varchar("banner_url", { length: 512 }),
     is_verified: boolean("is_verified").default(false).notNull(),
     subscription_status: varchar("subscription_status", { length: 20 }),
     created_at: timestamp("created_at").defaultNow().notNull(),
@@ -38,6 +43,9 @@ export const resources = pgTable(
         course_code: varchar("course_code", { length: 20 }).notNull(),
         semester: varchar("semester", { length: 20 }).notNull(),
         university: varchar("university", { length: 100 }).notNull(),
+        university_id: integer("university_id").references(
+            () => universities.university_id
+        ),
         title: varchar("title", { length: 255 }).notNull(),
         description: text("description"),
         file_url: varchar("file_url", { length: 512 }).notNull(),
@@ -237,6 +245,17 @@ export const report_flags = pgTable(
 export const universities = pgTable("universities", {
     university_id: serial("university_id").primaryKey(),
     name: varchar("name", { length: 120 }).unique().notNull(),
+    slug: varchar("slug", { length: 150 }).unique().notNull(),
+    description: text("description"),
+    location: varchar("location", { length: 255 }),
+    website: varchar("website", { length: 255 }),
+    email: varchar("email", { length: 255 }),
+    logo_url: varchar("logo_url", { length: 512 }),
+    banner_url: varchar("banner_url", { length: 512 }),
+    is_private: boolean("is_private").default(false).notNull(),
+    is_official: boolean("is_official").default(false).notNull(),
+    created_at: timestamp("created_at").defaultNow().notNull(),
+    updated_at: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const programs = pgTable(

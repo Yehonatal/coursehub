@@ -4,7 +4,12 @@ import { z } from "zod";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
-import { users, verificationTokens, passwordResetTokens } from "@/db/schema";
+import {
+    users,
+    verificationTokens,
+    passwordResetTokens,
+    universities,
+} from "@/db/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { createSession, invalidateSession } from "@/lib/auth/session";
 import { warn, debug, error } from "@/lib/logger";
@@ -16,6 +21,7 @@ import {
     passwordChangedEmailTemplate,
 } from "@/lib/email/templates";
 import { headers } from "next/headers";
+import { slugify } from "@/utils/helpers";
 
 const SignInSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email format"),
@@ -158,6 +164,33 @@ export async function signUp(
 
         const passwordHash = await bcrypt.hash(password, 12);
 
+        // Handle university creation if it doesn't exist
+        let universityId: number | null = null;
+        if (university) {
+            try {
+                const existingUni = await db
+                    .select()
+                    .from(universities)
+                    .where(eq(universities.name, university));
+
+                if (existingUni.length === 0) {
+                    const [newUni] = await db
+                        .insert(universities)
+                        .values({
+                            name: university,
+                            slug: slugify(university),
+                        })
+                        .returning();
+                    universityId = newUni.university_id;
+                } else {
+                    universityId = existingUni[0].university_id;
+                }
+            } catch (err) {
+                error("University creation error:", err);
+                // Continue even if university creation fails
+            }
+        }
+
         const [newUser] = await db
             .insert(users)
             .values({
@@ -167,6 +200,7 @@ export async function signUp(
                 password_hash: passwordHash,
                 role: accountType,
                 university: university || null,
+                university_id: universityId,
                 school_id_url: schoolIdUrl || null,
                 is_verified: false,
             })

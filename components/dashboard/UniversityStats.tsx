@@ -39,7 +39,17 @@ function StatCard({ label, value, icon, highlight }: StatCardProps) {
     );
 }
 
-export function UniversityStats() {
+interface UniversityStatsProps {
+    students: number;
+    resources: number;
+    verified: number;
+}
+
+export function UniversityStats({
+    students,
+    resources,
+    verified,
+}: UniversityStatsProps) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="md:col-span-2 p-0 relative overflow-hidden group">
@@ -55,8 +65,8 @@ export function UniversityStats() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-6 relative">
-                    <StatCard label="Active Students" value="250" />
-                    <StatCard label="Verified Staff" value="8" />
+                    <StatCard label="Active Students" value={students} />
+                    <StatCard label="Verified Materials" value={verified} />
                 </div>
             </div>
 
@@ -75,7 +85,7 @@ export function UniversityStats() {
                     <div className="mt-8">
                         <div className="flex items-baseline gap-3">
                             <span className="text-6xl font-serif font-bold tracking-tighter text-foreground">
-                                105
+                                {resources}
                             </span>
                             <span className="text-muted-foreground/60 font-medium">
                                 Files

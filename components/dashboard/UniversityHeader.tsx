@@ -1,25 +1,41 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Settings2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EditUniversityModal } from "./EditUniversityModal";
 
 interface UniversityHeaderProps {
+    universityId: number;
     name: string;
     description: string;
     type: string;
     website: string;
     logoUrl: string;
     bannerUrl?: string;
+    isStaff?: boolean;
+    email?: string;
+    location?: string;
+    isPrivate?: boolean;
 }
 
 export function UniversityHeader({
+    universityId,
     name,
     description,
     type,
     website,
     logoUrl,
     bannerUrl,
+    isStaff,
+    email,
+    location,
+    isPrivate,
 }: UniversityHeaderProps) {
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
     return (
         <div className="relative mb-8">
             <div className="h-24 sm:h-48 w-full rounded-3xl relative overflow-hidden border border-border/50 ">
@@ -72,7 +88,7 @@ export function UniversityHeader({
 
             <div className="px-6 sm:px-10 pb-4 relative">
                 <div className="flex flex-col md:flex-row items-start gap-6 -mt-10 md:-mt-14 relative z-10">
-                    <div className="h-20 w-20 md:h-32 md:w-32 rounded-3xl border border-background bg-card shadow-2xl relative overflow-hidden shrink-0 flex items-center justify-center p-4">
+                    <div className="h-20 w-20 md:h-32 md:w-32 rounded-3xl border border-border bg-card shadow-2xl relative overflow-hidden shrink-0 flex items-center justify-center p-4">
                         <Image
                             src={logoUrl}
                             alt={name}
@@ -85,9 +101,24 @@ export function UniversityHeader({
                     <div className="flex-1 space-y-3 md:pt-16">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="space-y-1.5">
-                                <h1 className="text-2xl md:text-3xl font-serif font-bold text-foreground tracking-tight">
-                                    {name}
-                                </h1>
+                                <div className="flex items-center gap-4">
+                                    <h1 className="text-2xl md:text-3xl font-serif font-bold text-foreground tracking-tight">
+                                        {name}
+                                    </h1>
+                                    {isStaff && (
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                                setIsEditModalOpen(true)
+                                            }
+                                            className="h-8 rounded-xl border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 font-bold text-[10px] uppercase tracking-wider"
+                                        >
+                                            <Settings2 className="h-3.5 w-3.5 mr-1.5" />
+                                            Edit Details
+                                        </Button>
+                                    )}
+                                </div>
                                 <div className="flex items-center gap-3 text-[10px] md:text-xs text-muted-foreground/60 font-medium">
                                     <Badge
                                         variant="outline"
@@ -115,6 +146,24 @@ export function UniversityHeader({
                     </div>
                 </div>
             </div>
+
+            {isStaff && (
+                <EditUniversityModal
+                    isOpen={isEditModalOpen}
+                    onClose={() => setIsEditModalOpen(false)}
+                    university={{
+                        id: universityId,
+                        name,
+                        description,
+                        website,
+                        email: email || "",
+                        location: location || "",
+                        logoUrl,
+                        bannerUrl,
+                        isPrivate: isPrivate || false,
+                    }}
+                />
+            )}
         </div>
     );
 }

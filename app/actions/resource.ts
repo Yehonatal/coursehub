@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { db } from "@/db";
-import { resources, verification } from "@/db/schema";
+import { resources, verification, universities } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { uploadFile, deleteFile } from "@/lib/storage/upload";
 import { validateRequest } from "@/lib/auth/session";
@@ -171,12 +171,32 @@ export async function uploadResource(
             return { success: false, message: "University is required" };
         }
 
+        // Get university_id
+        let universityId = user.university_id;
+
+        // If a different university was provided, try to find its ID
+        if (
+            university &&
+            university.trim() !== "" &&
+            university !== user.university
+        ) {
+            const uniResult = await db
+                .select({ university_id: universities.university_id })
+                .from(universities)
+                .where(eq(universities.name, university))
+                .limit(1);
+            if (uniResult.length > 0) {
+                universityId = uniResult[0].university_id;
+            }
+        }
+
         await createResource(
             {
                 uploader_id: user.user_id,
                 course_code: courseCode,
                 semester,
                 university: uploaderUniversity,
+                university_id: universityId,
                 title,
                 description: description || undefined,
                 file_url: publicUrl,
@@ -303,7 +323,12 @@ export async function updateResource(
         } = parsed.data;
 
         const [existing] = await db
-            .select({ resource_id: resources.resource_id })
+            .select({
+                resource_id: resources.resource_id,
+                file_url: resources.file_url,
+                university: resources.university,
+                resource_type: resources.resource_type,
+            })
             .from(resources)
             .where(
                 and(
@@ -317,6 +342,19 @@ export async function updateResource(
                 success: false,
                 message: "Resource not found or unauthorized",
             };
+        }
+
+        // Get university_id if university changed
+        let universityId: number | undefined = undefined;
+        if (university && university !== existing.university) {
+            const uniResult = await db
+                .select({ university_id: universities.university_id })
+                .from(universities)
+                .where(eq(universities.name, university))
+                .limit(1);
+            if (uniResult.length > 0) {
+                universityId = uniResult[0].university_id;
+            }
         }
 
         // Handle optional replacement file
@@ -372,6 +410,7 @@ export async function updateResource(
                 course_code: courseCode,
                 semester,
                 university: university || existing.university,
+                university_id: universityId,
                 description: description || null,
                 resource_type: resourceType || existing.resource_type,
                 tags: tags || null,

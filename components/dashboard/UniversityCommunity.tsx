@@ -3,28 +3,21 @@ import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 
 interface CommunityMember {
-    name: string;
-    role: string;
-    description: string;
-    avatarUrl: string;
+    user_id: string;
+    first_name: string;
+    last_name: string;
+    headline: string | null;
+    total_downloads: number;
+    avg_rating: number;
 }
 
-export function UniversityCommunity() {
-    const members: CommunityMember[] = [
-        {
-            name: "Dr. Abdelgany Kebede",
-            role: "Lecturer",
-            description: "Specialization in User Interface Design",
-            avatarUrl: "",
-        },
-        {
-            name: "Lidiya Alemayehu",
-            role: "Student",
-            description: "@HRU | Full-Stack Developer",
-            avatarUrl: "",
-        },
-    ];
+interface UniversityCommunityProps {
+    contributors: CommunityMember[];
+}
 
+export function UniversityCommunity({
+    contributors,
+}: UniversityCommunityProps) {
     return (
         <div className="space-y-8">
             <div className="space-y-1">
@@ -37,41 +30,42 @@ export function UniversityCommunity() {
             </div>
 
             <div className="space-y-6">
-                {members.map((member, index) => (
+                {contributors.map((member, index) => (
                     <div
-                        key={index}
+                        key={member.user_id}
                         className="flex items-center gap-4 group cursor-pointer"
                     >
                         <div className="h-12 w-12 rounded-xl bg-card overflow-hidden relative shrink-0 border border-border group-hover:border-primary/20 transition-all">
-                            {member.avatarUrl ? (
-                                <Image
-                                    src={member.avatarUrl}
-                                    alt={member.name}
-                                    fill
-                                    className="object-cover"
-                                />
-                            ) : (
-                                <div className="w-full h-full bg-linear-to-br from-primary/5 to-primary/10 flex items-center justify-center text-primary font-bold text-xs">
-                                    {member.name.substring(0, 2).toUpperCase()}
-                                </div>
-                            )}
+                            <div className="w-full h-full bg-linear-to-br from-primary/5 to-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                                {member.first_name[0]}
+                                {member.last_name[0]}
+                            </div>
                         </div>
                         <div className="space-y-0.5 flex-1">
                             <h4 className="text-sm font-bold text-foreground tracking-tight group-hover:text-primary transition-colors">
-                                {member.name}
+                                {member.first_name} {member.last_name}
                             </h4>
                             <p className="text-[11px] text-muted-foreground/60 font-medium leading-tight">
-                                {member.description}
+                                {member.headline || "Contributor"}
                             </p>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-xs font-bold text-primary">
+                                {member.total_downloads}
+                            </div>
+                            <div className="text-[8px] uppercase tracking-wider text-muted-foreground/60 font-bold">
+                                Downloads
+                            </div>
                         </div>
                     </div>
                 ))}
-            </div>
 
-            <button className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 hover:text-primary transition-colors">
-                View All{" "}
-                <ArrowDown className="h-3 w-3 group-hover:translate-y-0.5 transition-transform" />
-            </button>
+                {contributors.length === 0 && (
+                    <p className="text-sm text-muted-foreground italic">
+                        No contributors yet.
+                    </p>
+                )}
+            </div>
         </div>
     );
 }

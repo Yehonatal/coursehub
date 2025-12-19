@@ -251,6 +251,7 @@ export async function createResource(
         course_code: string;
         semester: string;
         university: string;
+        university_id?: number | null;
         title: string;
         description?: string;
         file_url: string;
