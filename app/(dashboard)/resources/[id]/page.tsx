@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ResourceHeader } from "@/components/resources/ResourceHeader";
 import { ResourceContent } from "@/components/resources/ResourceContent";
 import { ResourceSidebar } from "@/components/resources/ResourceSidebar";
+import { ResourceGenerations } from "@/components/resources/ResourceGenerations";
 import { RelatedResources } from "@/components/common/RelatedResources";
 import { CommentsSection } from "@/components/common/CommentsSection";
 
@@ -36,6 +37,9 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     }
 
     const isOwner = user?.user_id === resource.uploader_id;
+    const isPremium =
+        user?.subscription_status === "pro" ||
+        user?.subscription_status === "active";
 
     const relatedResources = await getRelatedResources(
         id,
@@ -162,7 +166,10 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                             objectives={[]}
                         />
 
-                        {/* <ResourceGenerations generations={generations} /> */}
+                        <ResourceGenerations
+                            generations={generations}
+                            isPremium={isPremium}
+                        />
 
                         <RelatedResources resources={relatedResources} />
                     </div>
@@ -170,6 +177,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                         <ResourceSidebar
                             generations={generations}
                             resourceId={id}
+                            isPremium={isPremium}
                         />
                     </div>
 

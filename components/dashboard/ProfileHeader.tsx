@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@/components/providers/UserProvider";
 import { BadgeCheck, Pencil, MapPin } from "lucide-react";
 import { EditProfileModal } from "@/components/dashboard/EditProfileModal";
+import { SubscriptionBadge } from "@/components/common/SubscriptionBadge";
 
 export function ProfileHeader() {
     const { user } = useUser();
@@ -78,12 +79,22 @@ export function ProfileHeader() {
                         </div>
 
                         <div className="md:pb-1 space-y-0.5 md:mt-14">
-                            <div className="flex items-center gap-2">
-                                <h1 className="text-lg md:text-xl font-serif font-bold text-foreground tracking-tight">
-                                    {displayName}
-                                </h1>
-                                {user?.is_verified && (
-                                    <BadgeCheck className="h-4 w-4 text-blue-500 fill-blue-50" />
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <h1 className="text-lg md:text-xl font-serif font-bold text-foreground tracking-tight">
+                                        {displayName}
+                                    </h1>
+                                    {user?.is_verified && (
+                                        <BadgeCheck className="h-4 w-4 text-blue-500 fill-blue-50" />
+                                    )}
+                                </div>
+
+                                {user && (
+                                    <div className="mt-2">
+                                        <SubscriptionBadge
+                                            status={user?.subscription_status}
+                                        />
+                                    </div>
                                 )}
                             </div>
                             <p className="text-xs md:text-sm font-medium text-muted-foreground/80 leading-relaxed">

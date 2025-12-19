@@ -162,6 +162,20 @@
       "when": 1766134541107,
       "tag": "0022_little_reaper",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1766139814474,
+      "tag": "0023_woozy_black_bird",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1766145859588,
+      "tag": "0024_slow_skrulls",
+      "breakpoints": true
     }
   ]
 }

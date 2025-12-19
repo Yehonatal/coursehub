@@ -6,6 +6,7 @@ import {
     boolean,
     timestamp,
     integer,
+    bigint,
     serial,
     index,
     uniqueIndex,
@@ -28,7 +29,10 @@ export const users = pgTable("users", {
     profile_image_url: varchar("profile_image_url", { length: 512 }),
     banner_url: varchar("banner_url", { length: 512 }),
     is_verified: boolean("is_verified").default(false).notNull(),
-    subscription_status: varchar("subscription_status", { length: 20 }),
+    subscription_status: varchar("subscription_status", { length: 20 })
+        .default("free")
+        .notNull(),
+    subscription_expiry: timestamp("subscription_expiry"),
     created_at: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -50,7 +54,7 @@ export const resources = pgTable(
         description: text("description"),
         file_url: varchar("file_url", { length: 512 }).notNull(),
         mime_type: varchar("mime_type", { length: 100 }),
-        file_size: integer("file_size"),
+        file_size: bigint("file_size", { mode: "number" }),
         resource_type: varchar("resource_type", { length: 20 }),
         upload_date: timestamp("upload_date").defaultNow().notNull(),
         views_count: integer("views_count").default(0).notNull(),
@@ -324,5 +328,9 @@ export const user_quotas = pgTable("user_quotas", {
         .references(() => users.user_id, { onDelete: "cascade" })
         .primaryKey(),
     ai_generations_count: integer("ai_generations_count").default(0).notNull(),
+    ai_chat_count: integer("ai_chat_count").default(0).notNull(),
+    storage_usage: bigint("storage_usage", { mode: "number" })
+        .default(0)
+        .notNull(),
     last_reset_date: timestamp("last_reset_date").defaultNow().notNull(),
 });

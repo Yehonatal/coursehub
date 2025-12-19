@@ -2,16 +2,21 @@
 
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Folder, Upload, Info, Crown } from "lucide-react";
 import { AIUploadModal } from "./AIUploadModal";
 import { getUserStorageStats, StorageStats } from "@/app/actions/stats";
 import { cn } from "@/utils/cn";
+import { useUser } from "@/components/providers/UserProvider";
 
 export function AIUploadCard() {
+    const { user } = useUser();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [stats, setStats] = useState<StorageStats | null>(null);
     const [showInfo, setShowInfo] = useState(false);
+
+    const isPremium =
+        user?.subscription_status === "pro" ||
+        user?.subscription_status === "active";
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -61,26 +66,29 @@ export function AIUploadCard() {
                         </div>
                         <div className="space-y-3">
                             <p className="text-[11px] text-muted-foreground leading-relaxed">
-                                Your current plan (Free) includes{" "}
+                                Your current plan ({isPremium ? "Pro" : "Free"})
+                                includes{" "}
                                 <span className="font-bold text-foreground">
-                                    100MB
+                                    {isPremium ? "10GB" : "100MB"}
                                 </span>{" "}
                                 of cloud storage for all your resources and AI
                                 generated content.
                             </p>
-                            <div className="p-3 rounded-2xl bg-primary/5 border border-primary/10 flex items-center gap-3 group/premium cursor-pointer pointer-events-auto">
-                                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/20">
-                                    <Crown className="h-4 w-4 text-white" />
+                            {!isPremium && (
+                                <div className="p-3 rounded-2xl bg-primary/5 border border-primary/10 flex items-center gap-3 group/premium cursor-pointer pointer-events-auto">
+                                    <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/20">
+                                        <Crown className="h-4 w-4 text-white" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-[10px] font-bold text-primary uppercase tracking-tight">
+                                            Upgrade to Premium
+                                        </p>
+                                        <p className="text-[9px] text-primary/60 font-medium">
+                                            Get 10GB + Priority AI
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="flex-1">
-                                    <p className="text-[10px] font-bold text-primary uppercase tracking-tight">
-                                        Upgrade to Premium
-                                    </p>
-                                    <p className="text-[9px] text-primary/60 font-medium">
-                                        Get 10GB + Priority AI
-                                    </p>
-                                </div>
-                            </div>
+                            )}
                         </div>
                     </div>
 
@@ -144,7 +152,7 @@ export function AIUploadCard() {
                                 </span>
                             </p>
                             <p className="text-xs text-muted-foreground/60 font-medium">
-                                Max file size 10MB
+                                Max file size 20MB
                             </p>
                         </div>
                     </div>

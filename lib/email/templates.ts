@@ -95,3 +95,43 @@ export const notificationPreferenceChangedEmailTemplate = () => `
 </body>
 </html>
 `;
+
+export const premiumWelcomeEmailTemplate = (name: string) => `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background-color: #0A251D; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+    .content { padding: 20px; border: 1px solid #eee; border-top: none; }
+    .footer { margin-top: 20px; font-size: 0.8em; color: #666; text-align: center; }
+    .feature-list { list-style: none; padding: 0; }
+    .feature-item { margin-bottom: 10px; padding-left: 25px; position: relative; }
+    .feature-item:before { content: '✓'; position: absolute; left: 0; color: #0A251D; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Welcome to CourseHub Premium!</h1>
+    </div>
+    <div class="content">
+      <p>Hi ${name},</p>
+      <p>Thank you for upgrading to CourseHub Premium! Your account has been successfully upgraded, and you now have access to all our premium features:</p>
+      <ul class="feature-list">
+        <li class="feature-item"><strong>Unlimited AI Generations:</strong> Create as many study notes, flashcards, and knowledge trees as you need.</li>
+        <li class="feature-item"><strong>Unlimited AI Chat:</strong> Interact with our AI study assistant without daily limits.</li>
+        <li class="feature-item"><strong>Increased Storage:</strong> Upload more resources and materials to your library.</li>
+        <li class="feature-item"><strong>Priority Support:</strong> Get help faster when you need it.</li>
+      </ul>
+      <p>We're excited to help you excel in your studies!</p>
+      <p>Best regards,<br>The CourseHub Team</p>
+    </div>
+    <div class="footer">
+      <p>© ${new Date().getFullYear()} CourseHub. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>
+`;

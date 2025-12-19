@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { HandDrawnShape } from "@/components/ui/decorations";
 import { FolderOpen, BadgeCheck, MapPin } from "lucide-react";
 import { useUser } from "@/components/providers/UserProvider";
+import { SubscriptionBadge } from "@/components/common/SubscriptionBadge";
 
 interface ProfileCardProps {
     // Optional props to override user data if needed
@@ -94,30 +95,40 @@ export function ProfileCard({
                     />
                 </div>
                 <div className="mt-14 space-y-2">
-                    <h2 className="text-xl font-serif font-semibold text-foreground flex items-center gap-2 tracking-tight">
-                        {displayName}
-                        {isMounted && user?.is_verified ? (
-                            <BadgeCheck className="h-5 w-5 text-primary fill-primary/10" />
-                        ) : isMounted && user ? (
-                            <span className="px-2.5 py-0.5 rounded-full bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-wider border border-primary/20 whitespace-nowrap">
-                                Not Verified
-                            </span>
-                        ) : null}
-                    </h2>
+                    <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-xl font-serif font-semibold text-foreground flex items-center gap-2 tracking-tight">
+                                {displayName}
+                                {isMounted && user?.is_verified ? (
+                                    <BadgeCheck className="h-5 w-5 text-primary fill-primary/10" />
+                                ) : isMounted && user ? (
+                                    <span className="px-2.5 py-0.5 rounded-full bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-wider border border-primary/20 whitespace-nowrap">
+                                        Not Verified
+                                    </span>
+                                ) : null}
+                            </h2>
+                        </div>
+                    </div>
+
                     <p className="text-sm text-muted-foreground/80 font-medium leading-relaxed">
                         {displayHeadline || displayRole}
                     </p>
                     <div className="flex items-center gap-3 text-xs text-muted-foreground/60 font-medium pt-1">
                         {displayBadge && (
-                            <span className="px-2.5 py-1 rounded-full bg-muted/30 text-muted-foreground border border-border/50">
+                            <div className="px-2.5 py-1 rounded-full bg-muted/30 text-muted-foreground border border-border/50">
                                 {displayBadge}
-                            </span>
+                            </div>
                         )}
                         <span className="h-1 w-1 rounded-full bg-border" />
-                        <span className="flex items-center gap-1">
-                            <MapPin className="h-3 w-3" />
-                            {displayLocation}
-                        </span>
+                        <div className="flex items-center gap-1">
+                            {isMounted && user && (
+                                <div className="mt-1">
+                                    <SubscriptionBadge
+                                        status={user.subscription_status}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 

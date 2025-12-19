@@ -12,6 +12,7 @@ export interface User {
     banner_url?: string | null;
     is_verified: boolean;
     subscription_status?: string | null;
+    subscription_expiry?: Date | null;
     created_at: Date;
 }
 

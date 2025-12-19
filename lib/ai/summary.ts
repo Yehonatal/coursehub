@@ -58,8 +58,11 @@ export async function generateStudyNotes(
                 throw new Error("Failed to generate study notes");
             }
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error generating study notes:", error);
+        if (error.status === 503 || error.message?.includes("503")) {
+            throw new Error("RATE_LIMIT_EXCEEDED");
+        }
         throw new Error("Failed to generate study notes");
     }
 }

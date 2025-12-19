@@ -20,6 +20,7 @@ export interface StorageStats {
 }
 
 const FREE_TIER_LIMIT_MB = 100;
+const PREMIUM_TIER_LIMIT_MB = 10 * 1024; // 10GB
 const BYTES_PER_MB = 1024 * 1024;
 
 // Estimates for AI content sizes (since we don't store actual file sizes for JSON in Mongo)
@@ -37,11 +38,15 @@ export async function getUserStorageStats(): Promise<StorageStats> {
     }
 
     try {
+        const isPremium =
+            user.subscription_status === "pro" ||
+            user.subscription_status === "active";
+
         // 1. Get Resource Stats from PostgreSQL
         const resourceStats = await db
             .select({
-                count: sql<number>`count(*)`,
-                totalSize: sql<number>`sum(coalesce(${resources.file_size}, 0))`,
+                count: sql`count(*)`,
+                totalSize: sql`sum(coalesce(${resources.file_size}, 0))`,
             })
             .from(resources)
             .where(eq(resources.uploader_id, user.user_id));
@@ -81,7 +86,8 @@ export async function getUserStorageStats(): Promise<StorageStats> {
         // 3. Combine Stats
         const totalItems = pgCount + aiCount;
         const totalSizeInBytes = pgSize + aiSize;
-        const storageLimitInBytes = FREE_TIER_LIMIT_MB * BYTES_PER_MB;
+        const limitMB = isPremium ? PREMIUM_TIER_LIMIT_MB : FREE_TIER_LIMIT_MB;
+        const storageLimitInBytes = limitMB * BYTES_PER_MB;
         const usagePercentage = Math.min(
             100,
             (totalSizeInBytes / storageLimitInBytes) * 100

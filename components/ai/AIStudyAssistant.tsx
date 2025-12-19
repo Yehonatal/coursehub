@@ -14,6 +14,7 @@ import { AIStudyNote, AIFlashcard, AIKnowledgeNode } from "@/types/ai";
 import { Loader2, FileText, Layers, Network } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/utils/cn";
+import { RateLimitModal } from "./RateLimitModal";
 
 export function AIStudyAssistant() {
     const [content, setContent] = useState("");
@@ -23,6 +24,7 @@ export function AIStudyAssistant() {
     const [tree, setTree] = useState<AIKnowledgeNode | null>(null);
     const [error, setError] = useState("");
     const [selectedModel, setSelectedModel] = useState<string | null>(null);
+    const [showRateLimitModal, setShowRateLimitModal] = useState(false);
 
     // Read persisted model selection
     useEffect(() => {
@@ -41,7 +43,11 @@ export function AIStudyAssistant() {
             );
             setNotes(result);
         } catch (err: unknown) {
-            setError((err as Error).message || "Failed to generate notes");
+            const msg = (err as Error).message || "Failed to generate notes";
+            if (msg === "RATE_LIMIT_EXCEEDED" || msg.includes("quota")) {
+                setShowRateLimitModal(true);
+            }
+            setError(msg);
         } finally {
             setLoading(false);
         }
@@ -58,7 +64,12 @@ export function AIStudyAssistant() {
             );
             setFlashcards(result);
         } catch (err: unknown) {
-            setError((err as Error).message || "Failed to generate flashcards");
+            const msg =
+                (err as Error).message || "Failed to generate flashcards";
+            if (msg === "RATE_LIMIT_EXCEEDED" || msg.includes("quota")) {
+                setShowRateLimitModal(true);
+            }
+            setError(msg);
         } finally {
             setLoading(false);
         }
@@ -75,9 +86,12 @@ export function AIStudyAssistant() {
             );
             setTree(result);
         } catch (err: unknown) {
-            setError(
-                (err as Error).message || "Failed to generate knowledge tree"
-            );
+            const msg =
+                (err as Error).message || "Failed to generate knowledge tree";
+            if (msg === "RATE_LIMIT_EXCEEDED" || msg.includes("quota")) {
+                setShowRateLimitModal(true);
+            }
+            setError(msg);
         } finally {
             setLoading(false);
         }
@@ -85,6 +99,10 @@ export function AIStudyAssistant() {
 
     return (
         <div className="space-y-6">
+            <RateLimitModal
+                isOpen={showRateLimitModal}
+                onClose={() => setShowRateLimitModal(false)}
+            />
             <Card>
                 <CardHeader>
                     <CardTitle>AI Study Assistant</CardTitle>

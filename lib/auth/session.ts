@@ -124,7 +124,28 @@ export const validateRequest = cache(async () => {
             return { user: null, session: null };
         }
 
-        const user = userResult[0];
+        let user = userResult[0];
+
+        // Check if subscription expired
+        if (user.subscription_status === "pro" && user.subscription_expiry) {
+            const now = new Date();
+            if (now > user.subscription_expiry) {
+                await db
+                    .update(users)
+                    .set({
+                        subscription_status: "free",
+                        subscription_expiry: null,
+                    })
+                    .where(eq(users.user_id, user.user_id));
+
+                // Update the local user object
+                user = {
+                    ...user,
+                    subscription_status: "free",
+                    subscription_expiry: null,
+                };
+            }
+        }
 
         return {
             user: user,

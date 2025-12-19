@@ -15,70 +15,128 @@ import {
     getAIGenerationsModel,
 } from "@/lib/mongodb/models";
 
-const FREE_TIER_QUOTA = 10;
+const FREE_GENERATIONS_LIMIT = 5;
+const FREE_CHATS_LIMIT = 10;
+const PRO_GENERATIONS_LIMIT = 1000;
+const PRO_CHATS_LIMIT = 2000;
 
-async function checkQuota(userId: string) {
+async function withRetry<T>(
+    fn: () => Promise<T>,
+    retries = 2,
+    delay = 1000
+): Promise<T> {
+    try {
+        return await fn();
+    } catch (error: any) {
+        const isRetryable =
+            error.message?.includes("503") ||
+            error.status === 503 ||
+            error.message?.includes("overloaded") ||
+            error.message?.includes("RATE_LIMIT_EXCEEDED");
+
+        if (retries > 0 && isRetryable) {
+            console.log(
+                `AI model overloaded or rate limited, retrying... (${retries} left)`
+            );
+            await new Promise((resolve) => setTimeout(resolve, delay));
+            return withRetry(fn, retries - 1, delay * 2);
+        }
+        throw error;
+    }
+}
+
+async function checkQuota(userId: string, type: "generation" | "chat") {
     const user = await db.query.users.findFirst({
         where: eq(users.user_id, userId),
     });
 
     if (!user) throw new Error("User not found");
 
-    if (
+    const isPremium =
         user.subscription_status === "active" ||
-        user.subscription_status === "pro"
-    ) {
-        return true; // Unlimited for paid users
-    }
+        user.subscription_status === "pro";
 
-    // Check quota for free users
+    const generationLimit = isPremium
+        ? PRO_GENERATIONS_LIMIT
+        : FREE_GENERATIONS_LIMIT;
+    const chatLimit = isPremium ? PRO_CHATS_LIMIT : FREE_CHATS_LIMIT;
+
+    // Check quota
     let quota = await db.query.user_quotas.findFirst({
         where: eq(user_quotas.user_id, userId),
     });
 
-    if (!quota) {
-        // Create quota record if not exists
-        await db.insert(user_quotas).values({ user_id: userId });
+    const now = new Date();
+    const isNewDay =
+        quota &&
+        (now.getUTCDate() !== quota.last_reset_date.getUTCDate() ||
+            now.getUTCMonth() !== quota.last_reset_date.getUTCMonth() ||
+            now.getUTCFullYear() !== quota.last_reset_date.getUTCFullYear());
+
+    if (!quota || isNewDay) {
+        // Create or reset quota record
+        await db
+            .insert(user_quotas)
+            .values({
+                user_id: userId,
+                ai_generations_count: 0,
+                ai_chat_count: 0,
+                last_reset_date: now,
+            })
+            .onConflictDoUpdate({
+                target: user_quotas.user_id,
+                set: {
+                    ai_generations_count: 0,
+                    ai_chat_count: 0,
+                    last_reset_date: now,
+                },
+            });
+
         quota = {
             user_id: userId,
             ai_generations_count: 0,
-            last_reset_date: new Date(),
+            ai_chat_count: 0,
+            storage_usage: quota?.storage_usage || 0,
+            last_reset_date: now,
         };
     }
 
-    if (quota.ai_generations_count >= FREE_TIER_QUOTA) {
+    if (
+        type === "generation" &&
+        quota.ai_generations_count >= generationLimit
+    ) {
         throw new Error(
-            "Free tier quota exceeded. Please upgrade to continue."
+            `${
+                isPremium ? "Premium" : "Free"
+            } tier generation limit reached (${generationLimit}/day). Please try again tomorrow.`
+        );
+    }
+
+    if (type === "chat" && quota.ai_chat_count >= chatLimit) {
+        throw new Error(
+            `${
+                isPremium ? "Premium" : "Free"
+            } tier chat limit reached (${chatLimit}/day). Please try again tomorrow.`
         );
     }
 
     return true;
 }
 
-async function incrementQuota(userId: string) {
-    const user = await db.query.users.findFirst({
-        where: eq(users.user_id, userId),
-    });
-
-    if (
-        user?.subscription_status === "active" ||
-        user?.subscription_status === "pro"
-    ) {
-        return;
-    }
-
+async function incrementQuota(userId: string, type: "generation" | "chat") {
     await db
-        .insert(user_quotas)
-        .values({
-            user_id: userId,
-            ai_generations_count: 1,
+        .update(user_quotas)
+        .set({
+            ai_generations_count:
+                type === "generation"
+                    ? sql`${user_quotas.ai_generations_count} + 1`
+                    : undefined,
+            ai_chat_count:
+                type === "chat"
+                    ? sql`${user_quotas.ai_chat_count} + 1`
+                    : undefined,
         })
-        .onConflictDoUpdate({
-            target: user_quotas.user_id,
-            set: {
-                ai_generations_count: sql`${user_quotas.ai_generations_count} + 1`,
-            },
-        });
+        .where(eq(user_quotas.user_id, userId));
 }
 
 export async function createStudyNotes(
@@ -89,11 +147,13 @@ export async function createStudyNotes(
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
-    await checkQuota(user.user_id);
+    await checkQuota(user.user_id, "generation");
 
-    const notes = await generateStudyNotes(content, apiKey, model);
+    const notes = await withRetry(() =>
+        generateStudyNotes(content, apiKey, model)
+    );
 
-    await incrementQuota(user.user_id);
+    await incrementQuota(user.user_id, "generation");
 
     return notes;
 }
@@ -106,11 +166,13 @@ export async function createFlashcards(
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
-    await checkQuota(user.user_id);
+    await checkQuota(user.user_id, "generation");
 
-    const flashcards = await generateFlashcards(content, apiKey, model);
+    const flashcards = await withRetry(() =>
+        generateFlashcards(content, apiKey, model)
+    );
 
-    await incrementQuota(user.user_id);
+    await incrementQuota(user.user_id, "generation");
 
     return flashcards;
 }
@@ -123,11 +185,13 @@ export async function createKnowledgeTree(
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
-    await checkQuota(user.user_id);
+    await checkQuota(user.user_id, "generation");
 
-    const tree = await generateKnowledgeTree(content, apiKey, model);
+    const tree = await withRetry(() =>
+        generateKnowledgeTree(content, apiKey, model)
+    );
 
-    await incrementQuota(user.user_id);
+    await incrementQuota(user.user_id, "generation");
 
     return tree;
 }
@@ -142,9 +206,9 @@ export async function sendChatMessage(
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
-    await checkQuota(user.user_id);
+    await checkQuota(user.user_id, "chat");
 
-    try {
+    return await withRetry(async () => {
         const model = getGeminiModel(apiKey, modelName);
 
         // Ensure history starts with a user message (Gemini requirement)
@@ -178,16 +242,21 @@ export async function sendChatMessage(
         const response = await result.response;
         const text = response.text();
 
-        await incrementQuota(user.user_id);
+        await incrementQuota(user.user_id, "chat");
 
         return text;
-    } catch (error: any) {
+    }).catch((error: any) => {
         console.error("Error sending chat message:", error);
-        if (error.message?.includes("429") || error.status === 429) {
+        if (
+            error.message?.includes("429") ||
+            error.status === 429 ||
+            error.message?.includes("503") ||
+            error.status === 503
+        ) {
             throw new Error("RATE_LIMIT_EXCEEDED");
         }
         throw error;
-    }
+    });
 }
 
 // --- AI Session Management ---
@@ -296,6 +365,27 @@ export async function saveGeneration(payload: {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
+    // Check if user is premium
+    const userData = await db.query.users.findFirst({
+        where: eq(users.user_id, user.user_id),
+    });
+
+    if (
+        userData?.subscription_status !== "pro" &&
+        userData?.subscription_status !== "active"
+    ) {
+        // Free users can save up to 5 generations per day
+        const quota = await db.query.user_quotas.findFirst({
+            where: eq(user_quotas.user_id, user.user_id),
+        });
+
+        if (quota && quota.ai_generations_count >= FREE_GENERATIONS_LIMIT) {
+            throw new Error(
+                `Daily save limit reached (${FREE_GENERATIONS_LIMIT}/day). Please upgrade to continue.`
+            );
+        }
+    }
+
     await connectMongo();
     const Generation = getAIGenerationsModel();
 
@@ -331,13 +421,36 @@ export async function listUserGenerations(
 }
 
 export async function getResourceGenerations(resourceId: string) {
+    const user = await getCurrentUser();
+
     await connectMongo();
     const Generation = getAIGenerationsModel();
 
-    const generations = await Generation.find({
+    // If user is not logged in or is free tier, they can only see their own generations
+    // (which would be none since they can't save, but for safety)
+    const query: Record<string, any> = {
         resourceId: resourceId,
         saved: true,
-    })
+    };
+
+    if (user) {
+        const userData = await db.query.users.findFirst({
+            where: eq(users.user_id, user.user_id),
+        });
+
+        const isPremium =
+            userData?.subscription_status === "pro" ||
+            userData?.subscription_status === "active";
+
+        if (!isPremium) {
+            query.userId = user.user_id;
+        }
+    } else {
+        // Not logged in users see nothing
+        return [];
+    }
+
+    const generations = await Generation.find(query)
         .sort({ createdAt: -1 })
         .limit(20)
         .lean();

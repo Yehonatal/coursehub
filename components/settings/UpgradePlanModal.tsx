@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Check, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { updateSubscriptionStatus } from "@/app/actions/profile";
+import { buyPremium } from "@/app/actions/subscription";
 
 interface UpgradePlanModalProps {
     isOpen: boolean;
@@ -25,7 +25,7 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
     const handleUpgrade = async () => {
         setIsUpgrading(true);
         try {
-            const res = await updateSubscriptionStatus("premium");
+            const res = await buyPremium();
             if (res.success) {
                 toast.success("Successfully upgraded to Premium!", {
                     description:

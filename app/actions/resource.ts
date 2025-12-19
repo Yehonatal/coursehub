@@ -2,8 +2,14 @@
 
 import { z } from "zod";
 import { db } from "@/db";
-import { resources, verification, universities } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import {
+    resources,
+    verification,
+    universities,
+    user_quotas,
+    users,
+} from "@/db/schema";
+import { eq, and, sql } from "drizzle-orm";
 import { uploadFile, deleteFile } from "@/lib/storage/upload";
 import { validateRequest } from "@/lib/auth/session";
 import { createResource } from "@/lib/dal/resource-helpers";
@@ -105,7 +111,38 @@ export async function uploadResource(
         return { success: false, message: "No file provided" };
     }
 
-    // Validate file type and size (max 20MB)
+    // Check storage quota
+    const FREE_STORAGE_LIMIT = 100 * 1024 * 1024; // 100MB
+    const PRO_STORAGE_LIMIT = 10 * 1024 * 1024 * 1024; // 10GB
+
+    const userData = await db.query.users.findFirst({
+        where: eq(users.user_id, user.user_id),
+    });
+
+    const isPremium =
+        userData?.subscription_status === "pro" ||
+        userData?.subscription_status === "active";
+
+    const storageLimit = isPremium ? PRO_STORAGE_LIMIT : FREE_STORAGE_LIMIT;
+
+    const quota = await db.query.user_quotas.findFirst({
+        where: eq(user_quotas.user_id, user.user_id),
+    });
+
+    const currentUsage = quota?.storage_usage || 0;
+    if (currentUsage + file.size > storageLimit) {
+        return {
+            success: false,
+            message: `Storage limit exceeded. ${
+                isPremium ? "Pro" : "Free"
+            } tier limit is ${isPremium ? "10GB" : "100MB"}. Current usage: ${(
+                currentUsage /
+                (1024 * 1024)
+            ).toFixed(2)}MB.`,
+        };
+    }
+
+    // Validate file type and size (max 20MB per file)
     const allowedTypes = [
         "application/pdf",
         "application/msword",
@@ -208,6 +245,20 @@ export async function uploadResource(
             tagList
         );
 
+        // Update storage usage in user_quotas
+        await db
+            .insert(user_quotas)
+            .values({
+                user_id: user.user_id,
+                storage_usage: file.size,
+            })
+            .onConflictDoUpdate({
+                target: user_quotas.user_id,
+                set: {
+                    storage_usage: sql`${user_quotas.storage_usage} + ${file.size}`,
+                },
+            });
+
         return {
             ...initialActionState,
             success: true,
@@ -242,7 +293,10 @@ export async function deleteResource(
 
     try {
         const [resource] = await db
-            .select({ file_url: resources.file_url })
+            .select({
+                file_url: resources.file_url,
+                file_size: resources.file_size,
+            })
             .from(resources)
             .where(
                 and(
@@ -270,6 +324,16 @@ export async function deleteResource(
         }
 
         await db.delete(resources).where(eq(resources.resource_id, resourceId));
+
+        // Decrement storage usage
+        if (resource.file_size) {
+            await db
+                .update(user_quotas)
+                .set({
+                    storage_usage: sql`GREATEST(0, ${user_quotas.storage_usage} - ${resource.file_size})`,
+                })
+                .where(eq(user_quotas.user_id, user.user_id));
+        }
 
         revalidatePath("/dashboard/resources");
         return { success: true, message: "Resource deleted successfully" };

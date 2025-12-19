@@ -67,22 +67,44 @@ export function UserMenu({ onSignOut }: UserMenuProps) {
                     Account Settings
                 </p>
 
-                <button className="w-full group flex items-center justify-between p-2.5 rounded-xl hover:bg-primary/5 transition-all duration-300">
-                    <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-primary-foreground transition-colors">
-                            <Crown className="h-4 w-4" />
-                        </div>
-                        <div className="text-left">
-                            <p className="text-sm font-bold text-foreground">
-                                Try Premium
-                            </p>
-                            <p className="text-[10px] text-muted-foreground font-medium">
-                                Unlock AI features
-                            </p>
+                {user?.subscription_status === "pro" ||
+                user?.subscription_status === "active" ? (
+                    <div className="w-full flex items-center justify-between p-2.5 rounded-xl bg-primary/5 border border-primary/10">
+                        <div className="flex items-center gap-3">
+                            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
+                                <Crown className="h-4 w-4" />
+                            </div>
+                            <div className="text-left">
+                                <p className="text-sm font-bold text-foreground">
+                                    Premium Member
+                                </p>
+                                <p className="text-[10px] text-primary font-medium">
+                                    Unlimited AI Access
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground/30 group-hover:text-primary transition-colors" />
-                </button>
+                ) : (
+                    <Link
+                        href="/dashboard/settings#billing"
+                        className="w-full group flex items-center justify-between p-2.5 rounded-xl hover:bg-primary/5 transition-all duration-300"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="h-8 w-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-primary-foreground transition-colors">
+                                <Crown className="h-4 w-4" />
+                            </div>
+                            <div className="text-left">
+                                <p className="text-sm font-bold text-foreground">
+                                    Try Premium
+                                </p>
+                                <p className="text-[10px] text-muted-foreground font-medium">
+                                    Unlock AI features
+                                </p>
+                            </div>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-muted-foreground/30 group-hover:text-primary transition-colors" />
+                    </Link>
+                )}
 
                 <Link
                     href="/dashboard/settings"

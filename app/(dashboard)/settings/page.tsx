@@ -7,7 +7,7 @@ import NotificationsSection from "@/components/settings/NotificationsSection";
 import ApiSection from "@/components/settings/ApiSection";
 import BillingSection from "@/components/settings/BillingSection";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
     return (
         <SettingsLayout active="general">
             <div className="space-y-8">
