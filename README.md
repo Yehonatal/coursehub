@@ -74,7 +74,8 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-19-02: Support opt-in/opt-out for different notification types (email, SMS).
 - [x] FR-19-03: Get notified when password changed, preferences updated, subscription status changed.
 - [ ] FR-20: Send regular updates or reminders regarding saved content and trending materials.
-- [ ] FR-21: Generate university-specific dashboards summarizing uploaded content and engagement metrics.
+- [x] FR-21: Generate university-specific dashboards summarizing uploaded content and engagement metrics.
+- [x] FR-21-01: Allow university staff to edit university information and manage content.
 - [x] FR-22: Generate user-specific dashboards summarizing personal contributions and engagement statistics.
 - [x] FR-23: Allow users to view their personal content contributions and engagement statistics.
 - [ ] FR-24: Support a payment module for subscription to premium AI services.

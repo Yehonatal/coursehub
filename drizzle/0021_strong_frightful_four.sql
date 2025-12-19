@@ -1,0 +1,4 @@
+ALTER TABLE "resources" ADD COLUMN "university_id" integer;--> statement-breakpoint
+ALTER TABLE "users" ADD COLUMN "university_id" integer;--> statement-breakpoint
+ALTER TABLE "resources" ADD CONSTRAINT "resources_university_id_universities_university_id_fk" FOREIGN KEY ("university_id") REFERENCES "public"."universities"("university_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "users" ADD CONSTRAINT "users_university_id_universities_university_id_fk" FOREIGN KEY ("university_id") REFERENCES "public"."universities"("university_id") ON DELETE no action ON UPDATE no action;
