@@ -57,7 +57,7 @@ export function PricingPlans() {
                 </div>
 
                 <div
-                    className="flex flex-col p-6 sm:p-8 bg-primary/5 border-2 border-primary rounded-xl sm:rounded-2xl shadow-xl relative"
+                    className="flex flex-col p-6 sm:p-8 bg-primary/5 border border-primary rounded-xl sm:rounded-2xl shadow-xl relative"
                     data-aos="fade-left"
                 >
                     <div className="absolute top-0 right-0 -mt-3 sm:-mt-4 mr-3 sm:mr-6 px-3 sm:px-4 py-0.5 sm:py-1 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider rounded-full shadow-sm">

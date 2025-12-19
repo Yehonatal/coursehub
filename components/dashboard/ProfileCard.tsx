@@ -74,7 +74,7 @@ export function ProfileCard({
                 </div>
             </div>
             <div className="px-6 pb-8 relative">
-                <div className="h-16 w-16 rounded-full border-4 border-background bg-card absolute -top-20 left-4 overflow-hidden shadow-lg z-20">
+                <div className="h-16 w-16 rounded-full border border-background bg-card absolute -top-20 left-4 overflow-hidden shadow-lg z-20">
                     <Image
                         src={displayAvatar}
                         alt="Profile"

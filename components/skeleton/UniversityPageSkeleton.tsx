@@ -8,7 +8,7 @@ export function UniversityPageSkeleton() {
                 <div className="space-y-6">
                     <div className="h-24 sm:h-48 w-full rounded-3xl bg-muted"></div>
                     <div className="flex flex-col md:flex-row items-start gap-6 px-4">
-                        <div className="h-20 w-20 md:h-32 md:w-32 rounded-3xl bg-muted -mt-10 md:-mt-14 border-4 border-background shrink-0"></div>
+                        <div className="h-20 w-20 md:h-32 md:w-32 rounded-3xl bg-muted -mt-10 md:-mt-14 border border-background shrink-0"></div>
                         <div className="space-y-3 flex-1 pt-2 md:pt-16">
                             <div className="h-8 w-64 bg-muted rounded-xl"></div>
                             <div className="h-4 w-full max-w-2xl bg-muted rounded-xl"></div>

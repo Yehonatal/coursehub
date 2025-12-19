@@ -28,7 +28,7 @@ export function UserMenu({ onSignOut }: UserMenuProps) {
         <Card className="absolute right-0 top-full mt-4 w-80 p-3 z-50 shadow-2xl shadow-primary/10 border-border animate-in fade-in zoom-in-95 duration-200 bg-card rounded-2xl overflow-hidden">
             {/* Profile Section */}
             <div className="p-3 flex items-center gap-4 mb-2 bg-muted/30 rounded-2xl border border-border">
-                <div className="h-14 w-14 rounded-full bg-muted overflow-hidden shrink-0 relative border-2 border-card shadow-sm">
+                <div className="h-14 w-14 rounded-full bg-muted overflow-hidden shrink-0 relative border border-card shadow-sm">
                     <Image
                         src={displayAvatar}
                         alt={displayName}

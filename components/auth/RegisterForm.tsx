@@ -147,7 +147,7 @@ export function RegisterForm() {
                     <Label htmlFor="schoolId" className="text-foreground">
                         School ID / Proof of Enrollment
                     </Label>
-                    <div className="border-2 border-dashed border-border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                    <div className="border border-dashed border-border rounded-lg p-4 hover:bg-muted/50 transition-colors">
                         <Input
                             id="schoolId"
                             name="schoolId"

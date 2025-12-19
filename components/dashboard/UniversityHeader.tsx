@@ -72,7 +72,7 @@ export function UniversityHeader({
 
             <div className="px-6 sm:px-10 pb-4 relative">
                 <div className="flex flex-col md:flex-row items-start gap-6 -mt-10 md:-mt-14 relative z-10">
-                    <div className="h-20 w-20 md:h-32 md:w-32 rounded-3xl border-4 border-background bg-card shadow-2xl relative overflow-hidden shrink-0 flex items-center justify-center p-4">
+                    <div className="h-20 w-20 md:h-32 md:w-32 rounded-3xl border border-background bg-card shadow-2xl relative overflow-hidden shrink-0 flex items-center justify-center p-4">
                         <Image
                             src={logoUrl}
                             alt={name}

@@ -55,7 +55,7 @@ export function ProfileHeader() {
             <div className="px-6 sm:px-10 pb-10 relative ">
                 <div className="flex flex-col sm:flex-row items-start md:items-end justify-between gap-4">
                     <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 -mt-8 md:-mt-12 relative z-10">
-                        <div className="h-16 w-16 md:h-24 md:w-24 rounded-full border-4 border-background bg-card overflow-hidden shadow-xl relative">
+                        <div className="h-16 w-16 md:h-24 md:w-24 rounded-full border border-background bg-card overflow-hidden shadow-xl relative">
                             <Image
                                 src={displayAvatar}
                                 alt="Profile"
@@ -64,7 +64,7 @@ export function ProfileHeader() {
                             />
                         </div>
 
-                        <div className="md:pb-1 space-y-0.5 mt-14">
+                        <div className="md:pb-1 space-y-0.5 md:mt-14">
                             <div className="flex items-center gap-2">
                                 <h1 className="text-lg md:text-xl font-serif font-bold text-foreground tracking-tight">
                                     {displayName}

@@ -82,8 +82,8 @@ export function Header() {
     };
 
     return (
-        <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-xl border-b border-border">
-            <div className="max-w-[1600px] flex h-20 items-center justify-between px-4 md:px-8 mx-auto">
+        <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-xl">
+            <div className="flex h-20 items-center justify-between px-4 md:px-8 mx-auto">
                 <div className="flex items-center gap-4">
                     <Link
                         href="/dashboard"
@@ -103,7 +103,7 @@ export function Header() {
                 <div className="flex-1 max-w-2xl mx-8">
                     <form onSubmit={handleSearch} className="relative group">
                         {isSearching ? (
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 border border-primary border-t-transparent rounded-full animate-spin" />
                         ) : (
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60 group-focus-within:text-primary transition-colors" />
                         )}

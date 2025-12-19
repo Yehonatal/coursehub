@@ -32,23 +32,6 @@ export function ResourceContent({
             <div className="prose prose-gray max-w-none text-muted-foreground leading-relaxed">
                 <p>{description}</p>
             </div>
-
-            <div className="space-y-4">
-                <h3 className="font-bold text-foreground">
-                    Learning Objectives:
-                </h3>
-                <ul className="space-y-3">
-                    {objectives.map((item, index) => (
-                        <li
-                            key={index}
-                            className="flex items-start gap-3 text-muted-foreground"
-                        >
-                            <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                            <span>{item}</span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
         </div>
     );
 }

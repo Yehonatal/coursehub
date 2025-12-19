@@ -88,7 +88,7 @@ export default function NotificationsPage() {
         return (
             <div className="flex flex-col items-center justify-center py-48 space-y-6">
                 <div className="relative">
-                    <div className="h-10 w-10 rounded-full border-2 border-primary/10 border-t-primary animate-spin" />
+                    <div className="h-10 w-10 rounded-full border border-primary/10 border-t-primary animate-spin" />
                     <Bell className="h-4 w-4 text-primary/20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                 </div>
                 <p className="text-sm text-muted-foreground font-medium tracking-wide">

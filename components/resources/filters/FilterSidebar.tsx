@@ -83,7 +83,7 @@ export function FilterSidebar() {
             <div className="flex items-center justify-between">
                 <h2 className="font-bold text-primary">Filter By</h2>
                 {isPending && (
-                    <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                    <div className="h-4 w-4 border border-primary border-t-transparent rounded-full animate-spin" />
                 )}
             </div>
             <DateRangeFilter />

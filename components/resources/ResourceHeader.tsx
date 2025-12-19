@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Download, BadgeCheck } from "lucide-react";
+import { Download, BadgeCheck, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { AIChatModal } from "@/components/ai/AIChatModal";
 import { ResourceHeaderActions } from "./ResourceHeaderActions";
@@ -42,6 +42,7 @@ interface ResourceHeaderProps {
         fileUrl?: string;
         fileName?: string;
     };
+    studyTime?: string;
 }
 
 export function ResourceHeader({
@@ -61,6 +62,7 @@ export function ResourceHeader({
     isVerified = false,
     verifier,
     resourceData,
+    studyTime,
 }: ResourceHeaderProps) {
     const [isAIModalOpen, setIsAIModalOpen] = useState(false);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -190,6 +192,13 @@ export function ResourceHeader({
                             <Download className="w-3 h-3" />
                             <span>{displayDownloads}</span>
                         </div>
+                        <div className="h-3 w-px bg-border hidden sm:block" />
+                        {studyTime && (
+                            <div className="flex items-center gap-1.5 text-muted-foreground/70 font-medium">
+                                <Clock className="w-3 h-3" />
+                                <span>{studyTime}</span>
+                            </div>
+                        )}
                         <div className="h-3 w-px bg-border hidden sm:block" />
                         <div className="text-muted-foreground/70 font-medium">
                             {date}

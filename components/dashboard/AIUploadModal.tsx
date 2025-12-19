@@ -162,7 +162,7 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                 </Label>
                                 <div
                                     className={cn(
-                                        "relative group cursor-pointer rounded-2xl border-2 border-dashed transition-all duration-300 p-10 text-center",
+                                        "relative group cursor-pointer rounded-2xl border border-dashed transition-all duration-300 p-10 text-center",
                                         dragActive
                                             ? "border-primary bg-primary/5"
                                             : "border-primary/10 hover:border-primary/30 hover:bg-primary/5",

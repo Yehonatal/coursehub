@@ -123,7 +123,7 @@ export function AIStudyAssistant() {
                         </Button>
                     </div>
                     {notes && (
-                        <Card className="border-l-4 border-l-primary rounded-2xl overflow-hidden shadow-md">
+                        <Card className="border-l border-l-primary rounded-2xl overflow-hidden shadow-md">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-2xl font-serif text-foreground">
                                     {notes.title}
@@ -277,7 +277,7 @@ function TreeRenderer({
                 <div className="mt-1.5 relative">
                     <div
                         className={cn(
-                            "w-3 h-3 rounded-full border-2 transition-colors",
+                            "w-3 h-3 rounded-full border transition-colors",
                             level === 0
                                 ? "bg-primary border-primary"
                                 : "bg-background border-muted-foreground group-hover:border-primary group-hover:bg-primary/20"

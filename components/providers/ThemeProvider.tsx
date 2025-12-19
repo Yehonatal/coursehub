@@ -77,7 +77,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         root.style.setProperty("--font-heading", prefs.headingFont);
         root.style.setProperty("--font-body", prefs.bodyFont);
         root.style.setProperty("--radius", `${prefs.radius}rem`);
-        root.style.setProperty("--border-w", `${prefs.borderWidth}px`);
+        root.style.setProperty("--border-width", `${prefs.borderWidth}px`);
         root.style.setProperty(
             "--shadow-intensity",
             `${prefs.shadowIntensity}`

@@ -116,7 +116,7 @@ export function ManagePaymentsModal({
                             ))}
 
                             {payments.length === 0 && (
-                                <div className="text-center py-12 border-2 border-dashed border-border/50 rounded-2xl bg-muted/5">
+                                <div className="text-center py-12 border border-dashed border-border/50 rounded-2xl bg-muted/5">
                                     <p className="text-sm text-muted-foreground font-medium">
                                         No payment methods saved.
                                     </p>

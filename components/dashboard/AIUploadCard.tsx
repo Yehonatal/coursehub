@@ -47,7 +47,7 @@ export function AIUploadCard() {
                     </div>
 
                     <div
-                        className="aspect-square rounded-2xl bg-muted/30 border-2 border-dashed border-border flex flex-col items-center justify-center text-center p-6 gap-5 hover:bg-muted/50 hover:border-primary/30 transition-all duration-300 cursor-pointer group"
+                        className="aspect-square rounded-2xl bg-muted/30 border border-dashed border-border flex flex-col items-center justify-center text-center p-6 gap-5 hover:bg-muted/50 hover:border-primary/30 transition-all duration-300 cursor-pointer group"
                         onClick={() => setIsModalOpen(true)}
                     >
                         <div className="h-14 w-14 rounded-2xl bg-card shadow-sm flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-500">

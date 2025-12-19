@@ -159,7 +159,7 @@ function CommentItem({
                 )}
 
                 {comment.replies?.length ? (
-                    <div className="space-y-6 mt-6 border-l-2 border-border/50 pl-6">
+                    <div className="space-y-6 mt-6 border-l border-border/50 pl-6">
                         {comment.replies.map((reply) => (
                             <CommentItem
                                 key={reply.id}

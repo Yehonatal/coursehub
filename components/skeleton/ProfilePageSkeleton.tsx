@@ -7,7 +7,7 @@ export function ProfileHeaderSkeleton() {
             <div className="h-24 sm:h-48 w-full bg-muted rounded-3xl"></div>
             <div className="px-6 sm:px-10 pb-2">
                 <div className="relative -mt-8 md:-mt-12 mb-4 flex flex-col md:flex-row items-end gap-4">
-                    <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-muted border-4 border-background shrink-0"></div>
+                    <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-muted border border-background shrink-0"></div>
                     <div className="flex-1 space-y-2 mb-1 w-full">
                         <div className="h-6 w-40 bg-muted rounded-xl"></div>
                         <div className="h-3 w-24 bg-muted rounded-xl"></div>

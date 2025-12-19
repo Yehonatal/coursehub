@@ -17,7 +17,7 @@ export function MobileQuickActions() {
                 <Button
                     variant="outline"
                     className={cn(
-                        "h-auto py-3 flex flex-col gap-1 border-dashed border-2",
+                        "h-auto py-3 flex flex-col gap-1 border-dashed border",
                         isOpen && activeTab === "upload"
                             ? "border-primary bg-primary/10 text-primary"
                             : "border-border/60"
@@ -43,7 +43,7 @@ export function MobileQuickActions() {
                 <Button
                     variant="outline"
                     className={cn(
-                        "h-auto py-3 flex flex-col gap-1 border-dashed border-2",
+                        "h-auto py-3 flex flex-col gap-1 border-dashed border",
                         isOpen && activeTab === "ai"
                             ? "border-secondary bg-secondary/10 text-secondary"
                             : "border-border/60"

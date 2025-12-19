@@ -22,7 +22,7 @@ export function SidebarWrapper({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-[2.5fr_9.5fr] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[2.15fr_9.5fr] gap-8">
             <div className="hidden lg:block space-y-8 sticky top-20 self-start">
                 <ProfileCard />
                 <QuickUploadCard />

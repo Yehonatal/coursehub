@@ -48,6 +48,16 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
         resource.author?.university || resource.university || "";
     const uploadDate = new Date(resource.upload_date);
 
+    // Estimate study time from file size (simple heuristic: ~100KB per minute)
+    const estimateStudyTime = (size?: number | null) => {
+        if (!size || typeof size !== "number") return "N/A";
+        const minutes = Math.max(1, Math.round(size / 10000));
+        return `${minutes} min`;
+    };
+
+    const studyTime = estimateStudyTime(resource.file_size);
+    console.log("Study Time:", studyTime);
+
     return (
         <div className="min-h-screen bg-background pb-20">
             <ViewTracker resourceId={id} />
@@ -131,6 +141,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                                         .split("/")
                                         .pop() || "",
                             }}
+                            studyTime={studyTime}
                         />
                         {resource.tags.length > 0 && (
                             <div className="flex flex-wrap gap-2 mt-2">
@@ -147,7 +158,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
 
                         <ResourceContent
                             description={resource.description ?? ""}
-                            studyTime="N/A"
+                            studyTime={studyTime}
                             objectives={[]}
                         />
 

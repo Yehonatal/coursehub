@@ -163,7 +163,7 @@ export function ThemePreferenceModal({
                                         key={t.id}
                                         onClick={() => setTheme(t.id)}
                                         className={cn(
-                                            "flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 text-left group",
+                                            "flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300 text-left group",
                                             theme === t.id
                                                 ? "border-primary bg-primary/5 shadow-lg shadow-primary/5"
                                                 : "border-border/40 hover:border-primary/30 hover:bg-muted/5"
@@ -217,7 +217,7 @@ export function ThemePreferenceModal({
                                     </Label>
                                     <input
                                         type="range"
-                                        min="12"
+                                        min="10"
                                         max="20"
                                         step="1"
                                         value={preferences.fontSize}
@@ -260,12 +260,12 @@ export function ThemePreferenceModal({
                                         type="range"
                                         min="0"
                                         max="4"
-                                        step="1"
+                                        step="0.5"
                                         value={preferences.borderWidth}
                                         onChange={(e) =>
                                             updatePreference(
                                                 "borderWidth",
-                                                parseInt(e.target.value)
+                                                parseFloat(e.target.value)
                                             )
                                         }
                                         className="w-full h-1.5 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"

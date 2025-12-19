@@ -61,7 +61,7 @@ export function ResourceHeaderActions({
 
     return (
         <>
-            <div className="flex items-center gap-3 border-t border-b border-border py-4 overflow-x-auto md:overflow-visible">
+            <div className="flex items-center gap-3 border-t border-b border-border py-4 overflow-x-auto overflow-y-visible md:overflow-visible">
                 <Button
                     className="inline-flex cursor-pointer items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm border-0 px-4 py-2 text-sm whitespace-nowrap rounded-xl"
                     onClick={() => onView && onView()}
@@ -130,7 +130,7 @@ export function ResourceHeaderActions({
                                 className="fixed inset-0 z-10"
                                 onClick={() => setIsMenuOpen(false)}
                             />
-                            <div className="absolute right-0 mt-2 w-48 bg-card rounded-xl shadow-xl z-20 border border-border py-1 overflow-hidden">
+                            <div className="absolute right-0 mt-2 w-48 bg-card rounded-xl shadow-xl z-50 border border-border py-1 overflow-hidden">
                                 {isOwner && (
                                     <>
                                         <button

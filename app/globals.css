@@ -47,7 +47,6 @@
     --radius-3xl: calc(var(--radius) * 3);
     --radius-4xl: calc(var(--radius) * 4);
 
-    --border-width: var(--border-w, 1px);
     --spacing-scale: var(--spacing-s, 1);
 
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / calc(0.05 * var(--shadow-intensity)));
@@ -78,7 +77,7 @@
 :root,
 [data-theme="default"] {
     --radius: 0.625rem;
-    --border-w: 1px;
+    --border-width: 1px;
     --spacing-s: 0.95;
     --shadow-intensity: 1;
     --base-font-size: 16px;
@@ -139,7 +138,7 @@
 
 [data-theme="ocean"] {
     --radius: 0.75rem;
-    --border-w: 1px;
+    --border-width: 1px;
     --spacing-s: 0.95;
     --shadow-intensity: 0.8;
     --background: oklch(0.97 0.01 220);
@@ -164,7 +163,7 @@
 
 [data-theme="midnight"] {
     --radius: 0.5rem;
-    --border-w: 1px;
+    --border-width: 1px;
     --spacing-s: 0.95;
     --shadow-intensity: 1.2;
     --background: oklch(0.15 0.02 250);
@@ -189,7 +188,7 @@
 
 [data-theme="forest"] {
     --radius: 1rem;
-    --border-w: 1px;
+    --border-width: 1px;
     --spacing-s: 0.95;
     --shadow-intensity: 0.9;
     --background: oklch(0.12 0.02 150);
@@ -214,7 +213,7 @@
 
 [data-theme="dark"] {
     --radius: 0.5rem;
-    --border-w: 0px;
+    --border-width: 0px;
     --spacing-s: 0.95;
     --shadow-intensity: 1.5;
     --background: oklch(0.1 0 0);
@@ -239,7 +238,7 @@
 
 [data-theme="earth"] {
     --radius: 1.25rem;
-    --border-w: 1px;
+    --border-width: 1px;
     --spacing-s: 0.95;
     --shadow-intensity: 0.7;
     --background: oklch(0.96 0.02 80);
@@ -264,7 +263,7 @@
 
 [data-theme="github"] {
     --radius: 0.375rem;
-    --border-w: 1px;
+    --border-width: 1px;
     --spacing-s: 0.95;
     --shadow-intensity: 0.5;
     --background: oklch(1 0 0);
@@ -289,7 +288,7 @@
 
 [data-theme="pink"] {
     --radius: 0.375rem;
-    --border-w: 1px;
+    --border-width: 1px;
     --spacing-s: 0.95;
     --shadow-intensity: 0.55;
 
@@ -318,10 +317,8 @@
 
 @layer base {
     * {
-        @apply border-border outline-ring/50;
-    }
-    .border {
-        border-width: var(--border-width);
+        border-color: var(--border);
+        outline-color: color-mix(in srgb, var(--ring), transparent 50%);
     }
     html {
         font-size: var(--base-font-size);
@@ -338,4 +335,67 @@
     h6 {
         font-family: var(--font-heading);
     }
+}
+
+/* Global Border Width Overrides - Ensures the slider works everywhere */
+.border {
+    border-width: var(--border-width, 1px) !important;
+    border-style: solid;
+}
+.border-t {
+    border-top-width: var(--border-width, 1px) !important;
+    border-style: solid;
+}
+.border-b {
+    border-bottom-width: var(--border-width, 1px) !important;
+    border-style: solid;
+}
+.border-l {
+    border-left-width: var(--border-width, 1px) !important;
+    border-style: solid;
+}
+.border-r {
+    border-right-width: var(--border-width, 1px) !important;
+    border-style: solid;
+}
+.border-s {
+    border-inline-start-width: var(--border-width, 1px) !important;
+    border-style: solid;
+}
+.border-e {
+    border-inline-end-width: var(--border-width, 1px) !important;
+    border-style: solid;
+}
+.border-x {
+    border-left-width: var(--border-width, 1px) !important;
+    border-right-width: var(--border-width, 1px) !important;
+    border-style: solid;
+}
+.border-y {
+    border-top-width: var(--border-width, 1px) !important;
+    border-bottom-width: var(--border-width, 1px) !important;
+    border-style: solid;
+}
+
+/* Reset for border-0 to ensure it still works */
+.border-0 {
+    border-width: 0px !important;
+}
+.border-t-0 {
+    border-top-width: 0px !important;
+}
+.border-b-0 {
+    border-bottom-width: 0px !important;
+}
+.border-l-0 {
+    border-left-width: 0px !important;
+}
+.border-r-0 {
+    border-right-width: 0px !important;
+}
+.border-s-0 {
+    border-inline-start-width: 0px !important;
+}
+.border-e-0 {
+    border-inline-end-width: 0px !important;
 }
