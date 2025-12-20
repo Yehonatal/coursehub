@@ -5,6 +5,7 @@ import { ResourceCard } from "@/components/common/ResourceCard";
 import { UniversityCard } from "@/components/common/UniversityCard";
 import { searchResources, getPopularAIGenerations } from "@/lib/resources";
 import { searchUniversities } from "@/app/actions/university";
+import type { University } from "@/app/types/university";
 
 export default async function ResourcesPage({
     searchParams,
@@ -89,7 +90,7 @@ export default async function ResourcesPage({
                                 Universities
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                                {universities.map((uni) => (
+                                {universities.map((uni: University) => (
                                     <UniversityCard
                                         key={uni.university_id}
                                         name={uni.name}
