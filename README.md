@@ -135,7 +135,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 #### Backend
 - **Database**: PostgreSQL (Supabase) + MongoDB (Analytics)
 - **ORM**: Drizzle ORM for type-safe queries
-- **Authentication**: Supabase Auth
+- **Authentication**: Supabase + custom auth
 - **Storage**: Supabase Storage
 - **AI**: Google Gemini Studio API
 
