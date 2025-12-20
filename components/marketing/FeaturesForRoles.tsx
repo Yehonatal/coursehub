@@ -38,15 +38,15 @@ export function FeaturesForRoles() {
                         <li className="flex items-start gap-3">
                             <CheckCircle className="h-5 w-5 text-primary mt-1" />{" "}
                             <span className="text-muted-foreground">
-                                Access a vast library of peer-reviewed study
+                                Access a community‑curated library of study
                                 materials.
                             </span>
                         </li>
                         <li className="flex items-start gap-3">
                             <CheckCircle className="h-5 w-5 text-primary mt-1" />{" "}
                             <span className="text-muted-foreground">
-                                Generate AI flashcards and summaries to speed up
-                                revision.
+                                Use our AI assistant to generate flashcards and
+                                summaries to support revision.
                             </span>
                         </li>
                         <li className="flex items-start gap-3">

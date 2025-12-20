@@ -22,6 +22,8 @@ export function HandDrawnCircle({
                 preserveAspectRatio="none"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                // Use theme-aware decoration color
+                style={{ color: "var(--decoration)" }}
             >
                 <path
                     d="M185.5 45.5C185.5 75.5 145.5 92.5 95.5 92.5C45.5 92.5 10.5 75.5 10.5 45.5C10.5 15.5 45.5 5.5 95.5 5.5C145.5 5.5 185.5 15.5 185.5 45.5Z"
@@ -71,6 +73,8 @@ export function HandDrawnUnderline({
                 preserveAspectRatio="none"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                // Use theme-aware decoration color
+                style={{ color: "var(--decoration)" }}
             >
                 <path
                     d="M5 12 L 195 12"
@@ -106,6 +110,8 @@ export function HandDrawnBox({
                 preserveAspectRatio="none"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                // Use theme-aware decoration color
+                style={{ color: "var(--decoration)" }}
             >
                 <path
                     d="M10 10 C 60 8 140 12 190 10 C 192 40 188 60 190 90 C 140 92 60 88 10 90 C 8 60 12 40 10 10 Z"
@@ -148,6 +154,8 @@ export function HandDrawnShape({
             preserveAspectRatio="none"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            // Use theme-aware decoration color
+            style={{ color: "var(--decoration)" }}
         >
             <path
                 d="M185.5 45.5C185.5 75.5 145.5 92.5 95.5 92.5C45.5 92.5 10.5 75.5 10.5 45.5C10.5 15.5 45.5 5.5 95.5 5.5C145.5 5.5 185.5 15.5 185.5 45.5Z"

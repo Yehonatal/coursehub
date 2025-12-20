@@ -64,7 +64,7 @@ export function ResourceGenerations({
             <PremiumLock
                 isPremium={isPremium}
                 title="Unlock Community Insights"
-                description="Join our premium community to access thousands of AI-generated study notes, flashcards, and knowledge trees created by other students."
+                description="Join our premium community to access a large collection of AI-assisted study notes, flashcards, and knowledge trees contributed by the community."
             >
                 <RecentsList
                     items={items as Parameters<typeof RecentsList>[0]["items"]}

@@ -63,8 +63,9 @@ export default function AuthLayout({
                         Elevate your academic journey.
                     </h1>
                     <p className="text-lg text-primary-foreground/80 max-w-lg leading-relaxed">
-                        Join thousands of students and educators on the most
-                        advanced adaptive learning platform in Ethiopia.
+                        Join our community of students and educators on a
+                        university‑aligned learning hub for Ethiopian
+                        universities.
                     </p>
                 </div>
                 <div className="absolute inset-0 opacity-20 bg-[url('/auth-pattern.png')] bg-cover bg-center mix-blend-soft-light data-[theme=midnight]:opacity-40 data-[theme=midnight]:mix-blend-screen"></div>

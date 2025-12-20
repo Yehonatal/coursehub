@@ -5,14 +5,14 @@
 CourseHub is an open-source, centralized adaptive learning platform designed for Ethiopian university students and educators. It centralizes curriculum-aligned resources, supports community moderation, and offers optional AI-powered study aids through the Gemini Studio API. The backend leverages Supabase for authentication, PostgreSQL database, and storage, while the frontend is built with Next.js and Tailwind CSS.
 
 ## Preview
+![Customization](./preview/customedesign.png)
+![Dashboard Preview](./preview/homepage.png)
+![AI Preview](./preview/ai.png)
+![Profile Preview](./preview/userpage.png)
+![Resource Page Preview](./preview/singleresourceview.png)
 
-![Dashboard Preview](./public/homepage.png)
-![AI Preview](./public/ai.png)
-![Profile Preview](./public/userpage.png)
-![Resource Page Preview](./public/singleresourceview.png)
-
-![Resources Preview](./public/resourcespage.png)
-![Community Preview](./public/universitypage.png)
+![Resources Preview](./preview/resourcespage.png)
+![Community Preview](./preview/universitypage.png)
 
 
 

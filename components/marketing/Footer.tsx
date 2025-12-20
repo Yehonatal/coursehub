@@ -14,9 +14,9 @@ export function Footer() {
                             COURSEHUB
                         </h3>
                         <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-                            Centralized adaptive learning platform for Ethiopian
-                            university students. Empowering the next generation
-                            of scholars.
+                            A centralized, university‑aligned learning hub for
+                            Ethiopian students and educators. Empowering the
+                            next generation of scholars.
                         </p>
                     </div>
                     <div className="flex flex-col gap-4">
