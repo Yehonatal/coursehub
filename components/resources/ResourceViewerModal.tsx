@@ -8,7 +8,11 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Maximize2, Minimize2, FileText } from "lucide-react";
+import { X, Maximize2, Minimize2, FileText, Loader2 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
+import rehypeRaw from "rehype-raw";
 
 interface ResourceViewerModalProps {
     isOpen: boolean;
@@ -26,14 +30,39 @@ export function ResourceViewerModal({
     mimeType,
 }: ResourceViewerModalProps) {
     const [isFullscreen, setIsFullscreen] = React.useState(false);
+    const [markdownContent, setMarkdownContent] = React.useState<string | null>(
+        null
+    );
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const isPdf = mimeType === "application/pdf" || fileUrl.endsWith(".pdf");
+    const isMarkdown =
+        mimeType === "text/markdown" ||
+        fileUrl.endsWith(".md") ||
+        mimeType === "text/x-markdown";
     const isOffice =
         !isPdf &&
+        !isMarkdown &&
         (fileUrl.endsWith(".doc") ||
             fileUrl.endsWith(".docx") ||
             fileUrl.endsWith(".ppt") ||
             fileUrl.endsWith(".pptx"));
+
+    React.useEffect(() => {
+        if (isOpen && isMarkdown) {
+            setIsLoading(true);
+            fetch(fileUrl)
+                .then((res) => res.text())
+                .then((text) => {
+                    setMarkdownContent(text);
+                    setIsLoading(false);
+                })
+                .catch((err) => {
+                    console.error("Error fetching markdown:", err);
+                    setIsLoading(false);
+                });
+        }
+    }, [isOpen, isMarkdown, fileUrl]);
 
     let viewerUrl = fileUrl;
     if (isOffice) {
@@ -90,11 +119,84 @@ export function ResourceViewerModal({
                     </div>
                 </DialogHeader>
                 <div className="flex-1 bg-muted/5 relative overflow-hidden">
-                    <iframe
-                        src={viewerUrl}
-                        className="w-full h-full border-0"
-                        allowFullScreen
-                    />
+                    {isMarkdown ? (
+                        <div className="w-full h-full overflow-auto p-8 bg-card">
+                            {isLoading ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                                </div>
+                            ) : (
+                                <div
+                                    className="
+                                        prose
+                                        prose-slate
+                                        dark:prose-invert
+                                        max-w-3xl
+                                        mx-auto
+
+                                        prose-headings:font-serif
+                                        prose-headings:font-bold
+                                        prose-headings:tracking-tight
+
+                                        prose-p:text-muted-foreground
+                                        prose-p:leading-7
+                                        prose-p:my-4
+
+                                        prose-ol:list-decimal
+                                        prose-ul:list-disc
+                                        prose-ol:pl-8
+                                        prose-ul:pl-8
+                                        prose-li:my-2
+                                        prose-li:marker:text-primary
+                                        prose-li:marker:font-bold
+
+                                        prose-blockquote:border-l-primary
+                                        prose-blockquote:bg-muted/30
+                                        prose-blockquote:rounded-xl
+                                        prose-blockquote:px-6
+                                        prose-blockquote:py-3
+
+                                        prose-code:bg-muted/60
+                                        prose-code:px-1.5
+                                        prose-code:py-0.5
+                                        prose-code:rounded-md
+                                        prose-code:text-sm
+
+                                        prose-pre:bg-muted/50
+                                        prose-pre:border
+                                        prose-pre:border-border
+                                        prose-pre:rounded-2xl
+                                        prose-pre:p-4
+                                        prose-pre:overflow-x-auto
+
+                                        prose-table:border
+                                        prose-table:border-border
+                                        prose-th:bg-muted
+                                        prose-th:p-2
+                                        prose-td:p-2
+
+                                        prose-img:rounded-2xl
+                                    "
+                                >
+                                    <ReactMarkdown
+                                        remarkPlugins={[
+                                            remarkGfm,
+                                            remarkBreaks,
+                                        ]}
+                                        rehypePlugins={[rehypeRaw]}
+                                    >
+                                        {markdownContent || ""}
+                                    </ReactMarkdown>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <iframe
+                            src={viewerUrl}
+                            className="w-full h-full border-0"
+                            allowFullScreen
+                        />
+                    )}
                 </div>
             </DialogContent>
         </Dialog>

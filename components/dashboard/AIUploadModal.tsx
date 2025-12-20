@@ -181,7 +181,7 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                         ref={fileInputRef}
                                         type="file"
                                         name="file"
-                                        accept=".pdf,.doc,.docx,.ppt,.pptx"
+                                        accept=".pdf,.doc,.docx,.ppt,.pptx,.md,.txt"
                                         className="sr-only"
                                         onChange={handleFileChange}
                                         required
@@ -215,8 +215,8 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                                         or drag and drop
                                                     </p>
                                                     <p className="text-xs text-primary/40">
-                                                        PDF, Word, or PowerPoint
-                                                        (Max 20MB)
+                                                        PDF, Word, Markdown or
+                                                        PowerPoint (Max 20MB)
                                                     </p>
                                                 </div>
                                             </>

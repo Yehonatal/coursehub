@@ -173,7 +173,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                         ref={fileInputRef}
                                         type="file"
                                         name="file"
-                                        accept=".pdf,.doc,.docx,.ppt,.pptx"
+                                        accept=".pdf,.doc,.docx,.ppt,.pptx,.md,.txt"
                                         className="sr-only"
                                         onChange={handleFileChange}
                                         required
@@ -207,8 +207,8 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                                         or drag and drop
                                                     </p>
                                                     <p className="text-xs text-muted-foreground/60">
-                                                        PDF, Word, or PowerPoint
-                                                        (Max 20MB)
+                                                        PDF, Word, Markdown or
+                                                        PowerPoint (Max 20MB)
                                                     </p>
                                                 </div>
                                             </>

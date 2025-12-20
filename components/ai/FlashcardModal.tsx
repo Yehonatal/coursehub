@@ -8,6 +8,10 @@ import { AIFlashcard } from "@/types/ai";
 import { cn } from "@/utils/cn";
 import { saveGeneration } from "@/app/actions/ai";
 import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
+import rehypeRaw from "rehype-raw";
 
 interface FlashcardModalProps {
     isOpen: boolean;
@@ -124,9 +128,17 @@ export function FlashcardModal({
                                     <span className="absolute top-8 left-8 text-xs font-bold text-primary/40 uppercase tracking-widest">
                                         Question
                                     </span>
-                                    <p className="text-2xl font-serif font-medium leading-relaxed text-foreground">
-                                        {currentCard.front}
-                                    </p>
+                                    <div className="prose prose-slate dark:prose-invert prose-p:text-2xl prose-p:font-serif prose-p:font-medium prose-p:leading-relaxed prose-p:text-foreground prose-ol:list-decimal prose-ul:list-disc prose-ol:pl-8 prose-ul:pl-8 prose-li:marker:text-primary prose-li:marker:font-bold">
+                                        <ReactMarkdown
+                                            remarkPlugins={[
+                                                remarkGfm,
+                                                remarkBreaks,
+                                            ]}
+                                            rehypePlugins={[rehypeRaw]}
+                                        >
+                                            {currentCard.front}
+                                        </ReactMarkdown>
+                                    </div>
                                     <div className="absolute bottom-8 text-xs font-medium text-muted-foreground/40 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <RotateCw className="h-3 w-3" /> Click
                                         to flip
@@ -137,10 +149,18 @@ export function FlashcardModal({
                                     <span className="absolute top-8 left-8 text-xs font-bold text-primary-foreground/40 uppercase tracking-widest">
                                         Answer
                                     </span>
-                                    <p className="text-2xl font-serif font-medium leading-relaxed">
-                                        {currentCard.back ||
-                                            "(No answer available)"}
-                                    </p>
+                                    <div className="prose prose-slate invert dark:prose-invert prose-p:text-2xl prose-p:font-serif prose-p:font-medium prose-p:leading-relaxed prose-p:text-primary-foreground prose-ol:list-decimal prose-ul:list-disc prose-ol:pl-8 prose-ul:pl-8 prose-li:marker:text-primary-foreground prose-li:marker:font-bold">
+                                        <ReactMarkdown
+                                            remarkPlugins={[
+                                                remarkGfm,
+                                                remarkBreaks,
+                                            ]}
+                                            rehypePlugins={[rehypeRaw]}
+                                        >
+                                            {currentCard.back ||
+                                                "(No answer available)"}
+                                        </ReactMarkdown>
+                                    </div>
                                     {currentCard.tag && (
                                         <span className="absolute bottom-8 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-primary-foreground/10 text-primary-foreground/90 backdrop-blur-sm">
                                             {currentCard.tag}

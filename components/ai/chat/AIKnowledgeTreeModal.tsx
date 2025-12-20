@@ -6,6 +6,10 @@ import { cn } from "@/utils/cn";
 import { AIKnowledgeNode } from "@/types/ai";
 import { saveGeneration } from "@/app/actions/ai";
 import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
+import rehypeRaw from "rehype-raw";
 
 interface AIKnowledgeTreeModalProps {
     isOpen: boolean;
@@ -137,16 +141,21 @@ function TreeRenderer({
                     </span>
                 </div>
                 {node.description && (
-                    <p
+                    <div
                         className={cn(
-                            "text-sm leading-relaxed",
+                            "prose prose-sm max-w-none prose-ol:list-decimal prose-ul:list-disc prose-ol:pl-6 prose-ul:pl-6 prose-li:marker:text-primary prose-li:marker:font-bold",
                             level === 0
-                                ? "text-primary-foreground/80"
-                                : "text-muted-foreground"
+                                ? "prose-invert text-primary-foreground/80"
+                                : "prose-slate dark:prose-invert text-muted-foreground"
                         )}
                     >
-                        {node.description}
-                    </p>
+                        <ReactMarkdown
+                            remarkPlugins={[remarkGfm, remarkBreaks]}
+                            rehypePlugins={[rehypeRaw]}
+                        >
+                            {node.description}
+                        </ReactMarkdown>
+                    </div>
                 )}
             </div>
             {node.children && node.children.length > 0 && (
