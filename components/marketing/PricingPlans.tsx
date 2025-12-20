@@ -38,12 +38,16 @@ export function PricingPlans() {
                             Upload and share content
                         </li>
                         <li className="flex items-center text-xs sm:text-sm">
-                            <Check className="mr-3 h-5 w-5 text-primary" />
-                            Community rating and comments
+                            <Check className="mr-3 h-5 w-5 text-primary" />5 AI
+                            generations per day
                         </li>
                         <li className="flex items-center text-xs sm:text-sm">
                             <Check className="mr-3 h-5 w-5 text-primary" />
-                            Limited AI study aid generation (5/month)
+                            10 AI chats per day
+                        </li>
+                        <li className="flex items-center text-xs sm:text-sm">
+                            <Check className="mr-3 h-5 w-5 text-primary" />
+                            100MB Cloud Storage
                         </li>
                     </ul>
                     <Link href="/register" className="w-full">
@@ -65,14 +69,14 @@ export function PricingPlans() {
                     </div>
                     <div className="space-y-2 mb-4 sm:mb-6">
                         <h3 className="text-xl sm:text-2xl font-serif font-bold text-primary">
-                            Student Pro
+                            Student Premium
                         </h3>
                         <p className="text-sm sm:text-base text-muted-foreground">
                             Unlock your full potential.
                         </p>
                     </div>
                     <div className="flex items-baseline text-3xl sm:text-4xl font-serif font-bold mb-6 sm:mb-8 text-primary">
-                        ETB 150
+                        ETB 1498.5
                         <span className="ml-2 text-base sm:text-lg font-sans font-normal text-muted-foreground">
                             / month
                         </span>
@@ -84,7 +88,11 @@ export function PricingPlans() {
                         </li>
                         <li className="flex items-center text-sm font-medium">
                             <Check className="mr-3 h-5 w-5 text-primary" />
-                            Unlimited AI Flashcards & Notes
+                            Unlimited AI Generations & Chats
+                        </li>
+                        <li className="flex items-center text-sm font-medium">
+                            <Check className="mr-3 h-5 w-5 text-primary" />
+                            10GB Cloud Storage
                         </li>
                         <li className="flex items-center text-sm font-medium">
                             <Check className="mr-3 h-5 w-5 text-primary" />
@@ -93,10 +101,6 @@ export function PricingPlans() {
                         <li className="flex items-center text-sm font-medium">
                             <Check className="mr-3 h-5 w-5 text-primary" />
                             Priority Support
-                        </li>
-                        <li className="flex items-center text-sm font-medium">
-                            <Check className="mr-3 h-5 w-5 text-primary" />
-                            Ad-free Experience
                         </li>
                     </ul>
                     <Link href="/register?plan=pro">

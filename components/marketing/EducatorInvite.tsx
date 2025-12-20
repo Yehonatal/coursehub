@@ -15,7 +15,7 @@ export function EducatorInvite() {
                                 Educator Access
                             </span>
                             <span className="text-xs text-muted-foreground font-medium tracking-wider uppercase">
-                                Request Free Pro Access
+                                Request Free Premium Access
                             </span>
                         </div>
                     </div>
@@ -34,7 +34,7 @@ export function EducatorInvite() {
                             type="button"
                             className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground h-12 px-8 rounded-lg"
                         >
-                            Request Free Pro Access
+                            Request Free Premium Access
                         </Button>
                         <p className="text-xs text-muted-foreground text-center mt-2">
                             Requests are reviewed within 3-5 business days.

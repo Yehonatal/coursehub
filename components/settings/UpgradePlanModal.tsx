@@ -43,11 +43,11 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
     };
 
     const features = [
-        "Unlimited AI Study Notes",
-        "Unlimited Flashcard Generations",
+        "Unlimited AI Generations & Chats",
+        "10GB Cloud Storage",
+        "Advanced Analytics Dashboard",
         "Priority AI Processing",
         "Advanced Knowledge Trees",
-        "Early Access to New Features",
         "Priority Support",
     ];
 
@@ -79,7 +79,7 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
                             </div>
                             <div className="flex items-baseline gap-1 mb-4">
                                 <span className="text-5xl font-serif font-bold text-primary">
-                                    $9.99
+                                    ETB 150
                                 </span>
                                 <span className="text-muted-foreground font-medium">
                                     /month
