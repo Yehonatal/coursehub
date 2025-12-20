@@ -2,7 +2,9 @@ import React from "react";
 import { FilterSidebar } from "@/components/resources/filters/FilterSidebar";
 import { PopularResourcesList } from "@/components/resources/PopularResourcesList";
 import { ResourceCard } from "@/components/common/ResourceCard";
+import { UniversityCard } from "@/components/common/UniversityCard";
 import { searchResources, getPopularAIGenerations } from "@/lib/resources";
+import { searchUniversities } from "@/app/actions/university";
 
 export default async function ResourcesPage({
     searchParams,
@@ -28,7 +30,7 @@ export default async function ResourcesPage({
             ? params.tags.split(",").map((t) => t.trim())
             : undefined;
 
-    const [resources, popularAI] = await Promise.all([
+    const [resources, popularAI, universities] = await Promise.all([
         searchResources({
             query,
             university,
@@ -39,6 +41,7 @@ export default async function ResourcesPage({
             tags,
         }),
         getPopularAIGenerations(4),
+        query ? searchUniversities(query, 4) : Promise.resolve([]),
     ]);
 
     const resourcesForGrid = resources.map((r) => ({
@@ -79,6 +82,28 @@ export default async function ResourcesPage({
 
                 <div className="space-y-12">
                     <PopularResourcesList resources={popularAI} />
+
+                    {universities.length > 0 && (
+                        <div className="space-y-8">
+                            <h3 className="text-xl font-serif font-bold text-primary">
+                                Universities
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                                {universities.map((uni) => (
+                                    <UniversityCard
+                                        key={uni.university_id}
+                                        name={uni.name}
+                                        slug={uni.slug}
+                                        description={uni.description}
+                                        location={uni.location}
+                                        logoUrl={uni.logo_url}
+                                        bannerUrl={uni.banner_url}
+                                        isOfficial={uni.is_official}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="space-y-8">
                         <h3 className="text-xl font-serif font-bold text-primary">

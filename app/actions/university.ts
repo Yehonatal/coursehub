@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { universities, users, resources, ratings, comments } from "@/db/schema";
-import { eq, and, desc, sql, count, avg } from "drizzle-orm";
+import { eq, and, desc, sql, count, avg, or, ilike } from "drizzle-orm";
 import { uploadFile } from "@/lib/storage/upload";
 import type { ActionResponse } from "@/app/actions/auth";
 import { revalidatePath } from "next/cache";
@@ -190,5 +190,24 @@ export async function updateUniversity(
     } catch (err) {
         error("Error updating university:", err);
         return { success: false, message: "Failed to update university" };
+    }
+}
+
+export async function searchUniversities(query: string, limit: number = 5) {
+    if (!query) return [];
+    try {
+        return await db
+            .select()
+            .from(universities)
+            .where(
+                or(
+                    ilike(universities.name, `%${query}%`),
+                    ilike(universities.description, `%${query}%`)
+                )
+            )
+            .limit(limit);
+    } catch (err) {
+        error("Error searching universities:", err);
+        return [];
     }
 }

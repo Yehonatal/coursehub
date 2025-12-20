@@ -149,6 +149,9 @@ export async function uploadResource(
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "application/vnd.ms-powerpoint",
         "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "text/markdown",
+        "text/x-markdown",
+        "text/plain",
     ];
     const MAX_SIZE = 20 * 1024 * 1024;
 
