@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import { createNotification } from "./notifications";
 import { sendEmail } from "@/lib/email/client";
 import { premiumWelcomeEmailTemplate } from "@/lib/email/templates";
+import { error } from "@/lib/logger";
 
 export async function buyPremium() {
     const { user } = await validateRequest();
@@ -50,8 +51,8 @@ export async function buyPremium() {
         revalidatePath("/dashboard/settings");
 
         return { success: true, message: "Successfully upgraded to Premium!" };
-    } catch (error) {
-        console.error("buyPremium error:", error);
+    } catch (err) {
+        error("buyPremium error:", err);
         return { success: false, message: "Failed to upgrade subscription." };
     }
 }
@@ -74,8 +75,8 @@ export async function getUserQuota() {
         }
 
         return quota;
-    } catch (error) {
-        console.error("Error in getUserQuota:", error);
+    } catch (err) {
+        error("Error in getUserQuota:", err);
         return {
             ai_generations_count: 0,
             ai_chat_count: 0,

@@ -18,6 +18,7 @@ import BrandBanner from "@/components/common/BrandBanner";
 import { ViewTracker } from "@/components/resources/ViewTracker";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getResourceGenerations } from "@/app/actions/ai";
+import { isValidUUID } from "@/utils/helpers";
 
 interface ResourcePageProps {
     params: Promise<{
@@ -27,6 +28,12 @@ interface ResourcePageProps {
 
 export default async function ResourcePage({ params }: ResourcePageProps) {
     const { id } = await params;
+
+    // Validate UUID to prevent DB errors from source maps or invalid IDs
+    if (!isValidUUID(id)) {
+        notFound();
+    }
+
     const user = await getCurrentUser();
     const resource = await getResourceById(id);
     const stats = await getResourceStats(id);

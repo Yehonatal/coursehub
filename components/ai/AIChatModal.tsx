@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { api } from "@/lib/api-client";
 import { toast } from "sonner";
 import {
     X,
@@ -122,16 +123,13 @@ export function AIChatModal({
             const formData = new FormData();
             formData.append("file", file);
 
-            const parseResponse = await fetch("/api/ai/parse", {
-                method: "POST",
-                body: formData,
-            });
+            const json = await api.ai.parse(formData);
 
-            if (!parseResponse.ok) {
+            if (!json.success) {
                 throw new Error("Failed to parse file");
             }
 
-            const { text } = await parseResponse.json();
+            const { text } = json.data;
 
             if (text.startsWith("Error:")) {
                 // Friendly message already returned by the API
@@ -203,12 +201,12 @@ export function AIChatModal({
                 ...prev,
                 {
                     role: "model",
-                    parts: "Sorry, we couldn't parse your PDF right now. Please try again later — we're working on a fix.",
+                    parts: "Sorry, we couldn't parse this resource right now. Please try again later — we're working on a fix.",
                 },
             ]);
 
             toast.error(
-                "Sorry, we couldn't parse your PDF right now. Please try again later — we're working on a fix."
+                "Sorry, we couldn't parse this resource right now. Please try again later — we're working on a fix."
             );
         } finally {
             setIsParsing(false);

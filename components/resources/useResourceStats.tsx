@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { api } from "@/lib/api-client";
 
 export type Stats = {
     rating: number;
@@ -22,8 +23,7 @@ export function useResourceStats(resourceId?: string, refreshInterval = 15000) {
             if (!resourceId) return;
             setLoading(true);
             try {
-                const res = await fetch(`/api/resources/${resourceId}/stats`);
-                const json = await res.json();
+                const json = await api.resources.getStats(resourceId);
                 if (mounted && json.success && json.data) {
                     setStats(json.data);
                 }

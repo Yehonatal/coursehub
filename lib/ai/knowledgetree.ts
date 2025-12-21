@@ -2,6 +2,7 @@ import { getGeminiModel } from "./gemini";
 import { KNOWLEDGE_TREE_PROMPT } from "./prompts";
 import { AIKnowledgeNode } from "@/types/ai";
 import { extractJSONSubstring, ensureNodeDefaults } from "./helpers";
+import { warn, error } from "@/lib/logger";
 
 export async function generateKnowledgeTree(
     content: string,
@@ -22,7 +23,7 @@ export async function generateKnowledgeTree(
         try {
             parsed = JSON.parse(jsonString) as AIKnowledgeNode;
         } catch (e) {
-            console.warn(
+            warn(
                 "Initial parse failed for knowledge tree, retrying with reformat prompt"
             );
             try {
@@ -33,7 +34,7 @@ export async function generateKnowledgeTree(
                 const fmtJSON = extractJSONSubstring(fmtText, false);
                 parsed = JSON.parse(fmtJSON) as AIKnowledgeNode;
             } catch (e2) {
-                console.error("Failed to reformat knowledge tree output:", e2);
+                error("Failed to reformat knowledge tree output:", e2);
                 throw new Error("Failed to generate knowledge tree");
             }
         }
@@ -41,9 +42,9 @@ export async function generateKnowledgeTree(
         // Validate and ensure defaults
         const repaired = ensureNodeDefaults(parsed as any);
         return repaired;
-    } catch (error: any) {
-        console.error("Error generating knowledge tree:", error);
-        if (error.status === 503 || error.message?.includes("503")) {
+    } catch (err: any) {
+        error("Error generating knowledge tree:", err);
+        if (err.status === 503 || err.message?.includes("503")) {
             throw new Error("RATE_LIMIT_EXCEEDED");
         }
         throw new Error("Failed to generate knowledge tree");

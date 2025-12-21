@@ -4,27 +4,13 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { validateRequest } from "@/lib/auth/session";
 import { db } from "@/db";
-import { users, universities } from "@/db/schema";
+import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import type { ActionResponse } from "@/app/actions/auth";
-import { slugify } from "@/utils/helpers";
-import { uploadFile } from "@/lib/storage/upload";
-import { error } from "@/lib/logger";
-
-const UpdateProfileSchema = z.object({
-    firstName: z
-        .string()
-        .trim()
-        .min(1, "First name is required")
-        .max(50, "First name is too long"),
-    lastName: z
-        .string()
-        .trim()
-        .min(1, "Last name is required")
-        .max(50, "Last name is too long"),
-    university: z.string().max(100, "University name is too long").optional(),
-    headline: z.string().max(150, "Headline is too long").optional(),
-});
+import { uploadFile, deleteFile } from "@/lib/storage/upload";
+import { warn, error } from "@/lib/logger";
+import { UpdateProfileSchema } from "@/lib/schemas";
+import { ensureUniversity } from "@/app/actions/university";
 
 const initialActionState: ActionResponse = {
     success: false,
@@ -69,36 +55,33 @@ export async function updateProfile(
         }
 
         let universityId: number | null = null;
-        if (normalizedUniversity) {
-            const existingUni = await db
-                .select()
-                .from(universities)
-                .where(eq(universities.name, normalizedUniversity));
+        let finalUniversityName = normalizedUniversity;
 
-            if (existingUni.length === 0) {
-                const [newUni] = await db
-                    .insert(universities)
-                    .values({
-                        name: normalizedUniversity,
-                        slug: slugify(normalizedUniversity),
-                    })
-                    .returning();
-                universityId = newUni.university_id;
-            } else {
-                universityId = existingUni[0].university_id;
-            }
+        if (normalizedUniversity) {
+            const result = await ensureUniversity(normalizedUniversity);
+            universityId = result.university_id;
+            finalUniversityName = result.name || normalizedUniversity;
         }
 
         const updateData: any = {
             first_name: firstName,
             last_name: lastName,
-            university: normalizedUniversity,
+            university: finalUniversityName,
             university_id: universityId,
             headline: normalizedHeadline,
         };
 
         // Handle profile image upload
         if (profileImageFile && profileImageFile.size > 0) {
+            // Delete old profile image if exists
+            if (user.profile_image_path) {
+                try {
+                    await deleteFile(user.profile_image_path);
+                } catch (e) {
+                    warn("Failed to delete old profile image", e);
+                }
+            }
+
             const profileImagePath = `users/${
                 user.user_id
             }/profile-${Date.now()}`;
@@ -107,13 +90,24 @@ export async function updateProfile(
                 profileImagePath
             );
             updateData.profile_image_url = profileImageUrl;
+            updateData.profile_image_path = profileImagePath;
         }
 
         // Handle banner upload
         if (bannerFile && bannerFile.size > 0) {
+            // Delete old banner if exists
+            if (user.banner_path) {
+                try {
+                    await deleteFile(user.banner_path);
+                } catch (e) {
+                    warn("Failed to delete old banner", e);
+                }
+            }
+
             const bannerPath = `users/${user.user_id}/banner-${Date.now()}`;
             const bannerUrl = await uploadFile(bannerFile, bannerPath);
             updateData.banner_url = bannerUrl;
+            updateData.banner_path = bannerPath;
         }
 
         await db
@@ -175,7 +169,7 @@ export async function updateSubscriptionStatus(
             message: `Successfully updated to ${status} plan`,
         };
     } catch (err) {
-        console.error("updateSubscriptionStatus", err);
+        error("updateSubscriptionStatus", err);
         return {
             success: false,
             message: "Failed to update subscription status",

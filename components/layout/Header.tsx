@@ -8,6 +8,7 @@ import { Bell, Search, Sparkles, GraduationCap, BookOpen } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/components/providers/UserProvider";
 import { error } from "@/lib/logger";
+import { api } from "@/lib/api-client";
 import { getUnreadNotificationCount } from "@/app/actions/notifications";
 import { UserMenu } from "./UserMenu";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -112,8 +113,8 @@ export function Header() {
 
     const handleSignOut = async () => {
         try {
-            const res = await fetch("/api/auth/signout", { method: "POST" });
-            if (!res.ok) {
+            const json = await api.auth.signOut();
+            if (!json.success) {
                 error("Sign out API responded with non-ok status");
             }
         } catch (err) {

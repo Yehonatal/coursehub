@@ -1,6 +1,7 @@
 import { getGeminiModel } from "./gemini";
 import { STUDY_NOTES_PROMPT } from "./prompts";
 import { AIStudyNote } from "@/types/ai";
+import { warn, error } from "@/lib/logger";
 
 function extractJSONSubstring(text: string) {
     // Strip surrounding markdown fences
@@ -43,7 +44,7 @@ export async function generateStudyNotes(
         try {
             return JSON.parse(jsonString) as AIStudyNote;
         } catch (e) {
-            console.warn(
+            warn(
                 "Initial parse failed for study notes, retrying with reformat prompt"
             );
             try {
@@ -54,13 +55,13 @@ export async function generateStudyNotes(
                 const fmtJSON = extractJSONSubstring(fmtText);
                 return JSON.parse(fmtJSON) as AIStudyNote;
             } catch (e2) {
-                console.error("Failed to reformat study notes output:", e2);
+                error("Failed to reformat study notes output:", e2);
                 throw new Error("Failed to generate study notes");
             }
         }
-    } catch (error: any) {
-        console.error("Error generating study notes:", error);
-        if (error.status === 503 || error.message?.includes("503")) {
+    } catch (err: any) {
+        error("Error generating study notes:", err);
+        if (err.status === 503 || err.message?.includes("503")) {
             throw new Error("RATE_LIMIT_EXCEEDED");
         }
         throw new Error("Failed to generate study notes");

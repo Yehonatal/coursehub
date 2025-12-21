@@ -8,7 +8,7 @@ import { DashboardToast } from "@/components/dashboard/DashboardToast";
 import { getRecommendedResources } from "@/lib/resources";
 import { listUserGenerations } from "@/app/actions/ai";
 import { getCurrentUser } from "@/lib/auth/session";
-import { mapGenerationToRecentItem } from "@/lib/ai/mappers";
+import { mapGenerationToRecentItem } from "@/utils/mappers";
 
 export default async function StudentDashboard() {
     const user = await getCurrentUser();

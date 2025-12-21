@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { universities, resources } from "@/db/schema";
-import { ilike, or, sql, desc } from "drizzle-orm";
+import { ilike, or, desc } from "drizzle-orm";
 import { error } from "@/lib/logger";
 
 export type SearchResult = {
@@ -19,23 +19,40 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
     try {
         const searchLower = query.toLowerCase();
 
-        // 1. Search Universities
-        // We prioritize those starting with the query
-        const universityResults = await db
-            .select({
-                id: universities.university_id,
-                name: universities.name,
-                slug: universities.slug,
-                location: universities.location,
-            })
-            .from(universities)
-            .where(
-                or(
-                    ilike(universities.name, `%${query}%`),
-                    ilike(universities.description, `%${query}%`)
+        const [universityResults, resourceResults] = await Promise.all([
+            db
+                .select({
+                    id: universities.university_id,
+                    name: universities.name,
+                    slug: universities.slug,
+                    location: universities.location,
+                })
+                .from(universities)
+                .where(
+                    or(
+                        ilike(universities.name, `%${query}%`),
+                        ilike(universities.description, `%${query}%`)
+                    )
                 )
-            )
-            .limit(10);
+                .limit(10),
+            db
+                .select({
+                    id: resources.resource_id,
+                    title: resources.title,
+                    course_code: resources.course_code,
+                    university: resources.university,
+                })
+                .from(resources)
+                .where(
+                    or(
+                        ilike(resources.title, `%${query}%`),
+                        ilike(resources.course_code, `%${query}%`),
+                        ilike(resources.university, `%${query}%`)
+                    )
+                )
+                .orderBy(desc(resources.upload_date))
+                .limit(15),
+        ]);
 
         const formattedUniversities: SearchResult[] = universityResults
             .sort((a: any, b: any) => {
@@ -53,25 +70,6 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
                 subtitle: u.location || "University",
                 url: `/university/${u.slug}`,
             }));
-
-        // 2. Search Resources
-        const resourceResults = await db
-            .select({
-                id: resources.resource_id,
-                title: resources.title,
-                course_code: resources.course_code,
-                university: resources.university,
-            })
-            .from(resources)
-            .where(
-                or(
-                    ilike(resources.title, `%${query}%`),
-                    ilike(resources.course_code, `%${query}%`),
-                    ilike(resources.university, `%${query}%`)
-                )
-            )
-            .orderBy(desc(resources.upload_date))
-            .limit(15);
 
         const formattedResources: SearchResult[] = resourceResults
             .sort((a: any, b: any) => {
@@ -91,7 +89,6 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
             }));
 
         // Combine and return
-        // We can sort them to put universities first or mix them
         return [...formattedUniversities, ...formattedResources];
     } catch (err) {
         error("Global search error:", err);

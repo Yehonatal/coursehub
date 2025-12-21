@@ -1,8 +1,8 @@
 "use server";
 import { getCurrentUser } from "@/lib/auth/session";
 import { db } from "@/db";
-import { user_quotas, users, resources } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { users, resources } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { generateStudyNotes } from "@/lib/ai/summary";
 import { generateFlashcards } from "@/lib/ai/flashcard";
 import { generateKnowledgeTree } from "@/lib/ai/knowledgetree";
@@ -14,130 +14,9 @@ import {
     getAIChatSessionsModel,
     getAIGenerationsModel,
 } from "@/lib/mongodb/models";
-
-const FREE_GENERATIONS_LIMIT = 5;
-const FREE_CHATS_LIMIT = 10;
-const PRO_GENERATIONS_LIMIT = 1000;
-const PRO_CHATS_LIMIT = 2000;
-
-async function withRetry<T>(
-    fn: () => Promise<T>,
-    retries = 2,
-    delay = 1000
-): Promise<T> {
-    try {
-        return await fn();
-    } catch (error: any) {
-        const isRetryable =
-            error.message?.includes("503") ||
-            error.status === 503 ||
-            error.message?.includes("overloaded") ||
-            error.message?.includes("RATE_LIMIT_EXCEEDED");
-
-        if (retries > 0 && isRetryable) {
-            console.log(
-                `AI model overloaded or rate limited, retrying... (${retries} left)`
-            );
-            await new Promise((resolve) => setTimeout(resolve, delay));
-            return withRetry(fn, retries - 1, delay * 2);
-        }
-        throw error;
-    }
-}
-
-async function checkQuota(userId: string, type: "generation" | "chat") {
-    const user = await db.query.users.findFirst({
-        where: eq(users.user_id, userId),
-    });
-
-    if (!user) throw new Error("User not found");
-
-    const isPremium =
-        user.subscription_status === "active" ||
-        user.subscription_status === "pro";
-
-    const generationLimit = isPremium
-        ? PRO_GENERATIONS_LIMIT
-        : FREE_GENERATIONS_LIMIT;
-    const chatLimit = isPremium ? PRO_CHATS_LIMIT : FREE_CHATS_LIMIT;
-
-    // Check quota
-    let quota = await db.query.user_quotas.findFirst({
-        where: eq(user_quotas.user_id, userId),
-    });
-
-    const now = new Date();
-    const isNewDay =
-        quota &&
-        (now.getUTCDate() !== quota.last_reset_date.getUTCDate() ||
-            now.getUTCMonth() !== quota.last_reset_date.getUTCMonth() ||
-            now.getUTCFullYear() !== quota.last_reset_date.getUTCFullYear());
-
-    if (!quota || isNewDay) {
-        // Create or reset quota record
-        await db
-            .insert(user_quotas)
-            .values({
-                user_id: userId,
-                ai_generations_count: 0,
-                ai_chat_count: 0,
-                last_reset_date: now,
-            })
-            .onConflictDoUpdate({
-                target: user_quotas.user_id,
-                set: {
-                    ai_generations_count: 0,
-                    ai_chat_count: 0,
-                    last_reset_date: now,
-                },
-            });
-
-        quota = {
-            user_id: userId,
-            ai_generations_count: 0,
-            ai_chat_count: 0,
-            storage_usage: quota?.storage_usage || 0,
-            last_reset_date: now,
-        };
-    }
-
-    if (
-        type === "generation" &&
-        quota.ai_generations_count >= generationLimit
-    ) {
-        throw new Error(
-            `${
-                isPremium ? "Premium" : "Free"
-            } tier generation limit reached (${generationLimit}/day). Please try again tomorrow.`
-        );
-    }
-
-    if (type === "chat" && quota.ai_chat_count >= chatLimit) {
-        throw new Error(
-            `${
-                isPremium ? "Premium" : "Free"
-            } tier chat limit reached (${chatLimit}/day). Please try again tomorrow.`
-        );
-    }
-
-    return true;
-}
-
-async function incrementQuota(userId: string, type: "generation" | "chat") {
-    await db
-        .update(user_quotas)
-        .set({
-            ai_generations_count:
-                type === "generation"
-                    ? sql`${user_quotas.ai_generations_count} + 1`
-                    : undefined,
-            ai_chat_count:
-                type === "chat"
-                    ? sql`${user_quotas.ai_chat_count} + 1`
-                    : undefined,
-        })
-        .where(eq(user_quotas.user_id, userId));
-}
+import { error } from "@/lib/logger";
+import { checkQuota, incrementQuota } from "@/lib/ai/quota";
+import { withRetry } from "@/utils/helpers";
 
 export async function createStudyNotes(
     content: string,
@@ -245,17 +124,17 @@ export async function sendChatMessage(
         await incrementQuota(user.user_id, "chat");
 
         return text;
-    }).catch((error: any) => {
-        console.error("Error sending chat message:", error);
+    }).catch((err: any) => {
+        error("Error sending chat message:", err);
         if (
-            error.message?.includes("429") ||
-            error.status === 429 ||
-            error.message?.includes("503") ||
-            error.status === 503
+            err.message?.includes("429") ||
+            err.status === 429 ||
+            err.message?.includes("503") ||
+            err.status === 503
         ) {
             throw new Error("RATE_LIMIT_EXCEEDED");
         }
-        throw error;
+        throw err;
     });
 }
 
@@ -365,26 +244,8 @@ export async function saveGeneration(payload: {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
-    // Check if user is premium
-    const userData = await db.query.users.findFirst({
-        where: eq(users.user_id, user.user_id),
-    });
-
-    if (
-        userData?.subscription_status !== "pro" &&
-        userData?.subscription_status !== "active"
-    ) {
-        // Free users can save up to 5 generations per day
-        const quota = await db.query.user_quotas.findFirst({
-            where: eq(user_quotas.user_id, user.user_id),
-        });
-
-        if (quota && quota.ai_generations_count >= FREE_GENERATIONS_LIMIT) {
-            throw new Error(
-                `Daily save limit reached (${FREE_GENERATIONS_LIMIT}/day). Please upgrade to continue.`
-            );
-        }
-    }
+    // Check quota (this handles both premium and free limits)
+    await checkQuota(user.user_id, "generation");
 
     await connectMongo();
     const Generation = getAIGenerationsModel();

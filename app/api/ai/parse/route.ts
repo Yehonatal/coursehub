@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { parseFile } from "@/lib/ai/parser";
+import { parseFile } from "@/utils/parser";
 import { getCurrentUser } from "@/lib/auth/session";
+import { error } from "@/lib/logger";
 
 export async function POST(req: NextRequest) {
     try {
@@ -20,9 +21,9 @@ export async function POST(req: NextRequest) {
         const text = await parseFile(buffer, file.type, file.name);
 
         return NextResponse.json({ text });
-    } catch (error) {
-        console.error("Error parsing file:", error);
-        const msg = error instanceof Error ? error.message : String(error);
+    } catch (err) {
+        error("Error parsing file:", err);
+        const msg = err instanceof Error ? err.message : String(err);
         // Return a friendly error message that the client can display
         return NextResponse.json({
             text: `Error: ${msg || "Failed to parse file"}`,
