@@ -5,23 +5,21 @@
 -- ===========================================
 
 -- Enable RLS on ALL tables
-ALTER TABLE public.ai_requests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.comments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.courses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.programs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ratings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.report_flags ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.resource_tags ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.resource_views ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.resources ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.saved_resources ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.universities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.verification ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.verification_tokens ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.password_reset_tokens ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.comment_reactions  ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_quotas ENABLE ROW LEVEL SECURITY;
 
 -- ===========================================
 -- USERS TABLE POLICIES
@@ -133,18 +131,6 @@ FOR UPDATE USING (
     )
 );
 
--- ===========================================
--- AI REQUESTS TABLE POLICIES
--- ===========================================
-
-CREATE POLICY "Users can view own AI requests" ON ai_requests
-FOR SELECT USING ((SELECT auth.uid())::text = user_id::text);
-
-CREATE POLICY "Users can create AI requests" ON ai_requests
-FOR INSERT WITH CHECK ((SELECT auth.uid())::text = user_id::text);
-
-CREATE POLICY "Users can update own AI requests" ON ai_requests
-FOR UPDATE USING ((SELECT auth.uid())::text = user_id::text);
 
 -- ===========================================
 -- NOTIFICATIONS TABLE POLICIES
@@ -159,34 +145,7 @@ FOR INSERT WITH CHECK (true);
 CREATE POLICY "Users can update own notifications" ON notifications
 FOR UPDATE USING ((SELECT auth.uid())::text = user_id::text);
 
--- ===========================================
--- SAVED RESOURCES TABLE POLICIES
--- ===========================================
 
-CREATE POLICY "Users can view own saved resources" ON saved_resources
-FOR SELECT USING ((SELECT auth.uid())::text = user_id::text);
-
-CREATE POLICY "Users can save resources" ON saved_resources
-FOR INSERT WITH CHECK ((SELECT auth.uid())::text = user_id::text);
-
-CREATE POLICY "Users can unsave resources" ON saved_resources
-FOR DELETE USING ((SELECT auth.uid())::text = user_id::text);
-
--- ===========================================
--- RESOURCE TAGS TABLE POLICIES
--- ===========================================
-
-CREATE POLICY "Resource tags are public" ON resource_tags
-FOR SELECT USING (true);
-
-CREATE POLICY "Resource owners can manage tags" ON resource_tags
-FOR ALL USING (
-    EXISTS (
-        SELECT 1 FROM resources r
-        WHERE r.resource_id = resource_tags.resource_id
-        AND r.uploader_id::text = (SELECT auth.uid())::text
-    )
-);
 
 -- ===========================================
 -- REPORT FLAGS POLICIES
@@ -210,15 +169,6 @@ FOR UPDATE USING (
     )
 );
 
--- ===========================================
--- RESOURCE VIEWS POLICIES
--- ===========================================
-
-CREATE POLICY "Allow view tracking" ON resource_views
-FOR INSERT WITH CHECK (true);
-
-CREATE POLICY "Users can view own view history" ON resource_views
-FOR SELECT USING ((SELECT auth.uid())::text = user_id::text OR user_id IS NULL);
 
 -- ===========================================
 -- UNIVERSITY STRUCTURE POLICIES

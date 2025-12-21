@@ -58,7 +58,7 @@ export default async function UniversityPage({
                             : "Public University"
                     }
                     website={university.website || ""}
-                    logoUrl={university.logo_url || "/hu-logo.jpg"}
+                    logoUrl={university.logo_url || undefined}
                     bannerUrl={university.banner_url || undefined}
                     isStaff={isStaff}
                     email={university.email || ""}

@@ -32,6 +32,7 @@ import { uploadResource } from "@/app/actions/resource";
 import { uploadResourceInitialState } from "@/app/actions/resource.client";
 import { toast } from "sonner";
 import { cn } from "@/utils/cn";
+import { UniversitySelect } from "@/components/common/UniversitySelect";
 
 interface AIUploadModalProps {
     isOpen: boolean;
@@ -295,12 +296,10 @@ export function AIUploadModal({ isOpen, onClose }: AIUploadModalProps) {
                                             *
                                         </span>
                                     </Label>
-                                    <Input
-                                        id="university"
+                                    <UniversitySelect
                                         name="university"
-                                        placeholder="e.g. Stanford University"
                                         required
-                                        className="h-12 rounded-xl border-primary/10 bg-primary/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
+                                        className="h-12"
                                     />
                                 </div>
 

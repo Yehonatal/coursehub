@@ -69,16 +69,32 @@ export function UniversityHeader({
                         <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
                         <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse delay-700"></div>
 
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="flex flex-col items-center gap-4 opacity-20 text-center p-8">
-                                <div className="relative h-16 w-16 shrink-0 grayscale">
+                        <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                            <div className="relative w-full flex items-center justify-center px-8">
+                                {bannerUrl ? (
                                     <Image
-                                        src={logoUrl}
+                                        src={bannerUrl}
                                         alt={name}
                                         fill
-                                        className="object-contain"
+                                        sizes="(max-width: 768px) 80px, 128px"
+                                        className="object-contain p-4"
                                     />
-                                </div>
+                                ) : (
+                                    <>
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none pointer-events-none">
+                                            <span className="text-[12vw] font-serif font-black uppercase tracking-tighter whitespace-nowrap">
+                                                {name.trim().split(" ")[0]}
+                                            </span>
+                                        </div>
+                                        <div className="relative z-10 flex items-center gap-4 md:gap-8">
+                                            <div className="h-px w-12 md:w-24 bg-linear-to-r from-transparent to-primary/30" />
+                                            <h2 className="text-lg md:text-3xl font-serif font-bold text-primary/40 uppercase tracking-[0.3em] text-center whitespace-nowrap">
+                                                {name}
+                                            </h2>
+                                            <div className="h-px w-12 md:w-24 bg-linear-to-l from-transparent to-primary/30" />
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -89,13 +105,32 @@ export function UniversityHeader({
             <div className="px-6 sm:px-10 pb-4 relative">
                 <div className="flex flex-col md:flex-row items-start gap-6 -mt-10 md:-mt-14 relative z-10">
                     <div className="h-20 w-20 md:h-32 md:w-32 rounded-3xl border border-border bg-card shadow-2xl relative overflow-hidden shrink-0 flex items-center justify-center p-4">
-                        <Image
-                            src={logoUrl}
-                            alt={name}
-                            fill
-                            sizes="(max-width: 768px) 80px, 128px"
-                            className="object-contain p-4"
-                        />
+                        {logoUrl ? (
+                            <Image
+                                src={logoUrl}
+                                alt={name}
+                                fill
+                                sizes="(max-width: 768px) 80px, 128px"
+                                className="object-contain p-4"
+                            />
+                        ) : (
+                            <div className="h-full w-full flex items-center justify-center bg-primary/5 text-primary font-serif font-bold text-xl">
+                                {name.charAt(0)}
+                                {(() => {
+                                    const parts = name.trim().split(/\s+/);
+                                    if (parts.length >= 2) {
+                                        const second = parts[1].toLowerCase();
+                                        if (
+                                            second === "university" ||
+                                            second === "college"
+                                        )
+                                            return "";
+                                        return parts[1].charAt(0).toUpperCase();
+                                    }
+                                    return "";
+                                })()}
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex-1 space-y-3 md:pt-16">

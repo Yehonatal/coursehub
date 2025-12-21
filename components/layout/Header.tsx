@@ -4,32 +4,70 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Bell, Search, Sparkles } from "lucide-react";
+import { Bell, Search, Sparkles, GraduationCap, BookOpen } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/components/providers/UserProvider";
 import { error } from "@/lib/logger";
 import { getUnreadNotificationCount } from "@/app/actions/notifications";
 import { UserMenu } from "./UserMenu";
+import { useDebounce } from "@/hooks/useDebounce";
+import { globalSearch, type SearchResult } from "@/app/actions/search";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
     const [isSearching, setIsSearching] = useState(false);
+    const [results, setResults] = useState<SearchResult[]>([]);
+    const [showResults, setShowResults] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const searchRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user } = useUser();
 
     const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+    const debouncedQuery = useDebounce(searchQuery, 300);
+    const cache = useRef<Record<string, SearchResult[]>>({});
 
     useEffect(() => {
         setSearchQuery(searchParams.get("q") || "");
         setIsSearching(false);
+        setShowResults(false);
     }, [searchParams]);
+
+    useEffect(() => {
+        if (!debouncedQuery.trim()) {
+            setResults([]);
+            setShowResults(false);
+            return;
+        }
+
+        if (cache.current[debouncedQuery]) {
+            setResults(cache.current[debouncedQuery]);
+            setShowResults(true);
+            return;
+        }
+
+        const performSearch = async () => {
+            setIsSearching(true);
+            try {
+                const data = await globalSearch(debouncedQuery);
+                cache.current[debouncedQuery] = data;
+                setResults(data);
+                setShowResults(true);
+            } catch (err) {
+                error("Search failed:", err);
+            } finally {
+                setIsSearching(false);
+            }
+        };
+
+        performSearch();
+    }, [debouncedQuery]);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSearching(true);
+        setShowResults(false);
         if (searchQuery.trim()) {
             router.push(
                 `/resources?q=${encodeURIComponent(searchQuery.trim())}`
@@ -59,6 +97,12 @@ export function Header() {
                 !menuRef.current.contains(event.target as Node)
             ) {
                 setIsMenuOpen(false);
+            }
+            if (
+                searchRef.current &&
+                !searchRef.current.contains(event.target as Node)
+            ) {
+                setShowResults(false);
             }
         }
         document.addEventListener("mousedown", handleClickOutside);
@@ -100,7 +144,7 @@ export function Header() {
                     </Link>
                 </div>
 
-                <div className="flex-1 max-w-2xl mx-8">
+                <div className="flex-1 max-w-2xl mx-8 relative" ref={searchRef}>
                     <form onSubmit={handleSearch} className="relative group">
                         {isSearching ? (
                             <div className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 border border-primary border-t-transparent rounded-full animate-spin" />
@@ -112,9 +156,73 @@ export function Header() {
                             placeholder="Search for resources, universities, or courses..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
+                            onFocus={() =>
+                                searchQuery.trim() && setShowResults(true)
+                            }
                             className="w-full h-12 pl-12 bg-muted/40 border-transparent focus:bg-card focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all duration-300 rounded-2xl text-sm font-medium"
                         />
                     </form>
+
+                    {showResults && (results.length > 0 || isSearching) && (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border/50 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                            <div className="max-h-[400px] overflow-y-auto p-2">
+                                {isSearching && results.length === 0 ? (
+                                    <div className="p-4 text-center text-sm text-muted-foreground">
+                                        Searching...
+                                    </div>
+                                ) : results.length > 0 ? (
+                                    <div className="space-y-1">
+                                        {results.map((result) => (
+                                            <Link
+                                                key={`${result.type}-${result.id}`}
+                                                href={result.url}
+                                                onClick={() =>
+                                                    setShowResults(false)
+                                                }
+                                                className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/50 transition-colors group"
+                                            >
+                                                <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-muted group-hover:bg-background transition-colors">
+                                                    {result.type ===
+                                                    "university" ? (
+                                                        <GraduationCap className="h-5 w-5 text-primary" />
+                                                    ) : (
+                                                        <BookOpen className="h-5 w-5 text-blue-500" />
+                                                    )}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-semibold text-foreground truncate">
+                                                        {result.title}
+                                                    </p>
+                                                    {result.subtitle && (
+                                                        <p className="text-xs text-muted-foreground truncate">
+                                                            {result.subtitle}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/40 group-hover:text-primary/40 transition-colors">
+                                                    {result.type}
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="p-4 text-center text-sm text-muted-foreground">
+                                        No results found for "{searchQuery}"
+                                    </div>
+                                )}
+                            </div>
+                            {results.length > 0 && (
+                                <div className="p-2 border-t border-border/50 bg-muted/20">
+                                    <button
+                                        onClick={handleSearch}
+                                        className="w-full py-2 text-xs font-medium text-primary hover:underline"
+                                    >
+                                        View all results
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-3 md:gap-5">

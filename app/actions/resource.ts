@@ -16,6 +16,7 @@ import { createResource } from "@/lib/dal/resource-helpers";
 import type { ActionResponse } from "@/app/actions/auth";
 import { revalidatePath } from "next/cache";
 import { error, warn } from "@/lib/logger";
+import { slugify } from "@/utils/helpers";
 
 export async function verifyResource(
     resourceId: string
@@ -227,6 +228,21 @@ export async function uploadResource(
                 .limit(1);
             if (uniResult.length > 0) {
                 universityId = uniResult[0].university_id;
+            } else {
+                // Create university if it doesn't exist
+                try {
+                    const [newUni] = await db
+                        .insert(universities)
+                        .values({
+                            name: university.trim(),
+                            slug: slugify(university.trim()),
+                            is_official: false,
+                        })
+                        .returning();
+                    universityId = newUni.university_id;
+                } catch (err) {
+                    error("University creation error in uploadResource:", err);
+                }
             }
         }
 
@@ -339,6 +355,7 @@ export async function deleteResource(
         }
 
         revalidatePath("/dashboard/resources");
+        revalidatePath("/dashboard");
         return { success: true, message: "Resource deleted successfully" };
     } catch (err) {
         error("Delete resource failed:", err);
