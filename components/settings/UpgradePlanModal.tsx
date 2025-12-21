@@ -25,7 +25,7 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
     const handleUpgrade = async () => {
         setIsUpgrading(true);
         try {
-            const res = await buyPremium();
+            const res = await buyPremium(window.location.origin);
             if (res.success && res.checkout_url) {
                 toast.success("Redirecting to payment...");
                 window.location.href = res.checkout_url;

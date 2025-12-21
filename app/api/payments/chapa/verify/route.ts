@@ -5,6 +5,7 @@ import { transactions } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { verifyTransaction } from "@/lib/payment/chapa/client";
 import { error } from "@/lib/logger";
+import { completeSubscription } from "@/app/actions/subscription";
 
 export async function GET(req: NextRequest) {
     try {
@@ -61,19 +62,17 @@ export async function GET(req: NextRequest) {
             verification.data.status === "success"
         ) {
             // Note: Webhook should have handled this, but we update here too just in case
-            await db
-                .update(transactions)
-                .set({
-                    status: "completed",
-                    payment_method: verification.data.method,
-                    updated_at: new Date(),
-                })
-                .where(eq(transactions.tx_ref, tx_ref));
+            const result = await completeSubscription(
+                tx_ref,
+                verification.data.method
+            );
 
-            return NextResponse.json({
-                status: "success",
-                message: "Payment verified",
-            });
+            if (result.success) {
+                return NextResponse.json({
+                    status: "success",
+                    message: "Payment verified",
+                });
+            }
         }
 
         return NextResponse.json({

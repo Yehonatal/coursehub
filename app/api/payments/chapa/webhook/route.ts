@@ -1,16 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { transactions, users } from "@/db/schema";
+import { transactions } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { verifyTransaction } from "@/lib/payment/chapa/client";
 import { error, info } from "@/lib/logger";
-import { createNotification } from "@/app/actions/notifications";
-import { sendEmail } from "@/lib/email/client";
-import { premiumWelcomeEmailTemplate } from "@/lib/email/templates";
+import { completeSubscription } from "@/app/actions/subscription";
+import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
     try {
-        const body = await req.json();
+        const rawBody = await req.text();
+        const signature = req.headers.get("x-chapa-signature");
+        const secret =
+            process.env.CHAPA_WEBHOOK_SECRET || process.env.ENCRYPTION_KEY;
+
+        if (!secret) {
+            error("CHAPA_WEBHOOK_SECRET is not set");
+            return NextResponse.json(
+                { error: "Configuration error" },
+                { status: 500 }
+            );
+        }
+
+        // Verify signature
+        const hash = crypto
+            .createHmac("sha256", secret)
+            .update(rawBody)
+            .digest("hex");
+
+        if (hash !== signature) {
+            error("Invalid Chapa webhook signature", {
+                received: signature,
+                expected: hash,
+            });
+            return NextResponse.json(
+                { error: "Invalid signature" },
+                { status: 401 }
+            );
+        }
+
+        const body = JSON.parse(rawBody);
         const { tx_ref, status } = body;
 
         info(`Chapa webhook received for tx_ref: ${tx_ref}, status: ${status}`);
@@ -30,57 +59,16 @@ export async function POST(req: NextRequest) {
             verification.status === "success" &&
             verification.data.status === "success"
         ) {
-            // Update transaction status
-            const [transaction] = await db
-                .update(transactions)
-                .set({
-                    status: "completed",
-                    payment_method: verification.data.method,
-                    updated_at: new Date(),
-                })
-                .where(eq(transactions.tx_ref, tx_ref))
-                .returning();
+            const result = await completeSubscription(
+                tx_ref,
+                verification.data.method
+            );
 
-            if (transaction) {
-                // Upgrade user subscription
-                const expiryDate = new Date();
-                expiryDate.setMonth(expiryDate.getMonth() + 1);
-
-                const [user] = await db
-                    .update(users)
-                    .set({
-                        subscription_status: "pro",
-                        subscription_expiry: expiryDate,
-                    })
-                    .where(eq(users.user_id, transaction.user_id))
-                    .returning();
-
-                if (user) {
-                    // Create notification
-                    await createNotification({
-                        userId: user.user_id,
-                        eventType: "subscription",
-                        message:
-                            "Welcome to CourseHub Premium! Your payment was successful.",
-                        link: "/dashboard/settings",
-                    });
-
-                    // Send email
-                    if (user.email) {
-                        const displayName = user.first_name || "Student";
-                        await sendEmail({
-                            to: user.email,
-                            subject: "Welcome to CourseHub Premium!",
-                            text: `Hi ${displayName},\n\nYour payment was successful and your account has been upgraded to Premium!`,
-                            html: premiumWelcomeEmailTemplate(displayName),
-                        });
-                    }
-                }
+            if (result.success) {
+                return NextResponse.json({
+                    message: "Webhook processed successfully",
+                });
             }
-
-            return NextResponse.json({
-                message: "Webhook processed successfully",
-            });
         }
 
         return NextResponse.json(

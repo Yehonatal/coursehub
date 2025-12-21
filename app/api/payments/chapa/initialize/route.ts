@@ -16,7 +16,11 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { amount, currency = "ETB", return_url } = body;
+        const {
+            amount,
+            currency = "ETB",
+            return_url: custom_return_url,
+        } = body;
 
         if (!amount) {
             return NextResponse.json(
@@ -36,7 +40,12 @@ export async function POST(req: NextRequest) {
             status: "pending",
         });
 
-        const callback_url = `${process.env.NEXT_PUBLIC_APP_URL}/api/payments/chapa/webhook`;
+        // Use request origin for dynamic environments (preview/prod)
+        const origin = req.nextUrl.origin;
+        const callback_url = `${origin}/api/payments/chapa/webhook`;
+        const return_url =
+            custom_return_url ||
+            `${origin}/dashboard/settings?payment=success&tx_ref=${tx_ref}`;
 
         const response = await initializeTransaction({
             first_name: user.first_name || "User",
@@ -46,9 +55,7 @@ export async function POST(req: NextRequest) {
             currency,
             tx_ref,
             callback_url,
-            return_url:
-                return_url ||
-                `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings`,
+            return_url,
         });
 
         if (response.status === "success" && response.data?.checkout_url) {
