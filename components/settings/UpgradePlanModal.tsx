@@ -79,7 +79,7 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
                             </div>
                             <div className="flex items-baseline gap-1 mb-4">
                                 <span className="text-5xl font-serif font-bold text-primary">
-                                    ETB 150
+                                    ETB 1498.5
                                 </span>
                                 <span className="text-muted-foreground font-medium">
                                     /month

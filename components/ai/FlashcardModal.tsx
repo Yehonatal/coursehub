@@ -149,7 +149,7 @@ export function FlashcardModal({
                                     <span className="absolute top-8 left-8 text-xs font-bold text-primary-foreground/40 uppercase tracking-widest">
                                         Answer
                                     </span>
-                                    <div className="prose prose-slate invert dark:prose-invert prose-p:text-2xl prose-p:font-serif prose-p:font-medium prose-p:leading-relaxed prose-p:text-primary-foreground prose-ol:list-decimal prose-ul:list-disc prose-ol:pl-8 prose-ul:pl-8 prose-li:marker:text-primary-foreground prose-li:marker:font-bold">
+                                    <div className="font-semibold prose prose-p:text-2xl prose-p:font-serif prose-p:font-medium prose-p:leading-relaxed text-primary-foreground prose a:text-primary-foreground/95 prose-ol:list-decimal prose-ul:list-disc prose-ol:pl-8 prose-ul:pl-8 prose-li:marker:text-primary-foreground/90 prose-li:marker:font-bold">
                                         <ReactMarkdown
                                             remarkPlugins={[
                                                 remarkGfm,

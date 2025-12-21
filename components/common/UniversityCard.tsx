@@ -47,7 +47,10 @@ export function UniversityCard({
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10" />
                     )}
                     {isOfficial && (
-                        <Badge className="absolute top-3 right-3 bg-primary/90 backdrop-blur-md border-none text-[10px] uppercase tracking-wider font-bold">
+                        <Badge
+                            variant="verified"
+                            className="absolute top-3 right-3"
+                        >
                             Official
                         </Badge>
                     )}
