@@ -27,6 +27,7 @@
         "@types/xml2js": "^0.4.14",
         "aos": "^2.3.4",
         "bcrypt": "^6.0.0",
+        "canvas-confetti": "^1.9.4",
         "chapa-nodejs": "^2.0.1",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -63,6 +64,7 @@
     "devDependencies": {
         "@tailwindcss/postcss": "^4",
         "@types/bcrypt": "^5.0.2",
+        "@types/canvas-confetti": "^1.9.0",
         "@types/node": "^20",
         "@types/nodemailer": "^7.0.4",
         "@types/pg": "^8.15.6",

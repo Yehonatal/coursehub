@@ -10,7 +10,7 @@ import { createNotification } from "./notifications";
 import { sendEmail } from "@/lib/email/client";
 import { premiumWelcomeEmailTemplate } from "@/lib/email/templates";
 
-export async function buyPremium(baseUrl?: string) {
+export async function buyPremium(baseUrl?: string, isDemo: boolean = false) {
     const { user } = await validateRequest();
     if (!user) throw new Error("Unauthorized");
 
@@ -22,7 +22,7 @@ export async function buyPremium(baseUrl?: string) {
         // Use provided baseUrl or fallback to env
         const appUrl = baseUrl || process.env.NEXT_PUBLIC_APP_URL;
 
-        console.log("Initializing Chapa payment:", {
+        console.log(`${isDemo ? "DEMO: " : ""}Initializing Chapa payment:`, {
             tx_ref,
             amount,
             email: user.email,
@@ -37,8 +37,17 @@ export async function buyPremium(baseUrl?: string) {
             tx_ref,
             amount: amount.toString(),
             currency,
-            status: "pending",
+            status: isDemo ? "completed" : "pending",
         });
+
+        if (isDemo) {
+            await completeSubscription(tx_ref, "demo_mode");
+            return {
+                success: true,
+                isDemo: true,
+                message: "Demo upgrade successful!",
+            };
+        }
 
         const callback_url = `${appUrl}/api/payments/chapa/webhook`;
         const return_url = `${appUrl}/dashboard/settings?payment=success&tx_ref=${tx_ref}`;

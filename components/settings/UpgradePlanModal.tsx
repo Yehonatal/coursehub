@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Check, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { buyPremium } from "@/app/actions/subscription";
+import confetti from "canvas-confetti";
 
 interface UpgradePlanModalProps {
     isOpen: boolean;
@@ -25,14 +26,36 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
     const handleUpgrade = async () => {
         setIsUpgrading(true);
         try {
-            const res = await buyPremium(window.location.origin);
-            if (res.success && res.checkout_url) {
-                toast.success("Redirecting to payment...");
-                window.location.href = res.checkout_url;
+            // Set to true for demo mode as requested
+            const res = await buyPremium(window.location.origin, true);
+
+            if (res.success) {
+                if (res.isDemo) {
+                    toast.success("Demo Upgrade Successful!", {
+                        description: "Welcome to CourseHub Premium!",
+                    });
+
+                    // Celebration!
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ["#FFD700", "#FFA500", "#FF4500"],
+                    });
+
+                    setTimeout(() => {
+                        onClose();
+                        window.location.reload(); // Refresh to show new status
+                    }, 2000);
+                } else if (res.checkout_url) {
+                    toast.success("Redirecting to payment...");
+                    window.location.href = res.checkout_url;
+                }
             } else {
                 toast.error(res.message || "Failed to initialize payment");
             }
-        } catch {
+        } catch (err) {
+            console.error("Upgrade error:", err);
             toast.error("An error occurred during upgrade");
         } finally {
             setIsUpgrading(false);

@@ -13,6 +13,7 @@ import { cn } from "@/utils/cn";
 import { useUser } from "@/components/providers/UserProvider";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import confetti from "canvas-confetti";
 
 interface BillingSectionProps {
     subscriptionStatus?: string;
@@ -44,6 +45,14 @@ export default function BillingSection({
         if (paymentStatus === "success") {
             toast.success("Payment successful!", {
                 description: "Your account has been upgraded to Premium.",
+            });
+
+            // Celebration!
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ["#FFD700", "#FFA500", "#FF4500"],
             });
         } else if (paymentStatus === "failed") {
             toast.error("Payment failed", {
