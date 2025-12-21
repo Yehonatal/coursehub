@@ -8,6 +8,7 @@ import { useUser } from "@/components/providers/UserProvider";
 import { BadgeCheck, Pencil, MapPin } from "lucide-react";
 import { EditProfileModal } from "@/components/dashboard/EditProfileModal";
 import { SubscriptionBadge } from "@/components/common/SubscriptionBadge";
+import BrandBanner from "@/components/common/BrandBanner";
 
 export function ProfileHeader() {
     const { user } = useUser();
@@ -34,7 +35,7 @@ export function ProfileHeader() {
                 <div className="h-24 sm:h-48 w-full rounded-3xl relative overflow-hidden border border-border/50 ">
                     <div className="absolute inset-0">
                         <div
-                            className="absolute inset-0 opacity-[0.03]"
+                            className="absolute inset-0 opacity-[0.07]"
                             style={{
                                 backgroundImage: `
                                                         linear-gradient(to right, currentColor 1px, transparent 1px),
@@ -63,26 +64,10 @@ export function ProfileHeader() {
                                     className="object-cover opacity-90"
                                 />
                             ) : (
-                                <>
-                                    <div className="relative w-full flex items-center justify-center px-8">
-                                        <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none pointer-events-none">
-                                            <span className="text-[12vw] font-serif font-black uppercase tracking-tighter whitespace-nowrap">
-                                                {
-                                                    displayName
-                                                        .trim()
-                                                        .split(" ")[0]
-                                                }
-                                            </span>
-                                        </div>
-                                        <div className="relative z-10 flex items-center gap-4 md:gap-8">
-                                            <div className="h-px w-12 md:w-24 bg-linear-to-r from-transparent to-primary/30" />
-                                            <h2 className="text-lg md:text-3xl font-serif font-bold text-primary/40 uppercase tracking-[0.3em] text-center whitespace-nowrap">
-                                                {displayName}
-                                            </h2>
-                                            <div className="h-px w-12 md:w-24 bg-linear-to-l from-transparent to-primary/30" />
-                                        </div>
-                                    </div>
-                                </>
+                                <BrandBanner
+                                    text={displayName}
+                                    watermark={displayName.trim().split(" ")[0]}
+                                />
                             )}
                         </div>
                     </div>

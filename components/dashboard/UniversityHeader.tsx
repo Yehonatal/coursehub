@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ExternalLink, Settings2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import BrandBanner from "@/components/common/BrandBanner";
 import { EditUniversityModal } from "./EditUniversityModal";
 
 interface UniversityHeaderProps {
@@ -49,7 +50,7 @@ export function UniversityHeader({
                 ) : (
                     <div className="absolute inset-0">
                         <div
-                            className="absolute inset-0 opacity-[0.03]"
+                            className="absolute inset-0 opacity-[0.07]"
                             style={{
                                 backgroundImage: `
                                     linear-gradient(to right, currentColor 1px, transparent 1px),
@@ -70,32 +71,19 @@ export function UniversityHeader({
                         <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse delay-700"></div>
 
                         <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                            <div className="relative w-full flex items-center justify-center px-8">
-                                {bannerUrl ? (
-                                    <Image
-                                        src={bannerUrl}
-                                        alt={name}
-                                        fill
-                                        sizes="(max-width: 768px) 80px, 128px"
-                                        className="object-contain p-4"
-                                    />
-                                ) : (
-                                    <>
-                                        <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none pointer-events-none">
-                                            <span className="text-[12vw] font-serif font-black uppercase tracking-tighter whitespace-nowrap">
-                                                {name.trim().split(" ")[0]}
-                                            </span>
-                                        </div>
-                                        <div className="relative z-10 flex items-center gap-4 md:gap-8">
-                                            <div className="h-px w-12 md:w-24 bg-linear-to-r from-transparent to-primary/30" />
-                                            <h2 className="text-lg md:text-3xl font-serif font-bold text-primary/40 uppercase tracking-[0.3em] text-center whitespace-nowrap">
-                                                {name}
-                                            </h2>
-                                            <div className="h-px w-12 md:w-24 bg-linear-to-l from-transparent to-primary/30" />
-                                        </div>
-                                    </>
-                                )}
-                            </div>
+                            {bannerUrl ? (
+                                <Image
+                                    src={bannerUrl}
+                                    alt={name}
+                                    fill
+                                    className="object-cover opacity-90"
+                                />
+                            ) : (
+                                <BrandBanner
+                                    text={name}
+                                    watermark={name.trim().split(" ")[0]}
+                                />
+                            )}
                         </div>
                     </div>
                 )}

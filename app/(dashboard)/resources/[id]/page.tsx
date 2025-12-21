@@ -14,6 +14,7 @@ import {
     getResourceComments,
     getRelatedResources,
 } from "@/lib/resources";
+import BrandBanner from "@/components/common/BrandBanner";
 import { ViewTracker } from "@/components/resources/ViewTracker";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getResourceGenerations } from "@/app/actions/ai";
@@ -70,7 +71,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                     <div className="h-24 sm:h-48 w-full rounded-3xl relative overflow-hidden border border-border/50 ">
                         <div className="absolute inset-0">
                             <div
-                                className="absolute inset-0 opacity-[0.03]"
+                                className="absolute inset-0 opacity-[0.07]"
                                 style={{
                                     backgroundImage: `
                                                         linear-gradient(to right, currentColor 1px, transparent 1px),
@@ -91,24 +92,12 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse delay-700"></div>
 
                             <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                                <div className="relative w-full flex items-center justify-center px-8">
-                                    <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none pointer-events-none">
-                                        <span className="text-[12vw] font-serif font-black uppercase tracking-tighter whitespace-nowrap">
-                                            {
-                                                displayUniversity
-                                                    .trim()
-                                                    .split(" ")[0]
-                                            }
-                                        </span>
-                                    </div>
-                                    <div className="relative z-10 flex items-center gap-4 md:gap-8">
-                                        <div className="h-px w-12 md:w-24 bg-linear-to-r from-transparent to-primary/30" />
-                                        <h2 className="text-lg md:text-3xl font-serif font-bold text-primary/40 uppercase tracking-[0.3em] text-center whitespace-nowrap">
-                                            {displayUniversity}
-                                        </h2>
-                                        <div className="h-px w-12 md:w-24 bg-linear-to-l from-transparent to-primary/30" />
-                                    </div>
-                                </div>
+                                <BrandBanner
+                                    text={displayUniversity}
+                                    watermark={
+                                        displayUniversity.trim().split(" ")[0]
+                                    }
+                                />
                             </div>
                         </div>
                     </div>
