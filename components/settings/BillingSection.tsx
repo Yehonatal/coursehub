@@ -11,6 +11,8 @@ import { getUserStorageStats, StorageStats } from "@/app/actions/stats";
 import { getUserQuota } from "@/app/actions/subscription";
 import { cn } from "@/utils/cn";
 import { useUser } from "@/components/providers/UserProvider";
+import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 interface BillingSectionProps {
     subscriptionStatus?: string;
@@ -28,6 +30,7 @@ export default function BillingSection({
     quota: initialQuota,
 }: BillingSectionProps) {
     const { user } = useUser();
+    const searchParams = useSearchParams();
     const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
     const [isPaymentsModalOpen, setIsPaymentsModalOpen] = useState(false);
     const [storageStats, setStorageStats] = useState<StorageStats | null>(null);
@@ -35,6 +38,19 @@ export default function BillingSection({
 
     const currentStatus = user?.subscription_status || initialStatus || "free";
     const currentExpiry = user?.subscription_expiry || initialExpiry;
+
+    useEffect(() => {
+        const paymentStatus = searchParams.get("payment");
+        if (paymentStatus === "success") {
+            toast.success("Payment successful!", {
+                description: "Your account has been upgraded to Premium.",
+            });
+        } else if (paymentStatus === "failed") {
+            toast.error("Payment failed", {
+                description: "Please try again or contact support.",
+            });
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         const fetchData = async () => {

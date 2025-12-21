@@ -2,58 +2,72 @@
 
 import { validateRequest } from "@/lib/auth/session";
 import { db } from "@/db";
-import { users, user_quotas } from "@/db/schema";
+import { transactions, user_quotas } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import { createNotification } from "./notifications";
-import { sendEmail } from "@/lib/email/client";
-import { premiumWelcomeEmailTemplate } from "@/lib/email/templates";
 import { error } from "@/lib/logger";
+import { genTxRef, initializeTransaction } from "@/lib/payment/chapa/client";
 
 export async function buyPremium() {
     const { user } = await validateRequest();
     if (!user) throw new Error("Unauthorized");
 
     try {
-        const expiryDate = new Date();
-        expiryDate.setMonth(expiryDate.getMonth() + 1); // 1 month subscription
+        const tx_ref = await genTxRef({ prefix: "CH", size: 15 });
+        const amount = "1498.5"; // Fixed price for premium
+        const currency = "ETB";
 
-        await db
-            .update(users)
-            .set({
-                subscription_status: "pro",
-                subscription_expiry: expiryDate,
-            })
-            .where(eq(users.user_id, user.user_id));
-
-        // Create notification
-        await createNotification({
-            userId: user.user_id,
-            eventType: "subscription",
-            message:
-                "Welcome to CourseHub Premium! You now have unlimited AI access and increased storage.",
-            link: "/dashboard/settings",
+        console.log("Initializing Chapa payment:", {
+            tx_ref,
+            amount,
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
         });
 
-        // Send email
-        if (user.email) {
-            const displayName =
-                user.first_name || user.email.split("@")[0] || "Student";
-            await sendEmail({
-                to: user.email,
-                subject: "Welcome to CourseHub Premium!",
-                text: `Hi ${displayName},\n\nWelcome to CourseHub Premium! You now have unlimited AI access and increased storage. Manage your subscription at /dashboard/settings\n\nThanks,\nCourseHub Team`,
-                html: premiumWelcomeEmailTemplate(displayName),
-            });
+        // Save transaction to DB
+        await db.insert(transactions).values({
+            user_id: user.user_id,
+            tx_ref,
+            amount: amount.toString(),
+            currency,
+            status: "pending",
+        });
+
+        const callback_url = `${process.env.NEXT_PUBLIC_APP_URL}/api/payments/chapa/webhook`;
+        const return_url = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings?payment=success&tx_ref=${tx_ref}`;
+
+        const response = await initializeTransaction({
+            first_name: user.first_name || "User",
+            last_name: user.last_name || "Student",
+            email: user.email,
+            amount: amount.toString(),
+            currency,
+            tx_ref,
+            callback_url,
+            return_url,
+        });
+
+        if (response.status === "success" && response.data?.checkout_url) {
+            return {
+                success: true,
+                checkout_url: response.data.checkout_url,
+                tx_ref,
+            };
+        } else {
+            return {
+                success: false,
+                message: response.message || "Failed to initialize payment",
+            };
         }
-
-        revalidatePath("/dashboard");
-        revalidatePath("/dashboard/settings");
-
-        return { success: true, message: "Successfully upgraded to Premium!" };
-    } catch (err) {
+    } catch (err: any) {
         error("buyPremium error:", err);
-        return { success: false, message: "Failed to upgrade subscription." };
+        return {
+            success: false,
+            message:
+                err.response?.data?.message ||
+                err.message ||
+                "Failed to initialize payment. Please try again later.",
+        };
     }
 }
 

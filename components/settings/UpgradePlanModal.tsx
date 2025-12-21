@@ -26,14 +26,11 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
         setIsUpgrading(true);
         try {
             const res = await buyPremium();
-            if (res.success) {
-                toast.success("Successfully upgraded to Premium!", {
-                    description:
-                        "You now have unlimited AI generations and priority support.",
-                });
-                onClose();
+            if (res.success && res.checkout_url) {
+                toast.success("Redirecting to payment...");
+                window.location.href = res.checkout_url;
             } else {
-                toast.error(res.message || "Failed to upgrade");
+                toast.error(res.message || "Failed to initialize payment");
             }
         } catch {
             toast.error("An error occurred during upgrade");

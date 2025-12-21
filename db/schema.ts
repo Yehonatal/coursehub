@@ -296,3 +296,18 @@ export const user_quotas = pgTable("user_quotas", {
         .notNull(),
     last_reset_date: timestamp("last_reset_date").defaultNow().notNull(),
 });
+
+// ================= TRANSACTIONS =================
+export const transactions = pgTable("transactions", {
+    transaction_id: uuid("transaction_id").defaultRandom().primaryKey(),
+    user_id: uuid("user_id")
+        .notNull()
+        .references(() => users.user_id, { onDelete: "cascade" }),
+    tx_ref: varchar("tx_ref", { length: 100 }).notNull().unique(),
+    amount: varchar("amount", { length: 20 }).notNull(),
+    currency: varchar("currency", { length: 10 }).default("ETB").notNull(),
+    status: varchar("status", { length: 20 }).default("pending").notNull(), // pending, completed, failed
+    payment_method: varchar("payment_method", { length: 50 }),
+    created_at: timestamp("created_at").defaultNow().notNull(),
+    updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
