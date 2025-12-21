@@ -2,7 +2,7 @@
 import { getCurrentUser } from "@/lib/auth/session";
 import { db } from "@/db";
 import { users, resources } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql, desc } from "drizzle-orm";
 import { generateStudyNotes } from "@/lib/ai/summary";
 import { generateFlashcards } from "@/lib/ai/flashcard";
 import { generateKnowledgeTree } from "@/lib/ai/knowledgetree";
@@ -124,13 +124,14 @@ export async function sendChatMessage(
         await incrementQuota(user.user_id, "chat");
 
         return text;
-    }).catch((err: any) => {
+    }).catch((err: unknown) => {
         error("Error sending chat message:", err);
+        const e = err as { message?: string; status?: number };
         if (
-            err.message?.includes("429") ||
-            err.status === 429 ||
-            err.message?.includes("503") ||
-            err.status === 503
+            e.message?.includes("429") ||
+            e.status === 429 ||
+            e.message?.includes("503") ||
+            e.status === 503
         ) {
             throw new Error("RATE_LIMIT_EXCEEDED");
         }
@@ -159,7 +160,7 @@ export async function createChatSession(resourceId?: string, title?: string) {
 
 export async function appendChatMessage(
     sessionId: string,
-    message: { role: string; text: string; type?: string; meta?: any }
+    message: { role: string; text: string; type?: string; meta?: unknown }
 ) {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
@@ -215,9 +216,8 @@ export async function listUserSessions(
     await connectMongo();
     const Session = getAIChatSessionsModel();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: any = { userId: user.user_id };
-    if (options.savedOnly) query.saved = true;
+    const query: Record<string, unknown> = { userId: user.user_id };
+    if (options.savedOnly) query["saved"] = true;
 
     const sessions = await Session.find(query)
         .sort({ updatedAt: -1 })
@@ -268,9 +268,11 @@ export async function listUserGenerations(
     await connectMongo();
     const Generation = getAIGenerationsModel();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: any = { userId: user.user_id, saved: true };
-    if (options.type) query.generationType = options.type;
+    const query: Record<string, unknown> = {
+        userId: user.user_id,
+        saved: true,
+    };
+    if (options.type) query["generationType"] = options.type;
 
     const generations = await Generation.find(query)
         .sort({ createdAt: -1 })
@@ -289,7 +291,7 @@ export async function getResourceGenerations(resourceId: string) {
 
     // If user is not logged in or is free tier, they can only see their own generations
     // (which would be none since they can't save, but for safety)
-    const query: Record<string, any> = {
+    const query: Record<string, unknown> = {
         resourceId: resourceId,
         saved: true,
     };
@@ -326,7 +328,7 @@ export async function getUserProfileStats() {
     await connectMongo();
     const Generation = getAIGenerationsModel();
 
-    // Aggregation for counts by type
+    // Aggregation for counts by type (saved generations)
     const typeStats = await Generation.aggregate([
         { $match: { userId: user.user_id, saved: true } },
         { $group: { _id: "$generationType", count: { $sum: 1 } } },
@@ -341,7 +343,21 @@ export async function getUserProfileStats() {
     const allResources = await db.query.resources.findMany();
 
     // Format stats
-    const stats = {
+    const stats: {
+        notes: number;
+        flashcards: number;
+        trees: number;
+        uploads: number;
+        totalResources: number;
+        contributor?: {
+            uploads: number;
+            rank: number;
+            totalContributors: number;
+            percentile: number;
+            displayPercent: number;
+            isTop: boolean;
+        };
+    } = {
         notes: 0,
         flashcards: 0,
         trees: 0,
@@ -354,6 +370,80 @@ export async function getUserProfileStats() {
         if (stat._id === "flashcards") stats.flashcards = stat.count;
         if (stat._id === "tree") stats.trees = stat.count;
     });
+
+    // Compute contributor percentile (per-university when available)
+    try {
+        const filter = user.university
+            ? eq(resources.university, user.university)
+            : undefined;
+
+        const contributors = await db
+            .select({
+                uploader_id: resources.uploader_id,
+                uploads: sql<number>`count(*)`,
+            })
+            .from(resources)
+            .where(filter)
+            .groupBy(resources.uploader_id)
+            .orderBy(desc(sql`count(*)`));
+
+        // Strongly type DB rows
+        type ContributorRow = { uploader_id: string; uploads: number | string };
+        const contributorRows = contributors as ContributorRow[];
+
+        // Normalize contributor rows once
+        const normalized = contributorRows.map((c) => ({
+            uploader_id: c.uploader_id,
+            uploads: Number(c.uploads),
+        }));
+
+        const totalContributors = normalized.length;
+        if (totalContributors === 0) {
+            // No contributors to rank; leave stats as-is
+        } else {
+            // Rank calculation
+            const userUploads = stats.uploads;
+            const higherCount = normalized.filter(
+                (c) => c.uploads > userUploads
+            ).length;
+
+            const rank = higherCount + 1;
+
+            // Standard percentile (0–100, higher is better)
+            const percentile =
+                totalContributors === 1
+                    ? 100
+                    : ((totalContributors - rank) / (totalContributors - 1)) *
+                      100;
+
+            // Leaderboard-style position (1–100, lower is better)
+            let displayPercent = Math.ceil((rank / totalContributors) * 100);
+            if (totalContributors === 1) {
+                displayPercent = 1;
+            } else {
+                displayPercent = Math.ceil((rank / totalContributors) * 100);
+            }
+
+            // Top 10% based on rank (stable, no rounding issues)
+            const isTop = rank <= Math.ceil(totalContributors * 0.1);
+
+            // Ensure correct upload count
+            const found = normalized.find(
+                (c) => c.uploader_id === user.user_id
+            );
+
+            stats.contributor = {
+                uploads: found?.uploads ?? userUploads,
+                rank,
+                totalContributors,
+                percentile: Math.round(percentile),
+                displayPercent,
+                isTop,
+            };
+        }
+    } catch (err) {
+        error("Error computing contributor stats:", err);
+    }
 
     return stats;
 }
