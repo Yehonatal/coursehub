@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { resources } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { eq, sql } from "drizzle-orm";
+import { error } from "@/lib/logger";
 
 export async function trackResourceView(resourceId: string, _userId?: string) {
     // Track view in database (only counter now)
@@ -16,7 +17,7 @@ export async function trackResourceView(resourceId: string, _userId?: string) {
             .where(eq(resources.resource_id, resourceId));
         revalidatePath(`/resources/${resourceId}`);
     } catch (err) {
-        console.error("Failed to track view:", err);
+        error("Failed to track view:", err);
     }
 }
 
@@ -33,6 +34,6 @@ export async function trackResourceDownload(
             .where(eq(resources.resource_id, resourceId));
         revalidatePath(`/resources/${resourceId}`);
     } catch (err) {
-        console.error("Failed to track download:", err);
+        error("Failed to track download:", err);
     }
 }

@@ -2,11 +2,13 @@
 
 import { db } from "@/db";
 import { universities, users, resources, ratings, comments } from "@/db/schema";
-import { eq, and, desc, sql, count, avg } from "drizzle-orm";
+import { eq, and, desc, sql, count, or, ilike } from "drizzle-orm";
 import { uploadFile } from "@/lib/storage/upload";
+
 import type { ActionResponse } from "@/app/actions/auth";
 import { revalidatePath } from "next/cache";
-import { error } from "@/lib/logger";
+import { debug, error } from "@/lib/logger";
+import { slugify } from "@/utils/helpers";
 
 export async function getUniversityBySlug(slug: string) {
     try {
@@ -25,33 +27,31 @@ export async function getUniversityBySlug(slug: string) {
 
 export async function getUniversityStats(universityId: number) {
     try {
-        // Count students
-        const [studentCount] = await db
-            .select({ count: count() })
-            .from(users)
-            .where(eq(users.university_id, universityId));
-
-        // Count total resources
-        const [resourceCount] = await db
-            .select({ count: count() })
-            .from(resources)
-            .where(eq(resources.university_id, universityId));
-
-        // Count verified resources
-        const [verifiedCount] = await db
-            .select({ count: count() })
-            .from(resources)
-            .where(
-                and(
-                    eq(resources.university_id, universityId),
-                    eq(resources.is_verified, true)
-                )
-            );
+        // Parallelize counts
+        const [studentCount, resourceCount, verifiedCount] = await Promise.all([
+            db
+                .select({ count: count() })
+                .from(users)
+                .where(eq(users.university_id, universityId)),
+            db
+                .select({ count: count() })
+                .from(resources)
+                .where(eq(resources.university_id, universityId)),
+            db
+                .select({ count: count() })
+                .from(resources)
+                .where(
+                    and(
+                        eq(resources.university_id, universityId),
+                        eq(resources.is_verified, true)
+                    )
+                ),
+        ]);
 
         return {
-            students: studentCount.count,
-            resources: resourceCount.count,
-            verified: verifiedCount.count,
+            students: studentCount[0].count,
+            resources: resourceCount[0].count,
+            verified: verifiedCount[0].count,
         };
     } catch (err) {
         error("Error fetching university stats:", err);
@@ -145,7 +145,7 @@ export async function updateUniversity(
         const logoFile = formData.get("logo") as File | null;
         const bannerFile = formData.get("banner") as File | null;
 
-        console.log("Updating university:", {
+        debug("Updating university:", {
             universityId,
             hasLogo: !!(logoFile && logoFile.size > 0),
             hasBanner: !!(bannerFile && bannerFile.size > 0),
@@ -183,12 +183,108 @@ export async function updateUniversity(
             .set(updateData)
             .where(eq(universities.university_id, universityId));
 
-        console.log("University updated successfully in DB");
+        debug("University updated successfully in DB");
 
         revalidatePath("/", "layout");
         return { success: true, message: "University updated successfully" };
     } catch (err) {
         error("Error updating university:", err);
         return { success: false, message: "Failed to update university" };
+    }
+}
+
+export async function searchUniversities(query: string, limit: number = 5) {
+    if (!query) return [];
+    try {
+        return await db
+            .select()
+            .from(universities)
+            .where(
+                or(
+                    ilike(universities.name, `%${query}%`),
+                    ilike(universities.description, `%${query}%`)
+                )
+            )
+            .limit(limit);
+    } catch (err) {
+        error("Error searching universities:", err);
+        return [];
+    }
+}
+
+export async function getUniversities() {
+    try {
+        return await db
+            .select({
+                university_id: universities.university_id,
+                name: universities.name,
+                slug: universities.slug,
+            })
+            .from(universities)
+            .orderBy(universities.name);
+    } catch (err) {
+        error("Error fetching all universities:", err);
+        return [];
+    }
+}
+
+export async function createUniversity(
+    name: string
+): Promise<ActionResponse & { university?: any }> {
+    try {
+        const slug = slugify(name);
+
+        const [newUniversity] = await db
+            .insert(universities)
+            .values({
+                name,
+                slug,
+                is_official: false,
+            })
+            .returning();
+
+        return {
+            success: true,
+            message: "University created successfully",
+            university: newUniversity,
+        };
+    } catch (err) {
+        error("Error creating university:", err);
+        return { success: false, message: "Failed to create university" };
+    }
+}
+
+export async function ensureUniversity(
+    name: string
+): Promise<{ university_id: number | null; name: string | null }> {
+    if (!name) return { university_id: null, name: null };
+
+    try {
+        const trimmedName = name.trim();
+        const existing = await db
+            .select()
+            .from(universities)
+            .where(eq(universities.name, trimmedName))
+            .limit(1);
+
+        if (existing.length > 0) {
+            return {
+                university_id: existing[0].university_id,
+                name: existing[0].name,
+            };
+        }
+
+        const result = await createUniversity(trimmedName);
+        if (result.success && result.university) {
+            return {
+                university_id: result.university.university_id,
+                name: result.university.name,
+            };
+        }
+
+        return { university_id: null, name: null };
+    } catch (err) {
+        error("ensureUniversity failed:", err);
+        return { university_id: null, name: null };
     }
 }

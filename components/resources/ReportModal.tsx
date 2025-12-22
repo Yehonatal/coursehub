@@ -13,6 +13,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { api } from "@/lib/api-client";
 
 interface ReportModalProps {
     isOpen: boolean;
@@ -64,15 +65,9 @@ export function ReportModal({ isOpen, onClose, resourceId }: ReportModalProps) {
             const fullReason =
                 reason === "Other" ? details : `${reason}: ${details}`;
 
-            const res = await fetch(`/api/resources/${resourceId}/report`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ reason: fullReason }),
-            });
+            const json = await api.resources.report(resourceId, fullReason);
 
-            const json = await res.json();
-
-            if (!res.ok) {
+            if (!json.success) {
                 throw new Error(json.message || "Failed to submit report");
             }
 

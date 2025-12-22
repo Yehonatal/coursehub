@@ -1,8 +1,8 @@
 "use server";
 import { getCurrentUser } from "@/lib/auth/session";
 import { db } from "@/db";
-import { user_quotas, users, resources } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { users, resources } from "@/db/schema";
+import { eq, sql, desc } from "drizzle-orm";
 import { generateStudyNotes } from "@/lib/ai/summary";
 import { generateFlashcards } from "@/lib/ai/flashcard";
 import { generateKnowledgeTree } from "@/lib/ai/knowledgetree";
@@ -14,130 +14,9 @@ import {
     getAIChatSessionsModel,
     getAIGenerationsModel,
 } from "@/lib/mongodb/models";
-
-const FREE_GENERATIONS_LIMIT = 5;
-const FREE_CHATS_LIMIT = 10;
-const PRO_GENERATIONS_LIMIT = 1000;
-const PRO_CHATS_LIMIT = 2000;
-
-async function withRetry<T>(
-    fn: () => Promise<T>,
-    retries = 2,
-    delay = 1000
-): Promise<T> {
-    try {
-        return await fn();
-    } catch (error: any) {
-        const isRetryable =
-            error.message?.includes("503") ||
-            error.status === 503 ||
-            error.message?.includes("overloaded") ||
-            error.message?.includes("RATE_LIMIT_EXCEEDED");
-
-        if (retries > 0 && isRetryable) {
-            console.log(
-                `AI model overloaded or rate limited, retrying... (${retries} left)`
-            );
-            await new Promise((resolve) => setTimeout(resolve, delay));
-            return withRetry(fn, retries - 1, delay * 2);
-        }
-        throw error;
-    }
-}
-
-async function checkQuota(userId: string, type: "generation" | "chat") {
-    const user = await db.query.users.findFirst({
-        where: eq(users.user_id, userId),
-    });
-
-    if (!user) throw new Error("User not found");
-
-    const isPremium =
-        user.subscription_status === "active" ||
-        user.subscription_status === "pro";
-
-    const generationLimit = isPremium
-        ? PRO_GENERATIONS_LIMIT
-        : FREE_GENERATIONS_LIMIT;
-    const chatLimit = isPremium ? PRO_CHATS_LIMIT : FREE_CHATS_LIMIT;
-
-    // Check quota
-    let quota = await db.query.user_quotas.findFirst({
-        where: eq(user_quotas.user_id, userId),
-    });
-
-    const now = new Date();
-    const isNewDay =
-        quota &&
-        (now.getUTCDate() !== quota.last_reset_date.getUTCDate() ||
-            now.getUTCMonth() !== quota.last_reset_date.getUTCMonth() ||
-            now.getUTCFullYear() !== quota.last_reset_date.getUTCFullYear());
-
-    if (!quota || isNewDay) {
-        // Create or reset quota record
-        await db
-            .insert(user_quotas)
-            .values({
-                user_id: userId,
-                ai_generations_count: 0,
-                ai_chat_count: 0,
-                last_reset_date: now,
-            })
-            .onConflictDoUpdate({
-                target: user_quotas.user_id,
-                set: {
-                    ai_generations_count: 0,
-                    ai_chat_count: 0,
-                    last_reset_date: now,
-                },
-            });
-
-        quota = {
-            user_id: userId,
-            ai_generations_count: 0,
-            ai_chat_count: 0,
-            storage_usage: quota?.storage_usage || 0,
-            last_reset_date: now,
-        };
-    }
-
-    if (
-        type === "generation" &&
-        quota.ai_generations_count >= generationLimit
-    ) {
-        throw new Error(
-            `${
-                isPremium ? "Premium" : "Free"
-            } tier generation limit reached (${generationLimit}/day). Please try again tomorrow.`
-        );
-    }
-
-    if (type === "chat" && quota.ai_chat_count >= chatLimit) {
-        throw new Error(
-            `${
-                isPremium ? "Premium" : "Free"
-            } tier chat limit reached (${chatLimit}/day). Please try again tomorrow.`
-        );
-    }
-
-    return true;
-}
-
-async function incrementQuota(userId: string, type: "generation" | "chat") {
-    await db
-        .update(user_quotas)
-        .set({
-            ai_generations_count:
-                type === "generation"
-                    ? sql`${user_quotas.ai_generations_count} + 1`
-                    : undefined,
-            ai_chat_count:
-                type === "chat"
-                    ? sql`${user_quotas.ai_chat_count} + 1`
-                    : undefined,
-        })
-        .where(eq(user_quotas.user_id, userId));
-}
+import { error } from "@/lib/logger";
+import { checkQuota, incrementQuota } from "@/lib/ai/quota";
+import { withRetry } from "@/utils/helpers";
 
 export async function createStudyNotes(
     content: string,
@@ -245,17 +124,18 @@ export async function sendChatMessage(
         await incrementQuota(user.user_id, "chat");
 
         return text;
-    }).catch((error: any) => {
-        console.error("Error sending chat message:", error);
+    }).catch((err: unknown) => {
+        error("Error sending chat message:", err);
+        const e = err as { message?: string; status?: number };
         if (
-            error.message?.includes("429") ||
-            error.status === 429 ||
-            error.message?.includes("503") ||
-            error.status === 503
+            e.message?.includes("429") ||
+            e.status === 429 ||
+            e.message?.includes("503") ||
+            e.status === 503
         ) {
             throw new Error("RATE_LIMIT_EXCEEDED");
         }
-        throw error;
+        throw err;
     });
 }
 
@@ -280,7 +160,7 @@ export async function createChatSession(resourceId?: string, title?: string) {
 
 export async function appendChatMessage(
     sessionId: string,
-    message: { role: string; text: string; type?: string; meta?: any }
+    message: { role: string; text: string; type?: string; meta?: unknown }
 ) {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
@@ -336,9 +216,8 @@ export async function listUserSessions(
     await connectMongo();
     const Session = getAIChatSessionsModel();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: any = { userId: user.user_id };
-    if (options.savedOnly) query.saved = true;
+    const query: Record<string, unknown> = { userId: user.user_id };
+    if (options.savedOnly) query["saved"] = true;
 
     const sessions = await Session.find(query)
         .sort({ updatedAt: -1 })
@@ -365,26 +244,8 @@ export async function saveGeneration(payload: {
     const user = await getCurrentUser();
     if (!user) throw new Error("Unauthorized");
 
-    // Check if user is premium
-    const userData = await db.query.users.findFirst({
-        where: eq(users.user_id, user.user_id),
-    });
-
-    if (
-        userData?.subscription_status !== "pro" &&
-        userData?.subscription_status !== "active"
-    ) {
-        // Free users can save up to 5 generations per day
-        const quota = await db.query.user_quotas.findFirst({
-            where: eq(user_quotas.user_id, user.user_id),
-        });
-
-        if (quota && quota.ai_generations_count >= FREE_GENERATIONS_LIMIT) {
-            throw new Error(
-                `Daily save limit reached (${FREE_GENERATIONS_LIMIT}/day). Please upgrade to continue.`
-            );
-        }
-    }
+    // Check quota (this handles both premium and free limits)
+    await checkQuota(user.user_id, "generation");
 
     await connectMongo();
     const Generation = getAIGenerationsModel();
@@ -407,9 +268,11 @@ export async function listUserGenerations(
     await connectMongo();
     const Generation = getAIGenerationsModel();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: any = { userId: user.user_id, saved: true };
-    if (options.type) query.generationType = options.type;
+    const query: Record<string, unknown> = {
+        userId: user.user_id,
+        saved: true,
+    };
+    if (options.type) query["generationType"] = options.type;
 
     const generations = await Generation.find(query)
         .sort({ createdAt: -1 })
@@ -428,7 +291,7 @@ export async function getResourceGenerations(resourceId: string) {
 
     // If user is not logged in or is free tier, they can only see their own generations
     // (which would be none since they can't save, but for safety)
-    const query: Record<string, any> = {
+    const query: Record<string, unknown> = {
         resourceId: resourceId,
         saved: true,
     };
@@ -465,7 +328,7 @@ export async function getUserProfileStats() {
     await connectMongo();
     const Generation = getAIGenerationsModel();
 
-    // Aggregation for counts by type
+    // Aggregation for counts by type (saved generations)
     const typeStats = await Generation.aggregate([
         { $match: { userId: user.user_id, saved: true } },
         { $group: { _id: "$generationType", count: { $sum: 1 } } },
@@ -480,7 +343,21 @@ export async function getUserProfileStats() {
     const allResources = await db.query.resources.findMany();
 
     // Format stats
-    const stats = {
+    const stats: {
+        notes: number;
+        flashcards: number;
+        trees: number;
+        uploads: number;
+        totalResources: number;
+        contributor?: {
+            uploads: number;
+            rank: number;
+            totalContributors: number;
+            percentile: number;
+            displayPercent: number;
+            isTop: boolean;
+        };
+    } = {
         notes: 0,
         flashcards: 0,
         trees: 0,
@@ -493,6 +370,80 @@ export async function getUserProfileStats() {
         if (stat._id === "flashcards") stats.flashcards = stat.count;
         if (stat._id === "tree") stats.trees = stat.count;
     });
+
+    // Compute contributor percentile (per-university when available)
+    try {
+        const filter = user.university
+            ? eq(resources.university, user.university)
+            : undefined;
+
+        const contributors = await db
+            .select({
+                uploader_id: resources.uploader_id,
+                uploads: sql<number>`count(*)`,
+            })
+            .from(resources)
+            .where(filter)
+            .groupBy(resources.uploader_id)
+            .orderBy(desc(sql`count(*)`));
+
+        // Strongly type DB rows
+        type ContributorRow = { uploader_id: string; uploads: number | string };
+        const contributorRows = contributors as ContributorRow[];
+
+        // Normalize contributor rows once
+        const normalized = contributorRows.map((c) => ({
+            uploader_id: c.uploader_id,
+            uploads: Number(c.uploads),
+        }));
+
+        const totalContributors = normalized.length;
+        if (totalContributors === 0) {
+            // No contributors to rank; leave stats as-is
+        } else {
+            // Rank calculation
+            const userUploads = stats.uploads;
+            const higherCount = normalized.filter(
+                (c) => c.uploads > userUploads
+            ).length;
+
+            const rank = higherCount + 1;
+
+            // Standard percentile (0–100, higher is better)
+            const percentile =
+                totalContributors === 1
+                    ? 100
+                    : ((totalContributors - rank) / (totalContributors - 1)) *
+                      100;
+
+            // Leaderboard-style position (1–100, lower is better)
+            let displayPercent = Math.ceil((rank / totalContributors) * 100);
+            if (totalContributors === 1) {
+                displayPercent = 1;
+            } else {
+                displayPercent = Math.ceil((rank / totalContributors) * 100);
+            }
+
+            // Top 10% based on rank (stable, no rounding issues)
+            const isTop = rank <= Math.ceil(totalContributors * 0.1);
+
+            // Ensure correct upload count
+            const found = normalized.find(
+                (c) => c.uploader_id === user.user_id
+            );
+
+            stats.contributor = {
+                uploads: found?.uploads ?? userUploads,
+                rank,
+                totalContributors,
+                percentile: Math.round(percentile),
+                displayPercent,
+                isTop,
+            };
+        }
+    } catch (err) {
+        error("Error computing contributor stats:", err);
+    }
 
     return stats;
 }

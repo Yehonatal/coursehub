@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import { cache } from "react";
 import * as jose from "jose";
 import { db } from "@/db";
 import { users } from "@/db/schema";
@@ -57,7 +56,7 @@ export async function createSession(userId: string) {
     }
 }
 
-export const getSession = cache(async () => {
+export async function getSession() {
     try {
         const cookieStore = await cookies();
         const token = cookieStore.get("auth_token")?.value;
@@ -97,7 +96,7 @@ export const getSession = cache(async () => {
         error("getSession failed:", err);
         return null;
     }
-});
+}
 
 export async function deleteSession() {
     const cookieStore = await cookies();
@@ -105,7 +104,7 @@ export async function deleteSession() {
 }
 
 // Backward compatibility wrapper for existing code
-export const validateRequest = cache(async () => {
+export async function validateRequest() {
     const session = await getSession();
     if (!session) return { user: null, session: null };
 
@@ -159,7 +158,7 @@ export const validateRequest = cache(async () => {
         error("Error fetching user details:", err);
         return { user: null, session: null };
     }
-});
+}
 
 export async function invalidateSession() {
     await deleteSession();

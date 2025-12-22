@@ -49,8 +49,8 @@ export function DeleteResourceModal({
             const result = await deleteResource(resourceId);
             if (result.success) {
                 toast.success("Resource deleted successfully");
+                router.push("/dashboard");
                 onClose();
-                router.push("/dashboard/resources");
             } else {
                 toast.error(result.message || "Failed to delete resource");
             }

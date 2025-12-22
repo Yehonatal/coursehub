@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { error } from "@/lib/logger";
+import { api } from "@/lib/api-client";
 
 interface RatingData {
     average: number;
@@ -25,8 +26,7 @@ export function useResourceRating(
 
         const fetchRating = async () => {
             try {
-                const res = await fetch(`/api/resources/${resourceId}/rating`);
-                const json = await res.json();
+                const json = await api.resources.getRating(resourceId);
                 if (json.success && json.data) {
                     setRatingData(json.data);
                 }
@@ -51,18 +51,9 @@ export function useResourceRating(
             }));
 
             try {
-                const res = await fetch(`/api/resources/${resourceId}/rating`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ value }),
-                });
+                const json = await api.resources.rate(resourceId, value);
 
-                if (res.status === 401) {
-                    window.location.href = "/auth/login";
-                    return;
-                }
-
-                const json = await res.json();
+                if (json.status === 401) return;
                 if (!json.success) throw new Error(json.message);
 
                 setRatingData({

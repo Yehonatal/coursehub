@@ -19,5 +19,3 @@ export const supabase: SupabaseClient | null =
 
 export const supabaseAdmin: SupabaseClient | null =
     url && serviceKey ? createClient(url, serviceKey) : null;
-
-export default { supabase, supabaseAdmin };

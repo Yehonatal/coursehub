@@ -4,19 +4,29 @@ import { db } from "@/db";
 import { comments, resources } from "@/db/schema";
 import { validateRequest } from "@/lib/auth/session";
 import { eq } from "drizzle-orm";
-import { createNotification } from "@/app/actions/notifications";
+import { error } from "@/lib/logger";
+import { notifyResourceOwner, notifyCommentAuthor } from "@/lib/notifications";
+import { isValidUUID } from "@/utils/helpers";
 
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
+
+    if (!isValidUUID(id)) {
+        return NextResponse.json(
+            { success: false, message: "Invalid resource ID" },
+            { status: 400 }
+        );
+    }
+
     try {
         const { user } = await validateRequest();
         const rows = await getResourceComments(id, user?.user_id);
         return NextResponse.json({ success: true, data: rows });
     } catch (err) {
-        console.error("GET comments failed:", err);
+        error("GET comments failed:", err);
         return NextResponse.json(
             { success: false, message: "Failed to fetch comments" },
             { status: 500 }
@@ -29,6 +39,14 @@ export async function POST(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
+
+    if (!isValidUUID(id)) {
+        return NextResponse.json(
+            { success: false, message: "Invalid resource ID" },
+            { status: 400 }
+        );
+    }
+
     const { user } = await validateRequest();
     if (!user) {
         return NextResponse.json(
@@ -107,12 +125,13 @@ export async function POST(
             .where(eq(resources.resource_id, id));
 
         if (resource && resource.uploader_id !== user.user_id) {
-            await createNotification({
-                userId: resource.uploader_id,
-                eventType: "comment",
-                message: `${user.first_name} ${user.last_name} commented on your resource: ${resource.title}`,
-                link: `/resources/${id}`,
-            });
+            await notifyResourceOwner(
+                resource.uploader_id,
+                id,
+                resource.title,
+                `${user.first_name} ${user.last_name}`,
+                "comment"
+            );
         }
 
         // If it's a reply, notify the parent comment author
@@ -127,12 +146,12 @@ export async function POST(
                 parentComment.user_id !== user.user_id &&
                 parentComment.user_id !== resource?.uploader_id
             ) {
-                await createNotification({
-                    userId: parentComment.user_id,
-                    eventType: "reply",
-                    message: `${user.first_name} ${user.last_name} replied to your comment on: ${resource?.title}`,
-                    link: `/resources/${id}`,
-                });
+                await notifyCommentAuthor(
+                    parentComment.user_id,
+                    id,
+                    resource?.title || "Resource",
+                    `${user.first_name} ${user.last_name}`
+                );
             }
         }
 
@@ -141,7 +160,7 @@ export async function POST(
             { status: 201 }
         );
     } catch (err) {
-        console.error("Create comment failed:", err);
+        error("Create comment failed:", err);
         return NextResponse.json(
             { success: false, message: "Failed to create comment" },
             { status: 500 }

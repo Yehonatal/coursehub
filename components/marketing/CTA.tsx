@@ -10,8 +10,8 @@ export function CTA() {
                         Ready to elevate your academic performance?
                     </h2>
                     <p className="text-primary-foreground/80 text-lg md:text-xl max-w-2xl mx-auto">
-                        Join thousands of students and educators on CourseHub
-                        today.
+                        Join our community of students and educators on
+                        CourseHub today.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                         <Link href="/register">

@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-    HandDrawnCircle,
-    HandDrawnUnderline,
-} from "@/components/ui/decorations";
+import { HandDrawnCircle } from "@/components/ui/decorations";
 import { BookOpen } from "lucide-react";
 import Image from "next/image";
 
@@ -11,26 +8,25 @@ export function Hero() {
     return (
         <section className="w-full py-8 sm:py-12 md:py-16 lg:py-24 xl:py-32 bg-card">
             <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
-                <div className="grid gap-8 sm:gap-10 md:gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+                <div className="grid gap-10 sm:gap-10 md:gap-12 lg:grid-cols-2 lg:gap-32 items-center">
                     <div
                         className="space-y-4 sm:space-y-6 md:space-y-8"
                         data-aos="fade-right"
                     >
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-medium tracking-tight text-foreground leading-[1.1]">
-                            A centralized,
-                            <HandDrawnUnderline className="text-primary">
-                                adaptive
-                            </HandDrawnUnderline>{" "}
-                            learning ecosystem for{" "}
+                            Centralized,university aligned Resource hub for{" "}
                             <HandDrawnCircle className="text-primary -rotate-2">
-                                everyone.
+                                <span className="font-extrabold">
+                                    Everyone.
+                                </span>
                             </HandDrawnCircle>
                         </h1>
                         <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed">
-                            Access a vast library of resources tagged by course,
-                            semester, and university. Leverage AI to generate
-                            study notes, flashcards, and knowledge trees
-                            instantly.
+                            Access a community‑curated library of resources
+                            tagged by course, semester, and university. Use our
+                            AI assistant to generate study notes, flashcards,
+                            and knowledge trees derived from available
+                            materials.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-3 max-w-md">
@@ -39,7 +35,7 @@ export function Hero() {
                                     size="lg"
                                     className="h-12 px-8 bg-primary hover:bg-primary/90 text-primary-foreground w-full"
                                 >
-                                    Start Learning Now
+                                    Start Sharing Now
                                 </Button>
                             </Link>
                             <Link
@@ -55,10 +51,17 @@ export function Hero() {
                                 </Button>
                             </Link>
                         </div>
+
+                        <p className="text-xs text-muted-foreground/70 max-w-xl mt-2">
+                            AI-generated study aids are for learning support and
+                            may contain inaccuracies—please verify against
+                            official course materials.
+                        </p>
+
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             <BookOpen className="h-4 w-4" />
                             <span>
-                                Join thousands of students and educators
+                                Join our community of students and educators
                             </span>
                         </div>
                     </div>

@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { validateRequest } from "@/lib/auth/session";
 import { comments, comment_reactions } from "@/db/schema";
 import { eq, and, count } from "drizzle-orm";
+import { error } from "@/lib/logger";
 
 export async function POST(
     request: Request,
@@ -67,13 +68,11 @@ export async function POST(
                     .where(eq(comment_reactions.reaction_id, e.id));
             }
         } else {
-            await db
-                .insert(comment_reactions)
-                .values({
-                    comment_id: Number(commentId),
-                    user_id: user.user_id,
-                    type,
-                });
+            await db.insert(comment_reactions).values({
+                comment_id: Number(commentId),
+                user_id: user.user_id,
+                type,
+            });
         }
 
         // return counts
@@ -126,7 +125,7 @@ export async function POST(
             data: { likes: likeCount, dislikes: dislikeCount, userReaction },
         });
     } catch (err) {
-        console.error("React failed:", err);
+        error("React failed:", err);
         return NextResponse.json(
             { success: false, message: "Failed to react" },
             { status: 500 }

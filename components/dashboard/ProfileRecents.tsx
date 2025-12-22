@@ -5,7 +5,7 @@ import { RecentsList } from "@/components/dashboard/RecentsList";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { mapGenerationToRecentItem } from "@/lib/ai/mappers";
+import { mapGenerationToRecentItem } from "@/utils/mappers";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function ProfileRecents({ generations }: { generations: any[] }) {

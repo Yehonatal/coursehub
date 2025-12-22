@@ -12,7 +12,7 @@ const globalForDb = globalThis as unknown as {
 let client: postgres.Sql | undefined;
 
 if (connectionString) {
-    // Fix for Supabase Transaction Pooler: Ensure port 6543 is used
+    // Ensure port 6543 is used
     // This is necessary because port 5432 (Session Pooler) often times out in serverless environments
     // or is blocked in some networks, while port 6543 (Transaction Pooler) is designed for this.
     let url = connectionString;

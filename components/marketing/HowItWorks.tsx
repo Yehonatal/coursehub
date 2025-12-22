@@ -82,9 +82,10 @@ export function HowItWorks() {
                             AI Enhancement
                         </h3>
                         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xs">
-                            Transform static documents into dynamic study aids
-                            like flashcards and knowledge trees using our Gemini
-                            Studio integration.
+                            Use our AI assistant (Gemini Studio integration) to
+                            help transform documents into study aids like
+                            flashcards and knowledge trees; AI outputs should be
+                            verified against official course materials.
                         </p>
                     </div>
                 </div>

@@ -11,6 +11,9 @@ import { getUserStorageStats, StorageStats } from "@/app/actions/stats";
 import { getUserQuota } from "@/app/actions/subscription";
 import { cn } from "@/utils/cn";
 import { useUser } from "@/components/providers/UserProvider";
+import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import confetti from "canvas-confetti";
 
 interface BillingSectionProps {
     subscriptionStatus?: string;
@@ -28,6 +31,7 @@ export default function BillingSection({
     quota: initialQuota,
 }: BillingSectionProps) {
     const { user } = useUser();
+    const searchParams = useSearchParams();
     const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
     const [isPaymentsModalOpen, setIsPaymentsModalOpen] = useState(false);
     const [storageStats, setStorageStats] = useState<StorageStats | null>(null);
@@ -35,6 +39,27 @@ export default function BillingSection({
 
     const currentStatus = user?.subscription_status || initialStatus || "free";
     const currentExpiry = user?.subscription_expiry || initialExpiry;
+
+    useEffect(() => {
+        const paymentStatus = searchParams.get("payment");
+        if (paymentStatus === "success") {
+            toast.success("Payment successful!", {
+                description: "Your account has been upgraded to Premium.",
+            });
+
+            // Celebration!
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ["#FFD700", "#FFA500", "#FF4500"],
+            });
+        } else if (paymentStatus === "failed") {
+            toast.error("Payment failed", {
+                description: "Please try again or contact support.",
+            });
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -331,11 +356,12 @@ export default function BillingSection({
                             <Sparkles className="w-5 h-5 text-primary mt-0.5" />
                             <div className="space-y-1">
                                 <p className="text-xs font-bold text-primary uppercase tracking-wider">
-                                    Pro Tip
+                                    Premium Tip
                                 </p>
                                 <p className="text-xs text-muted-foreground leading-relaxed">
-                                    Upgrade to Pro for unlimited AI generations,
-                                    priority support, and advanced study tools.
+                                    Upgrade to Premium for unlimited AI
+                                    generations & & chats, 10GB cloud storage,
+                                    and advanced study tools.
                                 </p>
                             </div>
                         </div>

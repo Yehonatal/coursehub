@@ -114,7 +114,9 @@ describe("parseFile", () => {
             "application/pdf",
             "test.pdf"
         );
-        expect(result).toContain("Sorry, we couldn't parse your PDF right now");
+        expect(result).toContain(
+            "Sorry, we couldn't parse this resource right now"
+        );
 
         // Restore original mocks for subsequent tests
         vi.doMock("pdf-parse", () => {

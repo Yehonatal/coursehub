@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { HandDrawnBox } from "@/components/ui/decorations";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { UniversitySelect } from "@/components/common/UniversitySelect";
 
 const initialState: ActionResponse = {
     success: false,
@@ -112,34 +113,11 @@ export function RegisterForm() {
                         <Label htmlFor="university" className="text-foreground">
                             University
                         </Label>
-                        <div className="relative">
-                            <select
-                                id="university"
-                                name="university"
-                                required
-                                defaultValue=""
-                                className="flex h-11 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                <option value="" disabled>
-                                    Select University
-                                </option>
-                                <option value="aau">
-                                    Addis Ababa University
-                                </option>
-                                <option value="aastu">AASTU</option>
-                                <option value="astu">ASTU</option>
-                                <option value="jimma">Jimma University</option>
-                                <option value="haramaya">
-                                    Haramaya University
-                                </option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        {state?.errors?.university && (
-                            <p className="text-sm text-red-500">
-                                {state.errors.university[0]}
-                            </p>
-                        )}
+                        <UniversitySelect
+                            name="university"
+                            required
+                            error={state?.errors?.university?.[0]}
+                        />
                     </div>
                 </div>
 

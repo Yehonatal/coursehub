@@ -5,14 +5,14 @@
 CourseHub is an open-source, centralized adaptive learning platform designed for Ethiopian university students and educators. It centralizes curriculum-aligned resources, supports community moderation, and offers optional AI-powered study aids through the Gemini Studio API. The backend leverages Supabase for authentication, PostgreSQL database, and storage, while the frontend is built with Next.js and Tailwind CSS.
 
 ## Preview
+![Customization](./preview/customedesign.png)
+![Dashboard Preview](./preview/homepage.png)
+![AI Preview](./preview/ai.png)
+![Profile Preview](./preview/userpage.png)
+![Resource Page Preview](./preview/singleresourceview.png)
 
-![Dashboard Preview](./public/homepage.png)
-![AI Preview](./public/ai.png)
-![Profile Preview](./public/userpage.png)
-![Resource Page Preview](./public/singleresourceview.png)
-
-![Resources Preview](./public/resourcespage.png)
-![Community Preview](./public/universitypage.png)
+![Resources Preview](./preview/resourcespage.png)
+![Community Preview](./preview/universitypage.png)
 
 
 
@@ -53,6 +53,8 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-08: Allow users to download and view publicly available content.
 - [x] FR-08-01: Track and store download counts for each resource. 
 - [x] FR-09: Provide advanced search filtering using course codes, university, tags, and semester.
+    - **Live Global Search**: High-performance, debounced search in the header covering universities and resources. Features client-side caching to minimize database load.
+    - **Searchable University Selection**: Advanced combobox for registration and resource uploads with fuzzy matching and "Add New" functionality for missing entries.
 - [x] FR-10: Allow users to rate content on a 5-star scale.
 - [x] FR-11: Allow users to comment on content.
 - [x] FR-12: Allow users to report inappropriate or low-quality content.
@@ -84,15 +86,6 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-27: User settings to manage profile, notification preferences, and subscription details.
 - [x] FR-27-01: Allow users to change password, delete account, and manage linked payment methods.
 
-### Implemented (summary)
-
-- Authentication: registration, sign-in, session creation, sign-out. See `app/actions/auth.ts`, `components/auth/RegisterForm.tsx`, `components/auth/LoginForm.tsx`.
-- Email: verification & password reset flows (tokens, templates, Gmail/Nodemailer transport). See `lib/email/client.ts`, `lib/email/templates.ts`, and `app/api/verify-email/route.ts`.
-- UI feedback: Sonner toasts for verification success and unverified account warning (login flow). See `components/auth/LoginForm.tsx`.
-- Forgot / Reset password UI and logic: `app/(auth)/forgot-password/page.tsx` and `app/(auth)/reset-password/page.tsx`.
-- Removed temporary email test endpoint (`app/api/email/test`) and rely on real delivery or development logs.
-
----
 
 **Non-Functional Requirements (NFR)**
 - [ ] NFR-01: Respond to 90% of search and page-navigation requests within 3s under typical load (≤50 concurrent active users).
@@ -104,7 +97,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] NFR-07: All data in transit protected using HTTPS/TLS 1.2+.
 - [x] NFR-08: Store passwords as salted bcrypt hashes (work factor ≥ 12).
 - [ ] NFR-09: Default session persistence up to one week; “Remember me” up to four weeks.
-- [ ] NFR-10: Validate and sanitize all user inputs against SQLi, XSS, and similar vulnerabilities.
+- [x] NFR-10: Validate and sanitize all user inputs against SQLi, XSS, and similar vulnerabilities.
 
 ---
 
@@ -135,7 +128,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 #### Backend
 - **Database**: PostgreSQL (Supabase) + MongoDB (Analytics)
 - **ORM**: Drizzle ORM for type-safe queries
-- **Authentication**: Supabase Auth
+- **Authentication**: Supabase + custom auth
 - **Storage**: Supabase Storage
 - **AI**: Google Gemini Studio API
 

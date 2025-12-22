@@ -51,6 +51,14 @@ export function ProfileStats({
         flashcards: number;
         uploads: number;
         totalResources?: number;
+        contributor?: {
+            uploads: number;
+            rank: number;
+            totalContributors: number;
+            percentile: number;
+            displayPercent: number;
+            isTop: boolean;
+        };
     };
 }) {
     return (
@@ -65,10 +73,15 @@ export function ProfileStats({
                             Academic Repository
                         </h3>
                     </div>
-                    <div className="px-3 py-1.5 rounded-full bg-primary/5 text-xs font-bold text-primary flex items-center gap-2 uppercase tracking-wider border border-primary/10">
-                        <TrendingUp className="h-3.5 w-3.5" />
-                        Top 5% Contributor
-                    </div>
+                    {stats.contributor && stats.contributor.isTop ? (
+                        <div
+                            title={`Rank ${stats.contributor.rank} of ${stats.contributor.totalContributors}`}
+                            className="px-3 py-1.5 rounded-full bg-primary/5 text-xs font-bold text-primary flex items-center gap-2 uppercase tracking-wider border border-primary/10"
+                        >
+                            <TrendingUp className="h-3.5 w-3.5" />
+                            Top {stats.contributor.displayPercent}% Contributor
+                        </div>
+                    ) : null}
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 relative">

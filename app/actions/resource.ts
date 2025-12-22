@@ -1,6 +1,5 @@
 "use server";
 
-import { z } from "zod";
 import { db } from "@/db";
 import {
     resources,
@@ -16,6 +15,14 @@ import { createResource } from "@/lib/dal/resource-helpers";
 import type { ActionResponse } from "@/app/actions/auth";
 import { revalidatePath } from "next/cache";
 import { error, warn } from "@/lib/logger";
+import { ensureUniversity } from "@/app/actions/university";
+import { UploadResourceSchema } from "@/lib/schemas";
+import { parseTags } from "@/utils/parser";
+
+const initialActionState: ActionResponse = {
+    success: false,
+    message: "",
+};
 
 export async function verifyResource(
     resourceId: string
@@ -71,31 +78,6 @@ export async function verifyResource(
     }
 }
 
-const UploadResourceSchema = z.object({
-    title: z.string().trim().min(1).max(255),
-    courseCode: z.string().trim().min(1).max(20),
-    semester: z.string().trim().min(1).max(30),
-    university: z.string().trim().max(100).optional(),
-    description: z.string().trim().max(2000).optional(),
-    resourceType: z
-        .string()
-        .trim()
-        .optional()
-        .refine(
-            (v) => !v || ["slides", "notes", "exam", "assignment"].includes(v),
-            {
-                message: "Invalid resource type",
-            }
-        ),
-    tags: z.string().optional(), // comma-separated tags
-    isAi: z.string().optional(),
-});
-
-const initialActionState: ActionResponse = {
-    success: false,
-    message: "",
-};
-
 export async function uploadResource(
     _prevState: ActionResponse,
     formData: FormData
@@ -115,19 +97,20 @@ export async function uploadResource(
     const FREE_STORAGE_LIMIT = 100 * 1024 * 1024; // 100MB
     const PRO_STORAGE_LIMIT = 10 * 1024 * 1024 * 1024; // 10GB
 
-    const userData = await db.query.users.findFirst({
-        where: eq(users.user_id, user.user_id),
-    });
+    const [userData, quota] = await Promise.all([
+        db.query.users.findFirst({
+            where: eq(users.user_id, user.user_id),
+        }),
+        db.query.user_quotas.findFirst({
+            where: eq(user_quotas.user_id, user.user_id),
+        }),
+    ]);
 
     const isPremium =
         userData?.subscription_status === "pro" ||
         userData?.subscription_status === "active";
 
     const storageLimit = isPremium ? PRO_STORAGE_LIMIT : FREE_STORAGE_LIMIT;
-
-    const quota = await db.query.user_quotas.findFirst({
-        where: eq(user_quotas.user_id, user.user_id),
-    });
 
     const currentUsage = quota?.storage_usage || 0;
     if (currentUsage + file.size > storageLimit) {
@@ -149,6 +132,9 @@ export async function uploadResource(
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "application/vnd.ms-powerpoint",
         "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "text/markdown",
+        "text/x-markdown",
+        "text/plain",
     ];
     const MAX_SIZE = 20 * 1024 * 1024;
 
@@ -197,12 +183,7 @@ export async function uploadResource(
 
         const publicUrl = await uploadFile(file, path);
 
-        const tagList = tags
-            ? tags
-                  .split(",")
-                  .map((t) => t.trim())
-                  .filter(Boolean)
-            : [];
+        const tagList = parseTags(tags);
 
         if (!uploaderUniversity) {
             return { success: false, message: "University is required" };
@@ -210,21 +191,17 @@ export async function uploadResource(
 
         // Get university_id
         let universityId = user.university_id;
+        let finalUniversityName = uploaderUniversity;
 
-        // If a different university was provided, try to find its ID
+        // If a different university was provided, ensure it exists
         if (
             university &&
             university.trim() !== "" &&
             university !== user.university
         ) {
-            const uniResult = await db
-                .select({ university_id: universities.university_id })
-                .from(universities)
-                .where(eq(universities.name, university))
-                .limit(1);
-            if (uniResult.length > 0) {
-                universityId = uniResult[0].university_id;
-            }
+            const result = await ensureUniversity(university);
+            universityId = result.university_id;
+            finalUniversityName = result.name || uploaderUniversity;
         }
 
         await createResource(
@@ -232,11 +209,12 @@ export async function uploadResource(
                 uploader_id: user.user_id,
                 course_code: courseCode,
                 semester,
-                university: uploaderUniversity,
+                university: finalUniversityName,
                 university_id: universityId,
                 title,
                 description: description || undefined,
                 file_url: publicUrl,
+                storage_path: path,
                 mime_type: file.type,
                 file_size: file.size,
                 resource_type: resourceType || undefined,
@@ -314,10 +292,15 @@ export async function deleteResource(
 
         // Attempt to delete file from storage
         try {
-            const url = new URL(resource.file_url);
-            const pathParts = url.pathname.split("/coursebucket/");
-            if (pathParts.length > 1) {
-                await deleteFile(pathParts[1]);
+            if (resource.storage_path) {
+                await deleteFile(resource.storage_path);
+            } else {
+                // Fallback for old resources
+                const url = new URL(resource.file_url);
+                const pathParts = url.pathname.split("/coursebucket/");
+                if (pathParts.length > 1) {
+                    await deleteFile(pathParts[1]);
+                }
             }
         } catch (e) {
             warn("Failed to delete file from storage", e);
@@ -336,6 +319,7 @@ export async function deleteResource(
         }
 
         revalidatePath("/dashboard/resources");
+        revalidatePath("/dashboard");
         return { success: true, message: "Resource deleted successfully" };
     } catch (err) {
         error("Delete resource failed:", err);
@@ -426,6 +410,7 @@ export async function updateResource(
         let publicUrl: string | undefined = undefined;
         let mimeType: string | undefined = undefined;
         let fileSize: number | undefined = undefined;
+        let storagePath: string | undefined = undefined;
 
         if (file && file.size > 0) {
             const allowedTypes = [
@@ -448,19 +433,23 @@ export async function updateResource(
                 /[^a-zA-Z0-9.\-_]/g,
                 "_"
             );
-            const path = `resources/${
+            storagePath = `resources/${
                 user.user_id
             }/${Date.now()}-${sanitizedFilename}`;
-            publicUrl = await uploadFile(file, path);
+            publicUrl = await uploadFile(file, storagePath);
             mimeType = file.type;
             fileSize = file.size;
 
             // Delete old file from storage if possible
             try {
-                const url = new URL(existing.file_url);
-                const pathParts = url.pathname.split("/coursebucket/");
-                if (pathParts.length > 1) {
-                    await deleteFile(pathParts[1]);
+                if (existing.storage_path) {
+                    await deleteFile(existing.storage_path);
+                } else {
+                    const url = new URL(existing.file_url);
+                    const pathParts = url.pathname.split("/coursebucket/");
+                    if (pathParts.length > 1) {
+                        await deleteFile(pathParts[1]);
+                    }
                 }
             } catch (e) {
                 warn("Failed to delete previous file from storage", e);
@@ -478,7 +467,9 @@ export async function updateResource(
                 description: description || null,
                 resource_type: resourceType || existing.resource_type,
                 tags: tags || null,
-                ...(publicUrl ? { file_url: publicUrl } : {}),
+                ...(publicUrl
+                    ? { file_url: publicUrl, storage_path: storagePath }
+                    : {}),
                 ...(mimeType ? { mime_type: mimeType } : {}),
                 ...(fileSize ? { file_size: fileSize } : {}),
             })

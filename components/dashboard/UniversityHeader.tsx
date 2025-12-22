@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ExternalLink, Settings2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import BrandBanner from "@/components/common/BrandBanner";
 import { EditUniversityModal } from "./EditUniversityModal";
 
 interface UniversityHeaderProps {
@@ -49,7 +50,7 @@ export function UniversityHeader({
                 ) : (
                     <div className="absolute inset-0">
                         <div
-                            className="absolute inset-0 opacity-[0.03]"
+                            className="absolute inset-0 opacity-[0.07]"
                             style={{
                                 backgroundImage: `
                                     linear-gradient(to right, currentColor 1px, transparent 1px),
@@ -69,17 +70,20 @@ export function UniversityHeader({
                         <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
                         <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse delay-700"></div>
 
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="flex flex-col items-center gap-4 opacity-20 text-center p-8">
-                                <div className="relative h-16 w-16 shrink-0 grayscale">
-                                    <Image
-                                        src={logoUrl}
-                                        alt={name}
-                                        fill
-                                        className="object-contain"
-                                    />
-                                </div>
-                            </div>
+                        <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                            {bannerUrl ? (
+                                <Image
+                                    src={bannerUrl}
+                                    alt={name}
+                                    fill
+                                    className="object-cover opacity-90"
+                                />
+                            ) : (
+                                <BrandBanner
+                                    text={name}
+                                    watermark={name.trim().split(" ")[0]}
+                                />
+                            )}
                         </div>
                     </div>
                 )}
@@ -89,13 +93,32 @@ export function UniversityHeader({
             <div className="px-6 sm:px-10 pb-4 relative">
                 <div className="flex flex-col md:flex-row items-start gap-6 -mt-10 md:-mt-14 relative z-10">
                     <div className="h-20 w-20 md:h-32 md:w-32 rounded-3xl border border-border bg-card shadow-2xl relative overflow-hidden shrink-0 flex items-center justify-center p-4">
-                        <Image
-                            src={logoUrl}
-                            alt={name}
-                            fill
-                            sizes="(max-width: 768px) 80px, 128px"
-                            className="object-contain p-4"
-                        />
+                        {logoUrl ? (
+                            <Image
+                                src={logoUrl}
+                                alt={name}
+                                fill
+                                sizes="(max-width: 768px) 80px, 128px"
+                                className="object-contain p-4"
+                            />
+                        ) : (
+                            <div className="h-full w-full flex items-center justify-center bg-primary/5 text-primary font-serif font-bold text-xl">
+                                {name.charAt(0)}
+                                {(() => {
+                                    const parts = name.trim().split(/\s+/);
+                                    if (parts.length >= 2) {
+                                        const second = parts[1].toLowerCase();
+                                        if (
+                                            second === "university" ||
+                                            second === "college"
+                                        )
+                                            return "";
+                                        return parts[1].charAt(0).toUpperCase();
+                                    }
+                                    return "";
+                                })()}
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex-1 space-y-3 md:pt-16">

@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import { error } from "@/lib/logger";
+import { api } from "@/lib/api-client";
 
 export interface CommentAuthor {
     name: string;
@@ -34,21 +35,12 @@ export function useResourceComments(
 
             setLoading(true);
             try {
-                const res = await fetch(
-                    `/api/resources/${resourceId}/comments`,
-                    {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ content }),
-                    }
+                const json = await api.resources.addComment(
+                    resourceId,
+                    content
                 );
 
-                if (res.status === 401) {
-                    window.location.href = "/auth/login";
-                    return;
-                }
-
-                const json = await res.json();
+                if (json.status === 401) return;
                 if (!json.success) throw new Error(json.message);
 
                 const newComment: Comment = {
@@ -82,21 +74,13 @@ export function useResourceComments(
             if (!resourceId) return;
 
             try {
-                const res = await fetch(
-                    `/api/resources/${resourceId}/comments`,
-                    {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ content, parentId }),
-                    }
+                const json = await api.resources.addComment(
+                    resourceId,
+                    content,
+                    parentId
                 );
 
-                if (res.status === 401) {
-                    window.location.href = "/auth/login";
-                    return;
-                }
-
-                const json = await res.json();
+                if (json.status === 401) return;
                 if (!json.success) throw new Error(json.message);
 
                 const newReply: Comment = {
@@ -182,21 +166,13 @@ export function useResourceComments(
             });
 
             try {
-                const res = await fetch(
-                    `/api/resources/${resourceId}/comments/${commentId}/react`,
-                    {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ type }),
-                    }
+                const json = await api.resources.reactToComment(
+                    resourceId,
+                    commentId,
+                    type
                 );
 
-                if (res.status === 401) {
-                    window.location.href = "/auth/login";
-                    return;
-                }
-
-                const json = await res.json();
+                if (json.status === 401) return;
                 if (!json.success) throw new Error(json.message);
 
                 // Update state with server data (to ensure consistency)

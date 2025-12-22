@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Check, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { buyPremium } from "@/app/actions/subscription";
+import confetti from "canvas-confetti";
 
 interface UpgradePlanModalProps {
     isOpen: boolean;
@@ -25,17 +26,36 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
     const handleUpgrade = async () => {
         setIsUpgrading(true);
         try {
-            const res = await buyPremium();
+            // Set to true for demo mode as requested
+            const res = await buyPremium(window.location.origin, true);
+
             if (res.success) {
-                toast.success("Successfully upgraded to Premium!", {
-                    description:
-                        "You now have unlimited AI generations and priority support.",
-                });
-                onClose();
+                if (res.isDemo) {
+                    toast.success("Demo Upgrade Successful!", {
+                        description: "Welcome to CourseHub Premium!",
+                    });
+
+                    // Celebration!
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ["#FFD700", "#FFA500", "#FF4500"],
+                    });
+
+                    setTimeout(() => {
+                        onClose();
+                        window.location.reload(); // Refresh to show new status
+                    }, 2000);
+                } else if (res.checkout_url) {
+                    toast.success("Redirecting to payment...");
+                    window.location.href = res.checkout_url;
+                }
             } else {
-                toast.error(res.message || "Failed to upgrade");
+                toast.error(res.message || "Failed to initialize payment");
             }
-        } catch {
+        } catch (err) {
+            console.error("Upgrade error:", err);
             toast.error("An error occurred during upgrade");
         } finally {
             setIsUpgrading(false);
@@ -43,11 +63,11 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
     };
 
     const features = [
-        "Unlimited AI Study Notes",
-        "Unlimited Flashcard Generations",
+        "Unlimited AI Generations & Chats",
+        "10GB Cloud Storage",
+        "Advanced Analytics Dashboard",
         "Priority AI Processing",
         "Advanced Knowledge Trees",
-        "Early Access to New Features",
         "Priority Support",
     ];
 
@@ -79,7 +99,7 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
                             </div>
                             <div className="flex items-baseline gap-1 mb-4">
                                 <span className="text-5xl font-serif font-bold text-primary">
-                                    $9.99
+                                    ETB 1498.5
                                 </span>
                                 <span className="text-muted-foreground font-medium">
                                     /month
