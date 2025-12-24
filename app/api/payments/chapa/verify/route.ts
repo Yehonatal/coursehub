@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { validateRequest } from "@/lib/auth/session";
 import { db } from "@/db";
 import { transactions } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { verifyTransaction } from "@/lib/payment/chapa/client";
 import { error, info } from "@/lib/logger";
 import { completeSubscription } from "@/app/actions/subscription";
+import crypto from "crypto";
 
 export const dynamic = "force-dynamic";
 
@@ -79,15 +79,26 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
     try {
-        const { user } = await validateRequest();
-        if (!user) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
+        const body = await req.json();
+        const signature =
+            req.headers.get("x-chapa-signature") ||
+            req.headers.get("Chapa-Signature");
+        const secret = process.env.CHAPA_SECRET_KEY;
+
+        // Optional: Verify signature if secret is configured
+        if (signature && secret) {
+            const hash = crypto
+                .createHmac("sha256", secret)
+                .update(JSON.stringify(body))
+                .digest("hex");
+
+            if (hash !== signature) {
+                error("Invalid Chapa signature detected");
+                // We still proceed to verify with Chapa API as a fallback,
+                // but we log the mismatch.
+            }
         }
 
-        const body = await req.json();
         const tx_ref = body.tx_ref || body.trx_ref;
 
         if (!tx_ref) {
@@ -97,7 +108,9 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Verify with Chapa API
+        info(`Processing Chapa webhook for tx_ref: ${tx_ref}`);
+
+        // Verify with Chapa API (Source of Truth)
         const verification = await verifyTransaction(tx_ref);
 
         if (
@@ -106,7 +119,7 @@ export async function POST(req: NextRequest) {
         ) {
             const result = await completeSubscription(
                 tx_ref,
-                verification.data.method
+                verification.data.method || body.payment_method
             );
 
             if (result.success) {
@@ -117,29 +130,28 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        if (verification.data?.status === "failed") {
+        // Handle failed or cancelled status
+        const chapaStatus = verification.data?.status || body.status;
+        if (chapaStatus === "failed" || chapaStatus === "failed/cancelled") {
             await db
                 .update(transactions)
                 .set({ status: "failed", updated_at: new Date() })
                 .where(eq(transactions.tx_ref, tx_ref));
 
             return NextResponse.json(
-                { error: "Payment failed", status: "failed" },
-                { status: 400 }
+                { message: "Payment marked as failed", status: chapaStatus },
+                { status: 200 }
             );
         }
 
         return NextResponse.json(
-            {
-                error: "Payment not yet completed",
-                status: verification.data?.status,
-            },
-            { status: 400 }
+            { message: "Webhook received", status: chapaStatus },
+            { status: 200 }
         );
     } catch (err: any) {
-        error("Payment verification error:", err);
+        error("Payment webhook error:", err);
         return NextResponse.json(
-            { error: "Internal server error", details: err.message },
+            { error: "Internal server error" },
             { status: 500 }
         );
     }

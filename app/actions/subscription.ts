@@ -49,7 +49,7 @@ export async function buyPremium(baseUrl?: string, isDemo: boolean = false) {
             };
         }
 
-        const callback_url = `${appUrl}/api/payments/chapa/webhook`;
+        const callback_url = `${appUrl}/api/payments/chapa/verify`;
         const return_url = `${appUrl}/dashboard/settings?payment=verifying&tx_ref=${tx_ref}`;
 
         const response = await initializeTransaction({
