@@ -27,7 +27,7 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
         setIsUpgrading(true);
         try {
             // Set to false to use real Chapa payment
-            const res = await buyPremium(window.location.origin, false);
+            const res = await buyPremium(window.location.origin, true);
 
             if (res.success) {
                 if (res.isDemo) {
