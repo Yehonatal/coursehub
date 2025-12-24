@@ -4,26 +4,19 @@ import { db } from "@/db";
 import { transactions } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { verifyTransaction } from "@/lib/payment/chapa/client";
-import { error } from "@/lib/logger";
+import { error, info } from "@/lib/logger";
 import { completeSubscription } from "@/app/actions/subscription";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
     try {
-        const { user } = await validateRequest();
-        if (!user) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
         const { searchParams } = new URL(req.url);
         const tx_ref = searchParams.get("tx_ref");
 
         if (!tx_ref) {
-            return NextResponse.json(
-                { error: "tx_ref is required" },
-                { status: 400 }
+            return NextResponse.redirect(
+                new URL("/dashboard/settings?payment=failed", req.url)
             );
         }
 
@@ -33,25 +26,16 @@ export async function GET(req: NextRequest) {
         });
 
         if (!transaction) {
-            return NextResponse.json(
-                { error: "Transaction not found" },
-                { status: 404 }
+            return NextResponse.redirect(
+                new URL("/dashboard/settings?payment=failed", req.url)
             );
         }
 
-        if (transaction.user_id !== user.user_id) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        // If already completed in DB, return success
+        // If already completed in DB, redirect to success
         if (transaction.status === "completed") {
-            return NextResponse.json({
-                status: "success",
-                message: "Payment verified",
-            });
+            return NextResponse.redirect(
+                new URL("/dashboard/settings?payment=success", req.url)
+            );
         }
 
         // Otherwise verify with Chapa
@@ -61,7 +45,64 @@ export async function GET(req: NextRequest) {
             verification.status === "success" &&
             verification.data.status === "success"
         ) {
-            // Note: Webhook should have handled this, but we update here too just in case
+            const result = await completeSubscription(
+                tx_ref,
+                verification.data.method
+            );
+
+            if (result.success) {
+                return NextResponse.redirect(
+                    new URL("/dashboard/settings?payment=success", req.url)
+                );
+            }
+        }
+
+        // If Chapa says it failed, update our DB
+        if (verification.data?.status === "failed") {
+            await db
+                .update(transactions)
+                .set({ status: "failed", updated_at: new Date() })
+                .where(eq(transactions.tx_ref, tx_ref));
+        }
+
+        return NextResponse.redirect(
+            new URL("/dashboard/settings?payment=failed", req.url)
+        );
+    } catch (err) {
+        error("Payment verification error:", err);
+        return NextResponse.redirect(
+            new URL("/dashboard/settings?payment=failed", req.url)
+        );
+    }
+}
+
+export async function POST(req: NextRequest) {
+    try {
+        const { user } = await validateRequest();
+        if (!user) {
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );
+        }
+
+        const body = await req.json();
+        const { tx_ref } = body;
+
+        if (!tx_ref) {
+            return NextResponse.json(
+                { error: "tx_ref is required" },
+                { status: 400 }
+            );
+        }
+
+        // Verify with Chapa API
+        const verification = await verifyTransaction(tx_ref);
+
+        if (
+            verification.status === "success" &&
+            verification.data.status === "success"
+        ) {
             const result = await completeSubscription(
                 tx_ref,
                 verification.data.method
@@ -69,20 +110,35 @@ export async function GET(req: NextRequest) {
 
             if (result.success) {
                 return NextResponse.json({
-                    status: "success",
-                    message: "Payment verified",
+                    success: true,
+                    message: "Payment confirmed",
                 });
             }
         }
 
-        return NextResponse.json({
-            status: "pending",
-            message: "Payment not yet completed",
-        });
-    } catch (err) {
+        if (verification.data?.status === "failed") {
+            await db
+                .update(transactions)
+                .set({ status: "failed", updated_at: new Date() })
+                .where(eq(transactions.tx_ref, tx_ref));
+
+            return NextResponse.json(
+                { error: "Payment failed", status: "failed" },
+                { status: 400 }
+            );
+        }
+
+        return NextResponse.json(
+            {
+                error: "Payment not yet completed",
+                status: verification.data?.status,
+            },
+            { status: 400 }
+        );
+    } catch (err: any) {
         error("Payment verification error:", err);
         return NextResponse.json(
-            { error: "Failed to verify payment" },
+            { error: "Internal server error", details: err.message },
             { status: 500 }
         );
     }

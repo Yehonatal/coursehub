@@ -15,8 +15,8 @@ export async function buyPremium(baseUrl?: string, isDemo: boolean = false) {
     if (!user) throw new Error("Unauthorized");
 
     try {
-        const tx_ref = await genTxRef({ prefix: "CH", size: 15 });
-        const amount = "1498.5"; // Fixed price for premium
+        const tx_ref = `coursehub-${crypto.randomUUID()}`;
+        const amount = "1498.50"; // Fixed price for premium
         const currency = "ETB";
 
         // Use provided baseUrl or fallback to env
@@ -50,17 +50,21 @@ export async function buyPremium(baseUrl?: string, isDemo: boolean = false) {
         }
 
         const callback_url = `${appUrl}/api/payments/chapa/webhook`;
-        const return_url = `${appUrl}/dashboard/settings?payment=success&tx_ref=${tx_ref}`;
+        const return_url = `${appUrl}/dashboard/settings?payment=verifying&tx_ref=${tx_ref}`;
 
         const response = await initializeTransaction({
-            first_name: user.first_name || "User",
-            last_name: user.last_name || "Student",
+            first_name: user.first_name || "Customer",
+            last_name: user.last_name || "",
             email: user.email,
             amount: amount.toString(),
             currency,
             tx_ref,
             callback_url,
             return_url,
+            customization: {
+                title: "CourseHub",
+                description: "Upgrade to CourseHub Premium Plan",
+            },
         });
 
         if (response.status === "success" && response.data?.checkout_url) {
@@ -70,24 +74,42 @@ export async function buyPremium(baseUrl?: string, isDemo: boolean = false) {
                 tx_ref,
             };
         } else {
+            let message = response.message || "Failed to initialize payment";
+            if (typeof message === "object") {
+                message = Object.values(message).flat().join(", ");
+            }
             return {
                 success: false,
-                message: response.message || "Failed to initialize payment",
+                message,
             };
         }
     } catch (err: any) {
         error("buyPremium error:", err);
+
+        let message = "Failed to initialize payment. Please try again later.";
+        const errorData = err.response?.data;
+
+        if (errorData?.message) {
+            if (typeof errorData.message === "object") {
+                message = Object.values(errorData.message).flat().join(", ");
+            } else {
+                message = errorData.message;
+            }
+        } else if (err.message) {
+            message = err.message;
+        }
+
         return {
             success: false,
-            message:
-                err.response?.data?.message ||
-                err.message ||
-                "Failed to initialize payment. Please try again later.",
+            message,
         };
     }
 }
 
-export async function completeSubscription(tx_ref: string, paymentMethod?: string) {
+export async function completeSubscription(
+    tx_ref: string,
+    paymentMethod?: string
+) {
     try {
         const [transaction] = await db
             .update(transactions)
@@ -118,13 +140,16 @@ export async function completeSubscription(tx_ref: string, paymentMethod?: strin
             .returning();
 
         if (user) {
-            info(`User ${user.user_id} upgraded to Premium via tx_ref: ${tx_ref}`);
+            info(
+                `User ${user.user_id} upgraded to Premium via tx_ref: ${tx_ref}`
+            );
 
             // Create notification
             await createNotification({
                 userId: user.user_id,
                 eventType: "subscription",
-                message: "Welcome to CourseHub Premium! Your payment was successful.",
+                message:
+                    "Welcome to CourseHub Premium! Your payment was successful.",
                 link: "/dashboard/settings",
             });
 

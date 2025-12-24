@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const tx_ref = await genTxRef({ prefix: "CH", size: 15 });
+        const tx_ref = `coursehub-${crypto.randomUUID()}`;
 
         // Save transaction to DB
         await db.insert(transactions).values({
@@ -45,36 +45,56 @@ export async function POST(req: NextRequest) {
         const callback_url = `${origin}/api/payments/chapa/webhook`;
         const return_url =
             custom_return_url ||
-            `${origin}/dashboard/settings?payment=success&tx_ref=${tx_ref}`;
+            `${origin}/dashboard/settings?payment=verifying&tx_ref=${tx_ref}`;
 
         const response = await initializeTransaction({
-            first_name: user.first_name || "User",
-            last_name: user.last_name || "Student",
+            first_name: user.first_name || "Customer",
+            last_name: user.last_name || "",
             email: user.email,
             amount: amount.toString(),
             currency,
             tx_ref,
             callback_url,
             return_url,
+            customization: {
+                title: "CourseHub",
+                description: "Payment for CourseHub services",
+            },
         });
 
         if (response.status === "success" && response.data?.checkout_url) {
             return NextResponse.json(response);
         } else {
+            let details = response.message || "Failed to initialize payment";
+            if (typeof details === "object") {
+                details = Object.values(details).flat().join(", ");
+            }
             return NextResponse.json(
                 {
                     error: "Failed to initialize payment",
-                    details: response.message,
+                    details,
                 },
                 { status: 400 }
             );
         }
     } catch (err: any) {
         error("Payment initialization error:", err);
+
+        let details = err.message || "Failed to initialize payment";
+        const errorData = err.response?.data;
+
+        if (errorData?.message) {
+            if (typeof errorData.message === "object") {
+                details = Object.values(errorData.message).flat().join(", ");
+            } else {
+                details = errorData.message;
+            }
+        }
+
         return NextResponse.json(
             {
                 error: "Failed to initialize payment",
-                details: err.response?.data?.message || err.message,
+                details,
             },
             { status: 500 }
         );

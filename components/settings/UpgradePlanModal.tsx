@@ -26,8 +26,8 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
     const handleUpgrade = async () => {
         setIsUpgrading(true);
         try {
-            // Set to true for demo mode as requested
-            const res = await buyPremium(window.location.origin, true);
+            // Set to false to use real Chapa payment
+            const res = await buyPremium(window.location.origin, false);
 
             if (res.success) {
                 if (res.isDemo) {
@@ -46,7 +46,7 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
                     setTimeout(() => {
                         onClose();
                         window.location.reload(); // Refresh to show new status
-                    }, 2000);
+                    }, 4000);
                 } else if (res.checkout_url) {
                     toast.success("Redirecting to payment...");
                     window.location.href = res.checkout_url;

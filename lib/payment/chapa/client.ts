@@ -1,13 +1,13 @@
-import { Chapa } from "chapa-nodejs";
+import axios from "axios";
 import { error } from "@/lib/logger";
+import crypto from "crypto";
 
 if (!process.env.CHAPA_SECRET_KEY) {
     throw new Error("CHAPA_SECRET_KEY is not set in environment variables");
 }
 
-export const chapa = new Chapa({
-    secretKey: process.env.CHAPA_SECRET_KEY,
-});
+const CHAPA_SECRET_KEY = process.env.CHAPA_SECRET_KEY;
+const CHAPA_API_URL = "https://api.chapa.co/v1";
 
 export interface InitializeOptions {
     first_name?: string;
@@ -27,21 +27,37 @@ export interface InitializeOptions {
 }
 
 export async function genTxRef(opts?: { prefix?: string; size?: number }) {
-    return chapa.genTxRef(opts);
+    const prefix = opts?.prefix || "CH";
+    return `${prefix}-${crypto.randomUUID()}`;
 }
 
 export async function initializeTransaction(options: InitializeOptions) {
     try {
-        const response = await chapa.initialize(options);
-        return response;
+        // Ensure amount is a string with 2 decimal places
+        const formattedOptions = {
+            ...options,
+            amount: Number(options.amount).toFixed(2),
+        };
+
+        const response = await axios.post(
+            `${CHAPA_API_URL}/transaction/initialize`,
+            formattedOptions,
+            {
+                headers: {
+                    Authorization: `Bearer ${CHAPA_SECRET_KEY}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
     } catch (err: any) {
         // Log detailed error for debugging
+        const errorData = err.response?.data;
         error("Chapa initialization failed:", {
             message: err.message,
-            status: err.status,
-            response: err.response?.data || err.response,
-            errors: err.errors,
-            options: { ...options, tx_ref: options.tx_ref }, // Log options but keep tx_ref visible
+            status: err.response?.status,
+            data: errorData,
+            options: { ...options, tx_ref: options.tx_ref },
         });
         throw err;
     }
@@ -49,10 +65,22 @@ export async function initializeTransaction(options: InitializeOptions) {
 
 export async function verifyTransaction(tx_ref: string) {
     try {
-        const response = await chapa.verify({ tx_ref });
-        return response;
-    } catch (err) {
-        error("Chapa verification failed:", err);
+        const response = await axios.get(
+            `${CHAPA_API_URL}/transaction/verify/${tx_ref}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${CHAPA_SECRET_KEY}`,
+                },
+            }
+        );
+        return response.data;
+    } catch (err: any) {
+        error("Chapa verification failed:", {
+            message: err.message,
+            status: err.response?.status,
+            data: err.response?.data,
+            tx_ref,
+        });
         throw err;
     }
 }

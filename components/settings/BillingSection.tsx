@@ -42,7 +42,46 @@ export default function BillingSection({
 
     useEffect(() => {
         const paymentStatus = searchParams.get("payment");
-        if (paymentStatus === "success") {
+        const tx_ref = searchParams.get("tx_ref");
+
+        if (paymentStatus === "verifying" && tx_ref) {
+            const verifyPayment = async () => {
+                const loadingToast = toast.loading("Verifying payment...");
+                try {
+                    const res = await fetch("/api/payments/chapa/verify", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ tx_ref }),
+                    });
+                    const data = await res.json();
+
+                    toast.dismiss(loadingToast);
+
+                    if (data.success) {
+                        toast.success("Payment successful!", {
+                            description:
+                                "Your account has been upgraded to Premium.",
+                        });
+                        confetti({
+                            particleCount: 150,
+                            spread: 70,
+                            origin: { y: 0.6 },
+                            colors: ["#FFD700", "#FFA500", "#FF4500"],
+                        });
+                        // Refresh page to update UI
+                        setTimeout(() => window.location.reload(), 2000);
+                    } else {
+                        toast.error(
+                            data.error || "Payment verification failed"
+                        );
+                    }
+                } catch (err) {
+                    toast.dismiss(loadingToast);
+                    toast.error("Failed to verify payment");
+                }
+            };
+            verifyPayment();
+        } else if (paymentStatus === "success") {
             toast.success("Payment successful!", {
                 description: "Your account has been upgraded to Premium.",
             });
