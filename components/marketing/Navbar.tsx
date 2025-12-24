@@ -5,15 +5,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { api } from "@/lib/api-client";
 
 export function Navbar() {
     const [isOpen, setIsOpen] = React.useState(false);
     const [user, setUser] = React.useState<{ first_name: string } | null>(null);
 
     React.useEffect(() => {
-        fetch("/api/me")
-            .then((res) => res.json())
-            .then((data) => setUser(data.user))
+        api.me
+            .get()
+            .then((json) => setUser(json.data?.user))
             .catch(() => setUser(null));
     }, []);
 

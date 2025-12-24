@@ -7,7 +7,7 @@ import { GeneratedContentModal } from "./GeneratedContentModal";
 import { FlashcardModal } from "@/components/ai/FlashcardModal";
 import { AIStudyNoteModal } from "@/components/ai/chat/AIStudyNoteModal";
 import { AIKnowledgeTreeModal } from "@/components/ai/chat/AIKnowledgeTreeModal";
-import { mapGenerationToRecentItem } from "@/lib/ai/mappers";
+import { mapGenerationToRecentItem } from "@/utils/mappers";
 import { PremiumLock } from "@/components/common/PremiumLock";
 
 interface RecentItem {

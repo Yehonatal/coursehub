@@ -4,7 +4,7 @@ import { listUserGenerations } from "@/app/actions/ai";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { mapGenerationToRecentItem } from "@/lib/ai/mappers";
+import { mapGenerationToRecentItem } from "@/utils/mappers";
 
 export const dynamic = "force-dynamic";
 

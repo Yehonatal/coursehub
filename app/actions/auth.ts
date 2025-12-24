@@ -4,12 +4,7 @@ import { z } from "zod";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
-import {
-    users,
-    verificationTokens,
-    passwordResetTokens,
-    universities,
-} from "@/db/schema";
+import { users, verificationTokens, passwordResetTokens } from "@/db/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { createSession, invalidateSession } from "@/lib/auth/session";
 import { warn, debug, error } from "@/lib/logger";
@@ -21,30 +16,14 @@ import {
     passwordChangedEmailTemplate,
 } from "@/lib/email/templates";
 import { headers } from "next/headers";
-import { slugify } from "@/utils/helpers";
-
-const SignInSchema = z.object({
-    email: z.string().min(1, "Email is required").email("Invalid email format"),
-    password: z.string().min(1, "Password is required"),
-});
-
-const SignUpSchema = z
-    .object({
-        firstName: z.string().min(1, "First name is required"),
-        lastName: z.string().min(1, "Last name is required"),
-        email: z
-            .string()
-            .min(1, "Email is required")
-            .email("Invalid email format"),
-        accountType: z.enum(["student", "educator"]),
-        university: z.string().optional(),
-        password: z.string().min(6, "Password must be at least 6 characters"),
-        confirmPassword: z.string().min(1, "Please confirm your password"),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords don't match",
-        path: ["confirmPassword"],
-    });
+import { ensureUniversity } from "@/app/actions/university";
+import {
+    SignInSchema,
+    SignUpSchema,
+    ResetPasswordSchema,
+    ChangePasswordSchema,
+    ForgotPasswordSchema,
+} from "@/lib/schemas";
 
 export type ActionResponse = {
     success: boolean;
@@ -144,6 +123,7 @@ export async function signUp(
         }
 
         let schoolIdUrl = "";
+        let schoolIdPath = "";
         if (schoolIdFile && schoolIdFile.size > 0) {
             try {
                 // Sanitize filename to prevent path traversal or special character issues
@@ -151,8 +131,8 @@ export async function signUp(
                     /[^a-zA-Z0-9.-]/g,
                     "_"
                 );
-                const path = `school-ids/${Date.now()}-${sanitizedFilename}`;
-                schoolIdUrl = await uploadFile(schoolIdFile, path);
+                schoolIdPath = `school-ids/${Date.now()}-${sanitizedFilename}`;
+                schoolIdUrl = await uploadFile(schoolIdFile, schoolIdPath);
             } catch (err) {
                 error("File upload error:", err);
                 return {
@@ -162,34 +142,13 @@ export async function signUp(
             }
         }
 
-        const passwordHash = await bcrypt.hash(password, 12);
-
-        // Handle university creation if it doesn't exist
-        let universityId: number | null = null;
-        if (university) {
-            try {
-                const existingUni = await db
-                    .select()
-                    .from(universities)
-                    .where(eq(universities.name, university));
-
-                if (existingUni.length === 0) {
-                    const [newUni] = await db
-                        .insert(universities)
-                        .values({
-                            name: university,
-                            slug: slugify(university),
-                        })
-                        .returning();
-                    universityId = newUni.university_id;
-                } else {
-                    universityId = existingUni[0].university_id;
-                }
-            } catch (err) {
-                error("University creation error:", err);
-                // Continue even if university creation fails
-            }
-        }
+        const [
+            passwordHash,
+            { university_id: universityId, name: universityName },
+        ] = await Promise.all([
+            bcrypt.hash(password, 12),
+            ensureUniversity(university || ""),
+        ]);
 
         const [newUser] = await db
             .insert(users)
@@ -199,9 +158,10 @@ export async function signUp(
                 email,
                 password_hash: passwordHash,
                 role: accountType,
-                university: university || null,
+                university: universityName,
                 university_id: universityId,
                 school_id_url: schoolIdUrl || null,
+                school_id_path: schoolIdPath || null,
                 is_verified: false,
             })
             .returning();
@@ -255,10 +215,6 @@ export async function signOut() {
     await invalidateSession();
     return { success: true };
 }
-
-const ForgotPasswordSchema = z.object({
-    email: z.string().email("Invalid email format"),
-});
 
 export async function forgotPassword(
     prevState: ActionResponse,
@@ -331,17 +287,6 @@ export async function forgotPassword(
     }
 }
 
-const ResetPasswordSchema = z
-    .object({
-        token: z.string().min(1, "Token is required"),
-        password: z.string().min(6, "Password must be at least 6 characters"),
-        confirmPassword: z.string().min(1, "Please confirm your password"),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords don't match",
-        path: ["confirmPassword"],
-    });
-
 export async function resetPassword(
     prevState: ActionResponse,
     formData: FormData
@@ -396,19 +341,6 @@ export async function resetPassword(
         return { success: false, message: "Server error" };
     }
 }
-
-const ChangePasswordSchema = z
-    .object({
-        currentPassword: z.string().min(1, "Current password is required"),
-        newPassword: z
-            .string()
-            .min(6, "New password must be at least 6 characters"),
-        confirmPassword: z.string().min(1, "Please confirm your new password"),
-    })
-    .refine((data) => data.newPassword === data.confirmPassword, {
-        message: "Passwords don't match",
-        path: ["confirmPassword"],
-    });
 
 export async function changePassword(
     prevState: ActionResponse,

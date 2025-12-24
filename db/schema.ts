@@ -26,8 +26,11 @@ export const users = pgTable("users", {
     ),
     headline: varchar("headline", { length: 150 }),
     school_id_url: varchar("school_id_url", { length: 512 }),
+    school_id_path: varchar("school_id_path", { length: 512 }),
     profile_image_url: varchar("profile_image_url", { length: 512 }),
+    profile_image_path: varchar("profile_image_path", { length: 512 }),
     banner_url: varchar("banner_url", { length: 512 }),
+    banner_path: varchar("banner_path", { length: 512 }),
     is_verified: boolean("is_verified").default(false).notNull(),
     subscription_status: varchar("subscription_status", { length: 20 })
         .default("free")
@@ -53,6 +56,7 @@ export const resources = pgTable(
         title: varchar("title", { length: 255 }).notNull(),
         description: text("description"),
         file_url: varchar("file_url", { length: 512 }).notNull(),
+        storage_path: varchar("storage_path", { length: 512 }),
         mime_type: varchar("mime_type", { length: 100 }),
         file_size: bigint("file_size", { mode: "number" }),
         resource_type: varchar("resource_type", { length: 20 }),
@@ -291,4 +295,19 @@ export const user_quotas = pgTable("user_quotas", {
         .default(0)
         .notNull(),
     last_reset_date: timestamp("last_reset_date").defaultNow().notNull(),
+});
+
+// ================= TRANSACTIONS =================
+export const transactions = pgTable("transactions", {
+    transaction_id: uuid("transaction_id").defaultRandom().primaryKey(),
+    user_id: uuid("user_id")
+        .notNull()
+        .references(() => users.user_id, { onDelete: "cascade" }),
+    tx_ref: varchar("tx_ref", { length: 100 }).notNull().unique(),
+    amount: varchar("amount", { length: 20 }).notNull(),
+    currency: varchar("currency", { length: 10 }).default("ETB").notNull(),
+    status: varchar("status", { length: 20 }).default("pending").notNull(), // pending, completed, failed
+    payment_method: varchar("payment_method", { length: 50 }),
+    created_at: timestamp("created_at").defaultNow().notNull(),
+    updated_at: timestamp("updated_at").defaultNow().notNull(),
 });

@@ -1,4 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase/client";
+import { error } from "@/lib/logger";
 
 export async function uploadFile(file: File, path: string) {
     if (!supabaseAdmin) throw new Error("Supabase not configured");
@@ -6,15 +7,15 @@ export async function uploadFile(file: File, path: string) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const { data, error } = await supabaseAdmin.storage
+    const { data, error: uploadError } = await supabaseAdmin.storage
         .from("coursebucket")
         .upload(path, buffer, {
             contentType: file.type,
             upsert: true,
         });
 
-    if (error) {
-        console.error("Upload failed:", error);
+    if (uploadError) {
+        error("Upload failed:", uploadError);
         throw new Error("Upload failed. Please try again later.");
     }
 

@@ -2,14 +2,24 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { report_flags, resources } from "@/db/schema";
 import { validateRequest } from "@/lib/auth/session";
-import { createNotification } from "@/app/actions/notifications";
 import { eq } from "drizzle-orm";
+import { error } from "@/lib/logger";
+import { notifyResourceOwner } from "@/lib/notifications";
+import { isValidUUID } from "@/utils/helpers";
 
 export async function POST(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
+
+    if (!isValidUUID(id)) {
+        return NextResponse.json(
+            { success: false, message: "Invalid resource ID" },
+            { status: 400 }
+        );
+    }
+
     const { user } = await validateRequest();
 
     if (!user) {
@@ -46,12 +56,14 @@ export async function POST(
             .where(eq(resources.resource_id, id));
 
         if (resource && resource.uploader_id !== user.user_id) {
-            await createNotification({
-                userId: resource.uploader_id,
-                eventType: "report",
-                message: `Your resource "${resource.title}" has been reported for: ${reason}`,
-                link: `/resources/${id}`,
-            });
+            await notifyResourceOwner(
+                resource.uploader_id,
+                id,
+                resource.title,
+                `${user.first_name} ${user.last_name}`,
+                "report",
+                reason
+            );
         }
 
         return NextResponse.json({
@@ -59,7 +71,7 @@ export async function POST(
             message: "Report submitted successfully",
         });
     } catch (err) {
-        console.error("Failed to submit report:", err);
+        error("Failed to submit report:", err);
         return NextResponse.json(
             { success: false, message: "Failed to submit report" },
             { status: 500 }

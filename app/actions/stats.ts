@@ -5,6 +5,7 @@ import { resources } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { validateRequest } from "@/lib/auth/session";
 import { connectMongo } from "@/lib/mongodb/client";
+import { error } from "@/lib/logger";
 import {
     getAIGenerationsModel,
     getAIChatSessionsModel,
@@ -42,32 +43,32 @@ export async function getUserStorageStats(): Promise<StorageStats> {
             user.subscription_status === "pro" ||
             user.subscription_status === "active";
 
-        // 1. Get Resource Stats from PostgreSQL
-        const resourceStats = await db
-            .select({
-                count: sql`count(*)`,
-                totalSize: sql`sum(coalesce(${resources.file_size}, 0))`,
-            })
-            .from(resources)
-            .where(eq(resources.uploader_id, user.user_id));
-
-        const pgCount = Number(resourceStats[0]?.count || 0);
-        const pgSize = Number(resourceStats[0]?.totalSize || 0);
-
-        // 2. Get AI Generation Stats from MongoDB
+        // 1. Get AI Generation Stats from MongoDB
         await connectMongo();
         const AIGeneration = getAIGenerationsModel();
         const AIChatSession = getAIChatSessionsModel();
 
-        // Count generations by type for better estimation
-        const generations = await AIGeneration.find({
-            userId: user.user_id,
-            saved: true,
-        });
-        const chatSessions = await AIChatSession.find({
-            userId: user.user_id,
-            saved: true,
-        });
+        // Parallelize PG and Mongo queries
+        const [resourceStats, generations, chatSessions] = await Promise.all([
+            db
+                .select({
+                    count: sql`count(*)`,
+                    totalSize: sql`sum(coalesce(${resources.file_size}, 0))`,
+                })
+                .from(resources)
+                .where(eq(resources.uploader_id, user.user_id)),
+            AIGeneration.find({
+                userId: user.user_id,
+                saved: true,
+            }),
+            AIChatSession.find({
+                userId: user.user_id,
+                saved: true,
+            }),
+        ]);
+
+        const pgCount = Number(resourceStats[0]?.count || 0);
+        const pgSize = Number(resourceStats[0]?.totalSize || 0);
 
         let aiSize = 0;
         generations.forEach((gen: any) => {
@@ -102,7 +103,7 @@ export async function getUserStorageStats(): Promise<StorageStats> {
             aiGenerationCount: aiCount,
         };
     } catch (err) {
-        console.error("Error fetching storage stats:", err);
+        error("Error fetching storage stats:", err);
         return {
             totalItems: 0,
             totalSizeInBytes: 0,

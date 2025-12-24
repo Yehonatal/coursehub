@@ -16,6 +16,8 @@ import {
     aliasedTable as alias,
 } from "drizzle-orm";
 import { Resource } from "@/app/types/resource";
+import { error } from "@/lib/logger";
+import { parseTags } from "@/utils/parser";
 
 export type ResourceWithTags = Resource & {
     tags: string[];
@@ -102,10 +104,6 @@ export async function fetchResourceRows(
     }
 }
 
-export async function fetchTagsByIds(_: string[]) {
-    return new Map<string, string[]>();
-}
-
 export async function fetchStatsByIds(ids: string[]) {
     if (ids.length === 0)
         return {
@@ -173,7 +171,7 @@ export async function fetchStatsByIds(ids: string[]) {
 
         return { ratingById, viewById, commentById, downloadById };
     } catch (err) {
-        console.error("Error fetching stats:", err);
+        error("Error fetching stats:", err);
         return {
             ratingById: new Map(),
             viewById: new Map(),
@@ -185,7 +183,6 @@ export async function fetchStatsByIds(ids: string[]) {
 
 export function mapResourceRows(
     rows: any[],
-    _tagsById: Map<string, string[]>, // Unused now
     stats: {
         ratingById: Map<string, { average: number; count: number }>;
         viewById: Map<string, number>;
@@ -196,12 +193,7 @@ export function mapResourceRows(
     return rows.map((r: any) => {
         const ratingData = stats.ratingById.get(r.resource_id);
         // Split tags string into array
-        const tags = r.tags
-            ? r.tags
-                  .split(",")
-                  .map((t: string) => t.trim())
-                  .filter(Boolean)
-            : [];
+        const tags = parseTags(r.tags);
 
         return {
             resource_id: r.resource_id,
@@ -255,6 +247,7 @@ export async function createResource(
         title: string;
         description?: string;
         file_url: string;
+        storage_path?: string;
         mime_type: string;
         file_size: number;
         resource_type?: string;

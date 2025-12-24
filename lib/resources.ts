@@ -5,7 +5,7 @@ import {
     users,
     comment_reactions,
 } from "@/db/schema";
-import { error } from "@/lib/logger";
+import { debug, error } from "@/lib/logger";
 import {
     eq,
     desc,
@@ -20,13 +20,13 @@ import {
 } from "drizzle-orm";
 import {
     fetchResourceRows,
-    fetchTagsByIds,
     fetchStatsByIds,
     mapResourceRows,
     ResourceWithTags,
 } from "@/lib/dal/resource-helpers";
 import { connectMongo } from "./mongodb/client";
 import { getAIGenerationsModel } from "./mongodb/models";
+import { isValidUUID } from "@/utils/helpers";
 
 export type { ResourceWithTags };
 
@@ -46,15 +46,21 @@ export async function getRelatedResources(
     if (rows.length === 0) return [];
 
     const ids = rows.map((r: any) => r.resource_id);
-    const [tagsById, stats] = await Promise.all([
-        fetchTagsByIds(ids),
-        fetchStatsByIds(ids),
-    ]);
+    const stats = await fetchStatsByIds(ids);
 
-    return mapResourceRows(rows, tagsById, stats);
+    return mapResourceRows(rows, stats);
 }
 
 export async function getResourceStats(resourceId: string) {
+    if (!isValidUUID(resourceId)) {
+        return {
+            rating: 0,
+            reviews: 0,
+            views: 0,
+            comments: 0,
+            downloads: 0,
+        };
+    }
     const stats = await fetchStatsByIds([resourceId]);
     const ratingData = stats.ratingById.get(resourceId);
     return {
@@ -67,6 +73,7 @@ export async function getResourceStats(resourceId: string) {
 }
 
 export async function getResourceComments(resourceId: string, userId?: string) {
+    if (!isValidUUID(resourceId)) return [];
     try {
         // Fetch all comments for resource, with author and parent id
         const rows = await db
@@ -88,61 +95,62 @@ export async function getResourceComments(resourceId: string, userId?: string) {
         // Build reaction counts
         const likesMap = new Map<string, number>();
         const dislikesMap = new Map<string, number>();
+        const userReactionMap = new Map<string, string | null>();
 
         if (commentIds.length > 0) {
-            const likeRows: any[] = await db
-                .select({
-                    id: comment_reactions.comment_id,
-                    cnt: count(comment_reactions.reaction_id),
-                })
-                .from(comment_reactions)
-                .where(
-                    and(
-                        inArray(comment_reactions.comment_id, commentIds),
-                        eq(comment_reactions.type, "like")
+            const [likeRows, dislikeRows, userReactions] = await Promise.all([
+                db
+                    .select({
+                        id: comment_reactions.comment_id,
+                        cnt: count(comment_reactions.reaction_id),
+                    })
+                    .from(comment_reactions)
+                    .where(
+                        and(
+                            inArray(comment_reactions.comment_id, commentIds),
+                            eq(comment_reactions.type, "like")
+                        )
                     )
-                )
-                .groupBy(comment_reactions.comment_id);
+                    .groupBy(comment_reactions.comment_id),
+                db
+                    .select({
+                        id: comment_reactions.comment_id,
+                        cnt: count(comment_reactions.reaction_id),
+                    })
+                    .from(comment_reactions)
+                    .where(
+                        and(
+                            inArray(comment_reactions.comment_id, commentIds),
+                            eq(comment_reactions.type, "dislike")
+                        )
+                    )
+                    .groupBy(comment_reactions.comment_id),
+                userId
+                    ? db
+                          .select({
+                              id: comment_reactions.comment_id,
+                              type: comment_reactions.type,
+                          })
+                          .from(comment_reactions)
+                          .where(
+                              and(
+                                  inArray(
+                                      comment_reactions.comment_id,
+                                      commentIds
+                                  ),
+                                  eq(comment_reactions.user_id, userId)
+                              )
+                          )
+                    : Promise.resolve([]),
+            ]);
 
-            likeRows.forEach((r) =>
+            likeRows.forEach((r: any) =>
                 likesMap.set(r.id.toString(), Number(r.cnt || 0))
             );
-
-            const dislikeRows: any[] = await db
-                .select({
-                    id: comment_reactions.comment_id,
-                    cnt: count(comment_reactions.reaction_id),
-                })
-                .from(comment_reactions)
-                .where(
-                    and(
-                        inArray(comment_reactions.comment_id, commentIds),
-                        eq(comment_reactions.type, "dislike")
-                    )
-                )
-                .groupBy(comment_reactions.comment_id);
-
-            dislikeRows.forEach((r) =>
+            dislikeRows.forEach((r: any) =>
                 dislikesMap.set(r.id.toString(), Number(r.cnt || 0))
             );
-        }
-
-        // User reactions (if userId provided)
-        const userReactionMap = new Map<string, string | null>();
-        if (userId && commentIds.length > 0) {
-            const ur = await db
-                .select({
-                    id: comment_reactions.comment_id,
-                    type: comment_reactions.type,
-                })
-                .from(comment_reactions)
-                .where(
-                    and(
-                        inArray(comment_reactions.comment_id, commentIds),
-                        eq(comment_reactions.user_id, userId)
-                    )
-                );
-            ur.forEach((r: any) =>
+            userReactions.forEach((r: any) =>
                 userReactionMap.set(r.id.toString(), r.type)
             );
         }
@@ -196,12 +204,9 @@ export async function getUserResources(
         if (rows.length === 0) return [];
 
         const ids = rows.map((r: any) => r.resource_id);
-        const [tagsById, stats] = await Promise.all([
-            fetchTagsByIds(ids),
-            fetchStatsByIds(ids),
-        ]);
+        const stats = await fetchStatsByIds(ids);
 
-        return mapResourceRows(rows, tagsById, stats);
+        return mapResourceRows(rows, stats);
     } catch (err) {
         error("getUserResources failed:", err);
         return [];
@@ -220,12 +225,9 @@ export async function getResourceById(
         if (rows.length === 0) return null;
 
         const ids = [rows[0].resource_id];
-        const [tagsById, stats] = await Promise.all([
-            fetchTagsByIds(ids),
-            fetchStatsByIds(ids),
-        ]);
+        const stats = await fetchStatsByIds(ids);
 
-        const result = mapResourceRows(rows, tagsById, stats);
+        const result = mapResourceRows(rows, stats);
         return result[0] || null;
     } catch (err) {
         error("getResourceById failed:", err);
@@ -242,12 +244,9 @@ export async function getRecommendedResources(
         if (rows.length === 0) return [];
 
         const ids = rows.map((r: any) => r.resource_id);
-        const [tagsById, stats] = await Promise.all([
-            fetchTagsByIds(ids),
-            fetchStatsByIds(ids),
-        ]);
+        const stats = await fetchStatsByIds(ids);
 
-        return mapResourceRows(rows, tagsById, stats);
+        return mapResourceRows(rows, stats);
     } catch (err) {
         error("getRecommendedResources failed:", err);
         return [];
@@ -333,7 +332,7 @@ export async function searchResources(filters: {
     }
 
     try {
-        console.log("Searching resources with conditions:", conditions.length);
+        debug("Searching resources with conditions:", conditions.length);
         const rows = await fetchResourceRows(
             conditions.length > 0 ? and(...conditions) : undefined,
             limit
@@ -342,12 +341,9 @@ export async function searchResources(filters: {
         if (rows.length === 0) return [];
 
         const ids = rows.map((r: any) => r.resource_id);
-        const [tagsById, stats] = await Promise.all([
-            fetchTagsByIds(ids),
-            fetchStatsByIds(ids),
-        ]);
+        const stats = await fetchStatsByIds(ids);
 
-        return mapResourceRows(rows, tagsById, stats);
+        return mapResourceRows(rows, stats);
     } catch (err) {
         error("searchResources failed:", err);
         return [];

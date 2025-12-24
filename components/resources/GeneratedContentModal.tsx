@@ -2,7 +2,7 @@
 
 import React from "react";
 import { RecentsList } from "@/components/dashboard/RecentsList";
-import { mapGenerationToRecentItem } from "@/lib/ai/mappers";
+import { mapGenerationToRecentItem } from "@/utils/mappers";
 import {
     Dialog,
     DialogContent,

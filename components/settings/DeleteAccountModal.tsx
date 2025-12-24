@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { api } from "@/lib/api-client";
 
 interface DeleteAccountModalProps {
     isOpen: boolean;
@@ -41,17 +42,14 @@ export function DeleteAccountModal({
 
         setIsDeleting(true);
         try {
-            const res = await fetch("/api/me", {
-                method: "DELETE",
-            });
+            const json = await api.me.delete();
 
-            if (res.ok) {
+            if (json.success) {
                 toast.success("Account deleted successfully");
                 router.push("/");
                 router.refresh();
             } else {
-                const data = await res.json();
-                toast.error(data.error || "Failed to delete account");
+                toast.error(json.message || "Failed to delete account");
             }
         } catch {
             toast.error("An error occurred while deleting your account");

@@ -2,6 +2,7 @@ import { getGeminiModel } from "./gemini";
 import { FLASHCARDS_PROMPT } from "./prompts";
 import { AIFlashcard } from "@/types/ai";
 import { extractJSONSubstring } from "./helpers";
+import { warn, error } from "@/lib/logger";
 
 export async function generateFlashcards(
     content: string,
@@ -20,7 +21,7 @@ export async function generateFlashcards(
         try {
             parsed = JSON.parse(jsonString) as AIFlashcard[];
         } catch (e) {
-            console.warn(
+            warn(
                 "Initial parse failed for flashcards, retrying with reformat prompt"
             );
             // Ask the model to reformat into strict JSON
@@ -32,7 +33,7 @@ export async function generateFlashcards(
                 const fmtJSON = extractJSONSubstring(fmtText, true);
                 parsed = JSON.parse(fmtJSON) as AIFlashcard[];
             } catch (e2) {
-                console.error("Failed to reformat flashcards output:", e2);
+                error("Failed to reformat flashcards output:", e2);
                 throw new Error("Failed to generate flashcards");
             }
         }
@@ -80,20 +81,20 @@ export async function generateFlashcards(
                     if (ans) {
                         c.back = ans.replace(/^\s*[:\-]*/g, "").trim();
                     }
-                } catch (e) {
-                    console.error(
+                } catch (err) {
+                    error(
                         "Failed to generate flashcard answer for:",
                         c.front,
-                        e
+                        err
                     );
                 }
             }
         }
 
         return repaired;
-    } catch (error: any) {
-        console.error("Error generating flashcards:", error);
-        if (error.status === 503 || error.message?.includes("503")) {
+    } catch (err: any) {
+        error("Error generating flashcards:", err);
+        if (err.status === 503 || err.message?.includes("503")) {
             throw new Error("RATE_LIMIT_EXCEEDED");
         }
         throw new Error("Failed to generate flashcards");

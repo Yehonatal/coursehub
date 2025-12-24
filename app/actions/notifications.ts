@@ -10,6 +10,7 @@ import { notificationPreferenceChangedEmailTemplate } from "@/lib/email/template
 import { db } from "@/db";
 import { notifications } from "@/db/schema";
 import { eq, and, desc, count } from "drizzle-orm";
+import { error } from "@/lib/logger";
 
 export type Notification = {
     notification_id: number;
@@ -36,8 +37,8 @@ export async function createNotification(data: {
         });
         revalidatePath("/dashboard/notifications");
         return { success: true };
-    } catch (error) {
-        console.error("createNotification", error);
+    } catch (err) {
+        error("createNotification", err);
         return { success: false };
     }
 }
@@ -54,8 +55,8 @@ export async function getNotifications() {
             .orderBy(desc(notifications.sent_date));
 
         return userNotifications;
-    } catch (error) {
-        console.error("getNotifications", error);
+    } catch (err) {
+        error("getNotifications", err);
         return [];
     }
 }
@@ -76,8 +77,8 @@ export async function getUnreadNotificationCount() {
             );
 
         return result[0].value;
-    } catch (error) {
-        console.error("getUnreadNotificationCount", error);
+    } catch (err) {
+        error("getUnreadNotificationCount", err);
         return 0;
     }
 }
@@ -99,8 +100,8 @@ export async function markNotificationAsRead(notificationId: number) {
 
         revalidatePath("/dashboard/notifications");
         return { success: true };
-    } catch (error) {
-        console.error("markNotificationAsRead", error);
+    } catch (err) {
+        error("markNotificationAsRead", err);
         return { success: false, message: "Failed to mark as read" };
     }
 }
@@ -117,8 +118,8 @@ export async function markAllNotificationsAsRead() {
 
         revalidatePath("/dashboard/notifications");
         return { success: true };
-    } catch (error) {
-        console.error("markAllNotificationsAsRead", error);
+    } catch (err) {
+        error("markAllNotificationsAsRead", err);
         return { success: false, message: "Failed to mark all as read" };
     }
 }
@@ -143,8 +144,8 @@ export async function getNotificationPreferences() {
         }
 
         return JSON.parse(JSON.stringify(prefs));
-    } catch (error) {
-        console.error("getNotificationPreferences", error);
+    } catch (err) {
+        error("getNotificationPreferences", err);
         return null;
     }
 }
@@ -184,8 +185,8 @@ export async function updateNotificationPreferences(data: {
         }
 
         return { success: true, message: "Preferences updated" };
-    } catch (error) {
-        console.error("updateNotificationPreferences", error);
+    } catch (err) {
+        error("updateNotificationPreferences", err);
         return { success: false, message: "Failed to update preferences" };
     }
 }

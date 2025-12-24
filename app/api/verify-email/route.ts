@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { verificationTokens, users } from "@/db/schema";
-import { eq, gt } from "drizzle-orm";
+import { eq } from "drizzle-orm";
+import { error } from "@/lib/logger";
 
 export async function GET(req: Request) {
     try {
@@ -50,7 +51,7 @@ export async function GET(req: Request) {
         // Redirect to login with success param
         return NextResponse.redirect(new URL("/login?verified=true", url));
     } catch (err) {
-        console.error("Verify email error:", err);
+        error("Verify email error:", err);
         return NextResponse.json(
             { success: false, message: "Server error" },
             { status: 500 }
