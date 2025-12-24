@@ -1,72 +1,88 @@
-# End-to-End (E2E) Tests – CourseHub
+# CourseHub – Adaptive Learning Platform
 
-This folder contains **Playwright end-to-end (E2E) tests** for the CourseHub project.  
-These tests simulate real user actions in the browser to verify that key workflows in the application are working correctly.
+CourseHub is a modern, open-source learning platform built with Next.js, designed to help students, educators, and universities share, discover, and interact with educational resources using AI-powered tools.
 
----
+## Features
 
-## Folder Structure
+- User authentication (login, registration, profile management)
+- Resource upload and management (PDFs, notes, presentations)
+- AI-powered tools: flashcards, study notes, knowledge trees
+- University-specific dashboards and resource filtering
+- Search for courses/resources
+- Comments, ratings, and premium feature gating
+- Responsive design with dark/light mode support
 
-tests/
-└─ E2E/
-├─ login.test.ts # User login flow
-├─ course-enroll.test.ts # Search and enroll in a course
-├─ profile-update.test.ts # Update user profile information
-├─ upload-resource.test.ts # Upload course resources
-└─ README.md # This file
+## Tech Stack
 
----
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + Shadcn/ui components
+- **Database**: Supabase (PostgreSQL + Auth)
+- **AI**: Gemini API integration
+- **File Parsing**: officeparser, pdf-parse
+- **Testing**: Vitest (unit), Playwright (E2E)
+- **Package Manager**: pnpm
 
-## Test Files Overview
+## Testing
 
-### 1. `login.test.ts`
+This project has comprehensive test coverage:
 
-- **Purpose:** Verify that a user can log in with valid credentials.
-- **Flow:**
-  1. Navigate to `/login` page.
-  2. Enter email and password.
-  3. Submit the form.
-  4. Check that the dashboard page is visible.
+### Unit Tests (`tests/unit/`)
 
-### 2. `course-enroll.test.ts`
+- Test individual functions and components in isolation
+- Use Vitest + React Testing Library
+- Run with: `pnpm test:unit`
 
-- **Purpose:** Test course search and enrollment functionality.
-- **Flow:**
-  1. Login as a user.
-  2. Navigate to `/courses`.
-  3. Search for a course (e.g., "Mathematics").
-  4. Click the **Enroll** button.
-  5. Verify enrollment success message is visible.
+### End-to-End Tests (`tests/E2E/`)
 
-### 3. `profile-update.test.ts`
+- Simulate real user flows in a browser using **Playwright**
+- Cover critical journeys: registration, login, upload, view resources, AI generation, search, profile, logout
 
-- **Purpose:** Test updating user profile information.
-- **Flow:**
-  1. Login as a user.
-  2. Navigate to `/profile`.
-  3. Update full name and bio fields.
-  4. Submit the form.
-  5. Confirm success message appears.
+#### Available E2E Tests
 
-### 4. `upload-resource.test.ts`
+| Test File                    | What It Tests                                          |
+| ---------------------------- | ------------------------------------------------------ |
+| login-flow.test.ts           | Successful login and dashboard redirect                |
+| register-flow.test.ts        | New user registration and auto-login                   |
+| resource-upload.test.ts      | Uploading a resource with title, description, file     |
+| resource-view.test.ts        | Viewing resource, generating AI flashcards, commenting |
+| search-and-enroll.test.ts    | Searching and accessing results                        |
+| profile-update.test.ts       | Editing profile name, bio, and settings                |
+| university-browse.test.ts    | Selecting university and viewing filtered content      |
+| dashboard-navigation.test.ts | Dashboard stats, tabs, and internal navigation         |
+| logout-premium.test.ts       | Premium gating and successful logout                   |
 
-- **Purpose:** Test uploading a resource to a course.
-- **Flow:**
-  1. Login as a user.
-  2. Navigate to `/courses/:id/resources`.
-  3. Upload a file using the file input.
-  4. Submit the form.
-  5. Verify the resource upload success message.
+#### How to Run E2E Tests
 
----
+1. Start the development server:
+   ```bash
+   pnpm dev
+   ```
 
-## Dependencies
+######
 
-To run these tests, you need:
+In a second terminal, run the tests:
+Bash
+npx playwright test tests/E2E
+Debug options:
+Bash
+npx playwright test tests/E2E --headed # See browser
+npx playwright test tests/E2E --ui # Interactive UI mode
 
-- **Node.js** (v18+ recommended)
-- **Playwright**
+Dependencies for Testing
 
-```bash
-npm install -D @playwright/test
-```
+@playwright/test – For E2E browser automation
+vitest + @testing-library/react – For unit tests
+
+Install browsers once:
+Bash
+npx playwright install
+
+Scripts
+Bash
+pnpm dev # Start development server
+pnpm build # Build for production
+pnpm start # Run production build
+pnpm test # Run all tests (unit + E2E)
+pnpm test:unit # Run only unit tests
+npx playwright test tests/E2E # Run E2E tests

@@ -1,0 +1,55 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - region "Notifications alt+T"
+  - generic [ref=e2]:
+    - generic [ref=e4]:
+      - link "H CourseHub" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e8]: H
+        - generic [ref=e9]: CourseHub
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - heading "Welcome back" [level=1] [ref=e14]:
+            - text: Welcome
+            - generic [ref=e15]:
+              - text: back
+              - img
+          - paragraph [ref=e16]: Enter your credentials to access your account
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - text: Email
+            - textbox "Email" [ref=e19]:
+              - /placeholder: name@example.com
+          - generic [ref=e20]:
+            - generic [ref=e21]:
+              - generic [ref=e22]: Password
+              - link "Forgot password?" [ref=e23] [cursor=pointer]:
+                - /url: /forgot-password
+            - generic [ref=e24]:
+              - textbox "Password" [ref=e25]:
+                - /placeholder: ••••••••
+              - button [ref=e26]:
+                - img [ref=e27]
+          - button "Sign In" [ref=e30]
+        - generic [ref=e31]:
+          - generic [ref=e32]: Don't have an account?
+          - link "Sign up" [ref=e33] [cursor=pointer]:
+            - /url: /register
+      - generic [ref=e34]:
+        - paragraph [ref=e35]: 2025 CourseHub. All rights reserved.
+        - generic [ref=e36]:
+          - link "Privacy Policy" [ref=e37] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms & Conditions" [ref=e38] [cursor=pointer]:
+            - /url: /terms
+    - generic [ref=e40]:
+      - heading "Elevate your academic journey." [level=1] [ref=e41]
+      - paragraph [ref=e42]: Join our community of students and educators on a university‑aligned learning hub for Ethiopian universities.
+  - button [ref=e46]:
+    - img [ref=e47]
+  - button "Open Next.js Dev Tools" [ref=e58] [cursor=pointer]:
+    - img [ref=e59]
+  - alert [ref=e62]
+```

@@ -1,11 +1,18 @@
-/// <reference types="vitest" />
+// vitest.config.ts
 import { defineConfig } from 'vitest/config';
+import tsconfigPaths from 'vite-tsconfig-paths';
+
 
 export default defineConfig({
+  
+
+  plugins: [
+    tsconfigPaths(), 
+  ],
+
   test: {
-    globals: true,                  // use test(), expect() without imports
-    environment: 'jsdom',           // simulate browser
-    setupFiles: './tests/unit/setup.ts', // optional setup file
-    include: ['tests/unit/**/*.test.{ts,tsx}'], // test file pattern
+    environment: 'jsdom',     // Needed for React component tests
+    globals: true,            // Allows using test, expect, describe without imports
+    // setupFiles: './tests/unit/setup.ts', // Uncomment if you have a setup file
   },
 });
