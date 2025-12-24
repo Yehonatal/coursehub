@@ -25,6 +25,7 @@ import { uploadResource } from "@/app/actions/resource";
 import { uploadResourceInitialState } from "@/app/actions/resource.client";
 import { toast } from "sonner";
 import { cn } from "@/utils/cn";
+import { UniversitySelect } from "@/components/common/UniversitySelect";
 
 interface UploadModalProps {
     isOpen: boolean;
@@ -173,7 +174,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                         ref={fileInputRef}
                                         type="file"
                                         name="file"
-                                        accept=".pdf,.doc,.docx,.ppt,.pptx"
+                                        accept=".pdf,.doc,.docx,.ppt,.pptx,.md,.txt"
                                         className="sr-only"
                                         onChange={handleFileChange}
                                         required
@@ -207,8 +208,8 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                                         or drag and drop
                                                     </p>
                                                     <p className="text-xs text-muted-foreground/60">
-                                                        PDF, Word, or PowerPoint
-                                                        (Max 20MB)
+                                                        PDF, Word, Markdown or
+                                                        PowerPoint (Max 20MB)
                                                     </p>
                                                 </div>
                                             </>
@@ -287,12 +288,10 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                                             *
                                         </span>
                                     </Label>
-                                    <Input
-                                        id="university"
+                                    <UniversitySelect
                                         name="university"
-                                        placeholder="e.g. Stanford University"
                                         required
-                                        className="h-12 rounded-xl border-border/50 bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all"
+                                        className="h-12"
                                     />
                                 </div>
 

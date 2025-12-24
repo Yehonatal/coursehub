@@ -2,11 +2,13 @@
 
 import { db } from "@/db";
 import { universities, users, resources, ratings, comments } from "@/db/schema";
-import { eq, and, desc, sql, count, avg } from "drizzle-orm";
+import { eq, and, desc, sql, count, avg, or, ilike } from "drizzle-orm";
 import { uploadFile } from "@/lib/storage/upload";
+
 import type { ActionResponse } from "@/app/actions/auth";
 import { revalidatePath } from "next/cache";
 import { error } from "@/lib/logger";
+import { slugify } from "@/utils/helpers";
 
 export async function getUniversityBySlug(slug: string) {
     try {
@@ -190,5 +192,66 @@ export async function updateUniversity(
     } catch (err) {
         error("Error updating university:", err);
         return { success: false, message: "Failed to update university" };
+    }
+}
+
+export async function searchUniversities(query: string, limit: number = 5) {
+    if (!query) return [];
+    try {
+        return await db
+            .select()
+            .from(universities)
+            .where(
+                or(
+                    ilike(universities.name, `%${query}%`),
+                    ilike(universities.description, `%${query}%`)
+                )
+            )
+            .limit(limit);
+    } catch (err) {
+        error("Error searching universities:", err);
+        return [];
+    }
+}
+
+export async function getUniversities() {
+    try {
+        return await db
+            .select({
+                university_id: universities.university_id,
+                name: universities.name,
+                slug: universities.slug,
+            })
+            .from(universities)
+            .orderBy(universities.name);
+    } catch (err) {
+        error("Error fetching all universities:", err);
+        return [];
+    }
+}
+
+export async function createUniversity(
+    name: string
+): Promise<ActionResponse & { university?: any }> {
+    try {
+        const slug = slugify(name);
+
+        const [newUniversity] = await db
+            .insert(universities)
+            .values({
+                name,
+                slug,
+                is_official: false,
+            })
+            .returning();
+
+        return {
+            success: true,
+            message: "University created successfully",
+            university: newUniversity,
+        };
+    } catch (err) {
+        error("Error creating university:", err);
+        return { success: false, message: "Failed to create university" };
     }
 }

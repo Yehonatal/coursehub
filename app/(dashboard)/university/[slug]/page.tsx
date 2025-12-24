@@ -58,7 +58,7 @@ export default async function UniversityPage({
                             : "Public University"
                     }
                     website={university.website || ""}
-                    logoUrl={university.logo_url || "/hu-logo.jpg"}
+                    logoUrl={university.logo_url || undefined}
                     bannerUrl={university.banner_url || undefined}
                     isStaff={isStaff}
                     email={university.email || ""}
@@ -66,7 +66,6 @@ export default async function UniversityPage({
                     isPrivate={university.is_private}
                 />
 
-                {/* Community & Impact Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                     <div className="lg:col-span-8">
                         <UniversityStats
@@ -80,7 +79,6 @@ export default async function UniversityPage({
                     </div>
                 </div>
 
-                {/* Materials Section */}
                 <div className="space-y-16">
                     <div className="space-y-8">
                         <div className="flex items-center justify-between">

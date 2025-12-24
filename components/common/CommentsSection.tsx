@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import { Comment, useResourceComments } from "@/hooks/useResourceComments";
+import { formatLocalTime } from "@/utils/date";
 
 interface CommentsSectionProps {
     initialComments: Comment[];
@@ -71,7 +72,7 @@ function CommentItem({
                         {comment.author.name}
                     </span>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                        {comment.timestamp}
+                        {formatLocalTime(comment.timestamp)}
                     </span>
                 </div>
                 <p className="text-foreground/80 text-sm leading-relaxed">

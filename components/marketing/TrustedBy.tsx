@@ -32,9 +32,9 @@ export function TrustedBy() {
                             “
                         </div>
                         <h3 className="text-2xl font-serif leading-relaxed mb-6 text-foreground">
-                            The diversity of topics, the connection with
-                            industry standards, and the quality of AI-generated
-                            study aids are impressive.
+                            The diversity of topics and the availability of
+                            AI‑assisted study aids provide valuable learning
+                            support for our students.
                         </h3>
                         <div className="text-4xl text-primary/20 font-serif mb-6">
                             “

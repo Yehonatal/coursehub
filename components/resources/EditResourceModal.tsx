@@ -200,7 +200,7 @@ function EditResourceForm({
                     htmlFor="description"
                     className="text-sm font-medium text-muted-foreground ml-1"
                 >
-                    Description
+                    Description (Supports Markdown)
                 </Label>
                 <Textarea
                     id="description"
@@ -249,6 +249,7 @@ function EditResourceForm({
                         id="file"
                         name="file"
                         type="file"
+                        accept=".pdf,.doc,.docx,.ppt,.pptx,.md,.txt"
                         className="h-12 rounded-xl border-border bg-muted/5 focus:border-primary/30 focus:ring-primary/5 transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
                     />
                 </div>

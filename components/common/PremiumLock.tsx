@@ -26,7 +26,7 @@ export function PremiumLock({
     return (
         <div
             className={cn(
-                "relative group/lock overflow-hidden",
+                "relative group/lock overflow-hidden h-80",
                 containerClassName
             )}
         >

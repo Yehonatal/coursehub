@@ -8,6 +8,7 @@ import { useUser } from "@/components/providers/UserProvider";
 import { BadgeCheck, Pencil, MapPin } from "lucide-react";
 import { EditProfileModal } from "@/components/dashboard/EditProfileModal";
 import { SubscriptionBadge } from "@/components/common/SubscriptionBadge";
+import BrandBanner from "@/components/common/BrandBanner";
 
 export function ProfileHeader() {
     const { user } = useUser();
@@ -31,22 +32,15 @@ export function ProfileHeader() {
                 user={user}
             />
             <div className="h-24 sm:h-48 w-full rounded-3xl  relative overflow-hidden border border-border/50 ">
-                {displayBanner ? (
-                    <Image
-                        src={displayBanner}
-                        alt="Banner"
-                        fill
-                        className="object-cover opacity-90"
-                    />
-                ) : (
-                    <>
+                <div className="h-24 sm:h-48 w-full rounded-3xl relative overflow-hidden border border-border/50 ">
+                    <div className="absolute inset-0">
                         <div
-                            className="absolute inset-0 opacity-[0.03]"
+                            className="absolute inset-0 opacity-[0.07]"
                             style={{
                                 backgroundImage: `
-                                    linear-gradient(to right, currentColor 1px, transparent 1px),
-                                    linear-gradient(to bottom, currentColor 1px, transparent 1px)
-                                `,
+                                                        linear-gradient(to right, currentColor 1px, transparent 1px),
+                                                        linear-gradient(to bottom, currentColor 1px, transparent 1px)
+                                                    `,
                                 backgroundSize: "40px 40px",
                             }}
                         ></div>
@@ -57,8 +51,27 @@ export function ProfileHeader() {
                                 backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
                             }}
                         ></div>
-                    </>
-                )}
+
+                        <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
+                        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse delay-700"></div>
+
+                        <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                            {displayBanner ? (
+                                <Image
+                                    src={displayBanner}
+                                    alt="Banner"
+                                    fill
+                                    className="object-cover opacity-90"
+                                />
+                            ) : (
+                                <BrandBanner
+                                    text={displayName}
+                                    watermark={displayName.trim().split(" ")[0]}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
 
                 <div className="absolute inset-0 bg-linear-to-t from-background/80 via-background/20 to-transparent"></div>
 

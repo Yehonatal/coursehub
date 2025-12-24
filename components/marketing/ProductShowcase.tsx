@@ -40,7 +40,7 @@ const products = [
         icon: Bot,
         title: "Smart Study Companion",
         description:
-            "Leverage advanced AI to transform how you learn. Generate summaries, create flashcards, and get instant answers to your academic questions.",
+            "Use our AI assistant to support learning: generate summaries, create flashcards, and get context-aware help based on your materials.",
         features: [
             "Instant document summarization",
             "Automated flashcard generation",
@@ -58,7 +58,7 @@ const products = [
         icon: Library,
         title: "Verified Academic Content",
         description:
-            "Access a vast library of peer-reviewed study materials, organized by course, semester, and university for easy retrieval.",
+            "Access a community‑curated library of study materials, organized by course, semester, and university for easy retrieval.",
         features: [
             "Course-specific filtering",
             "Educator-verified content",

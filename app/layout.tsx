@@ -48,9 +48,9 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-    title: "CourseHub - Centralized Adaptive Learning",
+    title: "CourseHub - University-aligned Learning Hub",
     description:
-        "The centralized adaptive learning platform for Ethiopian university students and educators.",
+        "A centralized, university‑aligned learning hub for Ethiopian students and educators.",
 };
 
 export default async function RootLayout({

@@ -115,21 +115,18 @@ export function ResourceHeader({
             <div className="flex flex-col md:flex-row justify-between items-start gap-4">
                 <div className="space-y-2 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                        <Badge
-                            variant="primary"
-                            className="px-1.5 py-0 text-[8px]"
-                        >
+                        <Badge variant="primary" className="px-2 py-0.5">
                             {type.charAt(0).toUpperCase() + type.slice(1)}
                         </Badge>
-                        <Badge
-                            variant="outline"
-                            className="px-1.5 py-0 text-[8px]"
-                        >
+                        <Badge variant="outline" className="px-2 py-0.5">
                             {courseCode}
                         </Badge>
                         {isVerified ? (
                             <div className="group relative inline-block">
-                                <Badge variant="verified" />
+                                <Badge
+                                    variant="verified"
+                                    className="px-2 py-0.5"
+                                />
                                 {verifier && (
                                     <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block w-48 p-3 bg-card border border-border rounded-2xl shadow-2xl z-50 text-[10px] animate-in fade-in slide-in-from-bottom-1 duration-200">
                                         <div className="space-y-1">
@@ -157,10 +154,7 @@ export function ResourceHeader({
                                 )}
                             </div>
                         ) : (
-                            <Badge
-                                variant="neutral"
-                                className="px-1.5 py-0 text-[8px] opacity-60"
-                            >
+                            <Badge variant="neutral" className="px-2 py-0.5">
                                 Unverified
                             </Badge>
                         )}

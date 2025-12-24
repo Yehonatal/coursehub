@@ -331,11 +331,12 @@ export default function BillingSection({
                             <Sparkles className="w-5 h-5 text-primary mt-0.5" />
                             <div className="space-y-1">
                                 <p className="text-xs font-bold text-primary uppercase tracking-wider">
-                                    Pro Tip
+                                    Premium Tip
                                 </p>
                                 <p className="text-xs text-muted-foreground leading-relaxed">
-                                    Upgrade to Pro for unlimited AI generations,
-                                    priority support, and advanced study tools.
+                                    Upgrade to Premium for unlimited AI
+                                    generations & & chats, 10GB cloud storage,
+                                    and advanced study tools.
                                 </p>
                             </div>
                         </div>

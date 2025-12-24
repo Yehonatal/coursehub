@@ -1,7 +1,6 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Star, Download, MessageSquare, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/utils/cn";
@@ -88,12 +87,7 @@ export function ResourceCard({
                                 )}
                             </div>
                         ) : (
-                            <Badge
-                                variant="neutral"
-                                className="bg-muted/60 backdrop-blur-sm text-muted-foreground border-none shadow-none"
-                            >
-                                Unverified
-                            </Badge>
+                            <Badge variant="neutral">Unverified</Badge>
                         )}
                     </div>
                 </div>

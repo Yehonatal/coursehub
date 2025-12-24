@@ -26,7 +26,7 @@ export function PricingTable() {
                                 Student Basic
                             </TableHead>
                             <TableHead className="text-center font-bold text-primary">
-                                Student Pro
+                                Student Premium
                             </TableHead>
                         </TableRow>
                     </TableHeader>
@@ -55,10 +55,10 @@ export function PricingTable() {
                         </TableRow>
                         <TableRow>
                             <TableCell className="font-medium pl-6">
-                                AI Flashcards
+                                AI Generations
                             </TableCell>
                             <TableCell className="text-center text-muted-foreground">
-                                5 / month
+                                5 / day
                             </TableCell>
                             <TableCell className="text-center font-bold text-primary">
                                 Unlimited
@@ -66,13 +66,24 @@ export function PricingTable() {
                         </TableRow>
                         <TableRow>
                             <TableCell className="font-medium pl-6">
-                                AI Summaries
+                                AI Chats
                             </TableCell>
                             <TableCell className="text-center text-muted-foreground">
-                                5 / month
+                                10 / day
                             </TableCell>
                             <TableCell className="text-center font-bold text-primary">
                                 Unlimited
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className="font-medium pl-6">
+                                Cloud Storage
+                            </TableCell>
+                            <TableCell className="text-center text-muted-foreground">
+                                100 MB
+                            </TableCell>
+                            <TableCell className="text-center font-bold text-primary">
+                                10 GB
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -84,17 +95,6 @@ export function PricingTable() {
                             </TableCell>
                             <TableCell className="text-center font-bold text-primary">
                                 Advanced
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell className="font-medium pl-6">
-                                Ad-free
-                            </TableCell>
-                            <TableCell className="text-center">
-                                <X className="h-5 w-5 text-muted-foreground/50 mx-auto" />
-                            </TableCell>
-                            <TableCell className="text-center">
-                                <Check className="h-5 w-5 text-primary mx-auto" />
                             </TableCell>
                         </TableRow>
                     </TableBody>
