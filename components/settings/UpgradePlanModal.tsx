@@ -46,7 +46,7 @@ export function UpgradePlanModal({ isOpen, onClose }: UpgradePlanModalProps) {
                     setTimeout(() => {
                         onClose();
                         window.location.reload(); // Refresh to show new status
-                    }, 4000);
+                    }, 2000);
                 } else if (res.checkout_url) {
                     toast.success("Redirecting to payment...");
                     window.location.href = res.checkout_url;
