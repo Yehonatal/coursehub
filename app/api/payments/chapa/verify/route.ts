@@ -12,7 +12,8 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
-        const tx_ref = searchParams.get("tx_ref");
+        const tx_ref =
+            searchParams.get("tx_ref") || searchParams.get("trx_ref");
 
         if (!tx_ref) {
             return NextResponse.redirect(
@@ -87,7 +88,7 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { tx_ref } = body;
+        const tx_ref = body.tx_ref || body.trx_ref;
 
         if (!tx_ref) {
             return NextResponse.json(

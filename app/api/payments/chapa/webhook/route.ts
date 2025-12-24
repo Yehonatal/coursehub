@@ -5,13 +5,44 @@ import { eq } from "drizzle-orm";
 import { verifyTransaction } from "@/lib/payment/chapa/client";
 import { error, info } from "@/lib/logger";
 import { completeSubscription } from "@/app/actions/subscription";
+import crypto from "crypto";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
     try {
-        const body = await req.json();
-        const { tx_ref, status } = body;
+        const rawBody = await req.text();
+        const signature =
+            req.headers.get("x-chapa-signature") ||
+            req.headers.get("chapa-signature");
+        const secret = process.env.CHAPA_SECRET_KEY;
+
+        // Optional: Verify signature if secret is available
+        if (secret && signature) {
+            const hash = crypto
+                .createHmac("sha256", secret)
+                .update(rawBody)
+                .digest("hex");
+
+            if (hash !== signature) {
+                info(
+                    "Webhook signature mismatch, but proceeding with verification check"
+                );
+            }
+        }
+
+        let body;
+        try {
+            body = JSON.parse(rawBody);
+        } catch (e) {
+            return NextResponse.json(
+                { message: "Invalid JSON" },
+                { status: 200 }
+            );
+        }
+
+        const tx_ref = body.tx_ref || body.trx_ref;
+        const status = body.status;
 
         if (!tx_ref) {
             return NextResponse.json({ message: "No tx_ref" }, { status: 200 });
@@ -40,7 +71,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "Processed" }, { status: 200 });
     } catch (err: any) {
         error("Chapa webhook error:", err);
-        // Always return 200 to Chapa to stop retries
         return NextResponse.json({ message: "Error handled" }, { status: 200 });
     }
 }
