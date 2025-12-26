@@ -13,6 +13,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',     // Needed for React component tests
     globals: true,            // Allows using test, expect, describe without imports
-    // setupFiles: './tests/unit/setup.ts', // Uncomment if you have a setup file
+    setupFiles: './vitest.setup.ts', // optional, for global mocks
   },
 });

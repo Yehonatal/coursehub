@@ -1,45 +1,79 @@
 # Unit Tests for CourseHub
 
-This directory contains **unit tests** for the core logic and utilities of the CourseHub application.
+This directory (`tests/unit/`) contains **unit tests** for the core logic and utilities of the CourseHub application.
 
-These tests run in isolation (no browser, no database, no network), are very fast, and ensure that individual functions and modules work correctly on their own.
+Unit tests run **in complete isolation** — no browser, no real database, no network calls. They are extremely fast and focus on verifying that individual functions and modules behave exactly as expected.
 
-## Status: All Tests Pass Successfully
+## Current Status: All Tests Passing
 
-**100% passing – no failures!**
+**100% passing — no failures!**
+c
+As of December 26, 2025:
 
-Current coverage:
+- **6 test files**
+- **41 total tests**
+- **All green and stable**
 
-- 4 test files
-- 10 total tests
-- All green and stable
+✓ tests/unit/auth.test.ts (12 tests)
+✓ tests/unit/gemini.test.ts (8 tests)
+✓ tests/unit/generateFlashcards.test.ts (6 tests)
+✓ tests/unit/generatestudynote.test.ts (6 tests)
+✓ tests/unit/helpers.test.ts (5 tests)
+✓ tests/unit/quota.test.ts (8 tests)
+✓ tests/unit/resource.test.ts (8 tests)
+
+## Tested Modules
+
+| Test File                    | Number of Tests | Purpose & Key Scenarios Covered                                                                                                                                |
+| ---------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `auth.test.ts`               | 12              | JWT generation/verification, session creation/retrieval/deletion, validateRequest (including subscription expiry downgrade), getCurrentUser, invalidateSession |
+| `gemini.test.ts`             | 8               | Gemini API key handling, model selection, env fallback, pre-initialized model, secure logging                                                                  |
+| `generateFlashcards.test.ts` | 6               | Flashcard generation flow, malformed JSON recovery, heuristic repair, follow-up prompts, rate-limit & error handling                                           |
+| `generatestudynote.test.ts`  | 6               | Study note generation pipeline, error recovery, rate limiting                                                                                                  |
+| `helpers.test.ts`            | 5               | JSON extraction from LLM responses, knowledge tree node defaults                                                                                               |
+| `quota.test.ts`              | 8               | Free vs Pro daily limits, quota reset on new day, new user creation, increment logic                                                                           |
+| `resource.test.ts`           | 8               | Resource fetching with joins, stats aggregation (ratings, comments, views, downloads), row mapping (author/verifier/tags), resource creation with tags         |
+
+These tests protect the most critical parts of CourseHub: AI generation, quota enforcement, authentication, and resource management.
 
 ## Dependencies
 
-- **Vitest** – The testing framework (fast, Vite-native)
-- **vi** – Built-in mocking utility from Vitest
-- No external testing libraries needed for these pure logic tests
+The test suite uses:
 
-Installed with:
+- **Vitest** – Ultra-fast testing framework built for Vite projects
+- **vi** – Vitest's built-in mocking utility
+
+No additional testing libraries are required.
+
+Installed via:
 
 ```bash
 pnpm add -D vitest
-
-
+# Optional: for coverage reports
+pnpm add -D @vitest/coverage-v8
 ```
 
-# Run all unit tests (recommended)
+How to Run the Tests
 
-pnpm test
+# Run all tests in the project (recommended)
 
-# Or directly target this folder
+pnpm vitest
 
-pnpm vitest run tests/unit
+# Run only the unit tests in this folder
 
-### How to Add It
+pnpm vitest tests/unit
 
-In your terminal (inside the project folder):
+# Run a single specific test file
 
-```bash
-touch tests/unit/README.md
-```
+pnpm vitest resource.test.ts
+pnpm vitest auth.test.ts
+
+# etc.
+
+# Watch mode – automatically re-runs tests when you save files (perfect for development)
+
+pnpm vitest --watch
+
+# Run with code coverage report
+
+pnpm vitest --coverage

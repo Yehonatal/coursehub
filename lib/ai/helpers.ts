@@ -30,15 +30,27 @@ function extractJSONSubstring(text: string, expectArray = true) {
     // As a last resort return the cleaned text and let JSON.parse fail upstream
     return cleaned;
 }
-function ensureNodeDefaults(node: any): AIKnowledgeNode {
+
+function ensureNodeDefaults(node: any = {}): AIKnowledgeNode {
+    const safeNode = node || {};
+
+    const rawLabel = safeNode.label || safeNode.id || "Root";
+    const label = typeof rawLabel === "string" ? rawLabel.trim() : "Root";
+
     const id =
-        node.id ||
-        (node.label ? node.label.toLowerCase().replace(/\s+/g, "_") : "root");
-    const label = node.label || node.id || "Root";
-    const description = node.description || undefined;
-    const children = Array.isArray(node.children)
-        ? node.children.map((c: any) => ensureNodeDefaults(c))
+        safeNode.id ||
+        (safeNode.label
+            ? typeof safeNode.label === "string"
+                ? safeNode.label.trim().toLowerCase().replace(/\s+/g, "_")
+                : "root"
+            : "root");
+
+    const description = safeNode.description || undefined;
+
+    const children = Array.isArray(safeNode.children)
+        ? safeNode.children.map((c: any) => ensureNodeDefaults(c))
         : [];
+
     return { id, label, description, children };
 }
 

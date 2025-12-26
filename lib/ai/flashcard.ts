@@ -100,3 +100,5 @@ export async function generateFlashcards(
         throw new Error("Failed to generate flashcards");
     }
 }
+export { extractJSONSubstring };
+
