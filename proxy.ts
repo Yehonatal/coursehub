@@ -5,11 +5,15 @@ import { error } from "@/lib/logger";
 export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // Protected routes
-    const protectedRoutes = ["/dashboard", "/ai", "/resources", "/university"];
+    // Bypass requests for files with an extension (e.g. /ai.png, /styles.css, /fonts.woff2)
+    if (/\.[^/?#]+$/.test(pathname)) {
+        return NextResponse.next();
+    }
 
-    const isProtected = protectedRoutes.some((route) =>
-        pathname.startsWith(route)
+    // Protected routes (exact path or folder)
+    const protectedRoutes = ["/dashboard", "/ai", "/resources", "/university"];
+    const isProtected = protectedRoutes.some(
+        (route) => pathname === route || pathname.startsWith(`${route}/`)
     );
 
     if (isProtected) {
