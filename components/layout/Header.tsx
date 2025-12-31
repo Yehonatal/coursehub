@@ -154,7 +154,7 @@ export function Header() {
                         )}
                         <Input
                             type="search"
-                            placeholder="Search for resources, universities, or courses..."
+                            placeholder="Search (e.g. '@haramaya programming') — resources, universities, or courses..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onFocus={() =>
