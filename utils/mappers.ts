@@ -25,13 +25,33 @@ export function mapGenerationToRecentItem(gen: any, author = "You") {
               (gen.prompt.length > 30 ? "..." : "")
             : generationType.charAt(0).toUpperCase() + generationType.slice(1));
 
+    // Helper to count nodes in a knowledge tree
+    const countTreeNodes = (nodeOrNodes: any): number => {
+        if (!nodeOrNodes) return 0;
+        if (Array.isArray(nodeOrNodes)) {
+            return nodeOrNodes.reduce((acc, n) => acc + countTreeNodes(n), 0);
+        }
+        // Single node object
+        const children = Array.isArray(nodeOrNodes.children)
+            ? nodeOrNodes.children
+            : [];
+        let count = 1; // count this node
+        for (const c of children) count += countTreeNodes(c);
+        return count;
+    };
+
     let meta: string;
     if (generationType === "notes") {
         meta = "Study Notes";
     } else if (generationType === "tree") {
-        meta = `${gen.content?.nodes?.length || 0} Nodes`;
+        const nodes = countTreeNodes(gen.content);
+        meta = `${nodes} Node${nodes === 1 ? "" : "s"}`;
     } else {
-        meta = `${gen.content?.length || 0} Cards`;
+        let cards = 0;
+        if (Array.isArray(gen.content)) cards = gen.content.length;
+        else if (Array.isArray(gen.content?.cards))
+            cards = gen.content.cards.length;
+        meta = `${cards} Card${cards === 1 ? "" : "s"}`;
     }
 
     return {
