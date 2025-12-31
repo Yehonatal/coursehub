@@ -44,10 +44,22 @@ export function AIStudyAssistant() {
             setNotes(result);
         } catch (err: unknown) {
             const msg = (err as Error).message || "Failed to generate notes";
-            if (msg === "RATE_LIMIT_EXCEEDED" || msg.includes("quota")) {
-                setShowRateLimitModal(true);
+            if (
+                msg === "AI_API_KEY_MISSING" ||
+                msg === "AI_API_KEY_INVALID" ||
+                msg.includes("API key not valid") ||
+                msg.includes("Missing Gemini API Key")
+            ) {
+                // Inform user to configure key
+                setError(
+                    "AI API key missing or invalid. Please configure your key in AI Settings."
+                );
+            } else {
+                if (msg === "RATE_LIMIT_EXCEEDED" || msg.includes("quota")) {
+                    setShowRateLimitModal(true);
+                }
+                setError(msg);
             }
-            setError(msg);
         } finally {
             setLoading(false);
         }

@@ -127,6 +127,22 @@ export async function sendChatMessage(
     }).catch((err: unknown) => {
         error("Error sending chat message:", err);
         const e = err as { message?: string; status?: number };
+        // Detect API key problems by message content
+        const errMsgText = (err as any)?.message || String(err || "");
+        if (
+            errMsgText.includes("Missing Gemini API Key") ||
+            errMsgText === "AI_API_KEY_MISSING"
+        ) {
+            throw new Error("AI_API_KEY_MISSING");
+        }
+        if (
+            errMsgText.includes("API key not valid") ||
+            errMsgText.includes("API_KEY_INVALID") ||
+            errMsgText === "AI_API_KEY_INVALID"
+        ) {
+            throw new Error("AI_API_KEY_INVALID");
+        }
+
         if (
             e.message?.includes("429") ||
             e.status === 429 ||

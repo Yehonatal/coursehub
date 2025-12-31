@@ -94,6 +94,16 @@ export async function generateFlashcards(
         return repaired;
     } catch (err: any) {
         error("Error generating flashcards:", err);
+        // detect API key issues and rethrow specific errors for client handling
+        try {
+            const { detectApiKeyError } = await import("./gemini");
+            const keyIssue = detectApiKeyError(err);
+            if (keyIssue === "MISSING") throw new Error("AI_API_KEY_MISSING");
+            if (keyIssue === "INVALID") throw new Error("AI_API_KEY_INVALID");
+        } catch (e) {
+            // ignore detection errors and continue
+        }
+
         if (err.status === 503 || err.message?.includes("503")) {
             throw new Error("RATE_LIMIT_EXCEEDED");
         }

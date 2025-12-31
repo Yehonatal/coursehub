@@ -347,6 +347,20 @@ export function AIChatModal({
             console.error("Error sending message:", error);
             const errMsg =
                 error instanceof Error ? error.message : String(error);
+
+            if (
+                errMsg === "AI_API_KEY_MISSING" ||
+                errMsg === "AI_API_KEY_INVALID" ||
+                errMsg.includes("API key not valid") ||
+                errMsg.includes("Missing Gemini API Key")
+            ) {
+                toast.error(
+                    "AI API key missing or invalid. Please add or update your key in AI Settings."
+                );
+                setShowApiKeyModal(true);
+                return;
+            }
+
             if (
                 errMsg === "RATE_LIMIT_EXCEEDED" ||
                 errMsg.includes("429") ||

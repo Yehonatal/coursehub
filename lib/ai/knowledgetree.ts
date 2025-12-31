@@ -44,6 +44,14 @@ export async function generateKnowledgeTree(
         return repaired;
     } catch (err: any) {
         error("Error generating knowledge tree:", err);
+        try {
+            const { detectApiKeyError } = await import("./gemini");
+            const keyIssue = detectApiKeyError(err);
+            if (keyIssue === "MISSING") throw new Error("AI_API_KEY_MISSING");
+            if (keyIssue === "INVALID") throw new Error("AI_API_KEY_INVALID");
+        } catch (e) {
+            // ignore
+        }
         if (err.status === 503 || err.message?.includes("503")) {
             throw new Error("RATE_LIMIT_EXCEEDED");
         }
