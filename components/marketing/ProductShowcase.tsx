@@ -7,6 +7,7 @@ import {
     HandDrawnCircle,
     HandDrawnUnderline,
 } from "@/components/ui/decorations";
+import { ImageLightbox } from "@/components/common/ImageLightbox";
 import {
     LayoutDashboard,
     Bot,
@@ -269,16 +270,13 @@ export function ProductShowcase() {
                                     <div className="ml-2 sm:ml-4 h-2 sm:h-3 w-16 sm:w-20 md:w-24 rounded-full bg-muted" />
                                 </div>
                                 <div className="relative aspect-video bg-muted/20 overflow-hidden">
-                                    <Image
-                                        key={activeProduct.image}
+                                    <ImageLightbox
                                         src={activeProduct.image}
                                         alt={activeProduct.title}
-                                        fill
                                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 95vw, (max-width: 1280px) 60vw, 50vw"
-                                        className="object-cover object-top transition duration-700 ease-out"
                                         priority
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-background/35 to-transparent" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-background/35 to-transparent pointer-events-none" />
                                 </div>
                                 <div
                                     className="absolute -top-4 sm:-top-5 -right-2 sm:-right-3 hidden sm:block"

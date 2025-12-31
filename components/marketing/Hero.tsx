@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { HandDrawnCircle } from "@/components/ui/decorations";
 import { BookOpen } from "lucide-react";
-import Image from "next/image";
+import { ImageLightbox } from "@/components/common/ImageLightbox";
 
 export function Hero() {
     return (
@@ -78,16 +78,13 @@ export function Hero() {
                                 <div className="ml-2 sm:ml-4 h-2 sm:h-3 w-16 sm:w-20 md:w-24 bg-muted" />
                             </div>
                             <div className="relative aspect-video bg-muted/20 overflow-hidden">
-                                <Image
-                                    key="/ai.png"
+                                <ImageLightbox
                                     src="/ai.png"
                                     alt="AI Assistant"
-                                    fill
                                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 95vw, (max-width: 1280px) 60vw, 50vw"
-                                    className="object-cover object-top transition duration-700 ease-out"
                                     priority
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-background/35 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-background/35 to-transparent pointer-events-none" />
                             </div>
                             <div
                                 className="absolute -top-4 sm:-top-5 -right-2 sm:-right-3 hidden sm:block"
