@@ -17,6 +17,7 @@ import {
     ilike,
     SQL,
     gte,
+    sql,
 } from "drizzle-orm";
 import {
     fetchResourceRows,
@@ -30,25 +31,129 @@ import { isValidUUID } from "@/utils/helpers";
 
 export type { ResourceWithTags };
 
+import { parseTags } from "@/utils/parser";
+
 export async function getRelatedResources(
     resourceId: string,
     university: string,
     limit = 3
 ): Promise<ResourceWithTags[]> {
-    const rows = await fetchResourceRows(
-        and(
-            eq(resourcesTable.university, university),
-            ne(resourcesTable.resource_id, resourceId)
-        ),
-        limit
-    );
+    try {
+        // Fetch the source resource row
+        const sourceRows = await fetchResourceRows(
+            eq(resourcesTable.resource_id, resourceId),
+            1
+        );
+        if (sourceRows.length === 0) return [];
 
-    if (rows.length === 0) return [];
+        const source = sourceRows[0];
+        const sourceTags = new Set(parseTags(source.tags || ""));
+        const sourceCourse = source.course_code || "";
+        const sourceSemester = source.semester || "";
+        const sourceIsAI = Boolean(source.is_ai);
 
-    const ids = rows.map((r: any) => r.resource_id);
-    const stats = await fetchStatsByIds(ids);
+        // Candidate pool: resources from same university (wider pool to score)
+        const poolLimit = Math.max(limit * 10, 50);
+        const candidateRows = await fetchResourceRows(
+            and(
+                eq(resourcesTable.university, university),
+                ne(resourcesTable.resource_id, resourceId)
+            ),
+            poolLimit
+        );
 
-    return mapResourceRows(rows, stats);
+        if (candidateRows.length === 0) return [];
+
+        const candidateIds = candidateRows.map((r: any) => r.resource_id);
+        const stats = await fetchStatsByIds(candidateIds);
+
+        // Precompute maxes for normalization
+        let maxDownloads = 0;
+        let maxViews = 0;
+        candidateRows.forEach((r: any) => {
+            const d = Number(
+                r.downloads_count ?? stats.downloadById.get(r.resource_id) ?? 0
+            );
+            const v = Number(
+                r.views_count ?? stats.viewById.get(r.resource_id) ?? 0
+            );
+            if (d > maxDownloads) maxDownloads = d;
+            if (v > maxViews) maxViews = v;
+        });
+
+        // Score candidates
+        const scored = candidateRows.map((r: any) => {
+            const tags = new Set(parseTags(r.tags || ""));
+            // Tag overlap score (Jaccard-like)
+            const intersection = [...sourceTags].filter((t) =>
+                tags.has(t)
+            ).length;
+            const union = new Set([...sourceTags, ...tags]).size || 1;
+            const tagScore = intersection / union; // 0..1
+
+            const courseMatch =
+                sourceCourse && r.course_code === sourceCourse ? 1 : 0;
+            const semesterMatch =
+                sourceSemester && r.semester === sourceSemester ? 1 : 0;
+            const verifiedBoost = r.is_verified ? 1 : 0;
+
+            const downloads = Number(
+                r.downloads_count ?? stats.downloadById.get(r.resource_id) ?? 0
+            );
+            const views = Number(
+                r.views_count ?? stats.viewById.get(r.resource_id) ?? 0
+            );
+
+            const normDownloads =
+                maxDownloads > 0 ? downloads / maxDownloads : 0;
+            const normViews = maxViews > 0 ? views / maxViews : 0;
+            const popularity = normDownloads * 0.6 + normViews * 0.4; // 0..1
+
+            // AI penalty/boost: prefer same type as source; slightly prefer non-AI overall
+            const aiBias = r.is_ai === sourceIsAI ? 0.2 : r.is_ai ? -0.3 : 0.1;
+
+            // Weighted sum (tunable)
+            const score =
+                tagScore * 3 + // strong signal
+                courseMatch * 2 +
+                semesterMatch * 0.8 +
+                verifiedBoost * 1.8 +
+                popularity * 1.5 +
+                aiBias +
+                (new Date(r.upload_date).getTime() >
+                Date.now() - 1000 * 60 * 60 * 24 * 30
+                    ? 0.2
+                    : 0); // slight freshness boost
+
+            return { row: r, score };
+        });
+
+        // Sort and take top N
+        scored.sort((a: any, b: any) => b.score - a.score);
+        const selected = scored.slice(0, limit).map((s: any) => s.row);
+
+        // Enrich and return
+        const selectedIds = selected.map((r: any) => r.resource_id);
+        const selectedStats = await fetchStatsByIds(selectedIds);
+        return mapResourceRows(selected, selectedStats);
+    } catch (err) {
+        error("getRelatedResources failed:", err);
+        // Fallback to simple method: same university, recent
+        const rows = await fetchResourceRows(
+            and(
+                eq(resourcesTable.university, university),
+                ne(resourcesTable.resource_id, resourceId)
+            ),
+            limit
+        );
+
+        if (rows.length === 0) return [];
+
+        const ids = rows.map((r: any) => r.resource_id);
+        const stats = await fetchStatsByIds(ids);
+
+        return mapResourceRows(rows, stats);
+    }
 }
 
 export async function getResourceStats(resourceId: string) {
@@ -239,13 +344,23 @@ export async function getRecommendedResources(
     limit = 6
 ): Promise<ResourceWithTags[]> {
     try {
-        const rows = await fetchResourceRows(undefined, limit);
+        // Order by: verified first, then downloads, then views, prefer non-AI content, then recency
+        const orderExpr = sql`
+            ${resourcesTable.is_verified} DESC,
+            ${resourcesTable.downloads_count} DESC,
+            ${resourcesTable.views_count} DESC,
+            ${resourcesTable.is_ai} ASC,
+            ${resourcesTable.upload_date} DESC
+        `;
+
+        const rows = await fetchResourceRows(undefined, limit, orderExpr);
 
         if (rows.length === 0) return [];
 
         const ids = rows.map((r: any) => r.resource_id);
         const stats = await fetchStatsByIds(ids);
 
+        // Map rows to enriched DTOs
         return mapResourceRows(rows, stats);
     } catch (err) {
         error("getRecommendedResources failed:", err);

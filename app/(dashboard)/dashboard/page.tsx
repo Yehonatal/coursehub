@@ -14,7 +14,7 @@ export default async function StudentDashboard() {
     const user = await getCurrentUser();
     if (!user) return null;
 
-    const recommendedResources = await getRecommendedResources(6);
+    const recommendedResources = await getRecommendedResources(8);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const recentGenerations = await listUserGenerations({ limit: 4 });
 

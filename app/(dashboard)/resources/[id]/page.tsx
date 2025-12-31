@@ -68,7 +68,6 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     };
 
     const studyTime = estimateStudyTime(resource.file_size);
-    console.log("Study Time:", studyTime);
 
     return (
         <div className="min-h-screen bg-background pb-20">
