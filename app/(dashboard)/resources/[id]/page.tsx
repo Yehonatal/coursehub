@@ -15,6 +15,7 @@ import {
     getRelatedResources,
 } from "@/lib/resources";
 import BrandBanner from "@/components/common/BrandBanner";
+import { Tag } from "@/components/common/Tag";
 import { ViewTracker } from "@/components/resources/ViewTracker";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getResourceGenerations } from "@/app/actions/ai";
@@ -147,12 +148,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                         {resource.tags.length > 0 && (
                             <div className="flex flex-wrap gap-2 mt-2">
                                 {resource.tags.map((t, i) => (
-                                    <span
-                                        key={i}
-                                        className="px-2 py-0.5 bg-muted text-muted-foreground text-[12px] font-medium rounded"
-                                    >
-                                        {t}
-                                    </span>
+                                    <Tag key={i} text={t} />
                                 ))}
                             </div>
                         )}

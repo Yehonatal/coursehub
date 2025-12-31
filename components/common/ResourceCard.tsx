@@ -5,6 +5,7 @@ import { Star, Download, MessageSquare, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/utils/cn";
 import { ResourcePreview } from "./ResourcePreview";
+import { Tag } from "@/components/common/Tag";
 
 interface ResourceCardProps {
     id: string | number;
@@ -148,12 +149,7 @@ export function ResourceCard({
                     {!isMini && tags.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-auto pt-2">
                             {tags.slice(0, 3).map((tag, i) => (
-                                <span
-                                    key={i}
-                                    className="px-3 py-1 bg-muted/50 text-muted-foreground text-[10px] font-bold rounded-full border border-border/50"
-                                >
-                                    {tag}
-                                </span>
+                                <Tag key={i} text={tag} />
                             ))}
                             {tags.length > 3 && (
                                 <span className="text-[10px] font-bold text-muted-foreground/40 self-center">
