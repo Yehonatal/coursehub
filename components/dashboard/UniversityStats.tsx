@@ -40,13 +40,15 @@ function StatCard({ label, value, icon, highlight }: StatCardProps) {
 }
 
 interface UniversityStatsProps {
-    students: number;
+    students?: number;
+    educators?: number;
     resources: number;
     verified: number;
 }
 
 export function UniversityStats({
     students,
+    educators,
     resources,
     verified,
 }: UniversityStatsProps) {
@@ -65,8 +67,12 @@ export function UniversityStats({
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-6 relative">
-                    <StatCard label="Active Students" value={students} />
-                    <StatCard label="Verified Materials" value={verified} />
+                    <StatCard label="Active Students" value={students ?? 0} />
+                    <StatCard label="Active Educators" value={educators ?? 0} />
+                    <StatCard
+                        label="Verified Materials"
+                        value={verified ?? 0}
+                    />
                 </div>
             </div>
 

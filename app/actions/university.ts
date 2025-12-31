@@ -28,34 +28,50 @@ export async function getUniversityBySlug(slug: string) {
 export async function getUniversityStats(universityId: number) {
     try {
         // Parallelize counts
-        const [studentCount, resourceCount, verifiedCount] = await Promise.all([
-            db
-                .select({ count: count() })
-                .from(users)
-                .where(eq(users.university_id, universityId)),
-            db
-                .select({ count: count() })
-                .from(resources)
-                .where(eq(resources.university_id, universityId)),
-            db
-                .select({ count: count() })
-                .from(resources)
-                .where(
-                    and(
-                        eq(resources.university_id, universityId),
-                        eq(resources.is_verified, true)
-                    )
-                ),
-        ]);
+        const [studentCount, educatorCount, resourceCount, verifiedCount] =
+            await Promise.all([
+                db
+                    .select({ count: count() })
+                    .from(users)
+                    .where(
+                        and(
+                            eq(users.university_id, universityId),
+                            eq(users.role, "student")
+                        )
+                    ),
+                db
+                    .select({ count: count() })
+                    .from(users)
+                    .where(
+                        and(
+                            eq(users.university_id, universityId),
+                            eq(users.role, "educator")
+                        )
+                    ),
+                db
+                    .select({ count: count() })
+                    .from(resources)
+                    .where(eq(resources.university_id, universityId)),
+                db
+                    .select({ count: count() })
+                    .from(resources)
+                    .where(
+                        and(
+                            eq(resources.university_id, universityId),
+                            eq(resources.is_verified, true)
+                        )
+                    ),
+            ]);
 
         return {
             students: studentCount[0].count,
+            educators: educatorCount[0].count,
             resources: resourceCount[0].count,
             verified: verifiedCount[0].count,
         };
     } catch (err) {
         error("Error fetching university stats:", err);
-        return { students: 0, resources: 0, verified: 0 };
+        return { students: 0, educators: 0, resources: 0, verified: 0 };
     }
 }
 

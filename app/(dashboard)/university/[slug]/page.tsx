@@ -70,6 +70,7 @@ export default async function UniversityPage({
                     <div className="lg:col-span-8">
                         <UniversityStats
                             students={stats.students}
+                            educators={stats.educators}
                             resources={stats.resources}
                             verified={stats.verified}
                         />
