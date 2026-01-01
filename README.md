@@ -37,7 +37,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 ---
 
 **Functional Requirements (traceable FR-XX)**
-
+### V1.0
 - [x] FR-01: Allow users to register using email and password.
 - [x] FR-02: Verify user accounts via email using the Notification Service.
 - [x] FR-03: Allow users to log in and maintain session state.
@@ -86,6 +86,108 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-27: User settings to manage profile, notification preferences, and subscription details.
 - [x] FR-27-01: Allow users to change password, delete account, and manage linked payment methods.
 
+### V2.0
+- [ ] FR-28: Allow users to create resource bundles or course packs by grouping multiple learning materials.
+- [ ] FR-28-01: Enable one-click download of bundled resources as a single ZIP file.
+- [ ] FR-28-02: Support prerequisite linking between resources to show recommended study order.
+- [ ] FR-29: Provide public user profiles displaying contributions, ratings, and verification status.
+- [ ] FR-29-01: Implement a follow system to notify users when followed contributors upload new content.
+- [ ] FR-29-02: Enable peer networking based on university, department, or field of study.
+- [ ] FR-30: Support uploading, hosting, and streaming of video lectures.
+- [ ] FR-30-01: Automatically generate AI-powered transcripts and summaries for video content.
+- [ ] FR-30-02: Allow timestamped comments and questions on video lectures.
+- [ ] FR-31: Provide peer-to-peer messaging for direct communication and resource sharing.
+- [ ] FR-31-01: Automatically generate course-specific group chats for each course code.
+- [ ] FR-31-02: Enable collaborative study rooms with shared documents and whiteboards.
+- [ ] FR-32: Implement a reputation system rewarding uploads, helpful comments, and ratings.
+- [ ] FR-32-01: Display monthly and all-time leaderboards for top contributors.
+- [ ] FR-32-02: Assign verified and master contributor badges to trusted users.
+- [ ] FR-33: Provide an internship and job board tailored to students and graduates.
+- [ ] FR-33-01: Use platform contributions as proof of skill and knowledge for employers.
+- [ ] FR-34: Generate adaptive learning paths based on user behavior and study habits.
+- [ ] FR-34-01: Support natural-language, context-aware academic search.
+- [ ] FR-35: Provide native mobile applications for Android and iOS.
+- [ ] FR-35-01: Enable offline access to downloaded resources and AI-generated notes.
+- [ ] FR-36: Support multiple Ethiopian languages including Amharic, Oromiffa, and Tigrinya.
+- [ ] FR-36-01: Enable AI-powered translation of resources into supported languages.
+- [ ] FR-37: Support a premium resource marketplace for selling high-quality study materials.
+- [ ] FR-37-01: Provide subscription tiers with enhanced AI features and storage limits.
+- [ ] FR-37-02: Offer white-label platform solutions for universities.
+- [ ] FR-38: Implement a peer-review system for validating academic resources.
+- [ ] FR-38-01: Integrate plagiarism detection for uploaded content.
+- [ ] FR-38-02: Support official university curriculum and course synchronization via APIs.
+- [ ] FR-39: Support sponsored challenges and hackathons hosted by industry partners.
+- [ ] FR-39-01: Enable educator-based skill endorsements for students.
+- [ ] FR-39-02: Provide an AI-curated scholarship and grant tracking system.
+- [ ] FR-40: Provide interactive flashcards with spaced repetition.
+- [ ] FR-40-01: Implement an AI-powered virtual tutor with step-by-step explanations.
+- [ ] FR-40-02: Provide access to digital textbooks and libraries through partnerships.
+
+### V3.0
+- [ ] FR-41: Track learning impact by correlating resource usage with user engagement and completion behavior.-
+- [ ] FR-41-01: Generate resource effectiveness scores based on views, downloads, ratings, and completion signals.
+- [ ] FR-41-02: Provide educators and university staff with AI-generated insights highlighting high-difficulty topics and learner drop-off points.
+- [ ] FR-42: Implement advanced content moderation workflows for reported or low-quality resources.
+- [ ] FR-42-01: Support community-based moderation roles for trusted and verified contributors.
+- [ ] FR-42-02: Maintain version history for edited resources and allow rollback to previous versions.
+- [ ] FR-42-03: Support soft-deletion, appeals, and administrative review of moderated content.
+- [ ] FR-43: Support official course ownership and content hierarchy per university and department.
+- [ ] FR-43-01: Allow educators or departments to mark resources as “official” for a course.
+- [ ] FR-43-02: Distinguish between official, verified, and community-contributed resources in course views.
+- [ ] FR-43-03: Support semester-based course archival and read-only access to past materials.
+- [ ] FR-44: Provide practice-based assessment tools without enabling academic dishonesty.
+- [ ] FR-44-01: Support time-limited practice exams using past questions in a simulation-only mode.
+- [ ] FR-44-02: Provide AI-generated feedback and hints without revealing final answers.
+- [ ] FR-44-03: Allow educators to tag questions by difficulty and learning objective.
+- [ ] FR-45: Increase AI transparency and reliability for generated educational content.
+- [ ] FR-45-01: Display source references or content chunks used to generate AI responses.
+- [ ] FR-45-02: Assign confidence indicators to AI-generated outputs.
+- [ ] FR-45-03: Allow users to flag suspected AI hallucinations or incorrect explanations.
+- [ ] FR-46: Optimize the platform for low-bandwidth and offline-first environments.
+- [ ] FR-46-01: Provide text-only and compressed versions of AI-generated content for low-connectivity users.
+- [ ] FR-46-02: Support resumable downloads and background synchronization.
+- [ ] FR-46-03: Notify users of critical platform events via SMS or lightweight notification channels when internet access is limited.
+- [ ] FR-47: Establish platform governance, transparency, and compliance controls.
+- [ ] FR-47-01: Require users to accept platform usage policies and contributor guidelines.
+- [ ] FR-47-02: Maintain audit logs for administrative and moderation actions.
+- [ ] FR-47-03: Allow users to export their personal data and contributions.
+
+### V4.0
+- FR-48: Implement comprehensive security monitoring and abuse prevention mechanisms.
+- FR-48-01: Detect and rate-limit suspicious activities such as mass downloads, spam uploads, or automated bot behavior.
+- FR-48-02: Log authentication events and critical account actions for security auditing.
+- FR-48-03: Notify users of unusual login activity or potential account compromise.
+- FR-49: Monitor system health and service availability in real time.
+- FR-49-01: Track API performance, error rates, and uptime metrics.
+- FR-49-02: Gracefully degrade non-critical features when system load is high.
+- FR-49-03: Provide administrators with alerts for critical system failures.
+- FR-50: Provide a controlled public API for third-party and institutional integrations.
+- FR-50-01: Allow external systems to fetch public resources and metadata via secure endpoints.
+- FR-50-02: Support API authentication, rate limiting, and access scopes.
+- FR-50-03: Provide API documentation for approved developers and partners.
+- FR-51: Support anonymized data exports for educational research and analytics.
+- FR-51-01: Allow administrators to generate anonymized datasets for academic studies.
+- FR-51-02: Ensure exported datasets comply with privacy, consent, and data protection policies.
+- FR-52: Incorporate learning-science-based study support features.
+- FR-52-01: Recommend spaced review schedules based on forgetting curve principles.
+- FR-52-02: Suggest interleaved practice across related courses or topics.
+- FR-52-03: Allow users to reflect on learning sessions via short self-assessment prompts.
+- FR-53: Ensure platform accessibility for users with disabilities.
+- FR-53-01: Support screen readers, keyboard navigation, and accessible color contrast.
+- FR-53-02: Provide captions and transcripts for all video-based learning materials.
+- FR-53-03: Allow users to customize font size, spacing, and reading modes.
+
+
+## 📈 Vision & ROI (Return on Investment)
+
+CourseHub is evolving from a student project into a high-growth educational startup with a clear path to value:
+
+1.  **For Students**: Drastic reduction in "Search Time" for quality materials. AI-powered tools provide a personalized learning experience that scales, leading to higher graduation rates and better job readiness.
+2.  **For Educators**: A platform to build a digital legacy, reach students nationwide, and monetize high-value expertise through the marketplace.
+3.  **For Universities**: Access to "Learning Analytics" that highlight where students struggle, enabling data-driven curriculum improvements.
+4.  **For the Economy**: By bridging the gap between academia and industry, CourseHub creates a more skilled workforce and a direct pipeline for talent discovery in Ethiopia.
+
+---
 
 **Non-Functional Requirements (NFR)**
 - [ ] NFR-01: Respond to 90% of search and page-navigation requests within 3s under typical load (≤50 concurrent active users).
