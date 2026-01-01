@@ -110,6 +110,7 @@ const fonts = [
     { name: "Geist Sans", value: "var(--font-geist-sans)" },
     { name: "Playfair Display", value: "var(--font-playfair)" },
     { name: "Inter", value: "var(--font-inter)" },
+    { name: "Lexend", value: "var(--font-lexend)" },
     { name: "Lora", value: "var(--font-lora)" },
     { name: "Fira Code", value: "var(--font-fira-code)" },
     { name: "System Sans", value: "system-ui, sans-serif" },

@@ -6,6 +6,7 @@ import {
     Inter,
     Lora,
     Fira_Code,
+    Lexend,
 } from "next/font/google";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
@@ -47,6 +48,11 @@ const firaCode = Fira_Code({
     subsets: ["latin"],
 });
 
+const lexend = Lexend({
+    variable: "--font-lexend",
+    subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
     title: "CourseHub - University-aligned Learning Hub",
     description:
@@ -64,7 +70,7 @@ export default async function RootLayout({
                 // Suppress hydration warnings caused by browser extensions or theme providers
                 // that modify the DOM before React hydrates.
                 suppressHydrationWarning
-                className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${inter.variable} ${lora.variable} ${firaCode.variable} font-sans antialiased`}
+                className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${inter.variable} ${lora.variable} ${firaCode.variable} ${lexend.variable} font-sans antialiased`}
             >
                 <Toaster />
                 <ThemeProvider>
