@@ -10,7 +10,6 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 ![AI Preview](./preview/ai.png)
 ![Profile Preview](./preview/userpage.png)
 ![Resource Page Preview](./preview/singleresourceview.png)
-
 ![Resources Preview](./preview/resourcespage.png)
 ![Community Preview](./preview/universitypage.png)
 
@@ -85,6 +84,11 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [x] FR-26: Restrict access to premium features when subscription inactive/expired.
 - [x] FR-27: User settings to manage profile, notification preferences, and subscription details.
 - [x] FR-27-01: Allow users to change password, delete account, and manage linked payment methods.
+
+### V1.5 (Tooling switches)
+- [ ] TS-1: Authentication migration from Custom Auth to Better Auth.
+- [ ] TS-2: Dockerize the application for local development and testing.
+- [ ] TS-3: Implement Testing with vitest and Playwright.
 
 ### V2.0
 - [ ] FR-28: Allow users to create resource bundles or course packs by grouping multiple learning materials.
