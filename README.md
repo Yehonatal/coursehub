@@ -4,6 +4,15 @@
 
 CourseHub is an open-source, centralized adaptive learning platform designed for Ethiopian university students and educators. It centralizes curriculum-aligned resources, supports community moderation, and offers optional AI-powered study aids through the Gemini Studio API. The backend leverages Supabase for authentication, PostgreSQL database, and storage, while the frontend is built with Next.js and Tailwind CSS.
 
+## Vision
+
+CourseHub is evolving from a final year project into a high-growth educational startup with a clear path to value:
+
+1.  **For Students**: Drastic reduction in "Search Time" for quality materials. AI-powered tools provide a personalized learning experience that scales, leading to higher graduation rates and better job readiness.
+2.  **For Educators**: A platform to build a digital legacy, reach students nationwide, and monetize high-value expertise through the marketplace.
+3.  **For Universities**: Access to "Learning Analytics" that highlight where students struggle, enabling data-driven curriculum improvements.
+
+
 ## Preview
 ![Customization](./preview/customedesign.png)
 ![Dashboard Preview](./preview/homepage.png)
@@ -35,7 +44,7 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 
 ---
 
-**Functional Requirements (traceable FR-XX)**
+### **Functional Requirements (traceable FR-XX)**
 ### V1.0
 - [x] FR-01: Allow users to register using email and password.
 - [x] FR-02: Verify user accounts via email using the Notification Service.
@@ -157,53 +166,67 @@ CourseHub is an open-source, centralized adaptive learning platform designed for
 - [ ] FR-47-03: Allow users to export their personal data and contributions.
 
 ### V4.0
-- FR-48: Implement comprehensive security monitoring and abuse prevention mechanisms.
-- FR-48-01: Detect and rate-limit suspicious activities such as mass downloads, spam uploads, or automated bot behavior.
-- FR-48-02: Log authentication events and critical account actions for security auditing.
-- FR-48-03: Notify users of unusual login activity or potential account compromise.
-- FR-49: Monitor system health and service availability in real time.
-- FR-49-01: Track API performance, error rates, and uptime metrics.
-- FR-49-02: Gracefully degrade non-critical features when system load is high.
-- FR-49-03: Provide administrators with alerts for critical system failures.
-- FR-50: Provide a controlled public API for third-party and institutional integrations.
-- FR-50-01: Allow external systems to fetch public resources and metadata via secure endpoints.
-- FR-50-02: Support API authentication, rate limiting, and access scopes.
-- FR-50-03: Provide API documentation for approved developers and partners.
-- FR-51: Support anonymized data exports for educational research and analytics.
-- FR-51-01: Allow administrators to generate anonymized datasets for academic studies.
-- FR-51-02: Ensure exported datasets comply with privacy, consent, and data protection policies.
-- FR-52: Incorporate learning-science-based study support features.
-- FR-52-01: Recommend spaced review schedules based on forgetting curve principles.
-- FR-52-02: Suggest interleaved practice across related courses or topics.
-- FR-52-03: Allow users to reflect on learning sessions via short self-assessment prompts.
-- FR-53: Ensure platform accessibility for users with disabilities.
-- FR-53-01: Support screen readers, keyboard navigation, and accessible color contrast.
-- FR-53-02: Provide captions and transcripts for all video-based learning materials.
-- FR-53-03: Allow users to customize font size, spacing, and reading modes.
+- [ ] FR-48: Implement comprehensive security monitoring and abuse prevention mechanisms.
+- [ ] FR-48-01: Detect and rate-limit suspicious activities such as mass downloads, spam uploads, or automated bot behavior.
+- [ ] FR-48-02: Log authentication events and critical account actions for security auditing.
+- [ ] FR-48-03: Notify users of unusual login activity or potential account compromise.
+- [ ] FR-49: Monitor system health and service availability in real time.
+- [ ] FR-49-01: Track API performance, error rates, and uptime metrics.
+- [ ] FR-49-02: Gracefully degrade non-critical features when system load is high.
+- [ ] FR-49-03: Provide administrators with alerts for critical system failures.
+- [ ] FR-50: Provide a controlled public API for third-party and institutional integrations.
+- [ ] FR-50-01: Allow external systems to fetch public resources and metadata via secure endpoints.
+- [ ] FR-50-02: Support API authentication, rate limiting, and access scopes.
+- [ ] FR-50-03: Provide API documentation for approved developers and partners.
+- [ ] FR-51: Support anonymized data exports for educational research and analytics.
+- [ ] FR-51-01: Allow administrators to generate anonymized datasets for academic studies.
+- [ ] FR-51-02: Ensure exported datasets comply with privacy, consent, and data protection policies.
+- [ ] FR-52: Incorporate learning-science-based study support features.
+- [ ] FR-52-01: Recommend spaced review schedules based on forgetting curve principles.
+- [ ] FR-52-02: Suggest interleaved practice across related courses or topics.
+- [ ] FR-52-03: Allow users to reflect on learning sessions via short self-assessment prompts.
+- [ ] FR-53: Ensure platform accessibility for users with disabilities.
+- [ ] FR-53-01: Support screen readers, keyboard navigation, and accessible color contrast.
+- [ ] FR-53-02: Provide captions and transcripts for all video-based learning materials.
+- [ ] FR-53-03: Allow users to customize font size, spacing, and reading modes.
 
 
-## 📈 Vision & ROI (Return on Investment)
-
-CourseHub is evolving from a student project into a high-growth educational startup with a clear path to value:
-
-1.  **For Students**: Drastic reduction in "Search Time" for quality materials. AI-powered tools provide a personalized learning experience that scales, leading to higher graduation rates and better job readiness.
-2.  **For Educators**: A platform to build a digital legacy, reach students nationwide, and monetize high-value expertise through the marketplace.
-3.  **For Universities**: Access to "Learning Analytics" that highlight where students struggle, enabling data-driven curriculum improvements.
-4.  **For the Economy**: By bridging the gap between academia and industry, CourseHub creates a more skilled workforce and a direct pipeline for talent discovery in Ethiopia.
 
 ---
 
-**Non-Functional Requirements (NFR)**
-- [ ] NFR-01: Respond to 90% of search and page-navigation requests within 3s under typical load (≤50 concurrent active users).
-- [ ] NFR-02: File uploads up to 50 MB complete within 10s in 90% of cases.
-- [ ] NFR-03: AI study-aid generation completes within 15s in 90% of requests (assuming typical external latency).
-- [x] NFR-04: Support modern desktop and mobile browsers without plugins.
-- [x] NFR-05: First-time users can upload and tag a resource within 5 minutes with ≤3 navigation errors.
-- [ ] NFR-06: Conform to WCAG 2.1 Level AA accessibility.
-- [x] NFR-07: All data in transit protected using HTTPS/TLS 1.2+.
-- [x] NFR-08: Store passwords as salted bcrypt hashes (work factor ≥ 12).
-- [ ] NFR-09: Default session persistence up to one week; “Remember me” up to four weeks.
-- [x] NFR-10: Validate and sanitize all user inputs against SQLi, XSS, and similar vulnerabilities.
+### **Non-Functional Requirements (NFR)**
+- [ ] NFR-01: Respond to 90% of search and page-navigation requests within 3 seconds under typical load (≤50 concurrent active users).
+- [ ] NFR-01-01: Support horizontal scalability to at least 500 concurrent users with degraded but usable performance.
+- [ ] NFR-02: File uploads up to 50 MB complete within 10 seconds in 90% of cases under typical network conditions.
+- [ ] NFR-03: AI-powered study-aid generation completes within 15 seconds in 90% of requests, excluding external API latency.
+- [ ] NFR-03-01: Gracefully queue or defer AI requests during peak load without data loss.
+- [ ] NFR-04: Maintain 99% uptime excluding scheduled maintenance.
+- [ ] NFR-04-01: Critical read-only features remain available during partial service degradation.
+- [ ] NFR-05: Prevent data loss for uploaded resources, AI-generated content, and user interactions.
+- [x] NFR-06: Support modern desktop and mobile browsers without requiring plugins.
+- [x] NFR-07: First-time users can upload and tag a resource within 5 minutes with no more than 3 navigation errors.
+- [ ] NFR-07-01: Core learning flows (search → consume → save → review) require no more than 5 primary interactions.
+- [ ] NFR-08: Conform to WCAG 2.1 Level AA accessibility standards.
+- [ ] NFR-08-01: All essential functionality is accessible via keyboard-only navigation.
+- [ ] NFR-08-02: All video and audio content includes captions or transcripts.
+- [x] NFR-09: All data in transit must be protected using HTTPS with TLS 1.2 or higher.
+- [x] NFR-10: Store user passwords as salted bcrypt hashes with a work factor ≥ 12.
+- [ ] NFR-11: Protect against common web vulnerabilities including SQL injection, XSS, CSRF, and IDOR.
+- [ ] NFR-11-01: Enforce rate limits on authentication, uploads, downloads, and public APIs.
+- [ ] NFR-12: Log security-relevant events including authentication attempts, privilege changes, and moderation actions.
+- [ ] NFR-13: Comply with data minimization and user-consent principles for analytics and exports.
+- [ ] NFR-14: Ensure modular service boundaries to allow independent evolution of AI, content, and analytics subsystems.
+- [ ] NFR-15: Maintain automated test coverage for critical business logic and user flows.
+- [ ] NFR-15-01: Support automated testing for both backend APIs and frontend user journeys.
+- [ ] NFR-16: Public APIs must be versioned and backward-compatible within a major version.
+- [ ] NFR-17: External integrations must fail gracefully without impacting core platform functionality.
+- [ ] NFR-18: Allow users to access previously downloaded resources and AI-generated notes without an internet connection.
+- [ ] NFR-18-01: Synchronize offline activity automatically once connectivity is restored.
+- [ ] NFR-19: Optimize critical learning content for low-bandwidth environments.
+- [ ] NFR-20: Monitor system health, performance metrics, and error rates in real time.
+- [ ] NFR-21: Alert administrators of critical failures, security incidents, or service degradation.
+
+
 
 ---
 
