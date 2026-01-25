@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export function CTA() {
     return (
-        <section className="w-full py-24 bg-primary text-primary-foreground">
+        <section className="w-full py-32 my-42 bg-primary text-primary-foreground">
             <div className="container px-4 md:px-6 mx-auto text-center">
                 <div className="max-w-3xl mx-auto space-y-8" data-aos="zoom-in">
                     <h2 className="text-3xl font-serif font-medium tracking-tight sm:text-4xl md:text-5xl">

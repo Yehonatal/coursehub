@@ -56,7 +56,7 @@ export function FeaturesGrid() {
     ];
 
     return (
-        <section className="w-full py-12 sm:py-16 md:py-20 lg:py-32 bg-background">
+        <section className="w-full py-24 sm:py-32 lg:py-40 bg-background">
             <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
                 <div className="text-center mb-12 sm:mb-16">
                     <div className="inline-block rounded-md bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground uppercase tracking-wider mb-3 sm:mb-4">

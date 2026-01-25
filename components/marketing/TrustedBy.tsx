@@ -3,7 +3,7 @@ import { HandDrawnUnderline } from "@/components/ui/decorations";
 
 export function TrustedBy() {
     return (
-        <section className="w-full py-20 bg-muted/30">
+        <section className="w-full py-32 bg-muted/30">
             <div className="container px-4 md:px-6 mx-auto">
                 <div className="text-center mb-16">
                     <h3 className="text-xs font-bold tracking-widest text-muted-foreground uppercase mb-8">

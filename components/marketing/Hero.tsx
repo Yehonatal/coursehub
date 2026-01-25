@@ -37,7 +37,7 @@ export function Hero() {
     }, [images.length]);
 
     return (
-        <section className="relative w-full py-20 lg:py-32 overflow-hidden bg-background">
+        <section className="relative w-full py-22 lg:py-32 overflow-hidden bg-background">
             <div className="absolute inset-0 -z-10 pointer-events-none">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/5 rounded-[100%] blur-[120px] opacity-50 animate-pulse-slow" />
                 <div className="absolute bottom-[-200px] right-[-200px] w-[800px] h-[600px] bg-blue-500/5 rounded-[100%] blur-[120px]" />

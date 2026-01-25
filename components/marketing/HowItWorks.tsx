@@ -5,7 +5,7 @@ import { BookOpen, Users, Zap } from "lucide-react";
 
 export function HowItWorks() {
     return (
-        <section className="w-full py-12 sm:py-16 md:py-20 lg:py-32 bg-muted/50">
+        <section className="w-full py-24 sm:py-32 lg:py-40 bg-muted/50">
             <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
                 <div className="text-center mb-12 sm:mb-16" data-aos="fade-up">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-medium tracking-tight mb-3 sm:mb-4">
@@ -34,7 +34,8 @@ export function HowItWorks() {
                             Discover & Connect
                         </h3>
                         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xs">
-                            Find curriculum-aligned resources and see what your peers are studying in the global campus feed.
+                            Find curriculum-aligned resources and see what your
+                            peers are studying in the global campus feed.
                         </p>
                     </div>
 
@@ -56,7 +57,9 @@ export function HowItWorks() {
                             Switch to Focus
                         </h3>
                         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xs">
-                            Toggle "Focus Mode" to enter your distraction-free workspace. Manage tasks, calendar, and classes in one place.
+                            Toggle "Focus Mode" to enter your distraction-free
+                            workspace. Manage tasks, calendar, and classes in
+                            one place.
                         </p>
                     </div>
 
@@ -78,7 +81,9 @@ export function HowItWorks() {
                             Master with AI
                         </h3>
                         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xs">
-                            Use the AI companion to generate summaries and flashcards directly from your documents while tracking your study streaks.
+                            Use the AI companion to generate summaries and
+                            flashcards directly from your documents while
+                            tracking your study streaks.
                         </p>
                     </div>
                 </div>

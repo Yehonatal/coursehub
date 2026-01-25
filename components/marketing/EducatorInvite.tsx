@@ -3,7 +3,7 @@ import { GraduationCap } from "lucide-react";
 
 export function EducatorInvite() {
     return (
-        <section className="w-full py-12 bg-background border-b border-border/40">
+        <section className="w-full py-24 bg-background border-b border-border/40">
             <div className="container px-4 md:px-6 mx-auto">
                 <div className="max-w-4xl mx-auto bg-card rounded-xl shadow-sm border border-border/60 p-4 md:p-6 grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-4 items-center">
                     <div className="flex items-center gap-4 px-2  border-border/60 w-full md:w-auto">
