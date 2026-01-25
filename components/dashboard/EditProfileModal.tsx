@@ -43,7 +43,7 @@ export function EditProfileModal({
 }: EditProfileModalProps) {
     const [state, action, isPending] = useActionState(
         updateProfile,
-        initialActionState
+        initialActionState,
     );
 
     // Local state for inputs to allow editing
@@ -52,10 +52,10 @@ export function EditProfileModal({
     const [university, setUniversity] = useState(user?.university ?? "");
     const [headline, setHeadline] = useState(user?.headline ?? "");
     const [profilePreview, setProfilePreview] = useState<string | null>(
-        user?.profile_image_url ?? null
+        user?.profile_image_url ?? null,
     );
     const [bannerPreview, setBannerPreview] = useState<string | null>(
-        user?.banner_url ?? null
+        user?.banner_url ?? null,
     );
 
     useEffect(() => {
@@ -122,7 +122,6 @@ export function EditProfileModal({
         <Dialog open={open} onOpenChange={(val) => !val && onClose()}>
             <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden border-none bg-card rounded-3xl shadow-2xl">
                 <div className="relative">
-                    {/* Decorative Header Background */}
                     <div className="absolute inset-0 h-32 bg-linear-to-br from-primary/5 via-transparent to-transparent -z-10" />
 
                     <div className="px-8 pt-8 pb-6">
@@ -167,7 +166,6 @@ export function EditProfileModal({
                         )}
 
                         <form action={action} className="space-y-6">
-                            {/* Banner & Profile Image Upload */}
                             <div className="space-y-4">
                                 <div className="relative">
                                     <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70 ml-1 mb-2 block">
@@ -201,7 +199,6 @@ export function EditProfileModal({
                                         </div>
                                     </div>
 
-                                    {/* Profile Image Overlay */}
                                     <div className="absolute -bottom-6 left-6 h-20 w-20 rounded-2xl border-4 border-card bg-card shadow-xl overflow-hidden group/profile z-30">
                                         {profilePreview ? (
                                             <Image
@@ -228,7 +225,6 @@ export function EditProfileModal({
                                     </div>
                                 </div>
                                 <div className="h-6" />{" "}
-                                {/* Spacer for profile image overlap */}
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">

@@ -57,14 +57,14 @@ export function EditUniversityModal({
 }: EditUniversityModalProps) {
     const [state, formAction, isPending] = useActionState(
         updateUniversity,
-        initialState
+        initialState,
     );
 
     const [logoPreview, setLogoPreview] = useState<string | null>(
-        university.logoUrl
+        university.logoUrl,
     );
     const [bannerPreview, setBannerPreview] = useState<string | null>(
-        university.bannerUrl || null
+        university.bannerUrl || null,
     );
     const [isPrivate, setIsPrivate] = useState(university.isPrivate);
 
@@ -133,7 +133,6 @@ export function EditUniversityModal({
                     </DialogHeader>
 
                     <div className="p-8 pt-4 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
-                        {/* Banner Upload */}
                         <div className="space-y-2">
                             <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60 flex items-center gap-2">
                                 <ImageIcon className="h-3 w-3" /> Banner Image
@@ -176,7 +175,6 @@ export function EditUniversityModal({
                         </div>
 
                         <div className="flex flex-col md:flex-row gap-6">
-                            {/* Logo Upload */}
                             <div className="space-y-2">
                                 <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60 flex items-center gap-2">
                                     Logo
