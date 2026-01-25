@@ -22,6 +22,13 @@ CourseHub is evolving from a final year project into a high-growth educational s
 ![Resources Preview](./preview/resourcespage.png)
 ![Community Preview](./preview/universitypage.png)
 
+## Course hub v2.0 (Focus Mode)
+![Dashboard](./preview/focusmode_dash.png)
+![Study Planner](./preview/focusmode_planner.png)
+![Progress](./preview/focusmode_progress.png)
+![Library](./preview/focusmod_lib.png)
+![Calendar Integration](./preview/fm_calendar.png)
+![New Task](./preview/fm_newtask.png)
 
 
 ### Key Features
