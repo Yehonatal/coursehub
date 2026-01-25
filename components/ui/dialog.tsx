@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
+import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@/utils/cn";
 
 const DialogContext = React.createContext<{
@@ -43,6 +44,32 @@ export const Dialog = ({
     );
 };
 
+export const DialogTrigger = ({
+    children,
+    asChild,
+    className,
+    ...props
+}: {
+    children: React.ReactNode;
+    asChild?: boolean;
+    className?: string;
+} & React.HTMLAttributes<HTMLElement>) => {
+    const { onOpenChange } = React.useContext(DialogContext);
+
+    // Simple implementation handling click to open
+    const Comp = asChild ? Slot : "div";
+
+    return (
+        <Comp
+            onClick={() => onOpenChange(true)}
+            className={cn("inline-flex", className)}
+            {...props}
+        >
+            {children}
+        </Comp>
+    );
+};
+
 export const DialogContent = React.forwardRef<
     HTMLDivElement,
     React.HTMLAttributes<HTMLDivElement>
@@ -81,14 +108,14 @@ export const DialogContent = React.forwardRef<
                 ref={ref}
                 className={cn(
                     "relative z-50 grid w-full max-w-lg gap-4 border bg-card p-6 shadow-lg duration-200 sm:rounded-3xl animate-in fade-in-0 zoom-in-95",
-                    className
+                    className,
                 )}
                 {...props}
             >
                 {children}
             </div>
         </div>,
-        document.body
+        document.body,
     );
 });
 DialogContent.displayName = "DialogContent";
@@ -100,7 +127,7 @@ export const DialogHeader = ({
     <div
         className={cn(
             "flex flex-col space-y-1.5 text-center sm:text-left",
-            className
+            className,
         )}
         {...props}
     />
@@ -115,7 +142,7 @@ export const DialogTitle = React.forwardRef<
         ref={ref}
         className={cn(
             "text-lg font-semibold leading-none tracking-tight",
-            className
+            className,
         )}
         {...props}
     />
@@ -141,9 +168,33 @@ export const DialogFooter = ({
     <div
         className={cn(
             "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-            className
+            className,
         )}
         {...props}
     />
 );
 DialogFooter.displayName = "DialogFooter";
+
+export const DialogClose = ({
+    children,
+    asChild,
+    className,
+    ...props
+}: {
+    children: React.ReactNode;
+    asChild?: boolean;
+    className?: string;
+} & React.HTMLAttributes<HTMLElement>) => {
+    const { onOpenChange } = React.useContext(DialogContext);
+
+    const Comp = asChild ? Slot : "div";
+    return (
+        <Comp
+            onClick={() => onOpenChange(false)}
+            className={cn("inline-flex", className)}
+            {...props}
+        >
+            {children}
+        </Comp>
+    );
+};

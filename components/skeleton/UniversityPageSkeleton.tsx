@@ -4,7 +4,6 @@ export function UniversityPageSkeleton() {
     return (
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pb-12 animate-pulse">
             <div className="space-y-12">
-                {/* Header Section */}
                 <div className="space-y-6">
                     <div className="h-24 sm:h-48 w-full rounded-3xl bg-muted"></div>
                     <div className="flex flex-col md:flex-row items-start gap-6 px-4">
@@ -20,9 +19,7 @@ export function UniversityPageSkeleton() {
                     </div>
                 </div>
 
-                {/* Stats & Community Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    {/* Stats Section */}
                     <div className="lg:col-span-8 space-y-6">
                         <div className="h-6 w-48 bg-muted rounded-xl"></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -32,7 +29,6 @@ export function UniversityPageSkeleton() {
                         <div className="h-48 bg-muted rounded-3xl"></div>
                     </div>
 
-                    {/* Community Section */}
                     <div className="lg:col-span-4 space-y-6">
                         <div className="h-6 w-48 bg-muted rounded-xl"></div>
                         <div className="space-y-6">
@@ -52,7 +48,6 @@ export function UniversityPageSkeleton() {
                     </div>
                 </div>
 
-                {/* Resources Section */}
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <div className="h-8 w-48 bg-muted rounded-xl"></div>

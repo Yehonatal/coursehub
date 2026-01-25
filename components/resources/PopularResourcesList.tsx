@@ -46,8 +46,8 @@ export function PopularResourcesList({
                 r.generationType === "notes"
                     ? "Note"
                     : r.generationType === "tree"
-                    ? "Knowledge Tree"
-                    : "Flashcards";
+                      ? "Knowledge Tree"
+                      : "Flashcards";
 
             let meta = "";
             if (r.generationType === "notes") {
@@ -67,8 +67,8 @@ export function PopularResourcesList({
                 iconType: (r.generationType === "tree"
                     ? "tree"
                     : r.generationType === "flashcards"
-                    ? "question"
-                    : "note") as any,
+                      ? "question"
+                      : "note") as any,
                 data: r,
             };
         }
@@ -84,8 +84,8 @@ export function PopularResourcesList({
             iconType: (rawType.toLowerCase().includes("tree")
                 ? "tree"
                 : rawType.toLowerCase().includes("question")
-                ? "question"
-                : "note") as any,
+                  ? "question"
+                  : "note") as any,
             href: `/resources/${r.resource_id || r.id}`,
         };
     });
@@ -109,7 +109,7 @@ export function PopularResourcesList({
                         <div className="flex items-center gap-5 group cursor-pointer">
                             <div
                                 className={`h-14 w-14 rounded-2xl border ${getBg(
-                                    item.iconType
+                                    item.iconType,
                                 )} flex items-center justify-center shrink-0 group-hover:scale-105 transition-all duration-300 shadow-sm group-hover:shadow-md`}
                             >
                                 {getIcon(item.iconType)}
@@ -152,7 +152,6 @@ export function PopularResourcesList({
                 })}
             </div>
 
-            {/* Modals for AI Content */}
             {selectedItem?.generationType === "flashcards" && (
                 <FlashcardModal
                     isOpen={!!selectedItem}

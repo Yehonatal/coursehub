@@ -16,7 +16,7 @@ const initialState: ActionResponse = {
 export default function SecuritySection() {
     const [state, formAction, isPending] = useActionState(
         changePassword,
-        initialState
+        initialState,
     );
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -142,7 +142,6 @@ export default function SecuritySection() {
                     </form>
                 </div>
 
-                {/* Active Sessions */}
                 <div className="p-6 rounded-xl border bg-card/50 backdrop-blur-sm">
                     <div className="flex items-center gap-3 mb-6">
                         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">

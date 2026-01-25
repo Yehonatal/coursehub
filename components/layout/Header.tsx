@@ -11,6 +11,7 @@ import { error } from "@/lib/logger";
 import { api } from "@/lib/api-client";
 import { getUnreadNotificationCount } from "@/app/actions/notifications";
 import { UserMenu } from "./UserMenu";
+import { ModeToggle } from "./ModeToggle";
 import { useDebounce } from "@/hooks/useDebounce";
 import { globalSearch, type SearchResult } from "@/app/actions/search";
 
@@ -71,7 +72,7 @@ export function Header() {
         setShowResults(false);
         if (searchQuery.trim()) {
             router.push(
-                `/resources?q=${encodeURIComponent(searchQuery.trim())}`
+                `/resources?q=${encodeURIComponent(searchQuery.trim())}`,
             );
         } else {
             router.push("/resources");
@@ -227,6 +228,7 @@ export function Header() {
                 </div>
 
                 <div className="flex items-center gap-3 md:gap-5">
+                    <ModeToggle />
                     <Link
                         href="/dashboard/notifications"
                         className="relative h-10 w-10 flex items-center justify-center rounded-xl border border-border/40 bg-card/50 hover:bg-card hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
