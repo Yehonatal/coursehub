@@ -10,6 +10,7 @@ import {
     serial,
     index,
     uniqueIndex,
+    json,
 } from "drizzle-orm/pg-core";
 
 // ================= USERS =================
@@ -22,7 +23,7 @@ export const users = pgTable("users", {
     role: varchar("role", { length: 20 }).notNull(),
     university: varchar("university", { length: 100 }),
     university_id: integer("university_id").references(
-        () => universities.university_id
+        () => universities.university_id,
     ),
     headline: varchar("headline", { length: 150 }),
     school_id_url: varchar("school_id_url", { length: 512 }),
@@ -51,7 +52,7 @@ export const resources = pgTable(
         semester: varchar("semester", { length: 20 }).notNull(),
         university: varchar("university", { length: 100 }).notNull(),
         university_id: integer("university_id").references(
-            () => universities.university_id
+            () => universities.university_id,
         ),
         title: varchar("title", { length: 255 }).notNull(),
         description: text("description"),
@@ -70,13 +71,13 @@ export const resources = pgTable(
     (table) => ({
         idx_uploader: index("idx_resources_uploader").on(table.uploader_id),
         idx_course_code: index("idx_resources_course_code").on(
-            table.course_code
+            table.course_code,
         ),
         idx_university: index("idx_resources_university").on(table.university),
         idx_title: index("idx_resources_title").on(table.title),
         idx_resource_type: index("idx_resources_type").on(table.resource_type),
         idx_semester: index("idx_resources_semester").on(table.semester),
-    })
+    }),
 );
 
 // ================= RATINGS =================
@@ -96,9 +97,9 @@ export const ratings = pgTable(
     (table) => ({
         unique_user_rating: uniqueIndex("unique_rating").on(
             table.resource_id,
-            table.user_id
+            table.user_id,
         ),
-    })
+    }),
 );
 
 // ================= COMMENTS =================
@@ -120,7 +121,7 @@ export const comments = pgTable(
         idx_resource: index("idx_comments_resource").on(table.resource_id),
         idx_user: index("idx_comments_user").on(table.user_id),
         idx_parent: index("idx_comments_parent").on(table.parent_comment_id),
-    })
+    }),
 );
 
 export const comment_reactions = pgTable(
@@ -139,12 +140,12 @@ export const comment_reactions = pgTable(
     (table) => ({
         unique_user_reaction: uniqueIndex("unique_comment_reaction").on(
             table.comment_id,
-            table.user_id
+            table.user_id,
         ),
         idx_comment: index("idx_comment_reactions_comment").on(
-            table.comment_id
+            table.comment_id,
         ),
-    })
+    }),
 );
 
 // ================= VERIFICATION =================
@@ -164,7 +165,7 @@ export const verification = pgTable(
     },
     (table) => ({
         idx_educator: index("idx_verification_educator").on(table.educator_id),
-    })
+    }),
 );
 
 // ================= NOTIFICATIONS =================
@@ -183,7 +184,7 @@ export const notifications = pgTable(
     },
     (table) => ({
         idx_user: index("idx_notifications_user").on(table.user_id),
-    })
+    }),
 );
 
 // ================= REPORT FLAGS =================
@@ -204,7 +205,7 @@ export const report_flags = pgTable(
     (table) => ({
         idx_resource: index("idx_report_flags_resource").on(table.resource_id),
         idx_reporter: index("idx_report_flags_reporter").on(table.reporter_id),
-    })
+    }),
 );
 
 // ================= UNIVERSITY STRUCTURE =================
@@ -235,9 +236,9 @@ export const programs = pgTable(
     },
     (table) => ({
         idx_university: index("idx_programs_university").on(
-            table.university_id
+            table.university_id,
         ),
-    })
+    }),
 );
 
 export const courses = pgTable(
@@ -253,7 +254,7 @@ export const courses = pgTable(
     },
     (table) => ({
         idx_program: index("idx_courses_program").on(table.program_id),
-    })
+    }),
 );
 
 // ================= VERIFICATION TOKENS =================
@@ -301,4 +302,72 @@ export const transactions = pgTable("transactions", {
     payment_method: varchar("payment_method", { length: 50 }),
     created_at: timestamp("created_at").defaultNow().notNull(),
     updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ================= STUDY MODE =================
+
+export const user_courses = pgTable("user_courses", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    user_id: uuid("user_id")
+        .notNull()
+        .references(() => users.user_id, { onDelete: "cascade" }),
+    course_name: varchar("course_name", { length: 255 }).notNull(),
+    course_code: varchar("course_code", { length: 20 }), // Optional link to global course
+    color_theme: varchar("color_theme", { length: 20 }).default("blue"),
+    semester: varchar("semester", { length: 50 }),
+    schedule_config: json("schedule_config"), // e.g. { days: ["Mon", "Wed"], time: "10:00-11:30" }
+    created_at: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const course_resources = pgTable(
+    "course_resources",
+    {
+        user_course_id: uuid("user_course_id")
+            .notNull()
+            .references(() => user_courses.id, { onDelete: "cascade" }),
+        resource_id: uuid("resource_id")
+            .notNull()
+            .references(() => resources.resource_id, { onDelete: "cascade" }),
+        added_at: timestamp("added_at").defaultNow().notNull(),
+    },
+    (table) => ({
+        pk: uniqueIndex("course_resources_pk").on(
+            table.user_course_id,
+            table.resource_id
+        ),
+    })
+);
+
+export const tasks = pgTable("tasks", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    user_id: uuid("user_id")
+        .notNull()
+        .references(() => users.user_id, { onDelete: "cascade" }),
+    title: varchar("title", { length: 255 }).notNull(),
+    description: text("description"),
+    due_date: timestamp("due_date"),
+    start_time: timestamp("start_time"), // For calendar view
+    end_time: timestamp("end_time"), // For calendar view
+    status: varchar("status", { length: 20 }).default("todo").notNull(), // todo, in_progress, done
+    associated_course_id: uuid("associated_course_id").references(
+        () => user_courses.id,
+        { onDelete: "set null" }
+    ),
+    priority: varchar("priority", { length: 10 }).default("medium"), // low, medium, high
+    reminder_at: timestamp("reminder_at"),
+    created_at: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const study_activities = pgTable("study_activities", {
+    id: serial("id").primaryKey(),
+    user_id: uuid("user_id")
+        .notNull()
+        .references(() => users.user_id, { onDelete: "cascade" }),
+    type: varchar("type", { length: 50 }).notNull(), // flashcard_session, reading, quiz
+    duration_seconds: integer("duration_seconds").default(0),
+    resource_id: uuid("resource_id").references(
+        () => resources.resource_id,
+        { onDelete: "set null" }
+    ),
+    created_at: timestamp("created_at").defaultNow().notNull(),
 });
