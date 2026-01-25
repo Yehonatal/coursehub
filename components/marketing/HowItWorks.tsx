@@ -31,12 +31,10 @@ export function HowItWorks() {
                             Step 01
                         </div>
                         <h3 className="text-lg sm:text-xl font-serif font-bold mb-2 sm:mb-3">
-                            Centralize Resources
+                            Discover & Connect
                         </h3>
                         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xs">
-                            Upload and access educational resources like PDFs
-                            and docs, strictly tagged by course code and
-                            university for easy retrieval.
+                            Find curriculum-aligned resources and see what your peers are studying in the global campus feed.
                         </p>
                     </div>
 
@@ -55,12 +53,10 @@ export function HowItWorks() {
                             Step 02
                         </div>
                         <h3 className="text-lg sm:text-xl font-serif font-bold mb-2 sm:mb-3">
-                            Community Moderation
+                            Switch to Focus
                         </h3>
                         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xs">
-                            Rate content, leave comments, and rely on educator
-                            verification to ensure you are studying the best
-                            material available.
+                            Toggle "Focus Mode" to enter your distraction-free workspace. Manage tasks, calendar, and classes in one place.
                         </p>
                     </div>
 
@@ -79,13 +75,10 @@ export function HowItWorks() {
                             Step 03
                         </div>
                         <h3 className="text-lg sm:text-xl font-serif font-bold mb-2 sm:mb-3">
-                            AI Enhancement
+                            Master with AI
                         </h3>
                         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xs">
-                            Use our AI assistant (Gemini Studio integration) to
-                            help transform documents into study aids like
-                            flashcards and knowledge trees; AI outputs should be
-                            verified against official course materials.
+                            Use the AI companion to generate summaries and flashcards directly from your documents while tracking your study streaks.
                         </p>
                     </div>
                 </div>

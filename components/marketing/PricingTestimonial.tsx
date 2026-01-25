@@ -18,9 +18,9 @@ export function PricingTestimonial() {
                 ))}
             </div>
             <blockquote className="text-2xl md:text-3xl font-serif font-medium leading-relaxed mb-8">
-                &ldquo;The Premium plan is worth every cent. The unlimited AI
-                summaries saved me hours of reading time during finals week. My
-                GPA has never been higher.&rdquo;
+                &ldquo;The Premium plan is worth every cent. The AI summaries
+                saved me hours of reading, and the Focus Timer helped me
+                actually do the work. My GPA has never been higher.&rdquo;
             </blockquote>
             <div className="flex flex-col items-center">
                 <div className="font-bold text-lg">Natnael Abebe</div>

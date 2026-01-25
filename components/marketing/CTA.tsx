@@ -7,11 +7,11 @@ export function CTA() {
             <div className="container px-4 md:px-6 mx-auto text-center">
                 <div className="max-w-3xl mx-auto space-y-8" data-aos="zoom-in">
                     <h2 className="text-3xl font-serif font-medium tracking-tight sm:text-4xl md:text-5xl">
-                        Ready to elevate your academic performance?
+                        Ready to Master Your Studies?
                     </h2>
                     <p className="text-primary-foreground/80 text-lg md:text-xl max-w-2xl mx-auto">
-                        Join our community of students and educators on
-                        CourseHub today.
+                        Join students using our Focus Mode and AI tools to crush
+                        their academic goals.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                         <Link href="/register">

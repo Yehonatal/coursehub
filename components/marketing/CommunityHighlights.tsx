@@ -8,6 +8,7 @@ import {
     MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ImageLightbox } from "@/components/common/ImageLightbox";
 
 export function CommunityHighlights() {
     return (
@@ -29,10 +30,11 @@ export function CommunityHighlights() {
                     </p>
                 </div>
                 <div className="flex justify-center" data-aos="fade-left">
-                    <div className="bg-muted/30 p-6 sm:p-8 md:p-12 rounded-xl sm:rounded-2xl border border-dashed border-muted-foreground/25 w-full max-w-md h-40 sm:h-60 md:h-80 flex items-center justify-center">
-                        <Users
-                            className="h-16 sm:h-24 md:h-32 w-16 sm:w-24 md:w-32 text-muted-foreground/20"
-                            strokeWidth={1}
+                    <div className="relative aspect-video w-full max-w-lg rounded-xl overflow-hidden shadow-2xl border border-border/50">
+                        <ImageLightbox
+                            src="/universitypage.png"
+                            alt="CourseHub Community Page"
+                            sizes="(max-width: 768px) 100vw, 500px"
                         />
                     </div>
                 </div>
@@ -43,10 +45,11 @@ export function CommunityHighlights() {
                     className="flex justify-center order-last lg:order-first"
                     data-aos="fade-right"
                 >
-                    <div className="bg-muted/30 p-6 sm:p-8 md:p-12 rounded-xl sm:rounded-2xl border border-dashed border-muted-foreground/25 w-full max-w-md h-40 sm:h-60 md:h-80 flex items-center justify-center">
-                        <Star
-                            className="h-16 sm:h-24 md:h-32 w-16 sm:w-24 md:w-32 text-muted-foreground/20"
-                            strokeWidth={1}
+                    <div className="relative aspect-video w-full max-w-lg rounded-xl overflow-hidden shadow-2xl border border-border/50">
+                        <ImageLightbox
+                            src="/resourcespage.png"
+                            alt="Resource Moderation System"
+                            sizes="(max-width: 768px) 100vw, 500px"
                         />
                     </div>
                 </div>

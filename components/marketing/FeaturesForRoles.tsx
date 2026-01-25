@@ -38,22 +38,22 @@ export function FeaturesForRoles() {
                         <li className="flex items-start gap-3">
                             <CheckCircle className="h-5 w-5 text-primary mt-1" />{" "}
                             <span className="text-muted-foreground">
-                                Access a community‑curated library of study
-                                materials.
+                                Seamlessly switch between social discovery and
+                                deep focus modes.
                             </span>
                         </li>
                         <li className="flex items-start gap-3">
                             <CheckCircle className="h-5 w-5 text-primary mt-1" />{" "}
                             <span className="text-muted-foreground">
-                                Use our AI assistant to generate flashcards and
-                                summaries to support revision.
+                                Organize your semester with the integrated smart
+                                planner & calendar.
                             </span>
                         </li>
                         <li className="flex items-start gap-3">
                             <CheckCircle className="h-5 w-5 text-primary mt-1" />{" "}
                             <span className="text-muted-foreground">
-                                Connect with study groups and peers from your
-                                university.
+                                Use AI to generate study guides and track your
+                                learning streaks.
                             </span>
                         </li>
                     </ul>

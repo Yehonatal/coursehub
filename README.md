@@ -2,15 +2,15 @@
 
 ### System Overview (SRS)
 
-CourseHub is an open-source, centralized adaptive learning platform designed for Ethiopian university students and educators. It centralizes curriculum-aligned resources, supports community moderation, and offers optional AI-powered study aids through the Gemini Studio API. The backend leverages Supabase for authentication, PostgreSQL database, and storage, while the frontend is built with Next.js and Tailwind CSS.
+CourseHub is an open-source, centralized adaptive learning platform designed for Ethiopian university students and educators. It centralizes curriculum-aligned resources and community moderation while introducing a high-performance **Focus Mode** for personalized study. By bridging the gap between social resource discovery and individual productivity, CourseHub provides a complete academic workspace with AI-powered study aids, integrated task management, and deep learning analytics.
 
 ## Vision
 
 CourseHub is evolving from a final year project into a high-growth educational startup with a clear path to value:
 
-1.  **For Students**: Drastic reduction in "Search Time" for quality materials. AI-powered tools provide a personalized learning experience that scales, leading to higher graduation rates and better job readiness.
-2.  **For Educators**: A platform to build a digital legacy, reach students nationwide, and monetize high-value expertise through the marketplace.
-3.  **For Universities**: Access to "Learning Analytics" that highlight where students struggle, enabling data-driven curriculum improvements.
+1.  **For Students**: Drastic reduction in "Search Time" for quality materials. The **Focus Mode** experience provides a personalized, AI-integrated workspace that helps students organize their academic life, manage tasks, and master complex subjects through adaptive tools.
+2.  **For Educators**: A platform to build a digital legacy, reach students nationwide, and monetize high-value expertise through curated resource bundles and verified contributions.
+3.  **For Universities**: Access to "Learning Analytics" and student engagement data that highlight where students struggle, enabling data-driven curriculum improvements and better academic outcomes.
 
 
 ## Preview
@@ -33,6 +33,12 @@ CourseHub is evolving from a final year project into a high-growth educational s
 
 ### Key Features
 - **Authentication**: User registration, email verification, and session management via Supabase Auth (currently have custom auth).
+- **Study Mode (New)**: A dedicated "Focus Mode" for distraction-free learning with specialized tools.
+    - **Planner**: Kanban-style task management and tracking linked to courses and calendars.
+    - **Class Integration**: Personalized course dashboards for class-based resource management, sorting, and focused study.
+    - **Study Workspace**: Split-screen interface combining document viewing with AI tools (Chat, Notes, Flashcards).
+    - **Study Timer**: Integrated Pomodoro/Study timer to track focus sessions and prevent burnout.
+    - **Progress Tracking**: Deep learning analytics for study habits, streaks, and completion rates.
 - **Content Submission**: Upload educational resources (e.g., PDFs, docs) with mandatory tagging by course code, semester, and university.
 - **Community Moderation**: Ratings (5-star scale), comments, reporting of inappropriate content, and educator-verified tagging for prioritized visibility.
 - **AI-Powered Study Aids**: Generate study notes, flashcards, and knowledge trees using the Gemini Studio API, with quota restrictions or subscription-based access.
@@ -42,12 +48,14 @@ CourseHub is evolving from a final year project into a high-growth educational s
 
 ### High-Level Workflow
 1. **User Authentication & Verification**: Register, verify email, and log in to establish session.
-2. **Content Upload & Tagging**: Authenticated users upload resources and apply required metadata tags.
-3. **Community Moderation and Search**: Search with filters (course, university, tags, semester), rate, comment, and report content.
-4. **AI Study Aid Generation**: Use Gemini API to create notes, flashcards, and knowledge trees (subject to quotas).
-5. **Notifications Delivery**: Send alerts for interactions, verifications, and reminders.
-6. **Optional Subscription/Payment**: Manage premium access and validate subscriptions.
-7. **Analytics & Feedback Loops**: View dashboards for insights and continuous improvement.
+2. **Mode Switching**: Users toggle between "Explore" (Social) and "Focus" (Study) modes via the navbar.
+3. **Study Planning**: Users create Classes, add Tasks, and schedule events in the Planner.
+4. **Content Upload & Tagging**: Authenticated users upload resources and apply required metadata tags.
+5. **Community Moderation and Search**: Search with filters (course, university, tags, semester), rate, comment, and report content.
+6. **AI Study Aid Generation**: Use Gemini API to create notes, flashcards, and knowledge trees (subject to quotas).
+7. **Progress Monitoring**: Track study sessions and task completion in the Progress dashboard.
+8. **Notifications Delivery**: Send alerts for interactions, verifications, and reminders.
+9. **Analytics & Feedback Loops**: View dashboards for insights and continuous improvement.
 
 ---
 
@@ -105,6 +113,47 @@ CourseHub is evolving from a final year project into a high-growth educational s
 - [ ] TS-1: Authentication migration from Custom Auth to Better Auth.
 - [ ] TS-2: Dockerize the application for local development and testing.
 - [ ] TS-3: Implement Testing with vitest and Playwright.
+
+### V2.0 Alpha (Study Mode)
+
+- [x] FM-01: **Schema Migration**
+    - [x] Create `user_courses` (classes) table with styling options.
+    - [x] Create `tasks` table with priorities and deadlines.
+    - [x] Create `course_resources` for linking global content to personal classes.
+    - [x] Create `study_activities` for progress tracking.
+- [x] FM-02: **Route & Navigation**
+    - [x] Implement `/study` route group with separated layout.
+    - [x] Build collapsible `StudySidebar` with "My Classes" accordion.
+    - [x] Implement "Mode Switcher" in navbar (Explore vs. Focus).
+- [x] FM-03: **Class Management**
+    - [x] "Create Class" functionality with color picker and semester selection.
+    - [x] Display enrolled classes in sidebar and dashboard grid.
+    - [ ] Dynamic Class Detail pages (`/study/classes/[id]`).
+- [x] FM-04: **Planner & Calendar**
+    - [x] **Kanban Board**: Drag-and-drop task management (Todo, In Progress, Done).
+    - [x] **Calendar View**: Monthly/Weekly view with task overlays.
+    - [x] "Add Task" Modal with date picking and course association.
+- [x] FM-05: **Study Dashboard**
+    - [x] Greeting and Quick Actions (Study Plan, Flashcards, etc.).
+    - [x] "Recents" and "Upcoming" summaries.
+    - [x] Input bar for AI Chat or creating new items.
+- [ ] FM-06: **Class-Based Resource Management**
+    - [x] Grid/List view of saved resources.
+    - [ ] Linking global resources to specific "Classes".
+    - [ ] Filtering logic (by Course, Type, Date).
+- [ ] FM-07: **Study Tools & Timer**
+    - [ ] **Study Timer**: Pomodoro or stopwatch for tracking sessions.
+    - [ ] Session logging to `study_activities` table.
+- [ ] FM-08: **Progress Tracking & Analytics**
+    - [x] Visual charts (Bar/Area) for study activity using Recharts.
+    - [x] "Study Streaks" and Time-spent analytics.
+    - [ ] Task completion rate tracking.
+- [ ] FM-09: **Study Workspace (Split Screen)**
+    - [ ] **Split Pane Layout**: Resizable left/right panes for Tools vs. Content.
+    - [ ] **Content Viewer**: Integrated PDF/Document viewer with annotation capabilities.
+    - [ ] **AI Side-Panel**: Context-aware AI companion with tabs for Chat, Summary, and Flashcards.
+    - [ ] **Context Linking**: Connection between active resource and AI context.
+
 
 ### V2.0
 - [ ] FR-28: Allow users to create resource bundles or course packs by grouping multiple learning materials.

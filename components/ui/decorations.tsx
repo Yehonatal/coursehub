@@ -16,7 +16,7 @@ export function HandDrawnCircle({
             <svg
                 className={cn(
                     "absolute -top-[20%] -left-[10%] w-[120%] h-[140%] pointer-events-none select-none",
-                    className
+                    className,
                 )}
                 viewBox="0 0 200 100"
                 preserveAspectRatio="none"
@@ -67,7 +67,7 @@ export function HandDrawnUnderline({
             <svg
                 className={cn(
                     "absolute  -bottom-0.5 left-0  w-full h-4 pointer-events-none select-none",
-                    className
+                    className,
                 )}
                 viewBox="0 0 200 20"
                 preserveAspectRatio="none"
@@ -104,7 +104,7 @@ export function HandDrawnBox({
             <svg
                 className={cn(
                     "absolute -top-[10%] -left-[5%] w-[110%] h-[120%] pointer-events-none select-none",
-                    className
+                    className,
                 )}
                 viewBox="0 0 200 100"
                 preserveAspectRatio="none"
@@ -180,5 +180,90 @@ export function HandDrawnShape({
                 }}
             />
         </svg>
+    );
+}
+
+export function HandDrawnArrow({
+    className,
+    strokeWidth = 2,
+}: {
+    className?: string;
+    strokeWidth?: number;
+}) {
+    return (
+        <svg
+            className={cn("pointer-events-none select-none", className)}
+            viewBox="0 0 100 80"
+            preserveAspectRatio="none"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M10 60 C 20 50, 40 40, 80 20"
+                stroke="currentColor"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+            />
+            <path
+                d="M 65 15 L 80 20 L 75 35"
+                stroke="currentColor"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+            />
+        </svg>
+    );
+}
+
+export function AnimatedHandDrawnUnderline({
+    children,
+    className,
+    strokeWidth = 24,
+}: {
+    children: React.ReactNode;
+    className?: string;
+    strokeWidth?: number;
+}) {
+    return (
+        <span className="relative inline-block whitespace-nowrap">
+            <span className="relative z-10">{children}</span>
+            <svg
+                className={cn(
+                    "absolute -bottom-0.5 left-0  w-full h-4 pointer-events-none select-none",
+                    className,
+                )}
+                viewBox="0 0 200 20"
+                preserveAspectRatio="none"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ color: "var(--decoration)" }}
+            >
+                <style>
+                    {`
+                        @keyframes draw-underline {
+                            0% { stroke-dashoffset: 1; }
+                            100% { stroke-dashoffset: 0; }
+                        }
+                    `}
+                </style>
+                <path
+                    d="M5 12 L 195 12"
+                    stroke="currentColor"
+                    strokeWidth={strokeWidth}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    vectorEffect="non-scaling-stroke"
+                    pathLength="1"
+                    style={{
+                        strokeDasharray: 1,
+                        strokeDashoffset: 1,
+                        animation: "draw-underline 0.8s ease-out forwards 0.5s",
+                    }}
+                />
+            </svg>
+        </span>
     );
 }

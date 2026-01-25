@@ -27,7 +27,7 @@ interface ThemeContextType {
     preferences: ThemePreferences;
     updatePreference: <K extends keyof ThemePreferences>(
         key: K,
-        value: ThemePreferences[K]
+        value: ThemePreferences[K],
     ) => void;
 }
 
@@ -35,8 +35,8 @@ const defaultPreferences: ThemePreferences = {
     fontSize: 14,
     headingFont: "var(--font-playfair)",
     bodyFont: "var(--font-geist-sans)",
-    radius: 0.625,
-    borderWidth: 1,
+    radius: 0,
+    borderWidth: 0.25,
     shadowIntensity: 1,
 };
 
@@ -80,7 +80,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         root.style.setProperty("--border-width", `${prefs.borderWidth}px`);
         root.style.setProperty(
             "--shadow-intensity",
-            `${prefs.shadowIntensity}`
+            `${prefs.shadowIntensity}`,
         );
     };
 
@@ -99,7 +99,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     const updatePreference = <K extends keyof ThemePreferences>(
         key: K,
-        value: ThemePreferences[K]
+        value: ThemePreferences[K],
     ) => {
         const newPrefs = { ...preferences, [key]: value };
         setPreferences(newPrefs);

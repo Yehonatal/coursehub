@@ -38,6 +38,14 @@ export function PricingPlans() {
                             Upload and share content
                         </li>
                         <li className="flex items-center text-xs sm:text-sm">
+                            <Check className="mr-3 h-5 w-5 text-primary" />
+                            Focus Mode & Study Timer
+                        </li>
+                        <li className="flex items-center text-xs sm:text-sm">
+                            <Check className="mr-3 h-5 w-5 text-primary" />
+                            Basic Study Planner
+                        </li>
+                        <li className="flex items-center text-xs sm:text-sm">
                             <Check className="mr-3 h-5 w-5 text-primary" />5 AI
                             generations per day
                         </li>
@@ -89,6 +97,14 @@ export function PricingPlans() {
                         <li className="flex items-center text-sm font-medium">
                             <Check className="mr-3 h-5 w-5 text-primary" />
                             Unlimited AI Generations & Chats
+                        </li>
+                        <li className="flex items-center text-sm font-medium">
+                            <Check className="mr-3 h-5 w-5 text-primary" />
+                            AI Smart Schedule Optimizer
+                        </li>
+                        <li className="flex items-center text-sm font-medium">
+                            <Check className="mr-3 h-5 w-5 text-primary" />
+                            Deep Focus Analytics
                         </li>
                         <li className="flex items-center text-sm font-medium">
                             <Check className="mr-3 h-5 w-5 text-primary" />

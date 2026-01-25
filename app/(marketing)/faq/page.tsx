@@ -25,6 +25,19 @@ export default function FAQPage() {
             ],
         },
         {
+            category: "Productivity & Focus",
+            items: [
+                {
+                    question: "What is Focus Mode?",
+                    answer: "Focus Mode helps you eliminate distractions by entering a specialized minimalist interface. It includes a Pomodoro timer, background ambient sounds, and a simplified task view to keep you in the flow.",
+                },
+                {
+                    question: "How does the Smart Planner work?",
+                    answer: "The Smart Planner allows you to drag-and-drop tasks into time blocks. It integrates with your university schedule (if uploaded) to suggest optimal study times around your classes.",
+                },
+            ],
+        },
+        {
             category: "Account & Verification",
             items: [
                 {

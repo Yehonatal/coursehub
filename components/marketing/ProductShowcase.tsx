@@ -14,21 +14,24 @@ import {
     Library,
     Users,
     CheckCircle2,
+    Calendar,
+    Focus,
+    Combine,
 } from "lucide-react";
 
 const products = [
     {
         id: "dashboard",
-        label: "Dashboard",
+        label: "Social Hub",
         icon: LayoutDashboard,
-        title: "Your Academic Command Center",
+        title: "Connect & Discover",
         description:
-            "A centralized hub that brings all your university activities together. Track your progress, view recent resources, and stay updated with campus news.",
+            "Your academic social feed. See what's trending, find new resources from peers, and stay updated with your university community.",
         features: [
-            "Personalized activity feed",
-            "Quick access to recent files",
             "University-wide announcements",
-            "Contribution tracking",
+            "Trending resources feed",
+            "Peer contribution tracking",
+            "Community updates",
         ],
         image: "/homepage.png",
         color: "text-blue-500",
@@ -36,17 +39,53 @@ const products = [
         borderColor: "border-blue-500/20",
     },
     {
+        id: "focus",
+        label: "Focus Mode",
+        icon: Focus,
+        title: "Deep Work Workspace",
+        description:
+            "A distraction-free environment optimized for studying. Switch from 'Explore' to 'Focus' to access your personal academic cockpit.",
+        features: [
+            "Distraction-free interface",
+            "Personalized class dashboards",
+            "Integrated study timer",
+            "Session analytics",
+        ],
+        image: "/focusmode_dash.png",
+        color: "text-indigo-500",
+        gradient: "from-indigo-500/20 to-violet-500/20",
+        borderColor: "border-indigo-500/20",
+    },
+    {
+        id: "planner",
+        label: "Smart Planner",
+        icon: Calendar,
+        title: "Academic Life, Organized",
+        description:
+            "Seamlessly manage assignments, exams, and study sessions. Visualize your semester with Kanban boards and calendar integrations.",
+        features: [
+            "Kanban task board",
+            "Course-specific schedules",
+            "Drag & drop prioritization",
+            "Deadline reminders",
+        ],
+        image: "/focusmode_planner.png",
+        color: "text-rose-500",
+        gradient: "from-rose-500/20 to-red-500/20",
+        borderColor: "border-rose-500/20",
+    },
+    {
         id: "ai",
         label: "AI Assistant",
         icon: Bot,
-        title: "Smart Study Companion",
+        title: "Your Personal Tutor",
         description:
-            "Use our AI assistant to support learning: generate summaries, create flashcards, and get context-aware help based on your materials.",
+            "Access AI tools directly alongside your documents. Generate summaries, quiz yourself, and clarify complex topics instantly.",
         features: [
-            "Instant document summarization",
-            "Automated flashcard generation",
-            "Context-aware chat assistance",
-            "Knowledge tree visualization",
+            "Document-aware chat",
+            "Instant flashcard creation",
+            "Lecture summarization",
+            "Knowledge tree generation",
         ],
         image: "/ai.png",
         color: "text-purple-500",
@@ -54,40 +93,22 @@ const products = [
         borderColor: "border-purple-500/20",
     },
     {
-        id: "resources",
-        label: "Resource Hub",
-        icon: Library,
-        title: "Verified Academic Content",
+        id: "progress",
+        label: "Analytics",
+        icon: Combine,
+        title: "Track Your Growth",
         description:
-            "Access a community‑curated library of study materials, organized by course, semester, and university for easy retrieval.",
+            "Visualize your study habits. Our analytics engine tracks your focus time, task completion, and learning consistency.",
         features: [
-            "Course-specific filtering",
-            "Educator-verified content",
-            "Smart search capabilities",
-            "Easy file uploads and sharing",
+            "Study streak tracking",
+            "Time distribution charts",
+            "Task completion rates",
+            "Monthly progress reports",
         ],
-        image: "/resourcespage.png",
-        color: "text-green-500",
-        gradient: "from-green-500/20 to-emerald-500/20",
-        borderColor: "border-green-500/20",
-    },
-    {
-        id: "community",
-        label: "Community",
-        icon: Users,
-        title: "Collaborative Learning",
-        description:
-            "Connect with peers and educators. Share knowledge, discuss topics, and build your academic reputation within the university network.",
-        features: [
-            "Course-specific discussion boards",
-            "Reputation and badge system",
-            "Peer review functionality",
-            "Direct messaging",
-        ],
-        image: "/universitypage.png",
-        color: "text-orange-500",
-        gradient: "from-orange-500/20 to-yellow-500/20",
-        borderColor: "border-orange-500/20",
+        image: "/focusmode_progress.png",
+        color: "text-emerald-500",
+        gradient: "from-emerald-500/20 to-green-500/20",
+        borderColor: "border-emerald-500/20",
     },
 ];
 export function ProductShowcase() {
@@ -140,7 +161,7 @@ export function ProductShowcase() {
                                     "group flex items-center gap-2 rounded-2xl border px-3 py-2 text-sm font-semibold transition-all",
                                     activeTab === product.id
                                         ? "bg-card border-primary/30 text-foreground shadow-md"
-                                        : "bg-muted/50 border-border/60 text-muted-foreground hover:border-primary/40"
+                                        : "bg-muted/50 border-border/60 text-muted-foreground hover:border-primary/40",
                                 )}
                             >
                                 <span
@@ -148,7 +169,7 @@ export function ProductShowcase() {
                                         "p-2 rounded-full bg-card/70 shadow-sm transition-colors",
                                         activeTab === product.id
                                             ? product.color
-                                            : "text-muted-foreground"
+                                            : "text-muted-foreground",
                                     )}
                                     aria-hidden
                                 >
@@ -171,7 +192,7 @@ export function ProductShowcase() {
                                         "group inline-flex items-center gap-3 px-4 py-2 rounded-full border text-sm font-semibold transition-all snap-center min-w-[140px]",
                                         activeTab === product.id
                                             ? "bg-card border-primary/30 text-foreground shadow-md"
-                                            : "bg-muted/50 border-border/60 text-muted-foreground hover:border-primary/40"
+                                            : "bg-muted/50 border-border/60 text-muted-foreground hover:border-primary/40",
                                     )}
                                 >
                                     <span
@@ -179,7 +200,7 @@ export function ProductShowcase() {
                                             "p-2 rounded-full bg-card/70 shadow-sm transition-colors",
                                             activeTab === product.id
                                                 ? product.color
-                                                : "text-muted-foreground"
+                                                : "text-muted-foreground",
                                         )}
                                         aria-hidden
                                     >
@@ -210,7 +231,7 @@ export function ProductShowcase() {
                             <div
                                 className={cn(
                                     "p-3 rounded-2xl bg-secondary/60",
-                                    activeProduct.color
+                                    activeProduct.color,
                                 )}
                             >
                                 <activeProduct.icon className="h-5 w-5 md:h-6 md:w-6" />
@@ -241,7 +262,7 @@ export function ProductShowcase() {
                                     <CheckCircle2
                                         className={cn(
                                             "h-4 w-4",
-                                            activeProduct.color
+                                            activeProduct.color,
                                         )}
                                     />
                                     {feature}
@@ -259,7 +280,7 @@ export function ProductShowcase() {
                             <div
                                 className={cn(
                                     "absolute -inset-4 sm:-inset-6 rounded-2xl sm:rounded-3xl md:rounded-4xl bg-gradient-to-tr blur-2xl sm:blur-3xl opacity-40 transition-opacity duration-700",
-                                    activeProduct.gradient
+                                    activeProduct.gradient,
                                 )}
                             />
                             <div className="relative bg-background rounded-xl sm:rounded-2xl md:rounded-3xl border border-border shadow-lg sm:shadow-xl md:shadow-2xl overflow-hidden backdrop-blur">

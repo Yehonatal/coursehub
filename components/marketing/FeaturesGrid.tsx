@@ -1,48 +1,57 @@
 import React from "react";
-import { BookOpen, Shield, Zap, Users, Bell, BarChart } from "lucide-react";
+import {
+    BookOpen,
+    Shield,
+    Zap,
+    Users,
+    Bell,
+    BarChart,
+    Calendar,
+    Target,
+} from "lucide-react";
 import { HandDrawnUnderline } from "@/components/ui/decorations";
 
 export function FeaturesGrid() {
     const features = [
         {
+            icon: <Target className="h-6 w-6" />,
+            title: "Focus Mode",
+            desc: "A dedicated distraction-free workspace designed to help you enter flow state and master deep work.",
+        },
+        {
+            icon: <Calendar className="h-6 w-6" />,
+            title: "Smart Planner",
+            desc: "Visualize your semester with Kanban boards and calendars linked directly to your courses.",
+        },
+        {
+            icon: <Zap className="h-6 w-6" />,
+            title: "AI Companion",
+            desc: "Sidebar AI that knows your context—generate summaries and flashcards without leaving your document.",
+        },
+        {
             icon: <BookOpen className="h-6 w-6" />,
-            title: "Structured Organization",
-            desc: "Resources are mandatory tagged by course code, semester, and university, eliminating the chaos of unorganized files.",
+            title: "Structured Library",
+            desc: "Resources are tagged by course code, semester, and university, making retrieval instant and precise.",
         },
         {
             icon: <Shield className="h-6 w-6" />,
             title: "Verified Content",
-            desc: "Educator-verified tags prioritize high-quality content, giving you confidence in the materials you use.",
+            desc: "Educator-verified tags and community reporting ensure only the highest quality materials surface.",
         },
         {
-            icon: <Zap className="h-6 w-6" />,
-            title: "AI Study Aids",
-            desc: "Generate study notes and flashcards instantly from your course materials using advanced AI models.",
+            icon: <BarChart className="h-6 w-6" />,
+            title: "Deep Analytics",
+            desc: "Track more than just downloads—visualize your study streaks, time spent, and task completion rates.",
         },
         {
             icon: <Users className="h-6 w-6" />,
             title: "Community Driven",
-            desc: "A 5-star rating system and community reporting ensure that the best content rises to the top.",
+            desc: "Connect with peers, share resources, and build your academic reputation on the leaderboard.",
         },
         {
             icon: <Bell className="h-6 w-6" />,
-            title: "Smart Notifications",
-            desc: "Get alerts for new content, interactions, and updates on trending materials relevant to your courses.",
-        },
-        {
-            icon: <BarChart className="h-6 w-6" />,
-            title: "Personal Analytics",
-            desc: "Track your contributions and engagement with a personalized dashboard to monitor your progress.",
-        },
-        {
-            icon: <Users className="h-6 w-6" />,
-            title: "Peer Collaboration",
-            desc: "Connect with students from your university and others to share knowledge and resources.",
-        },
-        {
-            icon: <Shield className="h-6 w-6" />,
-            title: "Secure Platform",
-            desc: "Data isolation and secure authentication ensure your personal information and contributions are safe.",
+            title: "Smart Alerts",
+            desc: "Get notified about relevant new uploads, deadlienes, and interactions on your shared content.",
         },
     ];
 
