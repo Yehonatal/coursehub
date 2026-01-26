@@ -77,8 +77,8 @@ A dedicated space for task management and scheduling.
     - [ ] **External Sync (Future Proofing)**: UI entry point for "Import .ICS" or "Connect Google Calendar".
 - [ ] **Task Board/List**
     - [x] Kanban or List view of tasks, filterable by Course.
-    - [ ] **Add Task Modal**:
-        - [ ] Title, Date/Time, Course Link, Priority.
+    - [x] **Add Task Modal**:
+        - [x] Title, Date/Time, Course Link, Priority.
 - [ ] **Backend Actions (`actions/planner.ts`)**
     - [ ] `createTask`, `updateTask`, `deleteTask`.
     - [ ] `getTasks(dateRange)`.
@@ -87,31 +87,31 @@ A dedicated space for task management and scheduling.
 
 Bridging the global resources into personal collections.
 
-- [ ] **Class Detail Page (`/study/classes/[id]`)**
-    - [ ] **Header**: Class Name, Color Theme, Progress Bar (Tasks completed for this class).
-    - [ ] **Resources Tab**:
+- [x] **Class Detail Page (`/study/classes/[id]`)**
+    - [x] **Header**: Class Name, Color Theme, Progress Bar (Tasks completed for this class).
+    - [x] **Resources Tab**:
         - [x] List resources linked via `course_resources`.
         - [ ] "Add Resource" button: Select from Global Library or Upload New.
     - [ ] **Assignments/Tasks Tab**: Filtered view of the Planner for this class.
-- [ ] **My Library Page (`/study/library`)**
-    - [ ] **Data Source**: Aggregated `user_courses` resources + Saved global resources + AI Artifacts.
+- [x] **My Library Page (`/study/library`)**
+    - [x] **Data Source**: Aggregated `user_courses` resources + Saved global resources + AI Artifacts.
     - [ ] **Filters**: By Class, By Type (PDF, Flashcard, Quiz), By Date.
-    - [ ] **UI**: Grid/List view with context menu (Move to Class, Generate AI, Delete).
+    - [x] **UI**: Grid/List view with context menu (Move to Class, Generate AI, Delete).
 
 ## Phase 6: The "Study Workspace" (Split Screen) [Core Feature]
 
 This is the most complex view, combining the PDF viewer and AI tools.
 
-- [ ] **Split Layout Framework**
-    - [ ] Implement a resizable split-pane component (Left: AI/Tools, Right: Content).
-- [ ] **Right Pane: Content Viewer**
-    - [ ] **Tabs**: Materials (PDF/Doc), Notes (Rich Text).
-    - [ ] **PDF/Doc Viewer**: Embed viewer with "Sticky Note" capability.
-- [ ] **Left Pane: AI Study Companion**
-    - [ ] **Tabs Navigation**: Chat, Study Guide, Flashcards, Quiz.
-    - [ ] **Chat Tab**: RAG-enabled chat constrained to this document.
-    - [ ] **Study Guide Tab**: AI Summary view.
-    - [ ] **Flashcards Tab**: Spaced repetition interface.
+- [x] **Split Layout Framework**
+    - [x] Implement a resizable split-pane component (Left: AI/Tools, Right: Content).
+- [x] **Right Pane: Content Viewer**
+    - [x] **Tabs**: Materials (PDF/Doc), Notes (Rich Text), Upload (Drag,link,type and also list materials)
+    - [x] **PDF/Doc Viewer**: Embed viewer with "Sticky Note" capability.
+- [x] **Left Pane: AI Study Companion**
+    - [x] **Tabs Navigation**: Chat, Study Guide, Flashcards, Quiz.
+    - [x] **Chat Tab**: RAG-enabled chat constrained to this document.
+    - [x] **Study Guide Tab**: AI Summary view.
+    - [x] **Flashcards Tab**: Spaced repetition interface.
 - [ ] **Context Awareness**:
     - [ ] Ensure AI knows which Class this resource belongs to (for better prompt context).
 
