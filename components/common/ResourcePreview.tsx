@@ -49,10 +49,9 @@ export function ResourcePreview({
         // Use Office Online Viewer for thumbnails/previews
         // wd=0 means no interactivity (if supported), but embed is usually read-only anyway
         viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
-            fileUrl
+            fileUrl,
         )}&wdStartOn=1&wdEmbedCode=0`;
     } else if (isPdf) {
-        // For PDF, we can try to use the file directly in an iframe or object
         // Adding #toolbar=0 to hide PDF toolbar
         viewerUrl = `${fileUrl}#toolbar=0&navpanes=0&scrollbar=0`;
     }
@@ -61,14 +60,12 @@ export function ResourcePreview({
         <div
             className={`relative w-full h-full overflow-hidden bg-card ${className}`}
         >
-            {/* Loading State */}
             {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-10">
                     <div className="animate-pulse w-8 h-8 rounded-full bg-muted" />
                 </div>
             )}
 
-            {/* Overlay to prevent interaction and handle clicks via parent Link */}
             <div className="absolute inset-0 z-20 bg-transparent" />
 
             <iframe

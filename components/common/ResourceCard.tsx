@@ -26,6 +26,7 @@ interface ResourceCardProps {
     };
     variant?: "default" | "mini";
     className?: string;
+    href?: string;
 }
 
 export function ResourceCard({
@@ -44,19 +45,20 @@ export function ResourceCard({
     verifier,
     variant = "default",
     className,
+    href,
 }: ResourceCardProps) {
     const isMini = variant === "mini";
 
     return (
         <Link
-            href={`/resources/${id}`}
+            href={href || `/resources/${id}`}
             className={cn("block group h-full", className)}
         >
             <Card className="h-full flex flex-col overflow-hidden transition-all duration-500 border border-border rounded-3xl hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-1 bg-card relative">
                 <div
                     className={cn(
                         "bg-muted/30 relative overflow-hidden",
-                        isMini ? "h-28" : "h-40"
+                        isMini ? "h-28" : "h-40",
                     )}
                 >
                     {fileUrl ? (
@@ -96,7 +98,7 @@ export function ResourceCard({
                 <div
                     className={cn(
                         "flex flex-col flex-1 gap-3",
-                        isMini ? "p-4" : "p-6"
+                        isMini ? "p-4" : "p-6",
                     )}
                 >
                     <div className="space-y-1.5">
@@ -112,7 +114,7 @@ export function ResourceCard({
                                                     : "h-3 w-3",
                                                 i < Math.floor(rating)
                                                     ? "fill-amber-400 text-amber-400"
-                                                    : "fill-muted text-muted"
+                                                    : "fill-muted text-muted",
                                             )}
                                         />
                                     ))}
@@ -130,7 +132,7 @@ export function ResourceCard({
                         <h3
                             className={cn(
                                 "font-serif font-bold text-primary tracking-tight leading-tight line-clamp-2 group-hover:text-primary/80 transition-colors",
-                                isMini ? "text-base" : "text-lg"
+                                isMini ? "text-base" : "text-lg",
                             )}
                         >
                             {title}
@@ -140,7 +142,7 @@ export function ResourceCard({
                     <p
                         className={cn(
                             "text-muted-foreground/70 line-clamp-2 leading-relaxed font-medium",
-                            isMini ? "text-xs" : "text-sm"
+                            isMini ? "text-xs" : "text-sm",
                         )}
                     >
                         {description}
@@ -162,7 +164,7 @@ export function ResourceCard({
                     <div
                         className={cn(
                             "flex items-center justify-between pt-3 mt-1 border-t border-border/40",
-                            isMini && "mt-auto"
+                            isMini && "mt-auto",
                         )}
                     >
                         <div className="flex items-center gap-4">
@@ -175,7 +177,7 @@ export function ResourceCard({
                         <div
                             className={cn(
                                 "rounded-full bg-primary/5 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300",
-                                isMini ? "h-7 w-7" : "h-8 w-8"
+                                isMini ? "h-7 w-7" : "h-8 w-8",
                             )}
                         >
                             <MoreHorizontal

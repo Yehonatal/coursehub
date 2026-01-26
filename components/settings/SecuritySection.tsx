@@ -43,7 +43,6 @@ export default function SecuritySection() {
             </div>
 
             <div className="space-y-8">
-                {/* Change Password */}
                 <div className="p-8 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all hover:border-primary/20 hover:shadow-md">
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-11 w-11 rounded-xl bg-primary/5 flex items-center justify-center text-primary/70">

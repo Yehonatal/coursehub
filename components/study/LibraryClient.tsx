@@ -120,9 +120,10 @@ export default function LibraryClient({
                     ) : (
                         <div className="bg-card border border-border/50 rounded-xl divide-y divide-border/50 shadow-sm overflow-hidden">
                             {filteredResources.map((resource) => (
-                                <div
+                                <Link
+                                    href={`/study/workspace/${resource.resource_id}`}
                                     key={resource.resource_id}
-                                    className="p-4 flex items-start gap-4 hover:bg-muted/30 transition-colors group cursor-pointer"
+                                    className="p-4 flex items-start gap-4 hover:bg-muted/30 transition-colors group cursor-pointer block"
                                 >
                                     <div className="h-12 w-12 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-200/20">
                                         <FileText className="w-6 h-6 text-blue-500" />
@@ -151,7 +152,7 @@ export default function LibraryClient({
                                     <button className="p-2 text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-all">
                                         <MoreHorizontal className="w-5 h-5" />
                                     </button>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     )}

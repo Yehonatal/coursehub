@@ -86,7 +86,6 @@ export default function ContactPage() {
                         </div>
                     </div>
 
-                    {/* Contact Form */}
                     <div
                         className="bg-card border border-border rounded-xl p-6 sm:p-8 shadow-sm"
                         data-aos="fade-left"

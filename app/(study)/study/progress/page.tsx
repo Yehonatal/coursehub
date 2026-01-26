@@ -103,7 +103,6 @@ const StatCard = ({
 export default function ProgressPage() {
     return (
         <div className="flex flex-col min-h-full bg-background/50 p-8 space-y-8 mx-auto w-full">
-            {/* Header */}
             <div className="flex flex-col gap-1">
                 <h1 className="text-3xl font-serif font-bold tracking-tight">
                     Progress & Analytics
@@ -113,7 +112,6 @@ export default function ProgressPage() {
                 </p>
             </div>
 
-            {/* Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                     title="Total Study Time"
@@ -149,9 +147,7 @@ export default function ProgressPage() {
                 />
             </div>
 
-            {/* Main Charts Row */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-auto">
-                {/* Study Activity Chart (Large) */}
                 <div className="lg:col-span-2 bg-card border border-border/50 rounded-xl p-6 shadow-sm min-h-[400px] flex flex-col">
                     <div className="flex items-center justify-between mb-6">
                         <div>
@@ -230,7 +226,6 @@ export default function ProgressPage() {
                     </div>
                 </div>
 
-                {/* Subject Distribution (Side) */}
                 <div className="bg-card border border-border/50 rounded-xl p-6 shadow-sm flex flex-col min-h-[400px]">
                     <h3 className="text-lg font-semibold mb-1">
                         Focus Distribution
@@ -261,7 +256,6 @@ export default function ProgressPage() {
                                 <Tooltip />
                             </PieChart>
                         </ResponsiveContainer>
-                        {/* Center Text */}
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
                             <span className="text-2xl font-bold">100%</span>
                             <p className="text-xs text-muted-foreground">
@@ -294,9 +288,7 @@ export default function ProgressPage() {
                 </div>
             </div>
 
-            {/* Lower Charts Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Radar Chart: Skills */}
                 <div className="bg-card border border-border/50 rounded-xl p-6 shadow-sm min-h-[350px]">
                     <div className="flex items-center gap-2 mb-6">
                         <Brain className="w-5 h-5 text-purple-500" />
@@ -332,7 +324,6 @@ export default function ProgressPage() {
                     </div>
                 </div>
 
-                {/* Productivity Heatmap / Bar Chart */}
                 <div className="bg-card border border-border/50 rounded-xl p-6 shadow-sm min-h-[350px]">
                     <div className="flex items-center gap-2 mb-6">
                         <Zap className="w-5 h-5 text-yellow-500" />
@@ -355,11 +346,7 @@ export default function ProgressPage() {
                                     tick={{ fontSize: 12, fill: "#6b7280" }}
                                     dy={10}
                                 />
-                                <YAxis
-                                    axisLine={false}
-                                    tickLine={false}
-                                    tick={{ fontSize: 12, fill: "#6b7280" }}
-                                />
+                                <YAxis axisLine={false} tickLine={false} />
                                 <Tooltip
                                     cursor={{ fill: "transparent" }}
                                     contentStyle={{ borderRadius: "12px" }}

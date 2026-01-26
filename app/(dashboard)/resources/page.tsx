@@ -76,7 +76,6 @@ export default async function ResourcesPage({
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-10">
-                {/* Sidebar Filters */}
                 <aside className="hidden lg:block sticky top-24 self-start">
                     <FilterSidebar />
                 </aside>

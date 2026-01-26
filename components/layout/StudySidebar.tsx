@@ -24,10 +24,29 @@ interface StudySidebarProps {
     courses: UserCourse[];
 }
 
-export function StudySidebar({ courses }: StudySidebarProps) {
+export function StudySidebar({ courses = [] }: StudySidebarProps) {
     const pathname = usePathname();
     const [coursesOpen, setCoursesOpen] = useState(true);
     const [isCollapsed, setIsCollapsed] = useState(false);
+
+    // Inject Mock "Test Class 1" for presentation
+    // Cast to any to bypass strict type checks for this mock if necessary,
+    // or ensure object matches all expectations from usage below.
+    const mockCourse: any = {
+        id: "test-class-1",
+        course_id: "test-class-1",
+        name: "Fundamentals Of Software Engineering",
+        course_name: "Fundamentals Of Software Engineering",
+        color: "#22c55e",
+        color_theme: "#22c55e",
+    };
+
+    // Filter out if it already exists to avoid duplicates if DB has it
+    const hasMock = courses.some(
+        (c) =>
+            c.id === "test-class-1" || (c as any).course_id === "test-class-1",
+    );
+    const displayCourses = hasMock ? courses : [...courses, mockCourse];
 
     const navItems = [
         { name: "Home", href: "/study/dashboard", icon: LayoutDashboard },
@@ -124,7 +143,7 @@ export function StudySidebar({ courses }: StudySidebarProps) {
 
                     {coursesOpen && (
                         <div className="space-y-1 mt-1">
-                            {courses.length === 0 ? (
+                            {displayCourses.length === 0 ? (
                                 <CreateClassModal className="w-full">
                                     <div className="w-full px-2 py-4 text-center border-2 border-dashed border-muted rounded-lg hover:border-muted-foreground/50 transition-colors cursor-pointer group/empty">
                                         <p className="text-xs text-muted-foreground mb-2 group-hover/empty:text-foreground transition-colors">
@@ -137,7 +156,7 @@ export function StudySidebar({ courses }: StudySidebarProps) {
                                 </CreateClassModal>
                             ) : (
                                 <>
-                                    {courses.map((course) => (
+                                    {displayCourses.map((course) => (
                                         <Link
                                             key={course.course_id}
                                             href={`/study/classes/${course.course_id}`}
@@ -175,7 +194,7 @@ export function StudySidebar({ courses }: StudySidebarProps) {
             ) : (
                 <div className="mt-4 flex flex-col items-center gap-4 flex-1">
                     <div className="w-8 h-[1px] bg-border" />
-                    {courses.map((course) => (
+                    {displayCourses.map((course) => (
                         <Link
                             key={course.id}
                             href={`/study/classes/${course.id}`}

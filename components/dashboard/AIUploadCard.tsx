@@ -47,13 +47,12 @@ export function AIUploadCard() {
                 suppressHydrationWarning
             >
                 <div className="space-y-6 relative">
-                    {/* Info Hover Modal */}
                     <div
                         className={cn(
                             "absolute -top-4 -right-4 z-50 w-72 p-5 bg-card border border-border rounded-3xl shadow-2xl transition-all duration-500 pointer-events-none",
                             showInfo
                                 ? "opacity-100 translate-y-0 scale-100"
-                                : "opacity-0 translate-y-4 scale-95"
+                                : "opacity-0 translate-y-4 scale-95",
                         )}
                     >
                         <div className="flex items-center gap-3 mb-3 text-primary">

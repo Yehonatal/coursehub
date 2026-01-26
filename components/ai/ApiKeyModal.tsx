@@ -79,7 +79,6 @@ export function ApiKeyModal({
                         </DialogDescription>
                     </DialogHeader>
 
-                    {/* Step-by-step guide */}
                     <div className="bg-primary/5 rounded-2xl p-5 border border-primary/10 space-y-4">
                         <h4 className="text-xs font-bold text-primary/70 uppercase tracking-wider flex items-center gap-2">
                             <CheckCircle2 className="h-3.5 w-3.5" />

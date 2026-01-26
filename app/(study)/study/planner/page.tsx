@@ -135,7 +135,6 @@ export default function PlannerPage() {
                                 <div className="grid grid-cols-2 gap-4 mb-8">
                                     <button className="flex flex-col items-center justify-center py-6 px-4 bg-muted/20 border-2 border-transparent hover:border-muted-foreground/20 hover:bg-muted/40 rounded-xl transition-all gap-3 overflow-hidden">
                                         <div className="h-10 w-10 flex items-center justify-center">
-                                            {/* Canvas Logo Placeholder */}
                                             <div
                                                 className="w-8 h-8 rounded-full border-4 border-red-500/80 border-t-transparent border-b-transparent animate-spin-slow duration-[3s]"
                                                 style={{ animation: "none" }}
@@ -231,7 +230,6 @@ export default function PlannerPage() {
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-4xl p-0 overflow-hidden">
                             <div className="flex flex-col md:flex-row h-full">
-                                {/* Left Side - Form */}
                                 <div className="flex-1 p-6 space-y-6">
                                     <div className="flex items-center justify-between">
                                         <h3 className="text-lg font-semibold">
@@ -315,7 +313,6 @@ export default function PlannerPage() {
                                     </div>
                                 </div>
 
-                                {/* Right Side - Mini Calendar & Time */}
                                 <div className="border-t md:border-t-0 md:border-l border-border/60 p-6 w-full md:w-80 bg-muted/5">
                                     <div className="bg-background rounded-xl border border-border/50 shadow-sm p-4 mb-4">
                                         <div className="flex items-center justify-between mb-4">
@@ -335,7 +332,6 @@ export default function PlannerPage() {
                                                 "Mo",
                                                 "Tu",
                                                 "We",
-                                                "Th",
                                                 "Fr",
                                                 "Sa",
                                             ].map((d) => (
@@ -348,7 +344,6 @@ export default function PlannerPage() {
                                             ))}
                                         </div>
                                         <div className="grid grid-cols-7 gap-1 text-center">
-                                            {/* Dummy calendar dates matching screenshot roughly */}
                                             {[...Array(4)].map((_, i) => (
                                                 <span key={`empty-${i}`} />
                                             ))}
